@@ -149,7 +149,7 @@ CONSTANCE_CONFIG = OrderedDict([
     ('min_silence_len', (500, '(in ms) minimum length of a silence to be used for a split. default: 1000ms')),
     ('silence_thresh', (-30, '(in dBFS) anything quieter than this will be considered silence. default: -16dBFS')),
     ('seek_step', (1, 'seek_step - step size for interating over the segment in ms')),
-    ('keep_silence', (100, '''(in ms or True/False) leave some silence at the beginning  and end of the chunks. Keeps the sound from sounding like it
+    ('keep_silence', (300, '''(in ms or True/False) leave some silence at the beginning  and end of the chunks. Keeps the sound from sounding like it
         is abruptly cut off. When the length of the silence is less than the keep_silence duration it is split evenly between the preceding and following non-silent
         segments.If True is specified, all the silence is kept, if False none is kept.
         default: 100ms''')),
