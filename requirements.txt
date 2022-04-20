@@ -1,0 +1,7 @@
+Django>=3,<4
+django-extensions
+djangorestframework
+channels
+channels_redis
+django-createsuperuserwithpassword==2.0.0
+pydub==0.25.1

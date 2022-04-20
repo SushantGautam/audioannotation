@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="m-2"><h4>WebApp</h4></div>
+<div class="m-2"><a class="btn btn-light" href="{% url 'Question_list' %}">Question Listing</a></div>
+<div class="m-2"><a class="btn btn-light" href="{% url 'Submissions_list' %}">Submissions Listing</a></div>
+<div class="m-2"><a class="btn btn-light" href="{% url 'Project_list' %}">Project Listing</a></div>
+{% endblock %}
