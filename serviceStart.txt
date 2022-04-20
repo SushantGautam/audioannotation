@@ -14,7 +14,7 @@ python manage.py createsuperuserwithpassword --username nsdevil --password nsdev
 
 screen
 
-python manage.py runserver 0.0.0.0:80
+python manage.py runserver 0.0.0.0:3001
 
 
 
