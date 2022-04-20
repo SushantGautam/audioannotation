@@ -46,7 +46,7 @@ class SubmissionsAdmin(admin.ModelAdmin):
         ) or mark_safe(
             "<span class='errors'>No Audio Splits Found</span>")
 
-    def playMainAduio(self, instance):
+    def play_main_audio(self, instance):
         return mark_safe('<br/><audio controls> <source src="' + instance.sound_file.url + '"> </audio> <br> ' + ''' 
         <a href='javascript:window.open("/record/{}","record", "width=400,height=400")'>Record Audio</a> 
         '''.format(instance.id)) or mark_safe(
@@ -54,7 +54,7 @@ class SubmissionsAdmin(admin.ModelAdmin):
             '''<a href='javascript:window.open("/record/{}","record", "width=600,height=300")'>Record Audio</a>'''
             .format(instance.id))
 
-    def splitAudio(self, instance):
+    def splitted_audio(self, instance):
         return mark_safe(
             '''<a href='javascript:window.open("/splitAudio/{}","example", "width=600,height=300")'>Split Audio</a> |
             <a href="/admin/constance/config/" target="_blank">(Settings)</a>'''.format(instance.id))
