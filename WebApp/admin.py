@@ -89,7 +89,7 @@ class ProjectAdminForm(forms.ModelForm):
     class Meta:
         model = models.Project
         fields = "__all__"
-        exclude = ['groups', 'staff', 'user_permissions']
+        exclude = ['groups', 'user_permissions']
 
 
 class ProjectAdmin(admin.ModelAdmin):
@@ -103,15 +103,14 @@ class ProjectAdmin(admin.ModelAdmin):
         "last_updated",
     ]
 
-#hide group from admin
-from django.contrib.auth.models import Group
-admin.site.unregister(Group)
 
+# hide group from admin
+from django.contrib.auth.models import Group
+
+admin.site.unregister(Group)
 
 admin.site.register(models.Member, MemberAdmin)
 
 admin.site.register(models.Question, QuestionAdmin)
 admin.site.register(models.Submissions, SubmissionsAdmin)
 admin.site.register(models.Project, ProjectAdmin)
-
-

@@ -1,7 +1,15 @@
 from rest_framework import viewsets, permissions
 
-from . import serializers
 from . import models
+from . import serializers
+
+
+class MemberViewSet(viewsets.ModelViewSet):
+    """ViewSet for the Member class"""
+
+    queryset = models.Member.objects.all()
+    serializer_class = serializers.MemberSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class QuestionViewSet(viewsets.ModelViewSet):

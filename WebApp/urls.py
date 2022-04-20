@@ -8,6 +8,7 @@ from . import api
 from . import views
 
 router = routers.DefaultRouter()
+router.register("Member", api.MemberViewSet)
 router.register("Question", api.QuestionViewSet)
 router.register("Submissions", api.SubmissionsViewSet)
 router.register("Project", api.ProjectViewSet)
