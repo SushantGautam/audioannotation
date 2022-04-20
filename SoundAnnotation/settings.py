@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'channels',
     'constance',
     'constance.backends.database',
+    'django_cleanup.apps.CleanupConfig',
 
     'WebApp',
 
