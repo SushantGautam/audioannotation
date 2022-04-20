@@ -6,3 +6,4 @@ channels_redis
 django-createsuperuserwithpassword==2.0.0
 pydub==0.25.1
 gunicorn
+whitenoise==5.2.0
