@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib import admin
+from django.shortcuts import redirect
 from django.utils.html import format_html_join
 from django.utils.safestring import mark_safe
 
@@ -31,6 +32,12 @@ class SubmissionsAdminForm(forms.ModelForm):
 
 
 class SubmissionsAdmin(admin.ModelAdmin):
+    def response_add(self, request, obj, post_url_continue=None):
+        return redirect(request.path)
+
+    def response_change(self, request, obj):
+        return redirect(request.path)
+
     def _getSplittedAudio(self, instance):
         return format_html_join(
             mark_safe('<br/>'),

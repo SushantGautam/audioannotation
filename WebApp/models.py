@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.urls import reverse
 
@@ -116,6 +116,11 @@ class Submissions(models.Model):
 
 @receiver(pre_save, sender=Submissions)
 def addrequest(sender, instance, **kwargs):
+    instance.pv_sound_file = instance.sound_file.url
+
+
+@receiver(post_save, sender=Submissions)
+def addrequest(sender, instance, **kwargs):
     try:
         pv = Submissions.objects.get(id=instance.id)
     except:
@@ -124,6 +129,6 @@ def addrequest(sender, instance, **kwargs):
             print(" new file and audio file changed")
         return  # exit and ignore for the first time
 
-    if instance.sound_file.url != pv.sound_file.url:  # on sound update
+    if instance.sound_file.url != instance.pv_sound_file:  # on sound update
         segmentaudio(sID=instance.id, audiofile=instance.sound_file)
         print("audio file changed")
