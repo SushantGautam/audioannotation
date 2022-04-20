@@ -103,7 +103,7 @@ class Submissions(models.Model):
     def getSplittedAudio(self):
         pathToSave = 'media/audio-splits/' + str(self.id) + "/"
         if self.extras.get("audio_segments"):
-            return self.extras.get("audio_segments")
+            return sorted(self.extras.get("audio_segments"))
         else:
             print('No sudio splits found')
             return []
