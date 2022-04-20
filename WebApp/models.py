@@ -1,6 +1,10 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.urls import reverse
+
+from WebApp.utils.audio import segmentaudio
 
 
 class Member(AbstractUser):
@@ -88,6 +92,15 @@ class Submissions(models.Model):
     tts_status = models.SmallIntegerField(choices=TTL_STATUS_CHOICES, default=0)
     extras = models.JSONField(blank=True, null=True, default=dict)
 
+    @property
+    def getSplittedAudio(self):
+        pathToSave = 'media/audio-splits/' + str(self.id) + "/"
+        if self.extras.get("audio_segments"):
+            return self.extras.get("audio_segments")
+        else:
+            print('No sudio splits found')
+            return []
+
     class Meta:
         pass
 
@@ -99,3 +112,18 @@ class Submissions(models.Model):
 
     def get_update_url(self):
         return reverse("Submissions_update", args=(self.pk,))
+
+
+@receiver(post_save, sender=Submissions)
+def addrequest(sender, instance, **kwargs):
+    try:
+        pv = Submissions.objects.get(id=instance.id)
+    except:
+        if instance.sound_file:  # first time is sound is added
+            segmentaudio(sID=instance.id, audiofile=instance.sound_file)
+            print(" new file and audio file changed")
+        return  # exit and ignore for the first time
+
+    if instance.sound_file != pv.sound_file:  # on sound update
+        segmentaudio(sID=instance.id, audiofile=instance.sound_file)
+        print("audio file changed")

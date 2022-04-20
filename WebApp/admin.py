@@ -1,11 +1,12 @@
-from django.contrib import admin
 from django import forms
+from django.contrib import admin
+from django.utils.html import format_html_join
+from django.utils.safestring import mark_safe
 
 from . import models
 
 
 class QuestionAdminForm(forms.ModelForm):
-
     class Meta:
         model = models.Question
         fields = "__all__"
@@ -24,26 +25,42 @@ class QuestionAdmin(admin.ModelAdmin):
 
 
 class SubmissionsAdminForm(forms.ModelForm):
-
     class Meta:
         model = models.Submissions
         fields = "__all__"
 
 
 class SubmissionsAdmin(admin.ModelAdmin):
+    def _getSplittedAudio(self, instance):
+        return format_html_join(
+            mark_safe('<br/>'),
+            '<audio controls> <source src="/{}"> </audio>',
+            ((line,) for line in instance.getSplittedAudio),
+        ) or mark_safe(
+            "<span class='errors'>No Audio Splits Found</span>")
+
+    def playMainAduio(self, instance):
+        return mark_safe('<br/><audio controls> <source src="' + instance.sound_file.url + '"> </audio>') or mark_safe(
+            "<span class='errors'>No Audio Uploaded</span>")
+
+    def splitAudio(self, instance):
+        return mark_safe(
+            '''<a href='javascript:window.open("/splitAudio/{}","example", "width=600,height=300")'>Split Audio</a>'''.format(instance.id))
+
     form = SubmissionsAdminForm
     list_display = [
         "last_updated",
         "created",
     ]
+
     readonly_fields = [
         "last_updated",
-        "created",
+        "created", "playMainAduio",
+        "_getSplittedAudio", "splitAudio"
     ]
 
 
 class ProjectAdminForm(forms.ModelForm):
-
     class Meta:
         model = models.Project
         fields = "__all__"

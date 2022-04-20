@@ -30,5 +30,6 @@ urlpatterns = (
     path("Project/detail/<int:pk>/", views.ProjectDetailView.as_view(), name="Project_detail"),
     path("Project/update/<int:pk>/", views.ProjectUpdateView.as_view(), name="Project_update"),
     path("Project/delete/<int:pk>/", views.ProjectDeleteView.as_view(), name="Project_delete"),
+    path("splitAudio/<int:qid>/", views.splitAudio, name="splitAudio"),
 )
 

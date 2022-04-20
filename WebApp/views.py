@@ -1,7 +1,11 @@
-from django.views import generic
+from django.http import HttpResponse
 from django.urls import reverse_lazy
-from . import models
+from django.views import generic
+
 from . import forms
+from . import models
+from .models import Submissions
+from .utils.audio import segmentaudio
 
 
 class QuestionListView(generic.ListView):
@@ -80,3 +84,16 @@ class ProjectUpdateView(generic.UpdateView):
 class ProjectDeleteView(generic.DeleteView):
     model = models.Project
     success_url = reverse_lazy("Project_list")
+
+
+def splitAudio(request, qid):
+    instance = Submissions.objects.get(id=qid)
+    if instance.sound_file:  # first time is sound is added
+        lenSeg = segmentaudio(sID=instance.id, audiofile=instance.sound_file)
+        print("new file and audio file changed")
+        return HttpResponse(
+            'Done! ' + str(
+                lenSeg) + ' splits made. <script>setTimeout(function(){window.opener.location.reload(); window.close()}, 1000) </script>')
+
+    return HttpResponse(
+        'No sound File! <script>setTimeout(function(){window.opener.location.reload(); window.close()}, 1000) </script>')
