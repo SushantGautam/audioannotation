@@ -13,7 +13,7 @@ router.register("Submissions", api.SubmissionsViewSet)
 router.register("Project", api.ProjectViewSet)
 
 urlpatterns = (
-    path("api/v1/", include(router.urls)),
+    path("api/", include(router.urls)),
     path('', TemplateView.as_view(template_name='index.html'), name='index'),
     path("Question/", views.QuestionListView.as_view(), name="Question_list"),
     path("Question/create/", views.QuestionCreateView.as_view(), name="Question_create"),
