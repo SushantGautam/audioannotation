@@ -47,8 +47,12 @@ class SubmissionsAdmin(admin.ModelAdmin):
             "<span class='errors'>No Audio Splits Found</span>")
 
     def playMainAduio(self, instance):
-        return mark_safe('<br/><audio controls> <source src="' + instance.sound_file.url + '"> </audio>') or mark_safe(
-            "<span class='errors'>No Audio Uploaded</span>")
+        return mark_safe('<br/><audio controls> <source src="' + instance.sound_file.url + '"> </audio> <br> ' + ''' 
+        <a href='javascript:window.open("/record/{}","record", "width=400,height=400")'>Record Audio</a> 
+        '''.format(instance.id)) or mark_safe(
+            "<span class='errors'>No Audio Uploaded</span>" +
+            '''<a href='javascript:window.open("/record/{}","record", "width=600,height=300")'>Record Audio</a>'''
+            .format(instance.id))
 
     def splitAudio(self, instance):
         return mark_safe(

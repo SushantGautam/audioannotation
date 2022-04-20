@@ -1,6 +1,8 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
+from django.views.decorators.csrf import csrf_exempt
 
 from . import forms
 from . import models
@@ -97,3 +99,17 @@ def splitAudio(request, qid):
 
     return HttpResponse(
         'No sound File! <script>setTimeout(function(){window.opener.location.reload(); window.close()}, 1000) </script>')
+
+
+@csrf_exempt
+def Record(request, qid):
+    if request.method == 'POST':
+        audio_file = request.FILES.get('recorded_audio')
+        myObj = Submissions.objects.get(id=qid)  # Put aurguments to properly according to your model
+        myObj.sound_file = audio_file
+        myObj.save()
+        return JsonResponse({
+            'success': True,
+        })
+
+    return render(request, "record.html", {"qid": qid})
