@@ -20,6 +20,10 @@ from django.views.static import serve
 
 from SoundAnnotation import settings
 
+admin.site.site_header = 'Sound Annotation Administration'  # default: "Django Administration"
+admin.site.index_title = 'Sound Annotation Administration'  # default: "Site administration"
+admin.site.site_title = 'Sound Annotation Administration'  # default: "Django site admin"
+
 urlpatterns = [
     path('', include('WebApp.urls')),
     path('admin/', admin.site.urls),
