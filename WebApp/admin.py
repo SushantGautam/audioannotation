@@ -52,7 +52,8 @@ class SubmissionsAdmin(admin.ModelAdmin):
 
     def splitAudio(self, instance):
         return mark_safe(
-            '''<a href='javascript:window.open("/splitAudio/{}","example", "width=600,height=300")'>Split Audio</a>'''.format(instance.id))
+            '''<a href='javascript:window.open("/splitAudio/{}","example", "width=600,height=300")'>Split Audio</a> |
+            <a href="/admin/constance/config/" target="_blank">(Settings)</a>'''.format(instance.id))
 
     form = SubmissionsAdminForm
     list_display = [

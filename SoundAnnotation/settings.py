@@ -9,6 +9,8 @@ https://docs.djangoproject.com/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from collections import OrderedDict
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -32,13 +34,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'channels',
+    'constance',
+    'constance.backends.database',
+
     'WebApp',
+
 ]
 INSTALLED_APPS += ("django_createsuperuserwithpassword",)
 
-
 AUTH_USER_MODEL = 'WebApp.Member'
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -71,7 +75,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'SoundAnnotation.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
@@ -82,11 +85,10 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
-AUTH_PWD_MODULE="django.contrib.auth.password_validation."
+AUTH_PWD_MODULE = "django.contrib.auth.password_validation."
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -103,7 +105,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
@@ -116,7 +117,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
@@ -132,16 +132,24 @@ CHANNEL_LAYERS = {
     },
 }
 
-DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-
-
-
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "WebApp/static")
 
-
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+CONSTANCE_CONFIG = OrderedDict([
+    ('Settings for Audio Splitter', ("ToBeConfigured", 'ToBeConfigured')),
+    ('min_silence_len', (500, '(in ms) minimum length of a silence to be used for a split. default: 1000ms')),
+    ('silence_thresh', (-30, '(in dBFS) anything quieter than this will be considered silence. default: -16dBFS')),
+    ('seek_step', (1, 'seek_step - step size for interating over the segment in ms')),
+    ('keep_silence', (100, '''(in ms or True/False) leave some silence at the beginning  and end of the chunks. Keeps the sound from sounding like it
+        is abruptly cut off. When the length of the silence is less than the keep_silence duration it is split evenly between the preceding and following non-silent
+        segments.If True is specified, all the silence is kept, if False none is kept.
+        default: 100ms''')),
+])

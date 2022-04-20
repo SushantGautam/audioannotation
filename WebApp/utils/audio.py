@@ -3,12 +3,17 @@ import pathlib
 import random
 import string
 
+import constance
 from pydub import AudioSegment, silence
 
 
 def segmentaudio(sID, audiofile):
     song = AudioSegment.from_file(audiofile)
-    sil = silence.split_on_silence(song, min_silence_len=500, silence_thresh=-30, seek_step=1)
+    sil = silence.split_on_silence(song,
+                                   min_silence_len=constance.config.min_silence_len,
+                                   silence_thresh=constance.config.silence_thresh,
+                                   keep_silence=constance.config.keep_silence,
+                                   seek_step=constance.config.seek_step)
     pathToSave = 'media/audio-splits/' + str(sID) + "/"
     pathlib.Path(pathToSave).mkdir(parents=True, exist_ok=True)
     for i in os.listdir(pathToSave): os.remove(pathToSave + i)
