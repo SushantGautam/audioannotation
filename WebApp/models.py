@@ -21,7 +21,14 @@ class Member(AbstractUser):
     gender = models.SmallIntegerField(choices=TTL_GENDER, default=0)
     study_purpose = models.CharField(max_length=100, null=True, blank=True)
     study_period = models.DurationField(null=True, blank=True)
+    def __str__(self):
+        return str(self.username)
 
+    def get_absolute_url(self):
+        return reverse("User_detail", args=(self.pk,))
+
+    def get_update_url(self):
+        return reverse("User_update", args=(self.pk,))
 
 class Project(models.Model):
     # Fields

@@ -7,6 +7,19 @@ from django.utils.safestring import mark_safe
 from . import models
 
 
+class MemberAdminForm(forms.ModelForm):
+    class Meta:
+        model = models.Member
+        fields = "__all__"
+
+
+class MemberAdmin(admin.ModelAdmin):
+    form = MemberAdminForm
+    list_display = [
+        "username", 'first_name', 'last_name', 'email',
+    ]
+
+
 class QuestionAdminForm(forms.ModelForm):
     class Meta:
         model = models.Question
@@ -76,6 +89,7 @@ class ProjectAdminForm(forms.ModelForm):
     class Meta:
         model = models.Project
         fields = "__all__"
+        exclude =['groups', 'staff', 'user_permissions']
 
 
 class ProjectAdmin(admin.ModelAdmin):
@@ -89,6 +103,8 @@ class ProjectAdmin(admin.ModelAdmin):
         "last_updated",
     ]
 
+
+admin.site.register(models.Member, MemberAdmin)
 
 admin.site.register(models.Question, QuestionAdmin)
 admin.site.register(models.Submissions, SubmissionsAdmin)
