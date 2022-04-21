@@ -88,7 +88,7 @@ class SubmissionsAdmin(admin.ModelAdmin):
     list_display = [
         "created",
         'id',
-        "question",
+        "question", 'comment',
         "sound_file",
         "last_updated",
     ]
