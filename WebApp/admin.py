@@ -45,9 +45,6 @@ class SubmissionsAdminForm(forms.ModelForm):
 
 
 class SubmissionsAdmin(admin.ModelAdmin):
-    def response_add(self, request, obj, post_url_continue=None):
-        return redirect(request.path)
-
     def response_change(self, request, obj):
         return redirect(request.path)
 
@@ -74,6 +71,9 @@ class SubmissionsAdmin(admin.ModelAdmin):
 
     form = SubmissionsAdminForm
     list_display = [
+        'id',
+        "question",
+        "sound_file",
         "last_updated",
         "created",
     ]

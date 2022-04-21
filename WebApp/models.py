@@ -21,6 +21,7 @@ class Member(AbstractUser):
     gender = models.SmallIntegerField(choices=TTL_GENDER, default=0)
     study_purpose = models.CharField(max_length=100, null=True, blank=True)
     study_period = models.DurationField(null=True, blank=True)
+
     def __str__(self):
         return str(self.username)
 
@@ -29,6 +30,7 @@ class Member(AbstractUser):
 
     def get_update_url(self):
         return reverse("User_update", args=(self.pk,))
+
 
 class Project(models.Model):
     # Fields
@@ -92,7 +94,8 @@ class Submissions(models.Model):
     id = models.AutoField(primary_key=True, auto_created=True)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     submitted_by = models.ForeignKey(Member, on_delete=models.CASCADE)
-    sound_file = models.FileField(upload_to='media/question_audio/')
+    sound_file = models.FileField(upload_to='media/question_audio/', blank=True, null=True,
+                                  help_text="Upload audio file now or you will get to record your voice after you save.")
     comment = models.CharField(max_length=200, blank=True, null=True)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
@@ -123,7 +126,10 @@ class Submissions(models.Model):
 
 @receiver(pre_save, sender=Submissions)
 def addrequest(sender, instance, **kwargs):
-    instance.pv_sound_file = instance.sound_file.url
+    if instance.sound_file:
+        instance.pv_sound_file = instance.sound_file.url
+    else:
+        instance.pv_sound_file = None
 
 
 @receiver(post_save, sender=Submissions)
@@ -136,6 +142,7 @@ def addrequest(sender, instance, **kwargs):
             print(" new file and audio file changed")
         return  # exit and ignore for the first time
 
-    if instance.sound_file.url != instance.pv_sound_file:  # on sound update
-        segmentaudio(sID=instance.id, audiofile=instance.sound_file)
-        print("audio file changed")
+    if instance.sound_file:
+        if instance.sound_file.url != instance.pv_sound_file:  # on sound update
+            segmentaudio(sID=instance.id, audiofile=instance.sound_file)
+            print("audio file changed")
