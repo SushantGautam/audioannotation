@@ -29,6 +29,9 @@ class QuestionAdminForm(forms.ModelForm):
 class QuestionAdmin(admin.ModelAdmin):
     form = QuestionAdminForm
     list_display = [
+        "id",
+        "question_text",
+        "project",
         "last_updated",
         "created",
     ]
@@ -95,6 +98,8 @@ class ProjectAdminForm(forms.ModelForm):
 class ProjectAdmin(admin.ModelAdmin):
     form = ProjectAdminForm
     list_display = [
+        "id",
+        "name",
         "created",
         "last_updated",
     ]
