@@ -15,10 +15,12 @@
 
 <!-- Initialize Label Studio -->
 <script>
-    var sus;
+    var sus; // TODO: remove this global variable and associated
+    var LabelStudioPtr;
 
     function UpdateAnnotation(annotation) {
-
+        sus = annotation.serializeAnnotation() // TODO: remove this
+        console.log(sus) // TODO: remove this
         $.ajax({
             type: "POST",
             url: "/annotate/{{ qid }}/",
@@ -106,25 +108,24 @@
         },
 
         onLabelStudioLoad: function (LS) {
-            var c = LS.annotationStore.addAnnotation({
-                userGenerate: true
-            });
-            LS.annotationStore.selectAnnotation(c.id);
+            LabelStudioPtr = LS;
+            // var c = LS.annotationStore.addAnnotation({
+            //     userGenerate: true
+            // })
+            //
+            // LS.annotationStore.selectAnnotation(c.id);
         },
         onSubmitAnnotation: function (ls, annotation) {
-            console.log(annotation)
             UpdateAnnotation(annotation)  // Update the annotation in the database
         },
         onUpdateAnnotation: function (ls, annotation) {
-            console.log(annotation)
             UpdateAnnotation(annotation)  // Update the annotation in the database
         },
         onDeleteAnnotation: function (ls, annotation) {
-            console.log(annotation)
             UpdateAnnotation(annotation)  // Update the annotation in the database
         },
         onEntityCreate: function (region) {
-            console.log(region)
+            {#console.log(region)#}
         }
     });
 </script>
