@@ -73,11 +73,14 @@ class SubmissionsAdmin(admin.ModelAdmin):
         <a href='javascript:window.open("/record/{}","record", "width=400,height=400")'><b>🎤 Record New Audio</b></a> | 
         <a href='javascript:window.open("/annotate/{}","record", "")'> <b>✂ Annotate Current Audio</b></a> 
         '''.format(instance.id, instance.id))
-        else:
+        elif instance.id:
             return mark_safe(
                 "<span class='errors'>No Audio Uploaded</span>" +
                 '''<a href='javascript:window.open("/record/{}","record", "width=600,height=300")'>🎤 Record Audio</a>'''
                 .format(instance.id))
+        else:
+            return mark_safe(
+                "<span class='errors'>You will record option here to 🎤 record audio after saving.</span>")
 
     def split_audio(self, instance):
         return mark_safe(
