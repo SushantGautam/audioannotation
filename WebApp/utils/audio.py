@@ -28,7 +28,48 @@ def segmentaudio(sID, audiofile):
     paths = [pathToSave + i for i in os.listdir(pathToSave)]
     sub = Submissions.objects.get(id=sID)
     sub.extras['audio_segments'] = paths
+
+    # get start and end of the audio segment
+    split_data = []
+    nonsilent_ms = silence.detect_nonsilent(song,
+                                            min_silence_len=constance.config.min_silence_len,
+                                            silence_thresh=constance.config.silence_thresh,
+                                            seek_step=constance.config.seek_step)
+    for idx, eachDuration in enumerate(nonsilent_ms):
+        split_data.append({"start": eachDuration[0] / 1000, "end": eachDuration[1] / 1000})
+    sub.extras['split_data'] = split_data
+
+    stt_predictions_annotations = []
+    for idx, eachDuration in enumerate(split_data):
+        stt_predictions_annotations.append({
+            "value": {
+                "start": eachDuration['start'],
+                "end": eachDuration['end'],
+                "labels": [
+                    "voice"
+                ]
+            },
+            "id": "splitter_" + str(idx),
+            "from_name": "labels",
+            "to_name": "audio",
+            "type": "labels"
+        })
+        stt_predictions_annotations.append({
+            "value": {
+                "start": eachDuration['start'],
+                "end": eachDuration['end'],
+                "text": [
+                    "To be Annotated by STT. This is from splitter."
+                ]
+            },
+            "id": "splitter_" + str(idx),
+            "from_name": "transcription",
+            "to_name": "audio",
+            "type": "textarea"
+        })
+    sub.extras['stt_predictions_annotations'] = stt_predictions_annotations
     sub.save()
+
     return len(paths)
 
 # segmentaudio(sID=1, audiofile="./../../media/question_audio/Recording.m4a")

@@ -137,7 +137,7 @@ def Annotate(request, qid):
         else:
             annotations = []
         if myObj.extras.get('stt_predictions_annotations'):
-            predictions = json.loads(myObj.extras.get('stt_predictions_annotations'))
+            predictions = myObj.extras.get('stt_predictions_annotations')
         else:
             predictions = []
 
