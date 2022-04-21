@@ -1,9 +1,11 @@
+import json
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 
 from . import forms
 from . import models
@@ -118,24 +120,38 @@ def Record(request, qid):
 
 
 @login_required
+@ensure_csrf_cookie
 def Annotate(request, qid):
+    myObj = Submissions.objects.get(id=qid)
     if request.method == 'POST':
-        # audio_file = request.FILES.get('recorded_audio')
-        # myObj = Submissions.objects.get(id=qid)  # Put aurguments to properly according to your model
-        # myObj.sound_file = audio_file
-        # myObj.save()
+        annotation = request.POST.get('annotations')
+        myObj.extras['annotations'] = annotation
+        myObj.save()
         return JsonResponse({
             'success': True,
         })
 
     if Submissions.objects.get(id=qid).sound_file:
+        if myObj.extras.get('annotations'):
+            annotations = json.loads(myObj.extras.get('annotations'))
+        else:
+            annotations = []
+        if myObj.extras.get('stt_predictions_annotations'):
+            predictions = json.loads(myObj.extras.get('stt_predictions_annotations'))
+        else:
+            predictions = []
+
         return render(request, "annotation-tool.html", {
             "user_pk": request.user.pk,
             "user_firstName": request.user.first_name,
             "user_lastName": request.user.last_name,
             "qid": qid,
             "audioFile": Submissions.objects.get(id=qid).sound_file.url,
-        })
+            "annotations": [{"result": annotations}],
+            "predictions": [{
+                "result": predictions
+            }, ]
+        }, )
     else:
         return HttpResponse(
             "No Audio file..... . </script>")
