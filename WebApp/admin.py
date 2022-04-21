@@ -76,7 +76,7 @@ class SubmissionsAdmin(admin.ModelAdmin):
         elif instance.id:
             return mark_safe(
                 "<span class='errors'>No Audio Uploaded</span>" +
-                '''<a href='javascript:window.open("/record/{}","record", "width=600,height=300")'>🎤 Record Audio</a>'''
+                '''<a href='javascript:window.open("/record/{}","record", "width=400,height=300")'>🎤 Record Audio</a>'''
                 .format(instance.id))
         else:
             return mark_safe(
@@ -84,7 +84,7 @@ class SubmissionsAdmin(admin.ModelAdmin):
 
     def split_audio(self, instance):
         return mark_safe(
-            '''<a href='javascript:window.open("/splitAudio/{}","example", "width=600,height=300")'>Split Audio</a> |
+            '''<a href='javascript:window.open("/splitAudio/{}","example", "width=400,height=300")'>Split Audio</a> |
             <a href="/admin/constance/config/" target="_blank">(Settings)</a>'''.format(instance.id))
 
     form = SubmissionsAdminForm
