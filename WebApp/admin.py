@@ -75,11 +75,11 @@ class SubmissionsAdmin(admin.ModelAdmin):
 
     form = SubmissionsAdminForm
     list_display = [
+        "created",
         'id',
         "question",
         "sound_file",
         "last_updated",
-        "created",
     ]
 
     readonly_fields = [
