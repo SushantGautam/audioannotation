@@ -1,0 +1,69 @@
+<!-- Include Label Studio stylesheet -->
+<link href="https://unpkg.com/label-studio/build/static/css/main.css" rel="stylesheet">
+
+<!-- Create the Label Studio container -->
+<body>
+<div>
+    <h4 style="text-align: -webkit-center;"><a href="{% url 'admin:WebApp_submissions_change' qid %}"> Submission
+        Detail </a></h4>
+</div>
+<div id="label-studio"></div>
+</body>
+<!-- Include the Label Studio library -->
+<script src="https://unpkg.com/label-studio/build/static/js/main.js"></script>
+
+
+<!-- Initialize Label Studio -->
+<script>
+    var labelStudio = new LabelStudio('label-studio', {
+        config: `
+   <View>
+      
+  <Labels name="labels" toName="audio">
+    <Label value="voice"/>
+  </Labels>
+  <AudioPlus name="audio" value="$audio" sync="transcription"/>
+
+  <View visibleWhen="region-selected|choice-selected">
+    <Header value="Provide Transcription"/>
+  </View>
+
+  <TextArea name="transcription" toName="audio" rows="1" editable="true" maxSubmissions="1" perRegion="true" required="true" displayMode="region-list"/>
+</View>
+    `,
+
+        interfaces: [
+            "panel",
+            "update",
+            "submit",
+            "controls",
+            "side-column",
+            "annotations:menu",
+            "annotations:add-new",
+            "annotations:delete",
+            "predictions:menu",
+        ],
+
+        user: {
+            pk: {{user.pk}},
+            firstName: " {{user_firstName}}",
+            lastName: " {{user_lastName}}",
+        },
+
+        task: {
+            annotations: [],
+            predictions: [],
+            id: {{ qid }},
+            data: {
+                audio: "{{audioFile}}",
+            }
+        },
+
+        onLabelStudioLoad: function (LS) {
+            var c = LS.annotationStore.addAnnotation({
+                userGenerate: true
+            });
+            LS.annotationStore.selectAnnotation(c.id);
+        }
+    });
+</script>

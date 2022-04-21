@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -102,6 +103,7 @@ def splitAudio(request, qid):
 
 
 @csrf_exempt
+@login_required
 def Record(request, qid):
     if request.method == 'POST':
         audio_file = request.FILES.get('recorded_audio')
@@ -113,3 +115,27 @@ def Record(request, qid):
         })
 
     return render(request, "record.html", {"qid": qid})
+
+
+@login_required
+def Annotate(request, qid):
+    if request.method == 'POST':
+        # audio_file = request.FILES.get('recorded_audio')
+        # myObj = Submissions.objects.get(id=qid)  # Put aurguments to properly according to your model
+        # myObj.sound_file = audio_file
+        # myObj.save()
+        return JsonResponse({
+            'success': True,
+        })
+
+    if Submissions.objects.get(id=qid).sound_file:
+        return render(request, "annotation-tool.html", {
+            "user_pk": request.user.pk,
+            "user_firstName": request.user.first_name,
+            "user_lastName": request.user.last_name,
+            "qid": qid,
+            "audioFile": Submissions.objects.get(id=qid).sound_file.url,
+        })
+    else:
+        return HttpResponse(
+            "No Audio file..... . </script>")
