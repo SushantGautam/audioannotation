@@ -5,6 +5,7 @@ from django.utils.html import format_html_join
 from django.utils.safestring import mark_safe
 
 from . import models
+from .models import Question
 
 
 class MemberAdminForm(forms.ModelForm):
@@ -48,6 +49,13 @@ class SubmissionsAdminForm(forms.ModelForm):
 
 
 class SubmissionsAdmin(admin.ModelAdmin):
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(SubmissionsAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['submitted_by'].initial = request.user
+        form.base_fields['question'].initial = Question.objects.all().last()
+        return form
+
     def response_change(self, request, obj):
         return redirect(request.path)
 
