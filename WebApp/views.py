@@ -149,8 +149,9 @@ def Annotate(request, qid):
             "audioFile": Submissions.objects.get(id=qid).sound_file.url,
             "annotations": [{"result": annotations}],
             "predictions": [{
-                "result": predictions
-            }, ]
+                             "model_version": "TTS Model",
+                             "result": predictions
+                             }, ]
         }, )
     else:
         return HttpResponse(
