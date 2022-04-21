@@ -37,7 +37,7 @@ def segmentaudio(sID, audiofile):
                                             seek_step=constance.config.seek_step)
     for idx, eachDuration in enumerate(nonsilent_ms):
         split_data.append({"start": (eachDuration[0] - constance.config.keep_silence) / 1000,
-                           "end": (eachDuration[1] + -constance.config.keep_silence) / 1000})
+                           "end": (eachDuration[1] + constance.config.keep_silence) / 1000})
     sub.extras['split_data'] = split_data
 
     stt_predictions_annotations = []
