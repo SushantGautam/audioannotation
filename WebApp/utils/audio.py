@@ -1,3 +1,4 @@
+import json
 import os
 import pathlib
 import random
@@ -68,6 +69,9 @@ def segmentaudio(sID, audiofile):
             "to_name": "audio",
             "type": "textarea"
         })
+    # if there are no saved annotations just set predicted annotations as annotations
+    if not sub.extras.get('annotations'):
+        sub.extras['annotations'] = json.dumps(stt_predictions_annotations)
     sub.extras['stt_predictions_annotations'] = stt_predictions_annotations
     sub.save()
 

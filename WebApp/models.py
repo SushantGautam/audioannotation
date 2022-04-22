@@ -139,10 +139,14 @@ def addrequest(sender, instance, **kwargs):
     except:
         if instance.sound_file:  # first time is sound is added
             segmentaudio(sID=instance.id, audiofile=instance.sound_file)
+            instance.extras['annotations'] = []
+            instance.save()
             print(" new file and audio file changed")
         return  # exit and ignore for the first time
 
     if instance.sound_file:
         if instance.sound_file.url != instance.pv_sound_file:  # on sound update
             segmentaudio(sID=instance.id, audiofile=instance.sound_file)
+            instance.extras['annotations'] = []
+            instance.save()
             print("audio file changed")
