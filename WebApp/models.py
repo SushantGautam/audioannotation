@@ -68,8 +68,12 @@ class Question(models.Model):
     class Meta:
         pass
 
+    @property
+    def short_question_text(self):
+        return str(truncatechars(self.question_text, 50))
+
     def __str__(self):
-        return str(truncatechars(self.question_text, 40))
+        return self.short_question_text
 
     def get_absolute_url(self):
         return reverse("Question_detail", args=(self.pk,))
@@ -97,11 +101,15 @@ class Submissions(models.Model):
     submitted_by = models.ForeignKey(Member, on_delete=models.CASCADE)
     sound_file = models.FileField(upload_to='media/question_audio/', blank=True, null=True,
                                   help_text="Upload audio file now or you will get to record your voice after you save.")
-    comment = models.TextField(max_length=4000, blank=True, null=True, help_text="Optional! Write your comment here")
+    comment = models.TextField(max_length=4000, blank=True, null=True, help_text="Optional! Write your comment here", )
     last_updated = models.DateTimeField(auto_now=True, editable=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
     tts_status = models.SmallIntegerField(choices=TTL_STATUS_CHOICES, default=0, help_text="For Future Purpose.")
     extras = models.JSONField(blank=True, null=True, default=dict)
+
+    @property
+    def short_comment(self):
+        return str(truncatechars(self.comment, 40))
 
     @property
     def getSplittedAudio(self):
