@@ -147,8 +147,8 @@ def Annotate(request, qid):
             "user_pk": request.user.pk,
             "user_firstName": request.user.first_name,
             "user_lastName": request.user.last_name,
-            "qid": qid,
-            "audioFile": Submissions.objects.get(id=qid).sound_file.url,
+            "qid": myObj,
+            "audioFile": myObj.sound_file.url,
             "annotations": [{"result": annotations}],
             "predictions": [{
                 "model_version": "TTS Model",

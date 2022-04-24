@@ -8,6 +8,11 @@
         Detail </a></h4>
 </div>
 <div id="label-studio"></div>
+<div style="margin: 20px">
+    <b> Question: </b>{{ qid.question.question_text }} <br>
+    <b> Comment: </b>{{ qid.comment }} <br>
+    <b> Exam: </b>{{ qid.question.project.name }} | <b> Submitted By: </b> {{ qid.submitted_by }} <br>
+</div>
 </body>
 <!-- Include the Label Studio library -->
 <script src="https://unpkg.com/label-studio/build/static/js/main.js"></script>
@@ -23,7 +28,7 @@
         console.log(sus) // TODO: remove this
         $.ajax({
             type: "POST",
-            url: "/annotate/{{ qid }}/",
+            url: "/annotate/{{ qid.pk }}/",
             data: {
                 'annotations': JSON.stringify(annotation.serializeAnnotation()),
                 'csrfmiddlewaretoken': "{{ csrf_token }}"
@@ -101,7 +106,7 @@
         task: {
             annotations:  {{annotations|safe}},
             predictions:  {{predictions|safe}},
-            id: {{ qid }},
+            id: {{ qid.pk }},
             data: {
                 audio: "{{audioFile}}",
             }
