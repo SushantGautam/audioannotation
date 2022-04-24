@@ -97,7 +97,7 @@ class Submissions(models.Model):
     submitted_by = models.ForeignKey(Member, on_delete=models.CASCADE)
     sound_file = models.FileField(upload_to='media/question_audio/', blank=True, null=True,
                                   help_text="Upload audio file now or you will get to record your voice after you save.")
-    comment = models.CharField(max_length=200, blank=True, null=True, help_text="Optional! Write your comment here")
+    comment = models.TextField(max_length=4000, blank=True, null=True, help_text="Optional! Write your comment here")
     last_updated = models.DateTimeField(auto_now=True, editable=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
     tts_status = models.SmallIntegerField(choices=TTL_STATUS_CHOICES, default=0, help_text="For Future Purpose.")
