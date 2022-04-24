@@ -10,3 +10,4 @@ whitenoise==5.2.0
 django-constance[database]==2.8.0
 django-picklefield
 django-cleanup~=5.2.0
+django-filter==2.4.0

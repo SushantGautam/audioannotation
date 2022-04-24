@@ -1,4 +1,6 @@
+import django_filters
 from rest_framework import viewsets, permissions
+from rest_framework.filters import OrderingFilter, SearchFilter
 
 from . import models
 from . import serializers
@@ -10,6 +12,9 @@ class MemberViewSet(viewsets.ModelViewSet):
     queryset = models.Member.objects.all()
     serializer_class = serializers.MemberSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend, OrderingFilter, SearchFilter]
+    filterset_fields = ['id',]
+
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
@@ -18,6 +23,8 @@ class QuestionViewSet(viewsets.ModelViewSet):
     queryset = models.Question.objects.all()
     serializer_class = serializers.QuestionSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend, OrderingFilter, SearchFilter]
+    filterset_fields = ['id', 'project']
 
 
 class SubmissionsViewSet(viewsets.ModelViewSet):
@@ -26,6 +33,8 @@ class SubmissionsViewSet(viewsets.ModelViewSet):
     queryset = models.Submissions.objects.all()
     serializer_class = serializers.SubmissionsSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend, OrderingFilter, SearchFilter]
+    filterset_fields = ['id', 'question']
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
@@ -34,3 +43,5 @@ class ProjectViewSet(viewsets.ModelViewSet):
     queryset = models.Project.objects.all()
     serializer_class = serializers.ProjectSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend, OrderingFilter, SearchFilter]
+    filterset_fields = ['id', 'created_by']
