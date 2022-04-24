@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+from rest_framework.decorators import api_view
 
 from . import forms
 from . import models
@@ -105,7 +106,8 @@ def splitAudio(request, qid):
 
 
 @csrf_exempt
-@login_required
+# @login_required
+@api_view(["POST"])
 def Record(request, qid):
     if request.method == 'POST':
         audio_file = request.FILES.get('recorded_audio')
@@ -149,9 +151,9 @@ def Annotate(request, qid):
             "audioFile": Submissions.objects.get(id=qid).sound_file.url,
             "annotations": [{"result": annotations}],
             "predictions": [{
-                             "model_version": "TTS Model",
-                             "result": predictions
-                             }, ]
+                "model_version": "TTS Model",
+                "result": predictions
+            }, ]
         }, )
     else:
         return HttpResponse(
