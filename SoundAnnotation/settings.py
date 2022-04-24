@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'channels',
     'constance',
     'constance.backends.database',
@@ -154,7 +155,6 @@ CONSTANCE_CONFIG = OrderedDict([
         segments.If True is specified, all the silence is kept, if False none is kept.
         default: 100ms''')),
 ])
-
 
 LOGIN_URL = '/admin/login/?next=/'
 LOGIN_REDIRECT_URL = '/'
