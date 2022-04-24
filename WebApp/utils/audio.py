@@ -69,7 +69,7 @@ def segmentaudio(sID, audiofile):
 
     res = ClovaSpeechClient().req_upload(file=sub.sound_file.path, completion='sync')
     if res.status_code == 200:
-        if res.json()['segments']:
+        if res.json().get('segments'):
             for idx, eachDuration in enumerate(res.json()['segments']):
                 stt_predictions_annotations.append({
                     "value": {
