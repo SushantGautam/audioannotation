@@ -10,7 +10,7 @@ function applyAudioWorkaround() {
         if (isSafari && window.MediaRecorder !== undefined) {
             // this version of Safari has MediaRecorder
             // but use the only supported mime type
-            options.plugins.record.audioMimeType = "audio/mp4";
+            options.plugins.record.audioMimeType = "audio/mp3";
         } else {
             // support recording in safari 11/12
             // see https://github.com/collab-project/videojs-record/issues/295
@@ -27,7 +27,7 @@ function applyAudioWorkaround() {
 function applyVideoWorkaround() {
     // use correct video mimetype for opera
     if (isOpera) {
-        options.plugins.record.videoMimeType = "video/mpeg;codecs=vp8"; // or vp9
+        options.plugins.record.videoMimeType = "video/webm;codecs=vp8"; // or vp9
     }
 }
 
