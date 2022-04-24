@@ -1,9 +1,10 @@
-from django.conf.urls.static import static
 from django.urls import path, include
 from django.views.generic import TemplateView
 from rest_framework import routers
+from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.response import Response
 
-from SoundAnnotation import settings
 from . import api
 from . import views
 
@@ -12,6 +13,27 @@ router.register("Member", api.MemberViewSet)
 router.register("Question", api.QuestionViewSet)
 router.register("Submissions", api.SubmissionsViewSet)
 router.register("Project", api.ProjectViewSet)
+
+
+class CustomObtainAuthToken(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        token = Token.objects.get(key=response.data['token'])
+        return Response({'token': token.key,
+                         'id': token.user_id,
+                         'FullName': token.user.first_name + " " + token.user.last_name,
+                         'email': token.user.email,
+                         'talent': token.user.is_talent,
+                         'status': token.user.is_active,
+                         'cpf': token.user.talent_extras.get('ChangePasswordFlag', False),  # changePasswordFlag
+                         })
+
+
+def logout_request(request):
+    logout(request)
+    messages.info(request, "Logged out successfully!")
+    return redirect("index")
+
 
 urlpatterns = (
     path("api/", include(router.urls)),
@@ -34,5 +56,9 @@ urlpatterns = (
     path("splitAudio/<int:qid>/", views.splitAudio, name="splitAudio"),
     path("record/<int:qid>/", views.Record, name="record"),
     path("annotate/<int:qid>/", views.Annotate, name="annotate"),
-)
 
+    # frontend login
+    path("api/token-auth", CustomObtainAuthToken.as_view()),
+    path("logout", logout_request, name="logout"),
+
+)
