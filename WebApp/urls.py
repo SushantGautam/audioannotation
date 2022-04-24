@@ -1,3 +1,5 @@
+from django.contrib.auth import logout
+from django.http import HttpResponse
 from django.urls import path, include
 from django.views.generic import TemplateView
 from rest_framework import routers
@@ -22,17 +24,12 @@ class CustomObtainAuthToken(ObtainAuthToken):
         return Response({'token': token.key,
                          'id': token.user_id,
                          'FullName': token.user.first_name + " " + token.user.last_name,
-                         'email': token.user.email,
-                         'talent': token.user.is_talent,
-                         'status': token.user.is_active,
-                         'cpf': token.user.talent_extras.get('ChangePasswordFlag', False),  # changePasswordFlag
                          })
 
 
 def logout_request(request):
     logout(request)
-    messages.info(request, "Logged out successfully!")
-    return redirect("index")
+    return HttpResponse("LoggedOut", status=200)
 
 
 urlpatterns = (
