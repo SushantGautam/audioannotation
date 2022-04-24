@@ -12,6 +12,7 @@ class MemberAdminForm(forms.ModelForm):
     class Meta:
         model = models.Member
         fields = "__all__"
+        exclude = ['extras']
 
 
 class MemberAdmin(admin.ModelAdmin):
@@ -25,6 +26,7 @@ class QuestionAdminForm(forms.ModelForm):
     class Meta:
         model = models.Question
         fields = "__all__"
+        exclude = ['extras']
 
 
 class QuestionAdmin(admin.ModelAdmin):
@@ -46,6 +48,7 @@ class SubmissionsAdminForm(forms.ModelForm):
     class Meta:
         model = models.Submissions
         fields = "__all__"
+        exclude = ['extras']
 
 
 class SubmissionsAdmin(admin.ModelAdmin):
@@ -99,7 +102,8 @@ class SubmissionsAdmin(admin.ModelAdmin):
     readonly_fields = [
         "last_updated",
         "created", "play_main_audio",
-        "get_splitted_chunks", "split_audio", 'extras',
+        # "get_splitted_chunks", "split_audio",
+        'extras',
     ]
 
 
@@ -107,14 +111,14 @@ class ProjectAdminForm(forms.ModelForm):
     class Meta:
         model = models.Project
         fields = "__all__"
-        exclude = ['groups', 'user_permissions']
+        exclude = ['groups', 'user_permissions', 'extras']
 
 
 class ProjectAdmin(admin.ModelAdmin):
     form = ProjectAdminForm
     list_display = [
-        "id",
         "name",
+        "id",
         "created",
         "last_updated",
     ]
