@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django_filters',
     'channels',
     'constance',
+    "corsheaders",
     'constance.backends.database',
     'django_cleanup.apps.CleanupConfig',
 
@@ -171,3 +172,7 @@ REST_FRAMEWORK = {
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     # 'PAGE_SIZE': 20
 }
+
+
+CORS_ALLOW_ALL_ORIGINS = True # If this is used then `CORS_ALLOWED_ORIGINS` will not have any effect
+CORS_ALLOW_CREDENTIALS = True
