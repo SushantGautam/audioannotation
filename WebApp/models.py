@@ -57,7 +57,7 @@ class Project(models.Model):
 class Question(models.Model):
     # Fields
     id = models.AutoField(primary_key=True, auto_created=True)
-    question_text = models.CharField(max_length=200, blank=False, null=False)
+    question_text = models.CharField(max_length=4000, blank=False, null=False)
     created_by = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="question_created_by")
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
