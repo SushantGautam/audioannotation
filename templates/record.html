@@ -1,226 +1,113 @@
-<!--inherits the layout-->
-{#{% extends 'base.html' %}#}
-<!--static-->
-{% load static %}
-<!--title-->
-{% block title %}{{ page_title }}{% endblock title %}
-
-<!--additional css-->
-
-{% block css %}
-    <link href="https://cdn.jsdelivr.net/gh/Sirneij/django-ajax-record/static/assets/css/video-js.css"
-          rel="stylesheet"/>
-    <link href="https://cdn.jsdelivr.net/gh/Sirneij/django-ajax-record/static/assets/css/all.min.css" rel="stylesheet"/>
-    <link
-            href="https://cdn.jsdelivr.net/gh/Sirneij/django-ajax-record/static/assets/css/videojs.wavesurfer.min.css"
-            rel="stylesheet"
-    />
-    <link href="https://cdn.jsdelivr.net/gh/Sirneij/django-ajax-record/static/assets/css/videojs.record.css"
-          rel="stylesheet"/>
-    <style>
-        /* change player background color */
-        #recordAudio {
-            background-color: #3e8ed0;
-        }
-    </style>
-{% endblock css %}
-<!--content-->
-{% block content %}
-    <section class="section">
-        <div class="container">
-            <div class="columns">
-                <div class="column is-offset-4 is-4">
-                    <h1 class="title">Record audio</h1>
-                    <article class="message is-success" id="alert">
-                        <div class="message-header">
-                            <p>Recorded successfully!</p>
-                            <button class="delete" aria-label="delete"></button>
-                        </div>
-                        <div class="message-body">
-                            You have successfully recorded your message. You can now click on
-                            the Submit button to post it.
-                        </div>
-                    </article>
-                    <form method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="control" style="margin-top: 1rem;">
-                            <button class="button is-info" id="submit" style="display: none">Submit</button>
-                        </div>
-
-                        <div class="field">
-                            {#            <div class="control has-icons-left has-icons-right">#}
-                            {#              <input#}
-                            {#                class="input"#}
-                            {#                type="text"#}
-                            {#                placeholder="Language"#}
-                            {#                name="language"#}
-                            {#                id="language"#}
-                            {#              />#}
-                            {#              <span class="icon is-left">#}
-                            {#                <i class="fas fa-language"></i>#}
-                            {#              </span>#}
-                            {#              <span class="icon is-right">#}
-                            {#                <i class="fas fa-check"></i>#}
-                            {#              </span>#}
-                            {#            </div>#}
-                            <div
-                                    class="control has-icons-left has-icons-right"
-                                    style="margin-top: 1rem"
-                            >
-                                <audio id="recordAudio" class="video-js vjs-default-skin"></audio>
-                            </div>
-
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-{% endblock content %}
-
-<!--additional js-->
-{% block js %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-            integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.jsdelivr.net/gh/Sirneij/django-ajax-record/static/assets/js/video.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/Sirneij/django-ajax-record/static/assets/js/RecordRTC.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/Sirneij/django-ajax-record/static/assets/js/adapter-latest.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/Sirneij/django-ajax-record/static/assets/js/wavesurfer.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/Sirneij/django-ajax-record/static/assets/js/wavesurfer.microphone.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/Sirneij/django-ajax-record/static/assets/js/videojs.wavesurfer.min.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/gh/Sirneij/django-ajax-record/static/assets/js/videojs.record.min.js"></script>
-    <script src="{%   static 'browser-workaround.js' %}"></script>
+<!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
 
-    <script>
-        // First lets hide the message
-        document.getElementById("alert").style.display = "none";
-        // Next, declare the options that will passed into the recording constructor
-        const options = {
-            controls: true,
-            bigPlayButton: false,
-            width: 600,
-            height: 300,
-            fluid: true, // this ensures that it's responsive
-            plugins: {
-                wavesurfer: {
-                    backend: "WebAudio",
-                    waveColor: "#f7fff7", // change the wave color here. Background color was set in the css above
-                    progressColor: "#ffe66d",
-                    displayMilliseconds: true,
-                    debug: true,
-                    cursorWidth: 1,
-                    hideScrollbar: true,
-                    plugins: [
-                        // enable microphone plugin
-                        WaveSurfer.microphone.create({
-                            bufferSize: 4096,
-                            numberOfInputChannels: 1,
-                            numberOfOutputChannels: 1,
-                            constraints: {
-                                video: false,
-                                audio: true,
-                            },
-                        }),
-                    ],
-                },
-                record: {
-                    audio: true, // only audio is turned on
-                    video: false, // you can turn this on as well if you prefer video recording.
-                    maxLength: 180, // how long do you want the recording?
-                    displayMilliseconds: true,
-                    debug: true,
-                },
-            },
-        };
+<div class="container text-center">
+    <h1> Record Submission</h1>
 
-        // apply audio workarounds for certain browsers
-        applyAudioWorkaround();
+    <ul id="playlist"></ul>
+    <span id="alertSuccess" style="display: none">Upload Success!</span>
+    <span id="alertFailed" style="display: none">Failed due to some reason!</span>
 
-        // create player and pass the the audio id we created then
-        var player = videojs("recordAudio", options, function () {
-            // print version information at startup
-            var msg =
-                "Using video.js " +
-                videojs.VERSION +
-                " with videojs-record " +
-                videojs.getPluginVersion("record") +
-                ", videojs-wavesurfer " +
-                videojs.getPluginVersion("wavesurfer") +
-                ", wavesurfer.js " +
-                WaveSurfer.VERSION +
-                " and recordrtc " +
-                RecordRTC.version;
-            videojs.log(msg);
+    <hr/>
+
+    <button class="btn btn-primary">🎙️Start recording</button>
+    <div id="afterSubmit" style="display: none">
+        <button onClick="window.location.reload();" class="btn btn-danger"> 🔁 Redo</button>
+        <button id="uploadToServer" class="btn btn-primary"> 📨 Submit</button>
+    </div>
+
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://unpkg.com/mic-recorder-to-mp3"></script>
+
+
+<script>
+    const button = document.querySelector('button');
+    const recorder = new MicRecorder({
+        bitRate: 128
+    });
+
+    button.addEventListener('click', startRecording);
+
+    function startRecording() {
+        recorder.start().then(() => {
+            button.textContent = '🛑 Stop recording';
+            button.classList.toggle('btn-danger');
+            button.removeEventListener('click', startRecording);
+            button.addEventListener('click', stopRecording);
+        }).catch((e) => {
+            console.error(e);
         });
+    }
 
-        // error handling
-        player.on("deviceError", function () {
-            console.log("device error:", player.deviceErrorCode);
-        });
+    var file;
 
-        player.on("error", function (element, error) {
-            console.error(error);
-        });
+    function stopRecording() {
 
-        // user clicked the record button and started recording
-        player.on("startRecord", function () {
-            console.log("started recording!");
-        });
-
-        // user completed recording and stream is available
-        player.on("finishRecord", function () {
-            const audioFile = player.recordedData;
-
-            console.log("finished recording: ", audioFile);
-
-            $("#submit").prop("disabled", false);
-            document.getElementById("alert").style.display = "block";
-            document.getElementById("submit").style.display = "block";
-        });
-
-        // Give event listener to the submit button
-        $("#submit").on("click", function (event) {
-            event.preventDefault();
-            let btn = $(this);
-            //   change the button text and disable it
-            btn.html("Submitting...").prop("disabled", true).addClass("disable-btn");
-            //   create a new File with the recordedData and its name
-            const recordedFile = new File([player.recordedData], `audiorecord.mp3`);
-            //   grabs the value of the language field
-            {#const language = document.getElementById("language").value;#}
-            //   initializes an empty FormData
-            let data = new FormData();
-            //   appends the recorded file and language value
-            data.append("recorded_audio", recordedFile);
-            data.append("qid", "{{qid}}");
-            {#data.append("language", language);#}
-            //   post url endpoint
-            const url = ".";
-            $.ajax({
-                url: url,
-                method: "POST",
-                data: data,
-                dataType: "json",
-                success: function (response) {
-                    if (response.success) {
-                        document.getElementById("alert").style.display = "block";
-                        window.opener.location.reload()
-                        window.close();
-                    } else {
-                        btn.html("Error").prop("disabled", false);
-                    }
-                },
-                error: function (error) {
-                    console.error(error);
-                },
-                cache: false,
-                processData: false,
-                contentType: false,
+        recorder.stop().getMp3().then(([buffer, blob]) => {
+            console.log(buffer, blob);
+            file = new File(buffer, 'music.mp3', {
+                type: blob.type,
+                lastModified: Date.now()
             });
+
+            const li = document.createElement('li');
+            const player = new Audio(URL.createObjectURL(file));
+            player.controls = true;
+            li.appendChild(player);
+            document.querySelector('#playlist').appendChild(li);
+
+            button.textContent = 'Start recording';
+            button.classList.toggle('btn-danger');
+            button.style.display = 'none';
+            button.removeEventListener('click', stopRecording);
+            button.addEventListener('click', startRecording);
+            $("#afterSubmit").show();
+        }).catch((e) => {
+            console.error(e);
         });
 
-    </script>
-{% endblock js %}
+    }
+
+
+    $('#uploadToServer').on('click', function () {
+        console.log('uploading');
+        const formData = new FormData();
+        formData.append("recorded_audio", file);
+        formData.append("qid", "{{qid}}");
+        $.ajax({
+            url: ".",
+            method: "POST",
+            data: formData,
+            dataType: "json",
+            success: function (response) {
+                if (response.success) {
+                    console.log(response);
+                    document.getElementById("alertSuccess").style.display = "block";
+                    document.getElementById("afterSubmit").style.display = "none";
+                    window.opener.location.reload()
+                    window.close();
+                } else {
+                    document.getElementById("afterSubmit").style.display = "none";
+                    document.getElementById("alertFailed").style.display = "block";
+
+                    // failed
+                    {#btn.html("Error").prop("disabled", false);#}
+                }
+            },
+            error: function (error) {
+                console.error(error);
+            },
+            cache: false,
+            processData: false,
+            contentType: false,
+        });
+    });
+</script>
