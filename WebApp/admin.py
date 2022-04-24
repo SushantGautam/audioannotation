@@ -30,8 +30,8 @@ class QuestionAdminForm(forms.ModelForm):
 class QuestionAdmin(admin.ModelAdmin):
     form = QuestionAdminForm
     list_display = [
-        "id",
         "question_text",
+        "id",
         "project",
         "last_updated",
         "created",

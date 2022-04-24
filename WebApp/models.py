@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
+from django.template.defaultfilters import truncatechars
 from django.urls import reverse
 
 from WebApp.utils.audio import segmentaudio
@@ -57,7 +58,7 @@ class Project(models.Model):
 class Question(models.Model):
     # Fields
     id = models.AutoField(primary_key=True, auto_created=True)
-    question_text = models.CharField(max_length=4000, blank=False, null=False)
+    question_text = models.TextField(max_length=4000, blank=False, null=False)
     created_by = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="question_created_by")
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
@@ -68,7 +69,7 @@ class Question(models.Model):
         pass
 
     def __str__(self):
-        return str(self.question_text)
+        return str(truncatechars(self.question_text, 40))
 
     def get_absolute_url(self):
         return reverse("Question_detail", args=(self.pk,))
