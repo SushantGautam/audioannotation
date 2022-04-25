@@ -13,3 +13,5 @@ django-cleanup~=5.2.0
 django-filter==2.4.0
 requests
 django-cors-headers
+celery
+eventlet

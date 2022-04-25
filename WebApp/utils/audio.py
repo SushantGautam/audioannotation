@@ -1,12 +1,13 @@
 import json
 
-from pydub import AudioSegment
+from celery import shared_task
 
 from clovaStt import ClovaSpeechClient
 
 
-def segmentaudio(sID, audiofile):
-    song = AudioSegment.from_file(audiofile)
+@shared_task
+def segmentaudio(sID):
+    # song = AudioSegment.from_file(audiofile)
     # sil = silence.split_on_silence(song,
     #                                min_silence_len=constance.config.min_silence_len,
     #                                silence_thresh=constance.config.silence_thresh,
@@ -25,6 +26,8 @@ def segmentaudio(sID, audiofile):
     from WebApp.models import Submissions
     # paths = [pathToSave + i for i in os.listdir(pathToSave)]
     sub = Submissions.objects.get(id=sID)
+    sub.set_tts_status(2)  # Processing by STT Queue
+
     # sub.extras['audio_segments'] = paths
     #
     # # get start and end of the audio segment
@@ -67,14 +70,16 @@ def segmentaudio(sID, audiofile):
     #         "type": "textarea"
     #     })
 
+    sub.set_tts_status(3)  # Calling STT API
+
     res = ClovaSpeechClient().req_upload(file=sub.sound_file.path, completion='sync')
     if res.status_code == 200:
         if res.json().get('segments'):
             for idx, eachDuration in enumerate(res.json()['segments']):
                 stt_predictions_annotations.append({
                     "value": {
-                        "start": eachDuration['start']/1000,
-                        "end": eachDuration['end']/1000,
+                        "start": eachDuration['start'] / 1000,
+                        "end": eachDuration['end'] / 1000,
                         "labels": [
                             "voice"
                         ]
@@ -86,8 +91,8 @@ def segmentaudio(sID, audiofile):
                 })
                 stt_predictions_annotations.append({
                     "value": {
-                        "start": eachDuration['start']/1000,
-                        "end": eachDuration['end']/1000,
+                        "start": eachDuration['start'] / 1000,
+                        "end": eachDuration['end'] / 1000,
                         "text": [
                             eachDuration['text']
                         ]
@@ -97,13 +102,17 @@ def segmentaudio(sID, audiofile):
                     "to_name": "audio",
                     "type": "textarea"
                 })
-
+    sub.set_tts_status(4)  # STT Output Received & Processing
+    sub.no_post_save = True
+    sub.save()
     # if there are no saved annotations just set predicted annotations as annotations
     if not sub.extras.get('annotations'):
         sub.extras['annotations'] = json.dumps(stt_predictions_annotations)
     sub.extras['stt_predictions_annotations'] = stt_predictions_annotations
     sub.save()
-
-    return len(stt_predictions_annotations)
+    sub.set_tts_status(5)  # STT TaskCompleted | AnnotationSaved
+    return "TaskID:" + str(sID) + " is splitted by NAVER SPEECH API to " + \
+           str(len(stt_predictions_annotations)) + " parts."
+    # return len(stt_predictions_annotations
 
 # segmentaudio(sID=1, audiofile="./../../media/question_audio/Recording.m4a")

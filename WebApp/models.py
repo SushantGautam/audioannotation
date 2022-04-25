@@ -5,8 +5,6 @@ from django.dispatch import receiver
 from django.template.defaultfilters import truncatechars
 from django.urls import reverse
 
-from WebApp.utils.audio import segmentaudio
-
 
 class Member(AbstractUser):
     TTL_GENDER = (
@@ -85,15 +83,12 @@ class Question(models.Model):
 class Submissions(models.Model):
     # Fields
     TTL_STATUS_CHOICES = (
-        (0, 'Submitted'),  # needs verification after member submits
-        (1, 'AdminVerifiedRequest'),  # when admin verifies
-        (2, 'AdminRejectedRequest'),  # admin rejects; may be member can resubmit after correction later
-        (3, 'PaymentMade'),  # After admin verifies; member pays money
-        (4, 'Hold'),  # after member pays money, talent can accept/reject
-        (5, 'TalentRejected'),  # if talent is unable to serve
-        (6, 'TalentCompleted'),  # automatically marked completed when talent does a submission
-        (7, 'AdminVerifySubmission'),
-        (8, 'AdminRejectSubmission'),
+        (0, 'Idle'),
+        (1, 'Submitted To STT Queue'),
+        (2, 'Processing by STT Queue'),
+        (3, 'Calling STT API'),
+        (4, 'STT Output Received & Processing'),
+        (5, 'STT TaskCompleted | AnnotationSaved '),
     )
 
     id = models.AutoField(primary_key=True, auto_created=True)
@@ -106,6 +101,11 @@ class Submissions(models.Model):
     created = models.DateTimeField(auto_now_add=True, editable=False)
     tts_status = models.SmallIntegerField(choices=TTL_STATUS_CHOICES, default=0, help_text="For Future Purpose.")
     extras = models.JSONField(blank=True, null=True, default=dict)
+
+    def set_tts_status(self, status):
+        self.tts_status = status  # STT TaskCompleted | AnnotationSaved
+        self.no_post_save = True
+        self.save()
 
     @property
     def short_comment(self):
@@ -151,8 +151,9 @@ def addrequest(sender, instance, **kwargs):
         if instance.sound_file:  # first time is sound is added
             instance.extras['annotations'] = []
             instance.no_post_save = True
+            instance.status = 0
             instance.save()
-            segmentaudio(sID=instance.id, audiofile=instance.sound_file)
+            segmentaudio.delay(sID=instance.id)
             print(" new file and audio file changed")
         return  # exit and ignore for the first time
 
@@ -161,5 +162,5 @@ def addrequest(sender, instance, **kwargs):
             instance.extras['annotations'] = []
             instance.no_post_save = True
             instance.save()
-            segmentaudio(sID=instance.id, audiofile=instance.sound_file)
+            segmentaudio.delay(sID=instance.id)
             print("audio file changed")

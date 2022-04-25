@@ -161,7 +161,6 @@ CONSTANCE_CONFIG = OrderedDict([
 LOGIN_URL = '/admin/login/?next=/'
 LOGIN_REDIRECT_URL = '/'
 
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
@@ -173,6 +172,12 @@ REST_FRAMEWORK = {
     # 'PAGE_SIZE': 20
 }
 
-
-CORS_ALLOW_ALL_ORIGINS = True # If this is used then `CORS_ALLOWED_ORIGINS` will not have any effect
+CORS_ALLOW_ALL_ORIGINS = True  # If this is used then `CORS_ALLOWED_ORIGINS` will not have any effect
 CORS_ALLOW_CREDENTIALS = True
+CELERY_BROKER_URL = 'amqp://user:password@127.0.0.1:5672/vhost'
+# to run on windows use:
+# docker run -d --hostname my-rabbit --name some-rabbit -p 5672:5672 -p 15672:15672 -e RABBITMQ_DEFAULT_USER=user -e RABBITMQ_DEFAULT_PASS=password -e RABBITMQ_DEFAULT_VHOST=vhost  rabbitmq:3-management
+# celery -A SoundAnnotation  worker -l info -P eventlet
+
+# to run on linux use:
+# celery -A SoundAnnotation worker -l info

@@ -6,12 +6,10 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
-from rest_framework.decorators import api_view
 
 from . import forms
 from . import models
 from .models import Submissions
-from .utils.audio import segmentaudio
 
 
 class QuestionListView(generic.ListView):
@@ -92,14 +90,17 @@ class ProjectDeleteView(generic.DeleteView):
     success_url = reverse_lazy("Project_list")
 
 
+from .utils.audio import segmentaudio
+
+
 def splitAudio(request, qid):
     instance = Submissions.objects.get(id=qid)
     if instance.sound_file:  # first time is sound is added
-        lenSeg = segmentaudio(sID=instance.id, audiofile=instance.sound_file)
+        instance.set_tts_status(1)
+        segmentaudio.delay(sID=instance.id)
         print("new file and audio file changed")
         return HttpResponse(
-            'Done! ' + str(
-                lenSeg) + ' splits made. <script>setTimeout(function(){window.opener.location.reload(); window.close()}, 1000) </script>')
+            'Done! Submitted to speech API. <script>setTimeout(function(){window.opener.location.reload(); window.close()}, 1000) </script>')
 
     return HttpResponse(
         'No sound File! <script>setTimeout(function(){window.opener.location.reload(); window.close()}, 1000) </script>')
