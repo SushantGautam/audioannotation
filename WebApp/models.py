@@ -141,6 +141,9 @@ def addrequest(sender, instance, **kwargs):
         instance.pv_sound_file = None
 
 
+from .utils.audio import segmentaudio
+
+
 @receiver(post_save, sender=Submissions)
 def addrequest(sender, instance, **kwargs):
     if hasattr(instance, 'no_post_save'):
