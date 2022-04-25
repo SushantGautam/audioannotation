@@ -88,7 +88,7 @@ class SubmissionsAdmin(admin.ModelAdmin):
                 .format(instance.id))
         else:
             return mark_safe(
-                "<span class='errors'>You will record option here to 🎤 record audio after saving.</span>")
+                "<span class='errors'>You will get record option here to 🎤 record audio after saving.</span>")
 
     def split_audio(self, instance):
         return mark_safe(
