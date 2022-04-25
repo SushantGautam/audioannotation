@@ -102,7 +102,8 @@ class SubmissionsAdmin(admin.ModelAdmin):
     readonly_fields = [
         "last_updated",
         "created", "play_main_audio",
-        # "get_splitted_chunks", "split_audio",
+        # "get_splitted_chunks",
+        "split_audio",
         'extras',
     ]
 
