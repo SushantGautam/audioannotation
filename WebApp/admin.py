@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib import admin
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils.html import format_html_join
 from django.utils.safestring import mark_safe
@@ -61,6 +62,10 @@ class SubmissionsAdmin(admin.ModelAdmin):
 
     def response_change(self, request, obj):
         return redirect(request.path)
+
+    def response_add(self, request, obj, post_url_continue=None):
+        ss = super(SubmissionsAdmin, self).response_add(request, obj, post_url_continue)
+        return HttpResponseRedirect("/admin/WebApp/submissions/" + str(obj.pk) + "/change/")
 
     def get_splitted_chunks(self, instance):
         return format_html_join(
