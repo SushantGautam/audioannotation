@@ -107,7 +107,7 @@ def splitAudio(request, qid):
 
 @csrf_exempt
 # @login_required
-@api_view(["POST"])
+# @api_view(["POST"])
 def Record(request, qid):
     if request.method == 'POST':
         audio_file = request.FILES.get('recorded_audio')
