@@ -159,3 +159,9 @@ def Annotate(request, qid):
     else:
         return HttpResponse(
             "No Audio file..... . </script>")
+
+
+from django.views.generic.base import TemplateView
+
+class ProfileView(TemplateView):
+    template_name = "profile.html"

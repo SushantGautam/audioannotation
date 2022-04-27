@@ -19,6 +19,7 @@ from django.urls import path, include, re_path
 from django.views.static import serve
 
 from SoundAnnotation import settings
+from WebApp import views
 
 admin.site.site_header = 'Sound Annotation Administration'  # default: "Django Administration"
 admin.site.index_title = 'Sound Annotation Administration'  # default: "Site administration"
@@ -36,3 +37,7 @@ urlpatterns += [
         'document_root': settings.STATIC_ROOT,
     })]
 
+urlpatterns += [
+    re_path(r'^accounts/', include('allauth.urls')),
+    re_path(r'^accounts/profile$', views.ProfileView),
+]

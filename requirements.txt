@@ -15,3 +15,4 @@ requests
 django-cors-headers
 celery
 eventlet
+django-allauth

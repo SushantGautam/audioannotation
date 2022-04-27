@@ -1,10 +1,30 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block content %}
     {#    <div class="m-2"><h4>WebApp</h4></div>#}
 
-    <div class="m-2"><a class="btn btn-light" href="/admin"> <b>Goto Admin Page </b></a></div>
 
     {#<div class="m-2"><a class="btn btn-light" href="{% url 'Question_list' %}">Question Listing</a></div>#}
     {#<div class="m-2"><a class="btn btn-light" href="{% url 'Submissions_list' %}">Submissions Listing</a></div>#}
     {#<div class="m-2"><a class="btn btn-light" href="{% url 'Project_list' %}">Project Listing</a></div>#}
+    {% if  user.is_authenticated %}
+        <div><a class="btn btn-light" href="/admin"> <b>Goto Admin Page</b></a></div>
+        <br>
+
+        <a href="/accounts/logout/" class="btn btn-light">Logout</a>
+    {% else %}
+        {#        <a href="/accounts/whalespaceprovider/login/" class="btn btn-light">WhaleSpace Login</a>#}
+        <h3>Login with:</h3>
+        <br>
+        <div class="m-2"><a class="btn btn-light" href="/admin" style="width:200px;"> <b>Admin Login</b></a></div>
+        <br>
+        <a href="/accounts/whalespaceprovider/login/" class="btn btn-light">
+            <img src="{% static 'images/whalespace_logo.png' %}" alt="WhaleSpace Logo" style="width:200px;">
+        </a>
+    {% endif %}
+
+
+
 {% endblock %}
+

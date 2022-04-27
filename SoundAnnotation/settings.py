@@ -28,6 +28,13 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.sites',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'whaleSpaceProvider',
+
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -181,3 +188,15 @@ CELERY_BROKER_URL = 'amqp://user:password@127.0.0.1:5672/vhost'
 
 # to run on linux use:
 # celery -A SoundAnnotation worker -l info
+
+
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+SITE_ID = 1
+
+WHALE_OAUTH_SERVER_BASEURL = 'https://auth.whalespace.io/oauth2/v1'
