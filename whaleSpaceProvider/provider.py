@@ -22,7 +22,7 @@ class WhaleSpaceProvider(OAuth2Provider):
                     last_name=data['last_name'], )
 
     def get_default_scope(self):
-        scope = ['read']
+        scope = ['https%3A//whalespace.io/directory/user.profile.readonly']
         return scope
 
 
