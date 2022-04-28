@@ -26,54 +26,49 @@
         integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-<script src="https://unpkg.com/mic-recorder-to-mp3"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/@gkt/microphone@1.0.3/dist/Microphone.min.js"></script>
 
 <script>
     const button = document.querySelector('button');
-    const recorder = new MicRecorder({
-        bitRate: 128
+    var recorder;
+    navigator.mediaDevices.getUserMedia({audio: true}).then((stream) => {
+        recorder = new Microphone(stream);
     });
-
     button.addEventListener('click', startRecording);
 
     function startRecording() {
-        recorder.start().then(() => {
-            button.textContent = '🛑 Stop recording';
-            button.classList.toggle('btn-danger');
-            button.removeEventListener('click', startRecording);
-            button.addEventListener('click', stopRecording);
-        }).catch((e) => {
-            console.error(e);
-        });
+        recorder.start()
+        button.textContent = '🛑 Stop recording';
+        button.classList.toggle('btn-danger');
+        button.removeEventListener('click', startRecording);
+        button.addEventListener('click', stopRecording);
+
     }
 
     var file;
 
-    function stopRecording() {
-
-        recorder.stop().getMp3().then(([buffer, blob]) => {
-            console.log(buffer, blob);
-            file = new File(buffer, 'music.mp3', {
-                type: blob.type,
-                lastModified: Date.now()
-            });
-
-            const li = document.createElement('li');
-            const player = new Audio(URL.createObjectURL(file));
-            player.controls = true;
-            li.appendChild(player);
-            document.querySelector('#playlist').appendChild(li);
-
-            button.textContent = 'Start recording';
-            button.classList.toggle('btn-danger');
-            button.style.display = 'none';
-            button.removeEventListener('click', stopRecording);
-            button.addEventListener('click', startRecording);
-            $("#afterSubmit").show();
-        }).catch((e) => {
-            console.error(e);
+    async function stopRecording() {
+        const blob = recorder.export();
+        recorder.stop()
+        console.log("blob", blob);
+        debugger
+        file = new File([blob], 'music.wav', {
+            type: blob.type,
+            lastModified: Date.now()
         });
+
+        const li = document.createElement('li');
+        const player = new Audio(URL.createObjectURL(file));
+        player.controls = true;
+        li.appendChild(player);
+        document.querySelector('#playlist').appendChild(li);
+
+        button.textContent = 'Start recording';
+        button.classList.toggle('btn-danger');
+        button.style.display = 'none';
+        button.removeEventListener('click', stopRecording);
+        button.addEventListener('click', startRecording);
+        $("#afterSubmit").show();
 
     }
 
