@@ -12,8 +12,8 @@ class WhaleSpaceProvider(OAuth2Provider):
     name = 'My WhaleSpace OAuth2 Provider'
     account_class = WhaleSpaceAccount
 
-    # def extract_uid(self, data):
-    #     return str(data['id'])
+    def extract_uid(self, data):
+        return str(data['customer']['uid'])
 
     def extract_common_fields(self, data):
         return dict(username=data['username'],
@@ -22,7 +22,7 @@ class WhaleSpaceProvider(OAuth2Provider):
                     last_name=data['last_name'], )
 
     def get_default_scope(self):
-        scope = ['https%3A//whalespace.io/directory/user.profile.readonly']
+        scope = ['https://whalepace.io/auth/directory/user.readonly']
         return scope
 
 

@@ -19,7 +19,9 @@ class WhaleSpaceAdapter(OAuth2Adapter):
     # NOTE: trailing slashes in URLs are important, don't miss it
 
     def complete_login(self, request, app, token, **kwargs):
-        headers = {'Authorization': 'Bearer {0}'.format(token.token)}
+        headers = {'Authorization': 'Bearer {0}'.format(token.token),
+                   'Content-Type': 'application/x-www-form-urlencoded',
+                   'Host': 'api.whalespace.io'}
         resp = requests.get(self.profile_url, headers=headers)
         extra_data = resp.json()
         return self.get_provider().sociallogin_from_response(request, extra_data)
