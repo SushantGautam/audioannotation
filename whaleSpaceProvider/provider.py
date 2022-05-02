@@ -16,10 +16,10 @@ class WhaleSpaceProvider(OAuth2Provider):
         return str(data['customer']['uid'])
 
     def extract_common_fields(self, data):
-        return dict(username=data['username'],
-                    email=data['email'],
-                    first_name=data['first_name'],
-                    last_name=data['last_name'], )
+        return dict(username=data['primaryEmail'].replace('@', '_'),
+                    email=data['primaryEmail'],
+                    first_name=data['name']['givenName'],
+                    last_name=data['name']['familyName'], )
 
     def get_default_scope(self):
         scope = ['https://whalepace.io/auth/directory/user.readonly']
