@@ -9,10 +9,16 @@
     {#<div class="m-2"><a class="btn btn-light" href="{% url 'Submissions_list' %}">Submissions Listing</a></div>#}
     {#<div class="m-2"><a class="btn btn-light" href="{% url 'Project_list' %}">Project Listing</a></div>#}
     {% if  user.is_authenticated %}
-        <div><a class="btn btn-light" href="/admin"> <b>Goto Admin Page</b></a></div>
+        {% if  user.is_superuser %}
+            <div><a class="btn btn-light" href="/admin"> <b>Goto Admin Page</b></a></div>
+        {% endif %}
+        <br>
+        <b> User: </b>{{ user.username }} <br>
+        <b>Name: </b>{{ user.first_name }} {{ user.last_name }}
+        <br>
         <br>
 
-        <a href="/accounts/logout/" class="btn btn-light">Logout</a>
+        <a href="/logout/" class="btn btn-light">Logout</a>
     {% else %}
         {#        <a href="/accounts/whalespaceprovider/login/" class="btn btn-light">WhaleSpace Login</a>#}
         <h3>Login with:</h3>
