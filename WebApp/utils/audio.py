@@ -1,6 +1,9 @@
 import json
+import tempfile
 
 from celery import shared_task
+from django.core.files.temp import NamedTemporaryFile
+from pydub import AudioSegment
 
 from clovaStt import ClovaSpeechClient
 
@@ -72,8 +75,14 @@ def segmentaudio(sID):
 
     sub.set_tts_status(3)  # Calling STT API
 
-    res = ClovaSpeechClient().req_upload(file=sub.sound_file.path, completion='sync')
-    if res.status_code == 200:
+    # TODO: https://pythonbasics.org/convert-mp3-to-wav/
+    res= None
+    with tempfile.TemporaryFile(delete=False) as fp:
+        sound = AudioSegment.from_wav(sub.sound_file.path)
+        sound.export(fp, format="mp3")
+        res = ClovaSpeechClient().req_upload(file=fp.name, completion='sync')
+
+    if res and res.status_code == 200:
         if res.json().get('segments'):
             for idx, eachDuration in enumerate(res.json()['segments']):
                 stt_predictions_annotations.append({
