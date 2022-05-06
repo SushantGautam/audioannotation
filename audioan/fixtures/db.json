@@ -1,0 +1,20 @@
+[
+    {
+        "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$260000$FUpBFLQqOnPmmwCtpNRblo$rih74/r651SDV/yx2Whtgb6tL/FxHHYcQOagz5SsCEQ=",
+            "last_login": "2022-05-06T07:58:04.095Z",
+            "is_superuser": true,
+            "username": "nsdevil",
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2022-05-06T07:14:59.719Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    }
+]

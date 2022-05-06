@@ -41,11 +41,11 @@
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item">
-                <a href="{% url 'homepage' %}" class="nav-link{% if request.resolver_match.view_name == 'homepage' %} active{% endif %}">Home</a>
+                <a href="{% url 'homepage' %}" class="nav-link{% if request.resolver_match.view_name == 'homepage' %} active{% endif %}">{% trans 'Home' %}</a>
               </li>
               {% if user.is_authenticated %}
                 <li class="nav-item" data-turbolinks="false">
-                  <a class="nav-link{% if request.resolver_match.view_name == 'profile' %} active{% endif %}" href="#">Profile</a>
+                  <a class="nav-link{% if request.resolver_match.view_name == 'profile' %} active{% endif %}" href="#">{% trans 'Profile' %}</a>
                 </li>
               {% endif %}
             </ul>
