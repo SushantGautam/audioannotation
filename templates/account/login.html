@@ -17,7 +17,7 @@
   <form class="login" method="POST" action="{% url 'account_login' %}">
     {% csrf_token %}
     <img class="mb-4" src="{% static 'img/logo.png' %}" alt="Logo" width="80" height="80">
-    <h1 class="h3 mb-3 fw-normal">{% trans "Audio Annotation Tool" %}</h1>
+    <h1 class="h3 mb-3 fw-normal">{% trans "Audio Annotation Tool" %}</h1><br>
     <h5>{% trans "Please Sign In" %}</h5>
 
     <div class="form-floating">
@@ -39,7 +39,7 @@
         {% endfor %}
       </div>
     {% endif %}
-    <button class="w-100 btn btn-primary mb-2" type="submit">{% trans "Log In" %}</button>
+    <button class="w-100 btn btn-success mb-2" type="submit">{% trans "Log In" %}</button>
 
   </form>
 
@@ -53,8 +53,9 @@
         {% for provider in socialaccount_providers %}
             <a title="{{provider.name}}" class="socialaccount_provider {{provider.id}}" 
               href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
-                <button type="button" class="btn btn btn-outline-secondary">
-                  <i class="fa fa-windows fa-lg" aria-hidden="true"></i> Sign in with Naver
+                <button type="button" class="btn btn-lg btn-outline-success">
+                  <img src="{% static 'img/naver_logo.png' %}" alt="{% trans 'Naver Logo' %}" width="25" height="25">
+                   Sign in with Naver
               </button></a>
         {% endfor %}
       </ul>
@@ -68,7 +69,7 @@
   {% endif %}
 
 
-  <p class="mt-5 mb-3 text-muted">&copy; 2022</p>
+  <p class="mt-5 mb-3 text-muted">&copy; 2022 NSDevil Co. Ltd.</p>
 </div>
 
 {% endblock %}
