@@ -55,7 +55,7 @@
               href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
                 <button type="button" class="btn btn-lg btn-outline-success">
                   <img src="{% static 'img/naver_logo.png' %}" alt="{% trans 'Naver Logo' %}" width="25" height="25">
-                   Sign in with Naver
+                   {% trans 'Sign in with Naver' %}
               </button></a>
         {% endfor %}
       </ul>
@@ -69,7 +69,7 @@
   {% endif %}
 
 
-  <p class="mt-5 mb-3 text-muted">&copy; 2022 NSDevil Co. Ltd.</p>
+  <p class="mt-5 mb-3 text-muted">&copy; {% now "Y" %} NSDevil Co. Ltd.</p>
 </div>
 
 {% endblock %}
