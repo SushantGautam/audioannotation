@@ -1,5 +1,11 @@
 from distutils.command.upload import upload
 from django.db import models
+from orgadmin.models import BaseUserModel
+
+class Professor(BaseUserModel):
+    class Meta:
+        verbose_name = 'Professor'
+        verbose_name_plural = 'Professors'
 
 class Category(models.Model):
     name = models.CharField(max_length=256)
