@@ -160,6 +160,9 @@ function init_wavesurfer() {
       e.shiftKey ? region.playLoop() : region.play();
     });
     wavesurfer.on("region-click", editAnnotation);
+    wavesurfer.on("region-created", function (region) {
+      appendDeleteIcon(region.id);
+    });
     wavesurfer.on("region-updated", saveRegions);
     wavesurfer.on("region-removed", saveRegions);
 
@@ -255,6 +258,14 @@ function init_wavesurfer() {
     const form = document.forms.edit;
     form.style.opacity = 0;
   }
+}
+
+function appendDeleteIcon(elem) {
+  let btnHTML = document.createElement('button');
+  btnHTML.className = 'btn btn-sm delete-range';
+  btnHTML.innerHTML = "x";
+
+  document.querySelector(`[data-id=${elem}]`).appendChild(btnHTML);
 }
 
 function clear_annotations() {
@@ -572,6 +583,10 @@ document.addEventListener("DOMContentLoaded", function () {
     wavesurfer.playPause();
   });
 });
+
+function createRegionsCallBack(region) {
+  console.log('here', region)
+}
 
 function saveRegions() {
   const mydata = Object.keys(wavesurfer.regions.list).map(function (id) {
