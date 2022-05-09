@@ -4,7 +4,7 @@
 
 {% block content %}
   <div class="p-3">
-  <a class=" tab-element question_active_toggle_label active " id="questions_btn" href="/professor_question_list">Question List</a>
-  <a class=" tab-element question_set_active_toggle_label active " id="question_set_btn" href="/professor_question_set">Question Sets</a>
+  <a class=" tab-element question_set_active_toggle_label {% if 'professor_question_set' in request.path %} active {% endif %}" id="question_set_btn" href="{% url 'professor:question_set_page' %}">Question Sets</a>
+  <a class=" tab-element question_active_toggle_label {% if 'professor_question_list' in request.path %}active {% endif %}" id="questions_btn" href="{% url 'professor:question_list_page' %}">Question List</a>
   </div>
 {% endblock %}
