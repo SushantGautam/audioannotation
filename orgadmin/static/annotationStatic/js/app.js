@@ -188,12 +188,7 @@ function init_wavesurfer() {
     document
       .querySelector('[data-action="delete-region"]')
       .addEventListener("click", function () {
-        let form = document.forms.edit;
-        let regionId = form.dataset.region;
-        if (regionId) {
-          wavesurfer.regions.list[regionId].remove();
-          form.reset();
-        }
+        deleteRegionFunc();
       });
   }
 
@@ -260,11 +255,24 @@ function init_wavesurfer() {
   }
 }
 
+function deleteRegionFunc () {
+  console.log('here')
+  let form = document.forms.edit;
+  let regionId = form.dataset.region;
+  if (regionId) {
+    wavesurfer.regions.list[regionId].remove();
+    form.reset();
+  }
+}
 function appendDeleteIcon(elem) {
   let btnHTML = document.createElement('button');
   btnHTML.className = 'btn btn-sm delete-range';
+  btnHTML.setAttribute('data-action', 'delete-region');
   btnHTML.innerHTML = "x";
-
+  btnHTML.addEventListener("click", function () {
+    btnHTML.closest('.wavesurfer-region').click();
+    deleteRegionFunc();
+  });
   document.querySelector(`[data-id=${elem}]`).appendChild(btnHTML);
 }
 
