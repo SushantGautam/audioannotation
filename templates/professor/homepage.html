@@ -3,5 +3,8 @@
 {% load i18n %}
 
 {% block content %}
-    {{ user.username }}
+  <div class="p-3">
+  <a class=" tab-element question_active_toggle_label active " id="questions_btn" href="/professor_question_list">Question List</a>
+  <a class=" tab-element question_set_active_toggle_label active " id="question_set_btn" href="/professor_question_set">Question Sets</a>
+  </div>
 {% endblock %}
