@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "password": "pbkdf2_sha256$260000$FUpBFLQqOnPmmwCtpNRblo$rih74/r651SDV/yx2Whtgb6tL/FxHHYcQOagz5SsCEQ=",
-            "last_login": "2022-05-06T07:58:04.095Z",
+            "last_login": "2022-05-09T06:10:02.848Z",
             "is_superuser": true,
             "username": "nsdevil",
             "first_name": "",
@@ -15,6 +15,148 @@
             "date_joined": "2022-05-06T07:14:59.719Z",
             "groups": [],
             "user_permissions": []
+        }
+    },
+    {
+        "model": "professor.category",
+        "pk": 1,
+        "fields": {
+            "name": "Pronunciation",
+            "description": "",
+            "created_at": "2022-05-09T06:13:44.853Z",
+            "updated_at": "2022-05-09T06:13:44.853Z",
+            "is_active": true
+        }
+    },
+    {
+        "model": "professor.category",
+        "pk": 2,
+        "fields": {
+            "name": "Speech",
+            "description": "",
+            "created_at": "2022-05-09T06:13:54.668Z",
+            "updated_at": "2022-05-09T06:13:54.668Z",
+            "is_active": true
+        }
+    },
+    {
+        "model": "professor.subcategory",
+        "pk": 1,
+        "fields": {
+            "name": "Reading Word",
+            "description": "",
+            "category_code": 1,
+            "created_at": "2022-05-09T06:14:21.291Z",
+            "updated_at": "2022-05-09T06:14:21.291Z",
+            "is_active": true
+        }
+    },
+    {
+        "model": "professor.subcategory",
+        "pk": 2,
+        "fields": {
+            "name": "Reading Sentence",
+            "description": "",
+            "category_code": 1,
+            "created_at": "2022-05-09T06:14:39.549Z",
+            "updated_at": "2022-05-09T06:14:39.549Z",
+            "is_active": true
+        }
+    },
+    {
+        "model": "professor.subcategory",
+        "pk": 3,
+        "fields": {
+            "name": "Reading Paragraph",
+            "description": "",
+            "category_code": 1,
+            "created_at": "2022-05-09T06:14:51.508Z",
+            "updated_at": "2022-05-09T06:14:51.508Z",
+            "is_active": true
+        }
+    },
+    {
+        "model": "professor.subcategory",
+        "pk": 4,
+        "fields": {
+            "name": "Reading Story",
+            "description": "",
+            "category_code": 1,
+            "created_at": "2022-05-09T06:15:02.727Z",
+            "updated_at": "2022-05-09T06:15:02.727Z",
+            "is_active": true
+        }
+    },
+    {
+        "model": "professor.subcategory",
+        "pk": 5,
+        "fields": {
+            "name": "Listen and Repeat",
+            "description": "",
+            "category_code": 2,
+            "created_at": "2022-05-09T06:15:29.141Z",
+            "updated_at": "2022-05-09T06:15:29.141Z",
+            "is_active": true
+        }
+    },
+    {
+        "model": "professor.subcategory",
+        "pk": 6,
+        "fields": {
+            "name": "Answering questions",
+            "description": "",
+            "category_code": 2,
+            "created_at": "2022-05-09T06:15:55.595Z",
+            "updated_at": "2022-05-09T06:15:55.595Z",
+            "is_active": true
+        }
+    },
+    {
+        "model": "professor.subcategory",
+        "pk": 7,
+        "fields": {
+            "name": "Speaking on Personal Topic",
+            "description": "",
+            "category_code": 2,
+            "created_at": "2022-05-09T06:16:09.803Z",
+            "updated_at": "2022-05-09T06:16:09.803Z",
+            "is_active": true
+        }
+    },
+    {
+        "model": "professor.subcategory",
+        "pk": 8,
+        "fields": {
+            "name": "Speaking according to language function",
+            "description": "",
+            "category_code": 2,
+            "created_at": "2022-05-09T06:16:32.148Z",
+            "updated_at": "2022-05-09T06:16:32.148Z",
+            "is_active": true
+        }
+    },
+    {
+        "model": "professor.subcategory",
+        "pk": 9,
+        "fields": {
+            "name": "Explanation on image and graph",
+            "description": "",
+            "category_code": 2,
+            "created_at": "2022-05-09T06:17:13.033Z",
+            "updated_at": "2022-05-09T06:17:13.033Z",
+            "is_active": true
+        }
+    },
+    {
+        "model": "professor.subcategory",
+        "pk": 10,
+        "fields": {
+            "name": "Speaking on Self Opinion",
+            "description": "",
+            "category_code": 2,
+            "created_at": "2022-05-09T06:17:32.000Z",
+            "updated_at": "2022-05-09T06:17:32.000Z",
+            "is_active": true
         }
     }
 ]
