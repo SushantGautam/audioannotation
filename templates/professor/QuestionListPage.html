@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+
+
+
+
+    <div class="p-3">
+        <a class="tab-element question_set_active_toggle_label {% if 'professor_question_set' in request.path %} active {% endif %} " id="question_set_btn" href="{% url 'professor:question_set_page' %}">{% trans "Question Set" %}</a>
+        <a class="mx-1 tab-element question_active_toggle_label {% if 'professor_question_list' in request.path %} active {% endif %}" id="questions_btn" href="{% url 'professor:question_list_page' %}">{% trans "Question List" %}</a>
+
+    </div>
+    <div class="bg-white p-3">
+
+      <h1 class="page-heading">{% trans "Question List" %}</h1>
+
+    <div class="table-responsive survey_questions_table" id="question_table" style="border: none;">
+            <table class="table pt-2" cellspacing="0" id="question_list_table">
+                <thead class="">
+                <tr class="tableTitleRow">
+                    <th>
+                        <input type="checkbox" class="CheckAll">
+                    </th>
+                    <th>{% trans "S. No." %}</th>
+                    <th>{% trans "Question Title" %}</th>
+                    <th>{% trans "Category" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Details" %}</th>
+                    <th>{% trans "Actions" %}</th>
+                </tr>
+
+                </thead>
+                <tbody>
+                {% comment %}
+                {% for object in object_list %}
+                    <tr>
+                   <td><input type="checkbox" class="surveyinfoCheckbox" value="{{ object.id }}">
+                   </td>
+                        <td> {{ forloop.counter }}</td>
+                        <td> {{ object.Survey_Title }}</td>
+                        <td> <h7 class="date_time link-dark" >
+                            {% language "en" %}
+                            {{ object.Start_Date|date:'Y.m.d  h:i A' }} ~ {{ object.End_Date|date:'Y.m.d  h:i A' }}
+                            {% endlanguage %}
+                        </h7></td>
+                        <td>{{ object.Category_Code.Category_Name }}</td>
+                        <td>
+
+
+                            {% if datetime_now > object.Start_Date and datetime_now < object.End_Date %}
+                                <h6 class="text-success">  {% trans "Active" %} </h6>
+                                {% elif datetime_now < object.Start_Date  %}
+                                <h6 class="text-secondary"> {% trans "Upcoming" %} </h6>
+                                {% elif datetime_now > object.End_Date %}
+                                <h6 class="text-secondary">{% trans "Expired" %}</h6>
+                            {% endif %}
+
+                        </td>
+                            <td>{{ object.Questions.count }}</td>
+                        <td>
+                            <a class="btn btn-sm btn-chinju-gray" id="{{ object.id }}" href="{{object.get_absolute_url}}">{% trans "Detail" %}</a>
+                        </td>
+                        <td> <a title="{% trans 'Update survey' %}" class="btn btn-sm btn-chinju-gray rounded-circle editSurvey" href="{{ object.get_update_url }}" data_id="" ><i class ="fa fa-pen"> </i></a>
+{#                            <a title="{% trans 'Delete survey' %}" class="btn btn-sm btn-chinju-gray rounded-circle ml-2" id="{{ object.id }}" href="{% url 'remove_course_from_evaluation' evaluation=object.id course_id=course.id %}"><i class="fa fa-trash"></i></a>#}
+                            <a title="{% trans 'Delete survey' %}" class="btn btn-sm btn-chinju-gray rounded-circle deleteSurvey confirm-delete ml-1" id="{{ object.id }}"><i class="fa fa-trash"></i></a>
+                        </td>
+
+                </tr>
+                {% endfor %}
+                {% endcomment %}
+                </tbody>
+            </table>
+            <span class="checkboxCheckedLength"></span>
+        </div>
+
+
+
+
+    <div id="add_survey_modal" class="modal fade" style="height: -webkit-fill-available;">
+        <div class="modal-dialog">
+            <div class="modal-content" style="height: -webkit-fill-available; overflow: auto; overflow-x: hidden;">
+                <div class="modal-header">
+                    <h5 class="modal-title " id="create_survey_modal_title" style="position: relative;left: 130px;">
+                        {% trans "Create New Question" %}
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="ti-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body" id="QuestionForm">
+                    <div class="card">
+
+                        <div class="card-body">
+                            <div class="row question_form_div">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+ $('#question_list_table').DataTable({
+        dom: 'lfBtp',
+        responsive: true,
+        pagingType: "full_numbers",
+        language: { search: '_INPUT_',
+                    searchPlaceholder: "{% trans 'Search' %}...",
+                    lengthMenu: "&nbsp; _MENU_" },
+
+
+        buttons: [
+          {% comment %}
+            {
+                text: `{% trans "Ready" %}`,
+                className: "ready sub-tab-element {% if 'ready' in request.get_full_path %}  active {% endif %}",
+                action: ready_click,
+            },
+            {
+                text: `{% trans "OnGoing" %}`,
+                className: "ongoing sub-tab-element {% if 'ongoing' in request.get_full_path %}  active {% endif %}",
+                action: ongoing_click,
+            },
+            {
+                text: `{% trans "Completed" %}`,
+                className: "completed sub-tab-element {% if 'completed' in request.get_full_path %}  active {% endif %}",
+                action: completed_click,
+            },
+            {% endcomment %}
+            {
+                text: "<i class='fa fa-plus mr-2'></i> {% trans 'Register' %}",
+                action: function ( e, dt, button, config ) {
+                    window.location = "{% url 'professor:question_list_page' %}";
+                },
+                className: "survey_dt_right_btn btn-chinju-orange active",
+            },
+            {
+                text: "<i class='fa fa-trash multiple-delete'></i>",
+                className: "survey_dt_right_btn",
+            },
+        ],
+
+
+
+
+
+        oLanguage: {
+            oPaginate: {
+                sFirst: '<i class="fas fa-angle-double-left"></i>',
+                sNext: '<i class="fas fa-angle-right"></i>',
+                sPrevious: '<i class="fas fa-angle-left"></i>',
+                sLast: '<i class="fas fa-angle-double-right"></i>',
+            }
+
+        },
+        initComplete: function() {
+             $('.dataTables_filter').addClass('survey_dt_right_btn');
+             $('.dataTables_length').addClass('survey_dt_right_btn');
+             $('.dataTables_filter input').removeClass('form-control-sm');
+             $('.dataTables_filter input').after(`<span class="fa fa-search search-input-icon"></span>`);
+             $('.dataTables_length select').removeClass('custom-select-sm');
+             $('.dt-buttons button').addClass('btn-gray text-white');
+        //    $('.ready').removeClass('btn-gray btn-secondary text-white');
+        //    $('.ongoing').removeClass('btn-gray btn-secondary text-white');
+       //     $('.completed').removeClass('btn-gray btn-secondary text-white');
+
+            $('.multiple-delete').parent().parent().attr({'class':'btn btn-chinju-gray rounded-circle float-right  text-white mr-2 deleteCheckedsurveys',
+                                                'type': 'submit',
+                                                'onclick': `return confirm("{% trans 'Are you sure you want to delete selected Surveys?' %}")`,
+                                                'disabled': 'true',
+                                                'title': '{% trans "Delete Selected Survey" %}'})
+
+              $('.multiple-delete').parent().parent().attr('onclick',"delete_multi()")
+
+
+
+            $('.dataTables_paginate').addClass('my-4');
+
+
+         var options = {
+
+          year: "numeric",
+          month: "numeric",
+          day: "2-digit"
+         };
+
+         $(".date_time").each(function(){
+            period_date =  $(this).text();
+            start = period_date.split("~")[0]
+            end = period_date.split("~")[1]
+            s = start.concat(" UTC")
+            e = end.concat(" UTC")
+            console.log("s", s)
+            console.log("e", e)
+
+            sd = new Date(s).toLocaleString("en")
+
+            ed = new Date(e).toLocaleString("en")
+              sd = moment(sd).format('YYYY.MM.DD hh:mm A')
+            ed = moment(ed).format('YYYY.MM.DD hh:mm A')
+            console.log("sd", sd)
+            console.log("ed", ed)
+            $(this).html(sd + " ~ " + ed);
+          });
+
+             $(".CheckAll").closest("th").removeClass("sorting_asc");
+        },
+        stateSave: false,
+        responsive: true,
+        processing: true,
+
+        fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+
+          var index = iDisplayIndexFull + 1;
+          $("td:eq(1)", nRow).html(index);
+          return nRow;
+        },
+        columnDefs: [
+            { orderable: false, targets: [0,7,8] }
+        ],
+    });
+
+
+</script>
+{% endblock scripts %}
