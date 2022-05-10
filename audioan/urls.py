@@ -24,7 +24,7 @@ if 'rosetta' in settings.INSTALLED_APPS and settings.DEBUG:
 # URL for development phase only
 if settings.DEBUG:
     urlpatterns += [
-        path('gitpull', views.gitpull),
-        path('deployserver', views.deployserver),
-        path('migratedb', views.migratedb)
+        path('gitpull/', views.gitpull),
+        path('deployserver/', views.deployserver),
+        path('migratedb/', views.migratedb)
     ]

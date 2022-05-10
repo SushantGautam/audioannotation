@@ -21,6 +21,6 @@ def migratedb(request):
 
 def deployserver(request):
     import subprocess
-    command = "sudo sh deploy.sh;"
+    command = "sh deploy.sh;"
     ret = subprocess.run(command, stdout=subprocess.PIPE, shell=True)
     return HttpResponse(ret.stdout.decode())
