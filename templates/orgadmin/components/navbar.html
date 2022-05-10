@@ -2,7 +2,7 @@
 {% load i18n %}
 
 <div class="collapse navbar-collapse" id="navbarCollapse">
-    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <ul class="navbar-nav me-auto">
       <li class="nav-item">
         <a href="{% url 'homepage' %}" class="nav-link{% if request.resolver_match.view_name == 'homepage' %} active{% endif %}">{% trans 'Home' %}</a>
       </li>

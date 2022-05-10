@@ -1,6 +1,277 @@
-{% extends "orgadmin/base.html" %}
-{% load static %}
+{% extends "orgadmin/base.html" %} 
+{% load static %} 
+
+{% block styles %}
+<style>
+
+  main{
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  section{
+    margin-block:1rem;
+  }
+
+  .title{
+    font-weight: 500;
+  }
+
+  .users , .workers{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1rem;
+    background-color: white;
+    /* padding-block: 1rem; */
+  }
+
+  .user-card , .worker-stat{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    border: 2.5px solid lightgrey;
+  }
+
+  .user-card .right-side {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .new-additions , .time{
+    display: flex;
+    flex-direction: column;
+    padding: 0rem 0.45rem 0 0.25rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 0.25rem;
+    background-color: rgba(0,0,0, 0.05);
+    color: #0ab2a9;
+  }
+
+  .count {
+    font-weight: 600; 
+    font-size: 1.5rem;
+  }
+
+  .tasks-workers-section{
+    display:flex;
+    gap: 1rem;
+  }
+
+  .tasks-workers-section > div{
+    width: 50%;
+  }
+
+  .tasks{
+    display:flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    border: 2.5px solid lightgrey;
+  }
+
+  .task-parent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    background-color: #f9f9f9;
+    padding: 0.25rem;
+  }
+
+  .task-parent .text-section{
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+    .task-parent .time-section{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .time{
+    min-width: 4.8rem;
+    text-align: center;
+  }
+  svg.fa-thumbtack{
+    margin-top: 0.3rem;
+  }
+
+  /* .workers{
+    display:flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    border: 2.5px solid lightgrey;
+  } */
+
+</style>
+{% endblock %} 
 
 {% block content %}
-    {{ user.username }}
+<main>
+
+
+  
+  <section >
+    <h2 class="my-3 title">User Metrics</h2>
+    <div class="users">
+    <div class="user-card">
+      <div class="right-side">
+        <div>
+          <i class="fa-solid fa-users"></i>
+          <span class="count"> 1123</span>
+        </div>
+        <span class="title"> Total Users</span>
+      </div>
+      <span class="new-additions">+98</span>
+    </div>
+
+    <div class="user-card">
+      <div class="right-side">
+        <div>
+          <i class="fa-solid fa-microphone-lines"></i>
+          <span class="count">222</span>
+        </div>
+        <span class="title"> Speakers</span>
+      </div>
+      <span class="new-additions">+98</span>
+
+    </div>
+
+    <div class="user-card">
+      <div class="right-side">
+        <div>
+          <i class="fa-solid fa-person-chalkboard"></i>
+          <span class="count">123</span>
+        </div>
+        <span class="title"> Professors</span>
+      </div>
+      <span class="new-additions">+98</span>
+
+    </div>
+
+    <div class="user-card">
+      <div class="right-side">
+        <div>
+          <i class="fa-solid fa-person-digging"></i>
+          <span class="count">333</span>
+        </div>
+        <span class="title"> Workers</span>
+      </div>
+      <span class="new-additions">+98</span>
+      
+    </div>
+    </div>
+  </section>
+
+  <section class="tasks-workers-section">
+    <div>
+      <h2>Latest tasks</h2>
+      <div class="tasks">
+        <div class="task-parent shadow-sm">
+          <div class="text-section">
+            <i class="fa-solid fa-thumbtack"></i>
+            <span class="task-title">Some random task here and there here and there here  and there...</span>
+          </div>
+
+          <div class="time-section">
+            <i class="fa-solid fa-clock"></i>
+            <span class="time "> 02:32 PM</span>
+          </div>
+        </div>
+        <div class="task-parent shadow-sm">
+          <div class="text-section">
+            <i class="fa-solid fa-thumbtack"></i>
+            <span class="task-title">Some random task here and there here and there here  and there...</span>
+          </div>
+
+          <div class="time-section">
+            <i class="fa-solid fa-clock"></i>
+            <span class="time "> 02:32 PM</span>
+          </div>
+        </div>
+        <div class="task-parent shadow-sm">
+          <div class="text-section">
+            <i class="fa-solid fa-thumbtack"></i>
+            <span class="task-title">Some random task here and there here and there here  and there...</span>
+          </div>
+
+          <div class="time-section">
+            <i class="fa-solid fa-clock"></i>
+            <span class="time "> 02:32 PM</span>
+          </div>
+        </div>
+        <div class="task-parent shadow-sm">
+          <div class="text-section">
+            <i class="fa-solid fa-thumbtack"></i>
+            <span class="task-title">Some random task here and there here and there here  and there...</span>
+          </div>
+
+          <div class="time-section">
+            <i class="fa-solid fa-clock"></i>
+            <span class="time "> 02:32 PM</span>
+          </div>
+        </div>
+
+        
+        
+      </div>
+    </div>
+
+    <div>
+      <h2 class="title">Worker stats</h2>
+      <div class="workers">
+
+      <div class="worker-stat">
+        <div class="right-side">
+          <div>
+            <i class="fa-solid fa-laptop-file"></i>
+            <span class="count"> 112</span>
+          </div>
+          <span class="title"> Tasks Pending</span>
+        </div>
+        <span class="new-additions">+66</span>
+      </div>
+      <div class="worker-stat">
+        <div class="right-side">
+          <div>
+            <i class="fa-solid fa-clipboard-check"></i>
+            <span class="count"> 112</span>
+          </div>
+          <span class="title"> Tasks Completed</span>
+        </div>
+        <span class="new-additions">+66</span>
+      </div>
+      <div class="worker-stat">
+        <div class="right-side">
+          <div>
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span class="count"> 112</span>
+          </div>
+          <span class="title"> Grading Pending</span>
+        </div>
+        <span class="new-additions">+66</span>
+      </div>
+      <div class="worker-stat">
+        <div class="right-side">
+          <div>
+            <i class="fa-solid fa-clipboard-check"></i>
+            <span class="count"> 112</span>
+          </div>
+          <span class="title"> Grading Completed</span>
+        </div>
+        <span class="new-additions">+66</span>
+      </div>
+
+      </div>
+    </div>
+    </section>
+</main>
 {% endblock %}
