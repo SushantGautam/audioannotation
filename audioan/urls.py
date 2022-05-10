@@ -4,6 +4,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+from orgadmin import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('allauth.urls')),
@@ -17,4 +19,12 @@ urlpatterns = [
 if 'rosetta' in settings.INSTALLED_APPS and settings.DEBUG:
     urlpatterns += [
         path('rosetta/', include('rosetta.urls'))
+    ]
+
+# URL for development phase only
+if settings.DEBUG:
+    urlpatterns += [
+        path('gitpull', views.gitpull),
+        path('deployserver', views.deployserver),
+        path('migratedb', views.migratedb)
     ]
