@@ -11,10 +11,8 @@ const item_name_annotation = "annotation";
 const item_name_meta = "meta";
 const key_annotation_item_names = "key_annotation_item_names";
 const default_annotation_item_names = [
-  "text_level0",
-  "kana_level0",
-  "text_level2",
-  "kana_level3",
+    "stt_text",
+    "annotation_text",
 ];
 
 function hms(sec) {
@@ -256,7 +254,6 @@ function init_wavesurfer() {
 }
 
 function deleteRegionFunc () {
-  console.log('here')
   let form = document.forms.edit;
   let regionId = form.dataset.region;
   if (regionId) {
@@ -264,6 +261,7 @@ function deleteRegionFunc () {
     form.reset();
   }
 }
+
 function appendDeleteIcon(elem) {
   let btnHTML = document.createElement('button');
   btnHTML.className = 'btn btn-sm delete-range';
@@ -304,6 +302,7 @@ function set_annotation_items(annotation_item_names) {
       /[&"<>]/g,
       (e) => escape_html_map[e]
     );
+
     if (j % 2 == 0) {
       area.innerHTML += `<div class="form-group row" id="annotation_item_row_${row_idx}">
                 <div class="col" id="annotation_item_${j}">
@@ -314,10 +313,14 @@ function set_annotation_items(annotation_item_names) {
       row_idx += 1;
     }
     const row = document.getElementById(`annotation_item_${j}`);
+    var final_name = item_name;
+    if (item_name != "stt_text") {
+      final_name = "vals__" + item_name;
+    }
     row.innerHTML = `
                 <div class="col">
-                    <label for="vals__${item_name}">${item_name}</label>
-                    <textarea id="vals__${item_name}" class="form-control" name="vals__${item_name}"></textarea>
+                    <label for="${final_name}">${final_name}</label>
+                    <textarea id="${final_name}" class="form-control" name="${final_name}"></textarea>
                 </div>
         `;
   }
@@ -382,89 +385,6 @@ document.addEventListener("DOMContentLoaded", function () {
         )
       );
       saveRegions();
-    });
-  }
-
-  {
-    // meta editor
-    const modal = document.querySelector("#edit_meta");
-    const container = document.getElementById("jsoneditor");
-    const options = {
-      mode: "code",
-    };
-    const editor = new JSONEditor(container, options);
-    modal.addEventListener("click", () => {
-      localforage.getItem(key_meta, (_, data) => {
-        if (data === null) {
-          data = {};
-        }
-        editor.set(data);
-      });
-    });
-
-    const modal_save = document.querySelector("#metaModal_save");
-    modal_save.addEventListener("click", () => {
-      try {
-        const updatedJson = editor.get();
-        localforage
-          .setItem(key_meta, updatedJson, () => {
-            // on success
-            const modal = document.getElementById("metaModal");
-            bootstrap.Modal.getInstance(modal).hide();
-          })
-          .catch((err) => {
-            alert(`Error on save: ${err}`);
-          });
-      } catch (e) {
-        alert(e);
-        return;
-      }
-    });
-  }
-
-  {
-    // config editor
-    const modal = document.querySelector("#configModal");
-    modal.addEventListener("show.bs.modal", function (e) {
-      if (document.forms.edit.style.opacity != 0) {
-        alert("Close form");
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        return false;
-      }
-
-      document.getElementById("default_annotation_item_names").innerText =
-        default_annotation_item_names;
-
-      localforage.getItem(key_annotation_item_names, (_, data) => {
-        document.getElementById("config_annotation_item_names").value = data;
-      });
-    });
-
-    const modal_save = document.querySelector("#configModal_save");
-    modal_save.addEventListener("click", () => {
-      const new_val = [];
-      document
-        .getElementById("config_annotation_item_names")
-        .value.split(",")
-        .forEach((v) => {
-          new_val.push(v.replace(/^\s*(.*?)\s*$/, "$1"));
-        });
-      set_annotation_items(new_val);
-      try {
-        localforage
-          .setItem(key_annotation_item_names, new_val, () => {
-            // on success
-            const modal = document.getElementById("configModal");
-            bootstrap.Modal.getInstance(modal).hide();
-          })
-          .catch((err) => {
-            alert(`Error on save: ${err}`);
-          });
-      } catch (e) {
-        alert(e);
-        return;
-      }
     });
   }
 
@@ -590,6 +510,10 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("button_play").addEventListener("click", () => {
     wavesurfer.playPause();
   });
+
+  if (Object.keys(STT_DATA).length < 1) return false;
+
+  loadRegions(STT_DATA.stt_predictions_annotations);
 });
 
 function createRegionsCallBack(region) {
@@ -600,8 +524,11 @@ function saveRegions() {
   const mydata = Object.keys(wavesurfer.regions.list).map(function (id) {
     const region = wavesurfer.regions.list[id];
     return {
+      id: region.id,
+      user: USER_ID,
       start: region.start,
       end: region.end,
+      updated_date: new Date().toISOString(),
       data: region.data,
     };
   });
