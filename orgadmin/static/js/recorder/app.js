@@ -111,7 +111,28 @@ function stopRecording() {
 	gumStream.getAudioTracks()[0].stop();
 
 	//create the wav blob and pass it on to createDownloadLink
-	rec.exportWAV(createDownloadLink);
+	// rec.exportWAV(createDownloadLink);
+}
+
+function on_form_submit(){
+	rec.exportWAV(send_to_backend);
+}
+
+function send_to_backend(blob){
+	var formData = new FormData($("#audio_form")[0]);
+	var recording = new Blob([blob], { type: "audio/wav" });
+	formData.append("audio_file", recording);
+	// for (var key of formData.entries()) {
+  //       console.log(key[0] + ', ' + key[1]);
+  //   }
+	$.ajax({
+		type: "POST",
+		url: $("#audio_form").attr("action"),
+		data: formData,
+		cache: false,
+		contentType: false,
+		processData: false
+	});
 }
 
 function createDownloadLink(blob) {
