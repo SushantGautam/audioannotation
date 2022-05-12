@@ -6,20 +6,16 @@
       <li class="nav-item">
         <a href="{% url 'professor:homepage' %}" class="nav-link{% if request.resolver_match.view_name == 'homepage' %} active{% endif %}">{% trans 'Home' %}</a>
       </li>
-    <li class="nav-item">
+      <li class="nav-item">
         <a href="{% url 'professor:question_list_page' %}" class="nav-link{% if request.resolver_match.view_name == 'QuestionListPage' %} active{% endif %}">{% trans 'Questions' %}</a>
       </li>
-{#      {% if user.is_authenticated %}#}
-{#        <li class="nav-item" data-turbolinks="false">#}
-{#          <a class="nav-link{% if request.resolver_match.view_name == 'profile' %} active{% endif %}" href="#">{% trans 'Profile' %}</a>#}
-{#        </li>#}
-{#      {% endif %}#}
     </ul>
     <ul class="navbar-nav justify-content-end">
       {% if user.is_authenticated %}
         <li class="nav-item dropdown">
           <a class="nav-link avatar-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
               <img src="{% static 'img/user.png' %}" class="rounded-circle align-self-center mr-2" style="width: 32px;height: 32px;">
+              <span class="h6 ps-2">{% trans 'Professor' %}</span>
           </a>
           <div class="dropdown-menu dropdown-menu-end">
             <h5 class="dropdown-item-text mb-0">{{ user.get_full_name }}</h5>
