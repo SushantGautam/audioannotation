@@ -3,8 +3,8 @@
 
 
 <form id="QuestionRegistrationForm"
-      action="{% if 'update' in request.path %} {% url 'professor:question_create_ajax' object.id %} {% else %} {% url 'professor:question_create_ajax' %} {% endif %}"
-      method="POST">
+      action="{% if object %} {% url 'professor:question_update' object.id %} {% else %} {% url 'professor:question_create_ajax' %} {% endif %}"
+      method="POST" enctype="multipart/form-data">
   {#    <h3 class="m-0">{% trans 'Question Registration' %} *</h3>#}
   {% csrf_token %}
   <div class="parent row question_form_table_row">
@@ -57,7 +57,35 @@
   <div class="parent row ">
     <div class="title col-4">{% trans 'File' %}</div>
     <div class="value col-8 file_upload">
-      <input class="form-control" type="file" id="formFile" name="file_upload">
+
+{#      <input class="form-control" type="file" id="formFile" name="upload_file">#}
+
+
+    <div class="input-group mb-3">
+      <input type="file" class="form-control" id="formFile" name="upload_file" accept="image/*" >
+{#      <label class="input-group-text" for="formFile">{% if object.upload_file %}#}
+{#        <a href="{{ object.upload_file.url }}">#}
+{#             {{ object.upload_file }}</a>#}
+{#        {% endif %}#}
+{#          </label>#}
+    </div>
+
+
+{#      {% if object.upload_file %}#}
+{#          {% trans 'Currently selected' %} :#}
+{#          <a href="{{ object.upload_file.url }}">#}
+{#             {{ object.upload_file }}#}
+{#          </a>#}
+{#          <span class="clear-selection">#}
+{#                  <input type="checkbox" name="upload_file-clear"#}
+{#                         id="upload_file-clear_id">#}
+{#                  <label class="m-0" for="upload_file-clear_id">{% trans 'Clear' %}</label>#}
+{#              </span>#}
+{#          <br>#}
+{#      {% endif %}#}
+
+
+
     </div>
   </div>
 
@@ -108,6 +136,12 @@
 <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
 
 <script>
+
+$(document).ready(function (){
+
+
+})
+
  $("#question_submit_btn").click(function(){
       if (!validate_form()){
         return false;
@@ -155,4 +189,7 @@
 
       return true;
     }
+
+
+
 </script>

@@ -70,6 +70,42 @@ class QuestionsCreateView(AjaxableResponseMixin, CreateView):
         return redirect('professor:question_list_page')
 
 
+
+
+class QuestionsUpdateView(AjaxableResponseMixin, UpdateView):
+    model = Question
+    form_class = QuestionForm
+    template_name = 'professor/question/ajax/QuestionsCreateAjax.html'
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['subcat'] = SubCategory.objects.all()
+        return context
+
+    def form_valid(self, form):
+        if form.is_valid():
+            self.object = form.save(commit=False)
+            # file_upload = self.request.FILES['file_upload']
+            # self.object.file_upload = file_upload
+            self.object.save()
+        response = {'url': self.request.build_absolute_uri(reverse('professor:question_list_page')),
+                    "status": "success",
+                    "msg": "",
+                    "qn_code": self.object.subcategory_code.name,
+                    "qn_pk": self.object.pk,
+                    "qn_title": self.object.title,
+                    }
+        # return JsonResponse(response)
+        return redirect('professor:question_list_page')
+
+
+
+
+
+
+
+
 def QuestionDeleteView(request, pk):
     if request.method == "POST":
         Question.objects.filter(pk=pk).delete()
