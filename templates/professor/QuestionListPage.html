@@ -1,16 +1,33 @@
-{% extends "base.html" %}
+{% extends "professor/base.html" %}
 {% load static %}
 {% load i18n %}
+{% block styles %}
+  <style>
+  .question_dt_right_btn{
+            float: right;
+        }
+  .dataTables_filter svg{
+    z-index: 100;
+    transform: translateX(-5px);
+    }
+  .dataTables_filter input{
+      transform: translateX(20px);
+
+  }
+
+
+  </style>
+{% endblock styles %}
 {% block content %}
 
 
 
 
-    <div class="p-3">
-        <a class="tab-element question_set_active_toggle_label {% if 'professor_question_set' in request.path %} active {% endif %} " id="question_set_btn" href="{% url 'professor:question_set_page' %}">{% trans "Question Set" %}</a>
-        <a class="mx-1 tab-element question_active_toggle_label {% if 'professor_question_list' in request.path %} active {% endif %}" id="questions_btn" href="{% url 'professor:question_list_page' %}">{% trans "Question List" %}</a>
-
-    </div>
+{#    <div class="p-3">#}
+{#        <a class="tab-element question_set_active_toggle_label {% if 'professor_question_set' in request.path %} active {% endif %} " id="question_set_btn" href="{% url 'professor:question_set_page' %}">{% trans "Question Set" %}</a>#}
+{#        <a class="mx-1 tab-element question_active_toggle_label {% if 'professor_question_list' in request.path %} active {% endif %}" id="questions_btn" href="{% url 'professor:question_list_page' %}">{% trans "Question List" %}</a>#}
+{##}
+{#    </div>#}
     <div class="bg-white p-3">
 
       <h1 class="page-heading">{% trans "Question List" %}</h1>
@@ -64,9 +81,9 @@
                         <td>
                             <a class="btn btn-sm btn-chinju-gray" id="{{ object.id }}" href="{{object.get_absolute_url}}">{% trans "Detail" %}</a>
                         </td>
-                        <td> <a title="{% trans 'Update survey' %}" class="btn btn-sm btn-chinju-gray rounded-circle editSurvey" href="{{ object.get_update_url }}" data_id="" ><i class ="fa fa-pen"> </i></a>
+                        <td> <a title="{% trans 'Update survey' %}" class="btn btn-sm btn-warning rounded-circle editSurvey" href="{{ object.get_update_url }}" data_id="" ><i class ="text-white fa fa-pen"> </i></a>
 {#                            <a title="{% trans 'Delete survey' %}" class="btn btn-sm btn-chinju-gray rounded-circle ml-2" id="{{ object.id }}" href="{% url 'remove_course_from_evaluation' evaluation=object.id course_id=course.id %}"><i class="fa fa-trash"></i></a>#}
-                            <a title="{% trans 'Delete survey' %}" class="btn btn-sm btn-chinju-gray rounded-circle deleteSurvey confirm-delete ml-1" id="{{ object.id }}"><i class="fa fa-trash"></i></a>
+                            <a title="{% trans 'Delete survey' %}" class="btn btn-sm btn-danger rounded-circle deleteSurvey confirm-delete ml-1" id="{{ object.id }}"><i class=" fa fa-trash"></i></a>
                         </td>
 
                 </tr>
@@ -80,14 +97,14 @@
 
 
 
-    <div id="add_survey_modal" class="modal fade" style="height: -webkit-fill-available;">
+    <div id="add_question_modal" class="modal fade" style="height: -webkit-fill-available;">
         <div class="modal-dialog">
             <div class="modal-content" style="height: -webkit-fill-available; overflow: auto; overflow-x: hidden;">
                 <div class="modal-header">
                     <h5 class="modal-title " id="create_survey_modal_title" style="position: relative;left: 130px;">
                         {% trans "Create New Question" %}
                     </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="ti-close"></i>
                     </button>
                 </div>
@@ -110,6 +127,47 @@
 
 
 {% block scripts %}
+  {% comment %}
+      <script>
+
+        $(document).ready(function(){
+          $('.register_btn').on('click', function () {
+            $('.question_form_div').append('<div class="se-pre-con-ajax"></div>');
+                $.ajax({
+                    type: "GET",
+                    url: "{% url 'professor:homepage' %}",  // URL to your view that serves new info
+                    success: function (data) {
+                        $(".question_form_div").html(data);
+                        },
+                    complete: function () {
+                         $(".se-pre-con-ajax").fadeOut("fast");
+                    }
+                });
+            });
+        })
+
+      </script>
+  {% endcomment %}
+  <script>
+
+        function add_question() {
+            $('.question_form_div').append('<div class="se-pre-con-ajax"></div>');
+            $.ajax({
+                type: "GET",
+                url: "{% url 'professor:question_create_ajax' %}",  // URL to your view that serves new info
+                success: function (data) {
+                    $(".question_form_div").html(data);
+                },
+                complete: function () {
+                    $(".se-pre-con-ajax").fadeOut("fast");
+
+                }
+            });
+        }
+
+
+  </script>
+
 <script>
  $('#question_list_table').DataTable({
         dom: 'lfBtp',
@@ -121,33 +179,15 @@
 
 
         buttons: [
-          {% comment %}
-            {
-                text: `{% trans "Ready" %}`,
-                className: "ready sub-tab-element {% if 'ready' in request.get_full_path %}  active {% endif %}",
-                action: ready_click,
-            },
-            {
-                text: `{% trans "OnGoing" %}`,
-                className: "ongoing sub-tab-element {% if 'ongoing' in request.get_full_path %}  active {% endif %}",
-                action: ongoing_click,
-            },
-            {
-                text: `{% trans "Completed" %}`,
-                className: "completed sub-tab-element {% if 'completed' in request.get_full_path %}  active {% endif %}",
-                action: completed_click,
-            },
-            {% endcomment %}
+
             {
                 text: "<i class='fa fa-plus mr-2'></i> {% trans 'Register' %}",
-                action: function ( e, dt, button, config ) {
-                    window.location = "{% url 'professor:question_list_page' %}";
-                },
-                className: "survey_dt_right_btn btn-chinju-orange active",
+                action: `add_question`,
+                className: "question_dt_right_btn btn-chinju-orange active btn btn-sm register_btn",
             },
             {
-                text: "<i class='fa fa-trash multiple-delete'></i>",
-                className: "survey_dt_right_btn",
+                text: "<i class='fa fa-trash  multiple-delete'></i>",
+                className: "question_dt_right_btn ",
             },
         ],
 
@@ -165,17 +205,20 @@
 
         },
         initComplete: function() {
-             $('.dataTables_filter').addClass('survey_dt_right_btn');
-             $('.dataTables_length').addClass('survey_dt_right_btn');
-             $('.dataTables_filter input').removeClass('form-control-sm');
-             $('.dataTables_filter input').after(`<span class="fa fa-search search-input-icon"></span>`);
+             $('.dataTables_filter').addClass('question_dt_right_btn');
+             $('.dataTables_length').addClass('question_dt_right_btn');
+           //  $('.dataTables_filter input').removeClass('form-control-sm');
+             $('.dataTables_filter input').after(`<span class="fa fa-search search-input-icon pr-5"></span>`);
              $('.dataTables_length select').removeClass('custom-select-sm');
              $('.dt-buttons button').addClass('btn-gray text-white');
-        //    $('.ready').removeClass('btn-gray btn-secondary text-white');
-        //    $('.ongoing').removeClass('btn-gray btn-secondary text-white');
-       //     $('.completed').removeClass('btn-gray btn-secondary text-white');
+             $('.dt-buttons').removeClass('btn-group');
+             $('.question_dt_right_btn').css('margin-left', '10px');
+             $('.register_btn').css('margin-right', '-22px');
+              $('.register_btn').attr("data-bs-toggle", "modal");
+              $('.register_btn').attr("data-bs-target", "#add_question_modal");
 
-            $('.multiple-delete').parent().parent().attr({'class':'btn btn-chinju-gray rounded-circle float-right  text-white mr-2 deleteCheckedsurveys',
+
+            $('.multiple-delete').parent().parent().attr({'class':'btn btn-sm btn-danger rounded-circle question_dt_right_btn  text-white mr-2 deleteCheckedsurveys',
                                                 'type': 'submit',
                                                 'onclick': `return confirm("{% trans 'Are you sure you want to delete selected Surveys?' %}")`,
                                                 'disabled': 'true',
@@ -227,7 +270,7 @@
           return nRow;
         },
         columnDefs: [
-            { orderable: false, targets: [0,7,8] }
+            { orderable: false, targets: [0,8, 9] }
         ],
     });
 
