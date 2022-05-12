@@ -2,15 +2,16 @@
 {% load i18n %}
 
 <div class="collapse navbar-collapse" id="navbarCollapse">
-    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <ul class="navbar-nav me-auto">
       <li class="nav-item">
         <a href="{% url 'homepage' %}" class="nav-link{% if request.resolver_match.view_name == 'homepage' %} active{% endif %}">{% trans 'Home' %}</a>
       </li>
-      {% if user.is_authenticated %}
-        <li class="nav-item" data-turbolinks="false">
-          <a class="nav-link{% if request.resolver_match.view_name == 'profile' %} active{% endif %}" href="#">{% trans 'Profile' %}</a>
-        </li>
-      {% endif %}
+      <li class="nav-item">
+        <a href="#" class="nav-link{% if request.resolver_match.view_name == 'user' %} active{% endif %}">{% trans 'User Management' %}</a>
+      </li>
+      <li class="nav-item" data-turbolinks="false">
+        <a class="nav-link{% if request.resolver_match.view_name == 'profile' %} active{% endif %}" href="#">{% trans 'Profile' %}</a>
+      </li>
     </ul>
     <ul class="navbar-nav justify-content-end">
       {% if user.is_authenticated %}

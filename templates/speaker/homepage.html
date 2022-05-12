@@ -3,5 +3,48 @@
 {% load i18n %}
 
 {% block content %}
-    {{ user.username }}
+  <form action="{% url 'speaker:save_audio' %}"
+        enctype="multipart/form-data"
+        method="post" id="audio_form">
+    {% csrf_token %}
+
+    <div id="controls">
+      <button id="recordButton">Record</button>
+      <button id="pauseButton" disabled>Pause</button>
+      <button id="stopButton" disabled>Stop</button>
+    </div>
+    <div id="formats">Format: start recording to see sample rate</div>
+    <p><strong>Recordings:</strong></p>
+    <ol id="recordingsList"></ol>
+    <button type="submit" class="btn btn-success">{% trans 'Save' %}</button>
+  </form>
 {% endblock %}
+{% block scripts %}
+
+  {#  <script type="module" src="{% static 'js/recorder/index.js' %}"></script>#}
+  <script src="{% static 'js/recorder/recorder.js' %}"></script>
+  <script src="{% static 'js/recorder/app.js' %}"></script>
+
+  <script>
+  $(document).ready(function (){
+
+    $("#audio_form").submit(function (e){
+      e.preventDefault();
+      on_form_submit();
+
+      // var formData = new FormData($("#audio_form")[0]);
+      // console.log(blob);
+      // $.ajax({
+      //  type: "POST",
+      //  url: $("#audio_form").attr("action"),
+      //  data: formData,
+      //  cache: false,
+      //  contentType: false,
+      //  processData: false
+	    // });
+    });
+
+  });
+  </script>
+
+{% endblock scripts %}
