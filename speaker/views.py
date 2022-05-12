@@ -3,6 +3,7 @@ from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 
 from speaker.forms import AudioFileForm
+from speaker.models import Speaker
 
 
 @csrf_protect
@@ -16,7 +17,9 @@ def save_audio(request):
         form = AudioFileForm(request.POST, request.FILES)
         if form.is_valid():
             print("File saved")
-            form.save()
+            obj = form.save(commit=False)
+            obj.speaker = Speaker.objects.first()
+            obj.save()
         else:
             print("form invalid: ", form.errors)
     return redirect('homepage')

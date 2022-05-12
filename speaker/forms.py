@@ -6,5 +6,5 @@ from speaker.models import AudioFile
 class AudioFileForm(ModelForm):
     class Meta:
         model = AudioFile
-        fields = "__all__"
+        fields = ["audio_file"]
 
