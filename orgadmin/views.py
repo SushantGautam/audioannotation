@@ -1,8 +1,19 @@
-from django.shortcuts import HttpResponse, render
+from django.http import JsonResponse
+from django.shortcuts import HttpResponse, render, redirect
 
 
 def homepage(request):
-    return render(request, 'orgadmin/homepage.html')
+    if hasattr(request.user, 'orgadmin'):
+        return render(request, 'orgadmin/homepage.html')
+    elif hasattr(request.user, 'speaker'):
+        return redirect('speaker:homepage')
+    elif hasattr(request.user, 'professor'):
+        return redirect('professor:homepage')
+    elif hasattr(request.user, 'worker'):
+        return redirect('worker:homepage')
+    else:
+        return JsonResponse({'error': 'User not assigned to any role'})
+        
 
 # For development phase only
 def gitpull(request):
