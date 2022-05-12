@@ -1,11 +1,11 @@
 from django.db import transaction
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from professor.forms import QuestionForm
-from professor.models import Question,QuestionSet
+from professor.models import Question, QuestionSet, SubCategory
 
 
 class AjaxableResponseMixin:
@@ -48,28 +48,32 @@ class QuestionsCreateView(AjaxableResponseMixin, CreateView):
     model = Question
     form_class = QuestionForm
     template_name = 'professor/question/ajax/QuestionsCreateAjax.html'
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['subcat'] = SubCategory.objects.all()
+        return context
+
     def form_valid(self, form):
         if form.is_valid():
             self.object = form.save(commit=False)
-            # self.object.center = self.request.user.Center_Code
             self.object.save()
-        context = self.get_context_data()
-        op = context['optioninfo_formset']
-        with transaction.atomic():
-            if op.is_valid():
-                op.instance = self.object
-                op.save()
-        response = {'url': self.request.build_absolute_uri(reverse('survey_question_list')),
+        response = {'url': self.request.build_absolute_uri(reverse('professor:question_list_page')),
                     "status": "success",
                     "msg": "",
-                    "qn_typ": self.object.Question_Type,
+                    "qn_code": self.object.subcategory_code.name,
                     "qn_pk": self.object.pk,
-                    "qn_title": self.object.Question_Name,
+                    "qn_title": self.object.title,
                     }
-        return JsonResponse(response)
+        # return JsonResponse(response)
+        return redirect('professor:question_list_page')
 
 
-
+def QuestionDeleteView(request, pk):
+    if request.method == "POST":
+        Question.objects.filter(pk=pk).delete()
+        return redirect("professor:question_list_page")
 
 
 

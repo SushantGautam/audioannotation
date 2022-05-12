@@ -1,7 +1,158 @@
 {% load static %}
 {% load i18n %}
-asdasda
-dadasdasdas
-{% for form in forms  %}
-{{ form }}
-{% endfor%}
+
+
+<form id="QuestionRegistrationForm"
+      action="{% if 'update' in request.path %} {% url 'professor:question_create_ajax' object.id %} {% else %} {% url 'professor:question_create_ajax' %} {% endif %}"
+      method="POST">
+  {#    <h3 class="m-0">{% trans 'Question Registration' %} *</h3>#}
+  {% csrf_token %}
+  <div class="parent row question_form_table_row">
+    <div class="title col-4 question_form_table_th">{% trans 'Title' %} *</div>
+    <div class="value col-8 question_form_table_td">
+      <input placeholder="{% trans 'Enter Question title here...' %}" type="text" required name="title" maxlength="255"
+             id="id_title" class="form-control"
+        {% if object %} value="{{ object.title }}"{% endif %}>
+      <div class="question_form_title_error question_form_error_div">
+        {% trans 'Title is required' %}
+      </div>
+    </div>
+  </div>
+
+
+  <div class="parent row">
+    <div class="title col-4">{% trans 'SubCategory' %} *</div>
+    <div class="value col-8 question_form_table_td">
+      <select name="subcategory_code" id="id_subcategory_code" class="form-control">
+        {% if not object %}
+          <option value="" selected="">---------</option>
+        {% endif %}
+        {% for category in subcat %}
+          <option value="{{ category.pk }}"
+            {% if object.subcategory_code.pk == category.pk %}
+                  selected
+
+            {% endif %}>
+            {% trans category.name %}
+          </option>
+        {% endfor %}
+      </select>
+      <div class="question_form_category_error question_form_error_div">
+        {% trans 'SubCategory is required' %}
+      </div>
+    </div>
+  </div>
+
+
+  <div class="parent row ">
+    <div class="title col-4">{% trans 'Description' %}</div>
+    <div class="value col-8 description">
+        <textarea placeholder="{% trans 'Enter question description here...' %}" name="description" id="id_description"
+                  cols="40" rows="3"
+                  class="form-control" >{% if object %}{{ object.description }}{% endif %}</textarea>
+    </div>
+  </div>
+
+
+  <div class="parent row ">
+    <div class="title col-4">{% trans 'File' %}</div>
+    <div class="value col-8 file_upload">
+      <input class="form-control" type="file" id="formFile" name="file_upload">
+    </div>
+  </div>
+
+  <div class="parent row question_form_table_row">
+    <div class="title col-4 question_form_table_th">{% trans 'Level' %} *</div>
+    <div class="value col-8 question_form_table_td">
+      <input placeholder="{% trans 'Enter Question level here...' %}" type="number" required name="level"
+             maxlength="255"
+             id="id_level" class="form-control"
+        {% if object %} value="{{ object.level }}"{% endif %}>
+      <div class="question_form_level_error question_form_error_div">
+        {% trans 'Level is required' %}
+      </div>
+    </div>
+  </div>
+
+  <div class="parent row  question_form_table_row">
+    <div class="title col-4 ">{% trans 'Option' %}</div>
+    <div class="value col-8 question_form_table_td option_fields">
+      <div id="div_id_Use_Flag" class=" question_create_options_div mr-2">
+        <input type="checkbox" name="is_active" class="checkboxinput " id="id_is_active"
+          {% if object and object.is_active %} checked {% elif object %} {% else %} checked {% endif %}>
+        <label for="id_is_active" class=" survey-add-label">
+          <span class="question_form_checkbox_label_text">{% trans 'Active' %}</span>
+        </label>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-12 text-center">
+      <button title="{% trans 'Submit created survey' %}" class="btn btn-primary mr-2" id="question_submit_btn"
+          type="button">
+    {% if object %}
+      {% trans 'Update' %}
+    {% else %}
+      {% trans 'Submit' %}
+    {% endif %}
+  </button>
+    </div>
+  </div>
+
+</form>
+
+
+<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+
+<script>
+ $("#question_submit_btn").click(function(){
+      if (!validate_form()){
+        return false;
+      }
+      $("#QuestionRegistrationForm").submit();
+
+    })
+
+
+  function animate_and_focus(el_id){
+      $('html, body').animate({
+        scrollTop: $(el_id).offset().top - 100
+      }, 500, function() {
+        $(el_id).focus();
+      });
+    }
+
+
+  function validate_form(){
+
+      $("#QuestionRegistrationForm .is-invalid").removeClass("is-invalid");
+      $(".question_form_error_div").hide();
+
+      if($("#id_title").val().replaceAll(" ", "") === ""){
+        $("#id_title").addClass('is-invalid');
+        $(".question_form_title_error").show();
+        animate_and_focus("#id_title")
+        return false;
+      }
+
+      if($("#id_subcategory_code").val() === ""){
+        $("#id_subcategory_code").addClass('is-invalid');
+        $(".question_form_category_error").show();
+        animate_and_focus("#id_subcategory_code")
+        return false;
+      }
+
+      if($("#id_level").val() === ""){
+        $("#id_level").addClass('is-invalid');
+        $(".question_form_level_error").show();
+        animate_and_focus("#id_level")
+        return false;
+      }
+
+
+      return true;
+    }
+</script>

@@ -98,12 +98,12 @@
 
 
     <div id="add_question_modal" class="modal fade" style="height: -webkit-fill-available;">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content" style="height: -webkit-fill-available; overflow: auto; overflow-x: hidden;">
                 <div class="modal-header">
-                    <h5 class="modal-title " id="create_survey_modal_title" style="position: relative;left: 130px;">
-                        {% trans "Create New Question" %}
-                    </h5>
+                    <h3 class="modal-title text-center" id="create_survey_modal_title" style="position: relative;left: 130px;">
+                        {% trans "Question Registration" %}
+                    </h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="ti-close"></i>
                     </button>
@@ -112,7 +112,7 @@
                     <div class="card">
 
                         <div class="card-body">
-                            <div class="row question_form_div">
+                            <div class="question_form_div">
                             </div>
                         </div>
                     </div>
@@ -182,7 +182,7 @@
 
             {
                 text: "<i class='fa fa-plus mr-2'></i> {% trans 'Register' %}",
-                action: `add_question`,
+                action: add_question(),
                 className: "question_dt_right_btn btn-chinju-orange active btn btn-sm register_btn",
             },
             {
@@ -276,4 +276,24 @@
 
 
 </script>
+  <script>
+
+    $(document).on('click', '.confirm-delete', function () {
+        ans = confirm('Are you sure you want to delete this Question? ');
+        if (ans == true) {
+            $.ajax({
+                url: "{% url 'professor:question_delete' pk='000123' %}".replace('000123', this.id),
+                method: 'post',
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                },
+                success: function () {
+                    location.reload();
+                }
+            })
+        } else {
+            return false;
+        }
+    });
+  </script>
 {% endblock scripts %}
