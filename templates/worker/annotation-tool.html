@@ -89,10 +89,6 @@
                         <span class="bi bi-trash"></span>
                     </button>
 
-                    <button class="btn btn-warning" id="vad">
-                        <span class="bi bi-pencil-square"></span>
-                    </button>
-
 
                     <button class="btn btn-light" id="info" data-bs-toggle="modal" data-bs-target="#infoModal">
                         <span class="bi bi-info-circle" aria-hidden="true"></span>
@@ -103,28 +99,8 @@
                         <span class="bi bi-download" aria-hidden="true"></span>
                     </button>
                 </div>
-
-                <div class="col-md">
-                    <div id="drag-and-drop-area">
-                        <div>
-                            D&amp;D or Click
-                        </div>
-                    </div>
-
-                    <div id="file-select">
-                        <input type="file" class="hidden" accept="*" id="file-select-input">
-                        <button type="button" id="file-select-button">
-                            File Select Button
-                        </button>
-                    </div>
-                </div>
             </div>
-
-
         </div>
-
-
-
 
 
         <form role="form" name="edit" style="opacity: 0; transition: opacity 300ms linear; margin: 30px 0;">
@@ -224,6 +200,6 @@
 <script>
     const USER_ID = "{{ user.id }}";
     const STT_DATA = {{ stt_data|safe }};
-    const AUDIO_FILE = "{{ audio_file }}";
+    const AUDIO_FILE = "{{ audio_obj.audio_file.url }}";
 </script>
 </html>
