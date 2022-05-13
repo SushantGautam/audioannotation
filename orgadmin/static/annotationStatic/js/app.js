@@ -478,6 +478,7 @@ function loadRegions(regions) {
     regions.forEach(function (region) {
         region.color = randomColor(0.1);
         wavesurfer.addRegion(region);
+        addRegionList(region);
     });
 }
 
@@ -578,4 +579,18 @@ function extractRegions(peaks, duration, unit_second) {
             end: Math.round(reg.end * unit_second * 100) / 100,
         };
     });
+}
+
+function addRegionList(region) {
+    let regionItem = document.createElement('div');
+    regionItem.className = 'region-item';
+    let region_innerHTMl = `
+        <div class="region-item-count"></div>
+        <div class="region-item-name">
+            <span> <i class="fa fa-microphone" aria-hidden="true"></i></span>
+            Audio ${region.start} - ${region.end}
+        </div>
+    `;
+    regionItem.innerHTML = region_innerHTMl;
+    document.getElementById('region-items').appendChild(regionItem);
 }

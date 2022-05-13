@@ -36,69 +36,75 @@
             <h1 id="title" itemprop="name">Hachiue</h1>
         </div>
 
-        <div id="demo">
+        <div>
+            <div id="demo">
 
-            <div class="row">
-                <div class="col">
-                    <p style="text-align:right;">
-                        <span id="time-current">0.00</span> / <span id="time-total">0.00</span><br>
-                        (<span id="time-current-hms">00:00:00</span> / <span id="time-total-hms">00:00:00</span>)
-                    </p>
+                <div class="row">
+                    <div class="col">
+                        <p style="text-align:right;">
+                            <span id="time-current">0.00</span> / <span id="time-total">0.00</span><br>
+                            (<span id="time-current-hms">00:00:00</span> / <span id="time-total-hms">00:00:00</span>)
+                        </p>
+                    </div>
                 </div>
-            </div>
 
 
-            <div id="wave-timeline"></div>
-            <div id="waveform"></div>
+                <div id="wave-timeline"></div>
+                <div id="waveform"></div>
 
-            <div class="row" style="margin: 30px 0">
-                <div class="col-auto">
-                    <button class="btn btn-primary btn-block" id="button_play">
+                <div class="row" style="margin: 30px 0">
+                    <div class="col-auto">
+                        <button class="btn btn-primary btn-block" id="button_play">
                         <span id="play">
                             <span class="bi bi-play"></span>
                             Play
                         </span>
 
-                        <span id="pause" style="display: none">
+                            <span id="pause" style="display: none">
                             <span class="bi bi-pause"></span>
                             Pause
                         </span>
-                    </button>
-                </div>
-
-                <div class="col-auto">
-                    <div style="text-align: right;">
-                        <div class="bi bi-zoom-out" style="float: left;"></div>
-                        <div class="bi bi-zoom-in"></div>
+                        </button>
                     </div>
-                    <input id="slider" data-action="zoom" type="range" min="1" max="200" value="0" style="width: 100%" />
-                </div>
 
-                <div class="col-auto">
-                    <div style="text-align: right;">
-                        <div class="bi bi-volume-off" style="float: left;" id="volume_zero"></div>
-                        <div class="bi bi-volume-up" id="volume_max"></div>
+                    <div class="col-auto">
+                        <div style="text-align: right;">
+                            <div class="bi bi-zoom-out" style="float: left;"></div>
+                            <div class="bi bi-zoom-in"></div>
+                        </div>
+                        <input id="slider" data-action="zoom" type="range" min="1" max="200" value="0" style="width: 100%" />
                     </div>
-                    <input id="volume" type="range" min="0" max="1" value="1" step="0.1" style="width: 100%" />
+
+                    <div class="col-auto">
+                        <div style="text-align: right;">
+                            <div class="bi bi-volume-off" style="float: left;" id="volume_zero"></div>
+                            <div class="bi bi-volume-up" id="volume_max"></div>
+                        </div>
+                        <input id="volume" type="range" min="0" max="1" value="1" step="0.1" style="width: 100%" />
+                    </div>
+
+
+
+                    <div class="col-auto">
+                        <button class="btn btn-danger" id="reset">
+                            <span class="bi bi-trash"></span>
+                        </button>
+
+
+                        <button class="btn btn-light" id="info" data-bs-toggle="modal" data-bs-target="#infoModal">
+                            <span class="bi bi-info-circle" aria-hidden="true"></span>
+                        </button>
+
+
+                        <button class="btn btn-light" id="download_button">
+                            <span class="bi bi-download" aria-hidden="true"></span>
+                        </button>
+                    </div>
                 </div>
-
-
-
-                <div class="col-auto">
-                    <button class="btn btn-danger" id="reset">
-                        <span class="bi bi-trash"></span>
-                    </button>
-
-
-                    <button class="btn btn-light" id="info" data-bs-toggle="modal" data-bs-target="#infoModal">
-                        <span class="bi bi-info-circle" aria-hidden="true"></span>
-                    </button>
-
-
-                    <button class="btn btn-light" id="download_button">
-                        <span class="bi bi-download" aria-hidden="true"></span>
-                    </button>
-                </div>
+            </div>
+            <div id="region-list">
+                <h5> Regions <span id="region-items-count"></span> </h5>
+                <div id="region-items"></div>
             </div>
         </div>
 
