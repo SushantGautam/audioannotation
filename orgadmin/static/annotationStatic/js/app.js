@@ -112,6 +112,9 @@ function init_wavesurfer() {
             ],
         });
 
+        // Load Audio File From Database
+        wavesurfer.load(AUDIO_FILE);
+
         function set_current_time() {
             const currentTime = wavesurfer.getCurrentTime();
             document.getElementById("time-current").innerText =
@@ -130,6 +133,8 @@ function init_wavesurfer() {
 
         localforage.getItem(key_annotation, (err, data_annotation) => {
             if (data_annotation === null) {
+                // If Localforage is empty, load from STT.
+                loadSTTData();
                 return;
             }
             loadRegions(data_annotation);
@@ -253,6 +258,12 @@ function init_wavesurfer() {
         const form = document.forms.edit;
         form.style.opacity = 0;
     }
+}
+
+// Load Data from STT Naver if localforage is not available.
+function loadSTTData() {
+    if (Object.keys(STT_DATA).length < 1) return;
+    loadRegions(STT_DATA.stt_predictions_annotations);
 }
 
 function deleteRegionFunc() {
@@ -441,11 +452,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("button_play").addEventListener("click", () => {
         wavesurfer.playPause();
     });
-
-    if (Object.keys(STT_DATA).length < 1) return false;
-
-    wavesurfer.load(AUDIO_FILE);
-    loadRegions(STT_DATA.stt_predictions_annotations);
 });
 
 function createRegionsCallBack(region) {
