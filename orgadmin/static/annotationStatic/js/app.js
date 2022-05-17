@@ -175,6 +175,7 @@ function init_wavesurfer() {
             e.shiftKey ? region.playLoop() : region.play();
         });
         wavesurfer.on("region-click", editAnnotation);
+        wavesurfer.on("region-click", (region) => {loadResults(region);});
         wavesurfer.on("region-created", function (region) {
             appendDeleteIcon(region.id);
         });
@@ -551,7 +552,6 @@ function editAnnotation(region) {
     document.getElementById("end").dispatchEvent(new Event("change"));
 
     for (const [key, el] of Object.entries(form.elements)) {
-        console.log(key)
         if (key.startsWith("vals__")) {
             // const mykey = key.substr("vals__".length);
             el.value = region.data['text'] || "";
@@ -621,4 +621,23 @@ function addRegionList(region) {
         console.log('here')
         document.querySelector(`.wavesurfer-region[data-id="${region.id}"]`).click();
     });
+}
+
+function loadResults(region) {
+    var elem = document.querySelector('.result-section > .result');
+    elem.innerHTML = `
+        <div class="audio-details">
+            <span class="serial-num badge rounded-pill bg-dark"></span>
+            <span><i class="fas fa-microphone-alt"></i> 
+            AudioTitle <span class="start">${hms(region.start)}</span>-<span class="end">${hms(region.end)}</span></span>
+        </div>
+        <div class="label-parent">
+            <label>Label : </label>
+            <span class="badge rounded-pill bg-dark">${region.data.labels}</span>
+        </div>
+        <div class="text-parent">
+            <label>Text : </label>
+            <span class="text">${region.data.text}</span>
+        </div>
+    `;
 }
