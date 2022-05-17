@@ -601,8 +601,9 @@ function extractRegions(peaks, duration, unit_second) {
 }
 
 function addRegionList(region) {
-    let regionList = document.createElement('div');
-    regionList.className = 'region';
+    let regionElem = document.createElement('div');
+    regionElem.className = 'region';
+    regionElem.dataset.region_id = region.id;
     let region_innerHTMl = `
         <span class="serial-num badge rounded-pill bg-secondary"></span>
         <span> <i class="fa fa-microphone-alt" aria-hidden="true"></i></span>
@@ -613,6 +614,11 @@ function addRegionList(region) {
             </div>
         </div>
     `;
-    regionList.innerHTML = region_innerHTMl;
-    document.getElementById('region-list').appendChild(regionList);
+    regionElem.innerHTML = region_innerHTMl;
+    document.getElementById('region-list').appendChild(regionElem);
+
+    regionElem.addEventListener("click", function () {
+        console.log('here')
+        document.querySelector(`.wavesurfer-region[data-id="${region.id}"]`).click();
+    });
 }
