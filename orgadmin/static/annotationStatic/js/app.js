@@ -11,8 +11,7 @@ const item_name_annotation = "annotation";
 const item_name_meta = "meta";
 const key_annotation_item_names = "key_annotation_item_names";
 const default_annotation_item_names = [
-    "stt_text",
-    "annotation_text",
+    "text",
 ];
 
 function hms(sec) {
@@ -92,9 +91,9 @@ function init_wavesurfer() {
     stt_data.forEach(function (region) {
         region.drag = false;
         region.resize = false;
-        region.attributes= {
-            label: region.data.text,
-        }
+        // region.attributes= {
+        //     label: region.data.text,
+        // }
     });
     {
         wavesurfer = WaveSurfer.create({
