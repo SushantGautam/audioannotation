@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.5/umd/popper.min.js" integrity="sha512-8cU710tp3iH9RniUh6fq5zJsGnjLzOWLWdZqBMLtqaoZUA6AWIE34lwMB3ipUNiTBP5jEZKY95SfbNnQ8cCKvA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="{% static 'annotationStatic/3rd/bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'annotationStatic/3rd/bootstrap-icons/bootstrap-icons.css' %}">
     <link rel="stylesheet" href="{% static 'annotationStatic/css/style.css' %}" />
@@ -28,8 +28,8 @@
 
     <script src="{% static 'annotationStatic/js/app.js' %}"></script>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/fontawesome.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/fontawesome.min.js"></script>
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/fontawesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/fontawesome.min.js"></script> -->
 </head>
 
 <style>
@@ -114,12 +114,7 @@
         flex-direction: column;
         gap: 0.75rem;
     }
-    .region{
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
+    
     .region-list{
         display: flex;
         flex-direction: column;
@@ -127,11 +122,17 @@
         max-height: 20rem;
         overflow-y: auto;
     }
-
-    /* .region > *{
+    
+    .region{
         display: flex;
-        gap: 0.25rem;
-    } */
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .sort-button{
+        padding-inline: 0.6rem ;
+    }
+
     .audio-range-parent{
         display: flex;
         gap: 0.5rem;
@@ -145,6 +146,8 @@
 
     .audio-range .start , .audio-range .end{
         font-weight: 500;
+        width: 4rem;
+        text-align: center;
     }
 
 
@@ -153,7 +156,6 @@
 <body itemscope itemtype="http://schema.org/WebApplication">
     <div class="container">
         <div class="header">
-            <!-- <h1 id="title" itemprop="name">Audio Annotation</h1> -->
             <h1>Audio Annotation</h1>
         </div>
 
@@ -277,7 +279,7 @@
 
                     <div class="header-section flex-space">
                         <h5 class="m-0">Results</h5>
-                        <button class="btn btn-sm btn-dark" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash"></i></button>
+                        <button class="btn btn-sm btn-dark" data-toggle="tooltip" data-placement="top" title="Delete all"><i class="fas fa-trash"></i></button>
 
                     </div>
 
@@ -307,13 +309,13 @@
 
                 <!-- Region section starts here -->
                 <div class="region-section shadow-sm">
-                    <h5 class="m-0">Regions</h5>
+                    <div class="header-section flex-space">
+                        <h5 class="m-0">Regions (01)</h5>
+                        <button title="Sort regions" class="sort-button btn btn-sm btn-dark"><i class="fa-solid fa-sort"></i></button>
+                    </div>
 
                     <div class="region-list" id="region-list">
-                        <!-- Render list of regions inside region-list sectionhere -->
-
-                        <!-- Render list of regions inside region-list sectionhere -->
-
+                        <!-- Render list of regions inside region-list section here -->
                     </div>
                 </div>
                 <!-- Region section ends here -->
