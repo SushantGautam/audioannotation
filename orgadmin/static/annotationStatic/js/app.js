@@ -618,7 +618,6 @@ function addRegionList(region) {
     document.getElementById('region-list').appendChild(regionElem);
 
     regionElem.addEventListener("click", function () {
-        console.log('here')
         document.querySelector(`.wavesurfer-region[data-id="${region.id}"]`).click();
     });
 }
