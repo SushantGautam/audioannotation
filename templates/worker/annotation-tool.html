@@ -49,14 +49,14 @@
         display: flex;
         gap: 2rem;
     }
-    
+
     .left-section{
         width: 75%;
         border: 1px solid rgba(0,0,0,0.1);
         border-radius: 0.25rem;
         padding: 1rem;
     }
-    
+
     .right-section{
         width: 25%;
         display: flex;
@@ -119,11 +119,13 @@
         align-items: center;
         gap: 0.5rem;
     }
-    
+
     .region-list{
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
+        max-height: 20rem;
+        overflow-y: auto;
     }
 
     /* .region > *{
@@ -208,10 +210,6 @@
                         </div>
                     </div>
                 </div>
-                <div id="region-list">
-                    <h5> Regions <span id="region-items-count"></span> </h5>
-                    <div id="region-items"></div>
-                </div>
 
                 <form role="form" name="edit" style="opacity: 0; transition: opacity 300ms linear; margin: 30px 0;">
                     <div class="form-group row">
@@ -271,7 +269,7 @@
                     </div>
                 </form>
             </section>
-            
+
             <section class="right-section">
 
                 <!-- Result section starts here -->
@@ -287,7 +285,7 @@
                     <div class="result">
                         <div class="audio-details">
                             <span class="serial-num badge rounded-pill bg-dark">01</span>
-                            <span><i class="fas fa-microphone"></i> AudioTitle</span>
+                            <span><i class="fas fa-microphone-alt"></i> AudioTitle</span>
                         </div>
                         <div class="label-parent">
                             <label>Label : </label>
@@ -295,14 +293,14 @@
                         </div>
                         <div class="text-parent">
                             <label>Text : </label>
-                            <span class="text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quibusdam, tempore.</span> 
+                            <span class="text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quibusdam, tempore.</span>
                         </div>
                     </div>
                     <div class="bottom-section">
                         <button title="Add Metadata" class="btn btn-sm btn-secondary"><i class="fas fa-plus"></i></button>
                         <button title="Delete" class="btn btn-sm btn-secondary"><i class="fas fa-trash"></i></button>
                     </div>
-                    
+
                 </div>
                 <!-- Result section ends here -->
 
@@ -310,61 +308,12 @@
                 <!-- Region section starts here -->
                 <div class="region-section shadow-sm">
                     <h5 class="m-0">Regions</h5>
-                    
-                    <div class="region-list">
+
+                    <div class="region-list" id="region-list">
                         <!-- Render list of regions inside region-list sectionhere -->
-                        <div class="region">
-                            <span class="serial-num badge rounded-pill bg-secondary">01</span>
-                            <span> <i class="fa fa-microphone" aria-hidden="true"></i></span>
-                            <div class="audio-range-parent"> 
-                                <div>AudioTitle</div>
-                                <div class="audio-range">
-                                    <span class="start">10.13</span>-<span class="end">20.13</span>   
-                                </div>
-                            </div>
-                        </div>
-                        <div class="region">
-                            <span class="serial-num badge rounded-pill bg-secondary">02</span>
-                            <span> <i class="fa fa-microphone" aria-hidden="true"></i></span>
-                            <div class="audio-range-parent"> 
-                                <div>AudioTitle</div>
-                                <div class="audio-range">
-                                    <span class="start">10.13</span>-<span class="end">20.13</span>   
-                                </div>
-                            </div>
-                        </div>
-                        <div class="region">
-                            <span class="serial-num badge rounded-pill bg-secondary">03</span>
-                            <span> <i class="fa fa-microphone" aria-hidden="true"></i></span>
-                            <div class="audio-range-parent"> 
-                                <div>AudioTitle</div>
-                                <div class="audio-range">
-                                    <span class="start">10.13</span>-<span class="end">20.13</span>   
-                                </div>
-                            </div>
-                        </div>
-                        <div class="region">
-                            <span class="serial-num badge rounded-pill bg-secondary">04</span>
-                            <span> <i class="fa fa-microphone" aria-hidden="true"></i></span>
-                            <div class="audio-range-parent"> 
-                                <div>AudioTitle</div>
-                                <div class="audio-range">
-                                    <span class="start">10.13</span>-<span class="end">20.13</span>   
-                                </div>
-                            </div>
-                        </div>
-                        <div class="region">
-                            <span class="serial-num badge rounded-pill bg-secondary">05</span>
-                            <span> <i class="fa fa-microphone" aria-hidden="true"></i></span>
-                            <div class="audio-range-parent"> 
-                                <div>AudioTitle</div>
-                                <div class="audio-range">
-                                    <span class="start">10.13</span>-<span class="end">20.13</span>   
-                                </div>
-                            </div>
-                        </div>
+
                         <!-- Render list of regions inside region-list sectionhere -->
-                        
+
                     </div>
                 </div>
                 <!-- Region section ends here -->

@@ -48,7 +48,6 @@ function load_audio(file) {
 }
 
 function load_files(files) {
-    console.log("here", files);
     Array.from(files).forEach((f) => {
         if (f.type.match(/audio\/*/)) {
             /**/
@@ -64,6 +63,7 @@ function load_files(files) {
             reader.onload = () => {
                 try {
                     const d = JSON.parse(reader.result);
+                    console.log(item_name_annotation, d[item_name_annotation])
                     loadRegions(d[item_name_annotation]);
 
                     //meta
@@ -249,8 +249,8 @@ function init_wavesurfer() {
 
     {
         // UI
-        document.getElementById("title").innerText = "Hachiue";
-        document.title = "Hachiue";
+        // document.getElementById("title").innerText = "Hachiue";
+        // document.title = "Hachiue";
         document.getElementById("time-total").innerText = "0.00";
         document.getElementById("time-current").innerText = "0.00";
         document.getElementById("time-total-hms").innerText = "00:00:00";
@@ -328,13 +328,11 @@ function set_annotation_items(annotation_item_names) {
         }
         const row = document.getElementById(`annotation_item_${j}`);
         var final_name = item_name;
-        if (item_name != "stt_text") {
-            final_name = "vals__" + item_name;
-        }
+
         row.innerHTML = `
                 <div class="col">
-                    <label for="${final_name}">${final_name}</label>
-                    <textarea id="${final_name}" class="form-control" name="${final_name}"></textarea>
+                    <label for="vals__${final_name}">${item_name}</label>
+                    <textarea id="vals__${final_name}" class="form-control" name="vals__${final_name}"></textarea>
                 </div>
         `;
     }
@@ -539,9 +537,10 @@ function editAnnotation(region) {
     document.getElementById("end").dispatchEvent(new Event("change"));
 
     for (const [key, el] of Object.entries(form.elements)) {
+        console.log(key)
         if (key.startsWith("vals__")) {
-            const mykey = key.substr("vals__".length);
-            el.value = region.data[mykey] || "";
+            // const mykey = key.substr("vals__".length);
+            el.value = region.data['text'] || "";
         }
     }
 
@@ -588,15 +587,18 @@ function extractRegions(peaks, duration, unit_second) {
 }
 
 function addRegionList(region) {
-    let regionItem = document.createElement('div');
-    regionItem.className = 'region-item';
+    let regionList = document.createElement('div');
+    regionList.className = 'region';
     let region_innerHTMl = `
-        <div class="region-item-count"></div>
-        <div class="region-item-name">
-            <span> <i class="fa fa-microphone" aria-hidden="true"></i></span>
-            Audio ${region.start} - ${region.end}
+        <span class="serial-num badge rounded-pill bg-secondary"></span>
+        <span> <i class="fa fa-microphone-alt" aria-hidden="true"></i></span>
+        <div class="audio-range-parent">
+            <div>Audio</div>
+            <div class="audio-range">
+                <span class="start">${hms(region.start)}</span>-<span class="end">${hms(region.end)}</span>
+            </div>
         </div>
     `;
-    regionItem.innerHTML = region_innerHTMl;
-    document.getElementById('region-items').appendChild(regionItem);
+    regionList.innerHTML = region_innerHTMl;
+    document.getElementById('region-list').appendChild(regionList);
 }
