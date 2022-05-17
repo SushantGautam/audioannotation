@@ -86,11 +86,20 @@ function load_files(files) {
     });
 }
 
+
 function init_wavesurfer() {
+     var stt_data = JSON.parse(JSON.stringify(STT_DATA.stt_predictions_annotations));
+    stt_data.forEach(function (region) {
+        region.drag = false;
+        region.resize = false;
+        region.attributes= {
+            label: region.data.text,
+        }
+    });
     {
         wavesurfer = WaveSurfer.create({
             container: "#waveform",
-            height: 150,
+            height: 300,
             pixelRatio: 1,
             skipLength: 0.5,
             scrollParent: true,
@@ -99,7 +108,9 @@ function init_wavesurfer() {
             backend: "MediaElement",
             cursorColor: "red",
             plugins: [
-                WaveSurfer.regions.create(),
+                WaveSurfer.regions.create({
+                    regions: stt_data,
+                }),
                 WaveSurfer.minimap.create({
                     height: 30,
                     waveColor: "#ddd",
@@ -483,6 +494,10 @@ function loadRegions(regions) {
         region.color = randomColor(0.1);
         wavesurfer.addRegion(region);
         addRegionList(region);
+        var regionText = document.createElement('div');
+        regionText.className = "region-stt-text";
+        regionText.innerHTML = ("text" in region.data) ? region.data.text == '' ? '' : region.data.text : '';
+        document.querySelector(`[data-id=${region.id}]`).appendChild(regionText);
     });
 }
 
