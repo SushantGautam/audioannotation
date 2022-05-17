@@ -16,7 +16,7 @@ var pauseButton = document.getElementById("pauseButton");
 //add events to those 2 buttons
 recordButton.addEventListener("click", startRecording);
 stopButton.addEventListener("click", stopRecording);
-pauseButton.addEventListener("click", pauseRecording);
+// pauseButton.addEventListener("click", pauseRecording);
 
 function startRecording() {
 	console.log("recordButton clicked");
@@ -89,7 +89,6 @@ function pauseRecording(){
 		//resume
 		rec.record()
 		pauseButton.innerHTML="Pause";
-
 	}
 }
 
@@ -110,12 +109,29 @@ function stopRecording() {
 	//stop microphone access
 	gumStream.getAudioTracks()[0].stop();
 
+	// show recorded audio:
+	rec.exportWAV(create_record_player);
+
 	//create the wav blob and pass it on to createDownloadLink
 	// rec.exportWAV(createDownloadLink);
 }
 
 function on_form_submit(){
 	rec.exportWAV(send_to_backend);
+}
+
+function create_record_player(blob){
+	var au = document.createElement('audio');
+	var url = URL.createObjectURL(blob);
+
+	//add controls to the <audio> element
+	au.controls = true;
+	au.src = url;
+
+	var player_div = document.getElementById("record_player");
+	player_div.innerHTML = '';
+	player_div.appendChild(au);
+
 }
 
 function send_to_backend(blob){
