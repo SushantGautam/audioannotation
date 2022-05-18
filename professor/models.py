@@ -1,4 +1,3 @@
-from distutils.command.upload import upload
 from django.db import models
 from orgadmin.models import BaseUserModel
 
@@ -37,22 +36,34 @@ def question_file_name(instance, filename):
 
 
 class Question(models.Model):
+    UPLOAD_TYPE_CHOICES = (
+        ('NON', 'None'),
+        ('IMG', 'Image Question'),
+        ('AUD', 'Audio Question'),
+    )
     # question_set = models.ForeignKey(QuestionSet, on_delete=models.CASCADE)
-    title = models.CharField(max_length=256)
+    question_title = models.TextField()
+    unique_code = models.CharField(max_length=10, unique=True)
     description = models.TextField(null=True, blank=True)
     upload_file = models.FileField(upload_to=question_file_name, null=True, blank=True)
+    upload_type = models.CharField(max_length=3, choices=UPLOAD_TYPE_CHOICES, default='NON')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
-    level = models.IntegerField(default=1)
+    difficulty_level = models.IntegerField(default=0)  # 0: both, 1: beginner, 2: advanced
+    ready_time = models.IntegerField(default=0)
+    speaking_time = models.IntegerField(default=0)
+    evaluation_purpose = models.TextField(null=True, blank=True)
+    # question_keywords = models.ManyToManyField('Keyword', related_name='question_keywords')
     subcategory_code = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.title
+        return self.question_title
 
 
 class QuestionSet(models.Model):
     name = models.CharField(max_length=256)
+    unique_code = models.CharField(max_length=10, unique=True)
     description = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
