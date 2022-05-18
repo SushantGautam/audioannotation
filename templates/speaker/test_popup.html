@@ -1,8 +1,8 @@
 {% load static %}
 {% load i18n %}
 
-<div class="row">
-  <div class="col-12">
+<div class="row" style="padding: 12px">
+  <div class="col-12" style="background-color: #f3f3f3; padding: 10px">
     {% for qn in qn_set.questions.all %}
 
       <button type="button"
@@ -19,24 +19,60 @@
   </div>
 </div>
 
-<div class="row">
-  <div class="col-2">
+<div class="row" style="height: 60%">
+  <div class="col-2" style="display: flex">
     {% if prev_qn != None %}
-    <button type="button"
-            onclick="prev_qn_btn_click();"
-            class="btn btn-primary prev_qn_btn">{% trans 'Previous' %}</button>
+      <button type="button"
+              style="margin: auto;"
+              onclick="prev_qn_btn_click();"
+              class="btn btn-primary prev_qn_btn">{% trans 'Previous' %}</button>
     {% endif %}
   </div>
   <div class="col-8">
-    <span>{{ qn_num1 }}. </span><span> {{ qn.title }}</span>
+    {#    <div class="row">#}
+    <div class="col-12">
+      <span>{{ qn_num1 }}. </span><span> {{ qn.title }}</span>
+    </div>
+    {#    </div>#}
+    {#    <div class="row">#}
+    <div class="col-12" style="margin-top: 20px;
+    height: 80%;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    border: 1px solid black;">
+      <span style="margin: auto;">{{ qn.description }}</span>
+    </div>
+    {#    </div>#}
+
   </div>
-  <div class="col-2">
+  <div class="col-2" style="display: flex">
     {% if next_qn != None %}
-    <button type="button"
-            onclick="next_qn_btn_click();"
-            class="btn btn-primary next_qn_btn">{% trans 'Next' %}</button>
+      <button type="button"
+              style="margin: auto;"
+              onclick="next_qn_btn_click();"
+              class="btn btn-primary next_qn_btn">{% trans 'Next' %}</button>
     {% endif %}
   </div>
+</div>
+
+<div class="row" style="height: 30%; padding: 0 12px 21px 12px;">
+  {#  <div class="col-12" style="height: 33%; background-color: #f3f3f3;">#}
+  <div class="col-4" style="text-align: center; margin: auto; height: 100%; display: flex; background-color: #f3f3f3">
+    <div class="recorder_wave"
+         style="width: 80%; height: 60%; border: solid black; margin: auto;"></div>
+  </div>
+  <div class="col-4" style="text-align: center; height: 100%; margin: auto; display: flex; background-color: #f3f3f3">
+    {#      <div class="col-12">#}
+    <button type="button" style="margin: auto; border-radius: 50%"
+            class="btn btn-info">{% trans 'Preparation' %}</button>
+    <button type="button"  style="margin: auto; border-radius: 50%"
+            class="btn btn-outline-info ml-5">{% trans 'Recording' %}</button>
+    {#      </div>#}
+
+  </div>
+  <div class="col-4" style="display: flex; background-color: #f3f3f3"></div>
+  {#  </div>#}
 </div>
 
 <script>
