@@ -1,0 +1,76 @@
+{% extends "professor/base.html" %}
+{% load static %}
+{% load i18n %}
+{% block styles %}
+  <style>
+  .status-text{
+      cursor: auto;
+      text-decoration: none;
+  }
+
+  .table-title {
+
+    background-color: rgba(188,188,188,0.2) !important;
+    text-align: center;
+
+    font-weight: 600;
+    width: 20%;
+}
+
+
+  </style>
+{% endblock styles %}
+
+{% block content %}
+  <h1 class="py-4">Question Detail</h1>
+
+  <table class="table table-bordered">
+    <tbody>
+    <tr class="">
+      <td class="table-title">Title</td>
+      <td class="value text-left">{{ object.title }}</td>
+    </tr>
+
+    <tr class="">
+      <td class="table-title">Description</td>
+      <td class="value">{{ object.description }} </td>
+    </tr>
+    <tr class="">
+      <td class="table-title">Created At</td>
+      <td class="value">{{ object.created_at }} </td>
+    </tr>
+    <tr class="">
+      <td class="table-title">Updated At</td>
+      <td class="value">{{ object.updated_at }} </td>
+    </tr>
+     <tr class="">
+      <td class="table-title">Status</td>
+      <td class="value">{% if object.is_active %}<span class="btn btn-sm btn-success"> <a class="text-white status-text">{% trans 'Active' %} </a></span>{% else %} <span class="btn btn-sm btn-warning"> <a class="text-white status-text">{% trans 'InActive' %} </a></span>{% endif %} </td>
+
+    </tr>
+
+    <tr class="">
+      <td class="table-title ">Level</td>
+
+      <td class="value">
+        {{ object.level }}
+      </td>
+
+
+    </tr>
+    <tr class="">
+      <td class="table-title ">SubCategory</td>
+
+      <td class="value">
+        {{ object.subcategory_code }}
+      </td>
+
+
+    </tr>
+
+    </tbody>
+  </table>
+{% endblock content %}
+
+{% block scripts %}
+{% endblock scripts %}
