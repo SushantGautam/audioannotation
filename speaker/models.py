@@ -2,6 +2,7 @@ from django.db import models
 from orgadmin.models import BaseUserModel
 from professor.models import Question
 
+
 class Speaker(BaseUserModel):
     class Meta:
         verbose_name = 'Speaker'

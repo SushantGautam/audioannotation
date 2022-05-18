@@ -12,7 +12,7 @@
       <div class="col-10">{{ q_set }}</div>
       <div class="col-2">
         <button type="button" data-bs-toggle="modal" data-bs-target="#test_modal"
-                data-questionset_pk="{{ q_set.pk }}"
+                data-qn_set_pk="{{ q_set.pk }}"
                 class="btn btn-warning start_test_button">{% trans 'Start' %}</button>
       </div>
     </div>
@@ -21,18 +21,20 @@
   <!-- Modal -->
   <div class="modal fade" id="test_modal" data-bs-backdrop="static" data-bs-keyboard="false"
        tabindex="-1" aria-labelledby="test_modal_label" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="test_modal_label">Modal title</h5>
+          <h5 class="modal-title" id="test_modal_label"></h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body" id="test_modal_body">
         </div>
+        <!--
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary">Understood</button>
         </div>
+        -->
       </div>
     </div>
   </div>
@@ -45,9 +47,10 @@
 
   <script>
     $(".start_test_button").click(function(){
+      let qn_set_pk = $(this).attr('data-qn_set_pk');
       $.ajax({
         type: "GET",
-        url: "",
+        url: `{% url 'speaker:exam_popup' %}?qn_set=${qn_set_pk}`,
         success: function (response){
            $("#test_modal_body").html(response);
         },

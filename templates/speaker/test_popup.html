@@ -1,4 +1,79 @@
 {% load static %}
 {% load i18n %}
 
+<div class="row">
+  <div class="col-12">
+    {% for qn in qn_set.questions.all %}
 
+      <button type="button"
+              style="display: inline-flex"
+              class="btn
+              {% if qn_num == forloop.counter0 %}
+                btn-info
+              {% else %}
+                btn-outline-info
+              {% endif %}">{{ forloop.counter }}</button>
+      {% if not forloop.last %}&nbsp;&nbsp; > &nbsp;&nbsp;{% endif %}
+
+    {% endfor %}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-2">
+    {% if prev_qn != None %}
+    <button type="button"
+            onclick="prev_qn_btn_click();"
+            class="btn btn-primary prev_qn_btn">{% trans 'Previous' %}</button>
+    {% endif %}
+  </div>
+  <div class="col-8">
+    <span>{{ qn_num1 }}. </span><span> {{ qn.title }}</span>
+  </div>
+  <div class="col-2">
+    {% if next_qn != None %}
+    <button type="button"
+            onclick="next_qn_btn_click();"
+            class="btn btn-primary next_qn_btn">{% trans 'Next' %}</button>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  $("#test_modal_label").html("{{ qn_set.name }}");
+  function prev_qn_btn_click(){
+    let qn_set_pk = "{{ qn_set.pk }}";
+    let qn_num = "{{ prev_qn }}"
+    $.ajax({
+      type: "GET",
+      url: `{% url 'speaker:exam_popup' %}?qn_set=${qn_set_pk}&qn_num=${qn_num}`,
+      success: function (response){
+        $("#test_modal_body").html(response);
+      },
+      error: function () {
+        console.log('Error');
+      },
+      complete: function () {
+        $(".loading-icon-ajax").fadeOut("fast");
+      }
+    });
+  }
+
+  function next_qn_btn_click(){
+    let qn_set_pk = "{{ qn_set.pk }}";
+    let qn_num = "{{ next_qn }}"
+    $.ajax({
+      type: "GET",
+      url: `{% url 'speaker:exam_popup' %}?qn_set=${qn_set_pk}&qn_num=${qn_num}`,
+      success: function (response){
+        $("#test_modal_body").html(response);
+      },
+      error: function () {
+        console.log('Error');
+      },
+      complete: function () {
+        $(".loading-icon-ajax").fadeOut("fast");
+      }
+    });
+  }
+</script>
