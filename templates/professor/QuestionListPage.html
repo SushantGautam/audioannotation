@@ -52,7 +52,7 @@
 
                 {% for object in object_list %}
                     <tr>
-                   <td><input type="checkbox" class="surveyinfoCheckbox" value="{{ object.id }}">
+                   <td><input type="checkbox" class="questionCheckbox" value="{{ object.id }}">
                    </td>
                         <td> {{ forloop.counter }}</td>
                         <td> {{ object.title }}</td>
@@ -68,7 +68,7 @@
                         <td>{{ object.subcategory_code.name }}</td>
 
                         <td>
-                            <a class="btn btn-sm btn-chinju-gray" id="{{ object.id }}" href="{{object.get_absolute_url}}">{% trans "Detail" %}</a>
+                            <a class="btn btn-sm btn-secondary" id="{{ object.id }}" href="{% url 'professor:question_detail' object.id %}">{% trans "Detail" %}</a>
                         </td>
                         <td> <a title="{% trans 'Update Question' %}" class="btn btn-sm btn-warning rounded-circle editQuestion"  id="editQuestion_{{ object.pk }}"><i class ="text-white fa fa-pen" data-bs-toggle="modal" data-bs-target="#add_question_modal"> </i></a>
 {#                            <a title="{% trans 'Delete survey' %}" class="btn btn-sm btn-chinju-gray rounded-circle ml-2" id="{{ object.id }}" href="{% url 'remove_course_from_evaluation' evaluation=object.id course_id=course.id %}"><i class="fa fa-trash"></i></a>#}
@@ -187,6 +187,37 @@
   </script>
 
 <script>
+
+function delete_multi(){
+   console.log("Clicked")
+    if( !confirm("{% trans 'Are you sure you want to delete selected Questions?' %}") ){
+        return false;
+      }
+
+   let seleced_questions = []
+   $.each($('#question_list_table input[type="checkbox"]:checked').not('.CheckAll'), function (index) {
+     seleced_questions.push($(this).val())
+   });
+   $.ajax({
+     type: "POST",
+     url: "{% url 'professor:delete_multiple_question' %}",
+     data: {
+       'csrfmiddlewaretoken': '{{ csrf_token }}',
+       'question_ids': seleced_questions,
+     },
+     success: function (data) {
+       location.reload();
+     },
+
+   });
+ }
+
+
+
+
+
+
+
  $('#question_list_table').DataTable({
         dom: 'lfBtp',
         responsive: true,
@@ -238,11 +269,11 @@
            //   $('.editQuestion').attr("data-bs-target", "#add_question_modal");
 
 
-            $('.multiple-delete').parent().parent().attr({'class':'btn btn-sm btn-danger rounded-circle question_dt_right_btn  text-white mr-2 deleteCheckedsurveys',
+            $('.multiple-delete').parent().parent().attr({'class':'btn btn-sm btn-danger rounded-circle question_dt_right_btn  text-white mr-2 deleteCheckedQuestions',
                                                 'type': 'submit',
-                                                'onclick': `return confirm("{% trans 'Are you sure you want to delete selected Surveys?' %}")`,
+                                              //  'onclick': `return confirm("{% trans 'Are you sure you want to delete selected Questions?' %}")`,
                                                 'disabled': 'true',
-                                                'title': '{% trans "Delete Selected Survey" %}'})
+                                                'title': '{% trans "Delete Selected Question" %}'})
 
               $('.multiple-delete').parent().parent().attr('onclick',"delete_multi()")
 
@@ -310,5 +341,37 @@
             return false;
         }
     });
+
+
+     $('.CheckAll').on('click', function () {
+        $('#question_list_table input:checkbox').not(this).prop('checked', this.checked);
+        checkboxChangeEvent()
+    });
+    $('#question_list_table').on('click', '.questionCheckbox', function () {
+          if ($('.questionCheckbox').length === $('.questionCheckbox:checked').length) {
+              $('.CheckAll').prop('checked', 'checked');
+          } else {
+              $('.CheckAll').prop('checked', false);
+          }
+          checkboxChangeEvent()
+      });
+
+    function checkboxChangeEvent() {
+      console.log("ALL SELECTEDS")
+        let checkBoxlength = $('#question_list_table input[type="checkbox"]:checked').not('.CheckAll').length
+        if (checkBoxlength > 0) {
+            $('.checkboxCheckedLength').text(checkBoxlength + ' of ' + $('.questionCheckbox').length + ' selected')
+            $('.deleteCheckedQuestions').removeAttr('disabled')
+        } else {
+            $('.checkboxCheckedLength').text('')
+            $('.deleteCheckedQuestions').prop('disabled', 'disabled')
+        }
+    }
+
+
+
+
+
+
   </script>
 {% endblock scripts %}

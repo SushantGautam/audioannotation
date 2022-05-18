@@ -2,10 +2,12 @@ from distutils.command.upload import upload
 from django.db import models
 from orgadmin.models import BaseUserModel
 
+
 class Professor(BaseUserModel):
     class Meta:
         verbose_name = 'Professor'
         verbose_name_plural = 'Professors'
+
 
 class Category(models.Model):
     name = models.CharField(max_length=256)
@@ -13,8 +15,10 @@ class Category(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
+
     def __str__(self):
         return self.name
+
 
 class SubCategory(models.Model):
     name = models.CharField(max_length=256)
@@ -23,11 +27,14 @@ class SubCategory(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
+
     def __str__(self):
         return self.name
 
+
 def question_file_name(instance, filename):
     return 'question/{0}/{1}/{2}'.format(instance.subcategory_code, instance.id, filename)
+
 
 class Question(models.Model):
     # question_set = models.ForeignKey(QuestionSet, on_delete=models.CASCADE)
@@ -39,8 +46,10 @@ class Question(models.Model):
     is_active = models.BooleanField(default=True)
     level = models.IntegerField(default=1)
     subcategory_code = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
+
     def __str__(self):
         return self.title
+
 
 class QuestionSet(models.Model):
     name = models.CharField(max_length=256)
@@ -49,5 +58,6 @@ class QuestionSet(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
     questions = models.ManyToManyField(Question)
+
     def __str__(self):
         return self.name

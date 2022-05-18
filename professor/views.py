@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -99,11 +100,21 @@ class QuestionsUpdateView(AjaxableResponseMixin, UpdateView):
         # return JsonResponse(response)
         return redirect('professor:question_list_page')
 
+class QuestionDetailView(DetailView):
+    model = Question
+    template_name = 'professor/question/QuestionsDetailPage.html'
 
+def MultipleQuestionDeleteView(request):
+    if request.method == 'POST':
+        try:
+            Obj = Question.objects.filter(pk__in=request.POST.getlist('question_ids[]'))
+            Obj.delete()
+            return redirect('professor:question_list_page')
 
-
-
-
+        except:
+            messages.error(request,
+                           "Cannot delete Questions")
+            return JsonResponse({}, status=500)
 
 
 def QuestionDeleteView(request, pk):
