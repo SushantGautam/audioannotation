@@ -87,14 +87,6 @@ function load_files(files) {
 
 
 function init_wavesurfer() {
-     var stt_data = JSON.parse(JSON.stringify(STT_DATA.stt_predictions_annotations));
-    stt_data.forEach(function (region) {
-        region.drag = false;
-        region.resize = false;
-        // region.attributes= {
-        //     label: region.data.text,
-        // }
-    });
     {
         wavesurfer = WaveSurfer.create({
             container: "#waveform",
@@ -107,9 +99,7 @@ function init_wavesurfer() {
             backend: "MediaElement",
             cursorColor: "red",
             plugins: [
-                WaveSurfer.regions.create({
-                    regions: stt_data,
-                }),
+                WaveSurfer.regions.create(),
                 WaveSurfer.minimap.create({
                     height: 30,
                     waveColor: "#ddd",
@@ -150,6 +140,7 @@ function init_wavesurfer() {
             loadRegions(data_annotation);
         });
 
+        loadSTTRegions();
         localforage.getItem(key_audio, (err, data_audio) => {
             load_audio(data_audio);
         });
@@ -269,6 +260,18 @@ function init_wavesurfer() {
         const form = document.forms.edit;
         form.style.opacity = 0;
     }
+}
+
+function loadSTTRegions() {
+    var stt_data = JSON.parse(JSON.stringify(STT_DATA.stt_predictions_annotations));
+    stt_data.forEach(function (region) {
+        region.color = randomColor(0.1);
+        region.drag = false;
+        region.resize = false;
+        region.id = "stt_"+region.id
+        wavesurfer.addRegion(region);
+        addTextToSTTRegion(region);
+    });
 }
 
 // Load Data from STT Naver if localforage is not available.
@@ -468,7 +471,7 @@ function createRegionsCallBack(region) {
 }
 
 function saveRegions() {
-    const mydata = Object.keys(wavesurfer.regions.list).map(function (id) {
+    const mydata = Object.keys(wavesurfer.regions.list).filter((key) => !key.includes('stt_')).map(function (id) {
         const region = wavesurfer.regions.list[id];
         return {
             id: region.id,
@@ -494,10 +497,6 @@ function loadRegions(regions) {
         region.color = randomColor(0.1);
         wavesurfer.addRegion(region);
         addRegionList(region);
-        var regionText = document.createElement('div');
-        regionText.className = "region-stt-text";
-        regionText.innerHTML = ("text" in region.data) ? region.data.text == '' ? '' : region.data.text : '';
-        document.querySelector(`[data-id=${region.id}]`).appendChild(regionText);
     });
 }
 
@@ -639,4 +638,12 @@ function loadResults(region) {
             <span class="text">${region.data.text}</span>
         </div>
     `;
+}
+
+function addTextToSTTRegion(region) {
+    if(!region.id.includes('stt')) return false;
+    var regionText = document.createElement('div');
+    regionText.className = "region-stt-text";
+    regionText.innerHTML = ("text" in region.data) ? region.data.text == '' ? '' : region.data.text : '';
+    document.querySelector(`[data-id=${region.id}]`).appendChild(regionText);
 }
