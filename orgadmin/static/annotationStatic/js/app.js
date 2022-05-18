@@ -151,7 +151,7 @@ function init_wavesurfer() {
 
         wavesurfer.on("ready", function () {
             wavesurfer.enableDragSelection({
-                color: randomColor(0.1),
+                color: "#FFF2CC",
             });
 
             const totalTime = wavesurfer.getDuration();
@@ -265,7 +265,7 @@ function init_wavesurfer() {
 function loadSTTRegions() {
     var stt_data = JSON.parse(JSON.stringify(STT_DATA.stt_predictions_annotations));
     stt_data.forEach(function (region) {
-        region.color = randomColor(0.1);
+        region.color = defaultColor(0.1);
         region.drag = false;
         region.resize = false;
         region.id = "stt_"+region.id
@@ -494,7 +494,7 @@ function saveRegions() {
 
 function loadRegions(regions) {
     regions.forEach(function (region) {
-        region.color = randomColor(0.1);
+        region.color = "rgb(255, 242, 204, 0.2)";
         wavesurfer.addRegion(region);
         addRegionList(region);
     });
@@ -507,6 +507,19 @@ function randomColor(alpha) {
             ~~(Math.random() * 255),
             ~~(Math.random() * 255),
             ~~(Math.random() * 255),
+            alpha || 1,
+        ] +
+        ")"
+    );
+}
+
+function defaultColor(alpha) {
+    return (
+        "rgba(" +
+        [
+            ~~(255 * 255),
+            ~~(242 * 255),
+            ~~(208 * 255),
             alpha || 1,
         ] +
         ")"
@@ -622,22 +635,32 @@ function addRegionList(region) {
 }
 
 function loadResults(region) {
-    var elem = document.querySelector('.result-section > .result');
+    var elem = document.querySelector('.result-section .result');
     elem.innerHTML = `
         <div class="audio-details">
             <span class="serial-num badge rounded-pill bg-dark"></span>
             <span><i class="fas fa-microphone-alt"></i> 
-            AudioTitle <span class="start">${hms(region.start)}</span>-<span class="end">${hms(region.end)}</span></span>
+            Audio <span class="start">${hms(region.start)}</span>-<span class="end">${hms(region.end)}</span></span>
         </div>
-        <div class="label-parent">
-            <label>Label : </label>
-            <span class="badge rounded-pill bg-dark">${region.data.labels}</span>
-        </div>
-        <div class="text-parent">
-            <label>Text : </label>
-            <span class="text">${region.data.text}</span>
+        <div class="audio-data">
+            <div class="label-parent">
+                <label>Label : </label>
+                <span class="badge rounded-pill bg-dark">${region.data.labels}</span>
+            </div>
+            <div class="text-parent">
+                <label>Text : </label>
+                <span class="text">${region.data.text}</span>
+            </div>
+            
+            <div class="bottom-section">
+                <button title="Add Metadata" class="btn btn-sm btn-secondary region-edit"><i class="fas fa-edit"></i></button>
+                <button title="Delete" class="btn btn-sm btn-secondary region-delete"><i class="fas fa-trash"></i></button>
+            </div>
         </div>
     `;
+
+    document.querySelector('.result-section .region-edit').dataset.region_id = region.id
+    document.querySelector('.result-section .region-delete').dataset.region_id = region.id
 }
 
 function addTextToSTTRegion(region) {

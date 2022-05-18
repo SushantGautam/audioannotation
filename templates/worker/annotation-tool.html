@@ -17,17 +17,6 @@
     <link rel="stylesheet" href="{% static 'annotationStatic/css/style.css' %}" />
     <link rel="stylesheet" href="{% static 'annotationStatic/css/app.css' %}" />
 
-    <script src="{% static 'annotationStatic/3rd/bootstrap/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'annotationStatic/3rd/wavesurfer.js/wavesurfer.min.js' %}"></script>
-    <script src="{% static 'annotationStatic/3rd/wavesurfer.js/plugin/wavesurfer.timeline.min.js' %}"></script>
-    <script src="{% static 'annotationStatic/3rd/wavesurfer.js/plugin/wavesurfer.regions.min.js' %}"></script>
-    <script src="{% static 'annotationStatic/3rd/wavesurfer.js/plugin/wavesurfer.minimap.min.js' %}"></script>
-    <script src="{% static 'annotationStatic/3rd/localforage/localforage.min.js' %}"></script>
-    <link href="{% static 'annotationStatic/3rd/jsoneditor/jsoneditor.min.css' %}" rel="stylesheet" type="text/css">
-    <script src="{% static 'annotationStatic/3rd/jsoneditor/jsoneditor.min.js' %}"></script>
-
-    <script src="{% static 'annotationStatic/js/app.js' %}"></script>
-
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/fontawesome.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/fontawesome.min.js"></script> -->
 </head>
@@ -114,7 +103,7 @@
         flex-direction: column;
         gap: 0.75rem;
     }
-    
+
     .region-list{
         display: flex;
         flex-direction: column;
@@ -122,7 +111,7 @@
         max-height: 20rem;
         overflow-y: auto;
     }
-    
+
     .region{
         display: flex;
         align-items: center;
@@ -291,18 +280,35 @@
                             <span class="serial-num badge rounded-pill bg-dark">01</span>
                             <span><i class="fas fa-microphone-alt"></i> AudioTitle</span>
                         </div>
-                        <div class="label-parent">
-                            <label>Label : </label>
-                            <span class="badge rounded-pill bg-dark"></span>
-                        </div>
-                        <div class="text-parent">
-                            <label>Text : </label>
-                            <span class="text"></span>
+                        <div class="audio-data">
+                            <div class="label-parent">
+                                <label>Label : </label>
+                                <span class="badge rounded-pill bg-dark"></span>
+                            </div>
+                            <div class="text-parent">
+                                <label>Text : </label>
+                                <span class="text"></span>
+                            </div>
+                            <div class="bottom-section">
+                                <button title="Add Metadata" class="btn btn-sm btn-secondary region-edit"><i class="fas fa-edit"></i></button>
+                                <button title="Delete" class="btn btn-sm btn-secondary region-delete"><i class="fas fa-trash"></i></button>
+                            </div>
                         </div>
                     </div>
-                    <div class="bottom-section">
-                        <button title="Add Metadata" class="btn btn-sm btn-secondary"><i class="fas fa-plus"></i></button>
-                        <button title="Delete" class="btn btn-sm btn-secondary"><i class="fas fa-trash"></i></button>
+
+
+                    <div class="annotation-form-section d-none">
+                        <form class="annotation-form">
+                            <textarea class="annotation-text">
+                            </textarea>
+                            <input type="hidden" value="" class="region-id">
+                            <div class="bottom-section">
+                                <button type="submit" title="Save" class="btn btn-sm btn-dark">
+                                    <i class="fas fa-check"></i></button>
+                                <button type="cancel" title="Cancel" class="btn btn-sm btn-dark">
+                                    <i class="fas fa-times"></i></button>
+                            </div>
+                        </form>
                     </div>
 
                 </div>
@@ -364,9 +370,25 @@
     </div> -->
 </body>
 
-<script>
-    const USER_ID = "{{ user.id }}";
-    const STT_DATA = {{ stt_data|safe }};
-    const AUDIO_FILE = "{{ audio_obj.audio_file.url }}";
-</script>
+<footer>
+    <script src="{% static 'annotationStatic/3rd/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'annotationStatic/3rd/wavesurfer.js/wavesurfer.min.js' %}"></script>
+    <script src="{% static 'annotationStatic/3rd/wavesurfer.js/plugin/wavesurfer.timeline.min.js' %}"></script>
+    <script src="{% static 'annotationStatic/3rd/wavesurfer.js/plugin/wavesurfer.regions.min.js' %}"></script>
+    <script src="{% static 'annotationStatic/3rd/wavesurfer.js/plugin/wavesurfer.minimap.min.js' %}"></script>
+    <script src="{% static 'annotationStatic/3rd/localforage/localforage.min.js' %}"></script>
+    <link href="{% static 'annotationStatic/3rd/jsoneditor/jsoneditor.min.css' %}" rel="stylesheet" type="text/css">
+    <script src="{% static 'annotationStatic/3rd/jsoneditor/jsoneditor.min.js' %}"></script>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="{% static 'annotationStatic/js/app.js' %}"></script>
+    <script src="{% static 'annotationStatic/js/additionalJS.js' %}"></script>
+    <script>
+        const USER_ID = "{{ user.id }}";
+        const STT_DATA = {{ stt_data|safe }};
+        const AUDIO_FILE = "{{ audio_obj.audio_file.url }}";
+    </script>
+</footer>
+
 </html>
