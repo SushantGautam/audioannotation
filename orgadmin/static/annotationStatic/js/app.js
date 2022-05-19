@@ -289,14 +289,20 @@ function deleteRegionFunc() {
     }
 }
 
+function deleteRegion(regionId) {
+    if (regionId) {
+        wavesurfer.regions.list[regionId].remove();
+    }
+}
+
 function appendDeleteIcon(elem) {
     let btnHTML = document.createElement('button');
     btnHTML.className = 'btn btn-sm delete-range';
     btnHTML.setAttribute('data-action', 'delete-region');
     btnHTML.innerHTML = "x";
-    btnHTML.addEventListener("click", function () {
-        btnHTML.closest('.wavesurfer-region').click();
-        deleteRegionFunc();
+    btnHTML.addEventListener("click", function (e) {
+        e.stopPropagation();
+        deleteRegion(elem);
     });
     document.querySelector(`[data-id=${elem}]`).appendChild(btnHTML);
 }
@@ -531,14 +537,12 @@ function save_a_region(region) {
     const data = {};
     data['labels'] = region.data.labels;
     for (const [key, el] of Object.entries(form.elements)) {
-        if (key.startsWith("vals__")) {
             let v = el.value;
             if (key != "vals__memo") {
                 // Clean blanks and line breaks
                 v = v.replace(/^\s+|\s+$|\n/g, "");
             }
             data[key.substr("vals__".length)] = v;
-        }
     }
 
     region.update({
@@ -654,8 +658,8 @@ function loadResults(region) {
             </div>
             
             <div class="bottom-section">
-                <button title="Add Metadata" class="btn btn-sm btn-secondary region-edit"><i class="fas fa-edit"></i></button>
-                <button title="Delete" class="btn btn-sm btn-secondary region-delete"><i class="fas fa-trash"></i></button>
+                <button title="Add Metadata" class="btn btn-sm btn-secondary region-edit" data-region_id="${region.id}"><i class="fas fa-edit"></i></button>
+                <button title="Delete" class="btn btn-sm btn-secondary region-delete" data-region_id="${region.id}"><i class="fas fa-trash"></i></button>
             </div>
         </div>
     `;

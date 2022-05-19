@@ -20,9 +20,14 @@ $(document).ready(function () {
         $('.result .text').html(region.data.text);
     });
 
-        $('.annotation-form button[type=cancel]').on('click', (e) => {
+    $('.annotation-form button[type=cancel]').on('click', (e) => {
         e.preventDefault();
         $('.result .audio-data').removeClass('d-none');
         $('.annotation-form-section').addClass('d-none');
     });
-})
+
+    $('.result-section').on('click', '.region-delete', () => {
+        console.log($('.result-section .region-delete').attr('data-region_id'));
+        deleteRegion($('.result-section .region-delete').attr('data-region_id'));
+    });
+});
