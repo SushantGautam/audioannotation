@@ -136,3 +136,17 @@ body {
     text-align: center;
     color: red;
 }
+
+
+.flex-space{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-center{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
