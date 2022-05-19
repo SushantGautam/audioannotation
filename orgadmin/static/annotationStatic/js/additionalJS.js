@@ -17,5 +17,12 @@ $(document).ready(function () {
         region.update({
             data: data,
         });
+        $('.result .text').html(region.data.text);
+    });
+
+        $('.annotation-form button[type=cancel]').on('click', (e) => {
+        e.preventDefault();
+        $('.result .audio-data').removeClass('d-none');
+        $('.annotation-form-section').addClass('d-none');
     });
 })
