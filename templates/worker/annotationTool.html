@@ -199,6 +199,7 @@
                             <button class="btn btn-light" id="download_button">
                                 <span class="bi bi-download" aria-hidden="true"></span>
                             </button>
+                            <button type="button" class="btn btn-secondary" id="save-btn">Save</button>
                         </div>
                     </div>
                 </div>
@@ -388,6 +389,8 @@
         const USER_ID = "{{ user.id }}";
         const STT_DATA = {{ stt_data|safe }};
         const AUDIO_FILE = "{{ audio_obj.audio_file.url }}";
+        const SAVE_ANNOTATION_URL = "{% url 'worker:save_annotation' audio_obj.id %}";
+        var csrf_token = "{{ csrf_token }}";
     </script>
 </footer>
 

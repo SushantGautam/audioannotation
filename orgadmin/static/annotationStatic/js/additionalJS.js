@@ -32,4 +32,29 @@ $(document).ready(function () {
     $('.result-section').on('click', '.region-delete', () => {
         deleteRegion($('.result-section .region-delete').attr('data-region_id'));
     });
+
+    $('#save-btn').on('click', (e) => {
+        localforage.getItem(key_annotation).then(function(value) {
+            // This code runs once the value has been loaded
+            // from the offline store.
+            console.log(value);
+            $.ajax({
+                url: SAVE_ANNOTATION_URL,
+                type: 'POST',
+                data: {
+                    'csrfmiddlewaretoken': csrf_token,
+                    'annotated_data': JSON.stringify(value),
+                },
+                success: function (response) {
+                    console.log(response);
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        }).catch(function(err) {
+            // This code runs if there were any errors
+            console.log(err);
+        });
+    });
 });
