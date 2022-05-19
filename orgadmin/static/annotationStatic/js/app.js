@@ -537,12 +537,14 @@ function save_a_region(region) {
     const data = {};
     data['labels'] = region.data.labels;
     for (const [key, el] of Object.entries(form.elements)) {
+        if (key.startsWith("vals__")) {
             let v = el.value;
             if (key != "vals__memo") {
                 // Clean blanks and line breaks
                 v = v.replace(/^\s+|\s+$|\n/g, "");
             }
             data[key.substr("vals__".length)] = v;
+        }
     }
 
     region.update({

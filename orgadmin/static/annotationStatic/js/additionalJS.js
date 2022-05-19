@@ -9,11 +9,14 @@ $(document).ready(function () {
 
     $('.annotation-form').on('submit', (e) => {
         e.preventDefault();
+        var annotated_text = $('.annotation-form .annotation-text').val();
+        // Change value in hidden form also
+        $('#vals__text').val(annotated_text);
         $('.result .audio-data').removeClass('d-none');
         $('.annotation-form-section').addClass('d-none');
         region = wavesurfer.regions.list[$('.annotation-form .region-id').val()];
         data = region.data;
-        data.text = $('.annotation-form .annotation-text').val();
+        data.text = [annotated_text];
         region.update({
             data: data,
         });
@@ -27,7 +30,6 @@ $(document).ready(function () {
     });
 
     $('.result-section').on('click', '.region-delete', () => {
-        console.log($('.result-section .region-delete').attr('data-region_id'));
         deleteRegion($('.result-section .region-delete').attr('data-region_id'));
     });
 });
