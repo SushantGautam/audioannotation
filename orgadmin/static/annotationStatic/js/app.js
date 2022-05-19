@@ -529,6 +529,7 @@ function defaultColor(alpha) {
 function save_a_region(region) {
     const form = document.forms.edit;
     const data = {};
+    data['labels'] = region.data.labels;
     for (const [key, el] of Object.entries(form.elements)) {
         if (key.startsWith("vals__")) {
             let v = el.value;
