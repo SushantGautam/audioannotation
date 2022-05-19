@@ -1,3 +1,4 @@
+from unicodedata import category
 from django.db import models
 from orgadmin.models import BaseUserModel
 
@@ -53,22 +54,35 @@ class Question(models.Model):
     difficulty_level = models.IntegerField(default=0)  # 0: both, 1: beginner, 2: advanced
     ready_time = models.IntegerField(default=0)
     speaking_time = models.IntegerField(default=0)
-    evaluation_purpose = models.TextField(null=True, blank=True)
+    evaluation_purpose = models.CharField(max_length=256, null=True, blank=True)
     # question_keywords = models.ManyToManyField('Keyword', related_name='question_keywords')
     subcategory_code = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.question_title
+        return self.unique_code
 
 
 class QuestionSet(models.Model):
-    name = models.CharField(max_length=256)
+    # name = models.CharField(max_length=256)
     unique_code = models.CharField(max_length=10, unique=True)
     description = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
     questions = models.ManyToManyField(Question)
+    subcategory_code = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return self.unique_code
+
+class ExamSet(models.Model):
+    exam_name = models.CharField(max_length=256)
+    description = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+    question_sets = models.ManyToManyField(QuestionSet)
+    difficulty_level = models.IntegerField(default=0)  # 0: both, 1: beginner, 2: advanced
+
+    def __str__(self):
+        return self.exam_name
