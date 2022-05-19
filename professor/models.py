@@ -57,7 +57,8 @@ class Question(models.Model):
     ready_time = models.IntegerField(default=0)
     speaking_time = models.IntegerField(default=0)
     evaluation_purpose = models.CharField(max_length=256, null=True, blank=True)
-    # question_keywords = models.ManyToManyField('Keyword', related_name='question_keywords')
+    question_keywords = models.CharField(max_length=256, null=True, blank=True,
+                                         help_text=_('Comma separated keywords'))
     subcategory_code = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
 
     def __str__(self):
