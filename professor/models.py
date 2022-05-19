@@ -70,6 +70,7 @@ class QuestionSet(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
     questions = models.ManyToManyField(Question)
+    difficulty_level = models.IntegerField(default=0)  # 0: both, 1: beginner, 2: advanced
     subcategory_code = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
 
     def __str__(self):
