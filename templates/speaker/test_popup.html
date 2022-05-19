@@ -1,6 +1,31 @@
 {% load static %}
 {% load i18n %}
 
+<style>
+  svg{
+          display: block;
+          width: 100%;
+          height: 100%;
+          padding: 0;
+          margin: auto;
+          /* position:absolute; */
+      }
+  
+  path{
+  stroke-linecap: square;
+  stroke: white;
+  stroke-width: 0.5px;
+  }
+
+  h1{
+    color: white;
+    margin-top: -35px;
+    font-size: 1.2rem;
+    
+  }
+
+</style>
+
 <div class="row" style="padding: 12px">
   <div class="col-12" style="background-color: #f3f3f3; padding: 10px">
     {% for qn in qn_set.questions.all %}
@@ -60,13 +85,33 @@
   {#  <div class="col-12" style="height: 33%; background-color: #f3f3f3;">#}
   <div class="col-4" style="text-align: center; margin: auto; height: 100%; display: flex; background-color: #f3f3f3">
     <div class="recorder_wave"
-         style="width: 80%; height: 60%; border: solid black; margin: auto; background-color: #360752"></div>
+         style="width: 80%; height: 60%; border: solid black; margin: auto; background-color: #360752">
+         <svg preserveAspectRatio="none" id="visualizer" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <defs>
+
+              <mask id="mask">
+                  <g id="maskGroup">
+                </g>
+              </mask>
+              <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style="stop-color:#ff0a0a;stop-opacity:1" />
+                  <stop offset="20%" style="stop-color:#f1ff0a;stop-opacity:1" />
+                  <stop offset="90%" style="stop-color:#d923b9;stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:#050d61;stop-opacity:1" />
+              </linearGradient>
+          </defs>
+          <rect x="0" y="0" width="100%" height="100%" fill="url(#gradient)" mask="url(#mask)"></rect>
+          
+      </svg>
+      <h1>{% trans 'Preparation' %}...</h1>
+    </div>
+<!-- <h1>In <a href="https://codepen.io/zapplebee/full/gbNbZE/">Full Page view</a>, please allow the use of your microphone</h1> -->
   </div>
   <div class="col-4" style="text-align: center; height: 100%; margin: auto; display: flex; background-color: #f3f3f3">
     {#      <div class="col-12">#}
-    <button type="button" style="margin: auto; border-radius: 50%"
+    <button id='prep_btn' type="button" style="margin: auto; border-radius: 50%"
             class="btn btn-info">{% trans 'Preparation' %}</button>
-    <button type="button"  style="margin: auto; border-radius: 50%"
+    <button id='recording_btn' type="button"  style="margin: auto; border-radius: 50%"
             class="btn btn-outline-info ml-5">{% trans 'Recording' %}</button>
     {#      </div>#}
 
@@ -74,7 +119,16 @@
   <div class="col-4" style="display: flex; background-color: #f3f3f3"></div>
   {#  </div>#}
 </div>
-
+<script>
+    //Timer test
+    prepTimeout = setTimeout(startRecording, 5000);
+    function startRecording(){
+      $('#prep_btn').removeClass('btn-info')
+      $('#prep_btn').addClass('btn-outline-info')
+      $('#recording_btn').removeClass('btn-outline-info')
+      $('#recording_btn').addClass('btn-info')
+     }
+</script>
 <script>
   $("#test_modal_label").html("{{ qn_set.name }}");
   function prev_qn_btn_click(){
@@ -112,4 +166,83 @@
       }
     });
   }
+
+</script>
+<!--Recorder testing from here-->
+<script>
+  $(document).ready(function(){
+  console.log('error');
+  "use strict";
+  console.log('Anusha');
+  prepTimeout = setTimeout(startRecording, 5000);
+
+  function startRecording(){
+      $('#prep_btn').removeClass('btn-info')
+      $('#prep_btn').addClass('btn-outline-info')
+      $('#recording_btn').removeClass('btn-outline-info')
+      $('#recording_btn').addClass('btn-info')
+    // var paths = document.getElementsByTagName('path');
+    // var visualizer = document.getElementById('visualizer');
+    // var mask = visualizer.getElementById('mask');
+    // var h = document.getElementsByTagName('h1')[0];
+    // var path;
+    // var report = 0;
+
+    paths = document.getElementsByTagName('path');
+    visualizer = document.getElementById('visualizer');
+    mask = visualizer.getElementById('mask');
+    h = document.getElementsByTagName('h1')[0];
+    // path;
+    report = 0;
+    
+    soundAllowed = function (stream) {
+        //Audio stops listening in FF without // window.persistAudioStream = stream;
+        //https://bugzilla.mozilla.org/show_bug.cgi?id=965483
+        //https://support.mozilla.org/en-US/questions/984179
+        window.persistAudioStream = stream;
+        h.innerHTML = "Thanks";
+        h.setAttribute('style', 'opacity: 0;');
+        var audioContent = new AudioContext();
+        var audioStream = audioContent.createMediaStreamSource( stream );
+        var analyser = audioContent.createAnalyser();
+        audioStream.connect(analyser);
+        analyser.fftSize = 1024;
+
+        var frequencyArray = new Uint8Array(analyser.frequencyBinCount);
+        visualizer.setAttribute('viewBox', '0 0 255 255');
+      
+				//Through the frequencyArray has a length longer than 255, there seems to be no
+        //significant data after this point. Not worth visualizing.
+        for (var i = 0 ; i < 255; i++) {
+            path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('stroke-dasharray', '4,1');
+            mask.appendChild(path);
+        }
+        var doDraw = function () {
+            requestAnimationFrame(doDraw);
+            analyser.getByteFrequencyData(frequencyArray);
+          	var adjustedLength;
+            for (var i = 0 ; i < 255; i++) {
+              	adjustedLength = Math.floor(frequencyArray[i]) - (Math.floor(frequencyArray[i]) % 5);
+                paths[i].setAttribute('d', 'M '+ (i) +',255 l 0,-' + adjustedLength);
+            }
+
+        }
+        doDraw();
+    }
+
+    soundNotAllowed = function (error) {
+        h.innerHTML = "{% trans 'No mic' %}";
+        console.log(error);
+    }
+
+    /*window.navigator = window.navigator || {};
+    /*navigator.getUserMedia =  navigator.getUserMedia       ||
+                              navigator.webkitGetUserMedia ||
+                              navigator.mozGetUserMedia    ||
+                              null;*/
+    navigator.getUserMedia({audio:true}, soundAllowed, soundNotAllowed);
+  }
+});
+
 </script>
