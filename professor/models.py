@@ -1,12 +1,13 @@
-from unicodedata import category
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-from orgadmin.models import BaseUserModel
+from django.utils.translation import gettext_lazy as _
 
+from orgadmin.models import BaseUserModel
 
 class Professor(BaseUserModel):
     class Meta:
-        verbose_name = 'Professor'
-        verbose_name_plural = 'Professors'
+        verbose_name = _('Professor')
+        verbose_name_plural = _('Professors')
 
 
 class Category(models.Model):
@@ -38,9 +39,9 @@ def question_file_name(instance, filename):
 
 class Question(models.Model):
     UPLOAD_TYPE_CHOICES = (
-        ('NON', 'None'),
-        ('IMG', 'Image Question'),
-        ('AUD', 'Audio Question'),
+        ('NON', _('None')),
+        ('IMG', _('Image Question')),
+        ('AUD', _('Audio Question')),
     )
     # question_set = models.ForeignKey(QuestionSet, on_delete=models.CASCADE)
     question_title = models.TextField()
@@ -51,7 +52,8 @@ class Question(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
-    difficulty_level = models.IntegerField(default=0)  # 0: both, 1: beginner, 2: advanced
+    difficulty_level = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(2)], 
+                                            help_text=_('0: both, 1: beginner, 2: advanced'))
     ready_time = models.IntegerField(default=0)
     speaking_time = models.IntegerField(default=0)
     evaluation_purpose = models.CharField(max_length=256, null=True, blank=True)
@@ -70,7 +72,8 @@ class QuestionSet(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
     questions = models.ManyToManyField(Question)
-    difficulty_level = models.IntegerField(default=0)  # 0: both, 1: beginner, 2: advanced
+    difficulty_level = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(2)],
+                                                help_text=_('0: both, 1: beginner, 2: advanced'))
     subcategory_code = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -83,7 +86,8 @@ class ExamSet(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
     question_sets = models.ManyToManyField(QuestionSet)
-    difficulty_level = models.IntegerField(default=0)  # 0: both, 1: beginner, 2: advanced
+    difficulty_level = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(2)],
+                                                help_text=_('0: both, 1: beginner, 2: advanced'))
 
     def __str__(self):
         return self.exam_name
