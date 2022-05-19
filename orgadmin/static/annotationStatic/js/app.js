@@ -151,7 +151,7 @@ function init_wavesurfer() {
 
         wavesurfer.on("ready", function () {
             wavesurfer.enableDragSelection({
-                color: "#FFF2CC",
+                color: defaultColor(0.2),
             });
 
             const totalTime = wavesurfer.getDuration();
@@ -265,7 +265,7 @@ function init_wavesurfer() {
 function loadSTTRegions() {
     var stt_data = JSON.parse(JSON.stringify(STT_DATA.stt_predictions_annotations));
     stt_data.forEach(function (region) {
-        region.color = defaultColor(0.1);
+        region.color = "rgba(0,0,0,0.15)";
         region.drag = false;
         region.resize = false;
         region.id = "stt_"+region.id
@@ -523,9 +523,9 @@ function defaultColor(alpha) {
     return (
         "rgba(" +
         [
-            ~~(255 * 255),
-            ~~(242 * 255),
-            ~~(208 * 255),
+            255,
+            242,
+            208,
             alpha || 1,
         ] +
         ")"
