@@ -1,8 +1,9 @@
+import os
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from orgadmin.models import BaseUserModel
-from professor.models import Question
+from professor.models import Question, ExamSet
 from speaker.choices import GENDER_CHOICES, COUNTRY_CHOICES, LANGUAGE_CHOICES, PROFICIENCY_CHOICES
 
 
@@ -38,6 +39,8 @@ class SpeakerSubmission(models.Model):
 
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     speaker = models.ForeignKey(Speaker, on_delete=models.CASCADE)
+    exam_set = models.ForeignKey(ExamSet, on_delete=models.CASCADE)
+
     audio_file = models.FileField(upload_to=audio_filename)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -47,6 +50,10 @@ class SpeakerSubmission(models.Model):
 
     def __str__(self):
         return self.question.title
+
+    def filename(self):
+        return os.path.basename(self.audio_file.name)
+
 
 
 

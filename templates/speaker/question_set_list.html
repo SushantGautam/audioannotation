@@ -3,6 +3,15 @@
 {% load i18n %}
 
 {% block content %}
+<style>
+   #controls{
+        display: none;
+      }
+    #formats{
+        display: none;
+      }
+      
+</style>
 
   <div>
     <span>{% trans 'Question Sets: ' %}</span>
@@ -17,6 +26,12 @@
       </div>
     </div>
   {% endfor %}
+  <div id="controls">
+    <button type="button" id="recordButton">Record</button>
+    <button type="button" id="pauseButton" disabled>Pause</button>
+    <button type="button" id="stopButton" disabled>Stop</button>
+  </div>
+  <div id="formats">Format: start recording to see sample rate</div>
 
   <!-- Modal -->
   <div class="modal fade" id="test_modal" data-bs-backdrop="static" data-bs-keyboard="false"
@@ -44,7 +59,8 @@
 {% endblock content %}
 
 {% block scripts %}
-
+  <script src="{% static 'js/recorder/recorder.js' %}"></script>
+  <script src="{% static 'js/recorder/app.js' %}"></script>
   <script>
     $(".start_test_button").click(function(){
       let qn_set_pk = $(this).attr('data-qn_set_pk');

@@ -23,9 +23,19 @@
     font-size: 1.2rem;
     
   }
+  #record_player{
+    display: none;
+  }    
+     
 
 </style>
-
+<form action="{% url 'speaker:save_audio' %}"
+        enctype="multipart/form-data"
+        method="post" id="audio_form">
+    {% csrf_token %}
+    <!-- record player -->
+    <div id="record_player"></div>
+ </form>   
 <div class="row" style="padding: 12px">
   <div class="col-12" style="background-color: #f3f3f3; padding: 10px">
     {% for qn in qn_set.questions.all %}
@@ -109,6 +119,12 @@
   </div>
   <div class="col-4" style="text-align: center; height: 100%; margin: auto; display: flex; background-color: #f3f3f3">
     {#      <div class="col-12">#}
+      <!-- <div id="controls">
+        <button type="button" id="recordButton">Record</button>
+        <button type="button" id="pauseButton" disabled>Pause</button>
+        <button type="button" id="stopButton" disabled>Stop</button>
+      </div> -->
+
     <button id='prep_btn' type="button" style="margin: auto; border-radius: 50%"
             class="btn btn-info">{% trans 'Preparation' %}</button>
     <button id='recording_btn' type="button"  style="margin: auto; border-radius: 50%"
@@ -119,10 +135,16 @@
   <div class="col-4" style="display: flex; background-color: #f3f3f3"></div>
   {#  </div>#}
 </div>
+
+<!--Recorder-->
+{#  <script type="module" src="{% static 'js/recorder/index.js' %}"></script>#}
+<!-- <script src="{% static 'js/recorder/recorder.js' %}"></script>
+<script src="{% static 'js/recorder/app.js' %}"></script> -->
+
 <script>
     //Timer test
-    prepTimeout = setTimeout(startRecording, 5000);
-    function startRecording(){
+    prepTimeout = setTimeout(startWave, 5000);
+    function startWave(){
       $('#prep_btn').removeClass('btn-info')
       $('#prep_btn').addClass('btn-outline-info')
       $('#recording_btn').removeClass('btn-outline-info')
@@ -172,11 +194,10 @@
 <script>
   $(document).ready(function(){
   console.log('error');
-  "use strict";
   console.log('Anusha');
-  prepTimeout = setTimeout(startRecording, 5000);
+  prepTimeout = setTimeout(startWave, 5000);
 
-  function startRecording(){
+  function startWave(){
       $('#prep_btn').removeClass('btn-info')
       $('#prep_btn').addClass('btn-outline-info')
       $('#recording_btn').removeClass('btn-outline-info')
@@ -248,10 +269,14 @@
         navigator.getUserMedia({audio:true}, soundAllowed, soundNotAllowed);
       }    
     start_wave();
-    setTimeout(stopRecording, 7000)
-    function stopRecording(){
+    startRecording();
+    // rec.record();
+    setTimeout(stopWave, 7000)
+    function stopWave(){
       record_state = false;
       start_wave();
+      stopRecording();
+      on_form_submit();
       $("#visualizer").hide();
       $('#recording_btn').removeClass('btn-info')
       $('#recording_btn').addClass('btn-outline-info')

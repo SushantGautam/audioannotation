@@ -12,6 +12,8 @@
 
     <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.png' %}">
 
+    <!-- Popper.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.5/umd/popper.min.js" integrity="sha512-8cU710tp3iH9RniUh6fq5zJsGnjLzOWLWdZqBMLtqaoZUA6AWIE34lwMB3ipUNiTBP5jEZKY95SfbNnQ8cCKvA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Bootstrap Core CSS -->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
@@ -25,17 +27,16 @@
 
 <body>
     {% block header %}
-      <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
-          <div class="container">
-            <a href="{% url 'homepage' %}" class="navbar-brand">{% trans 'Audio Annotation APP' %}</a>
+    <!-- <div class="main-header">
+      <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" style="display: flex; align-items:flex-start;">
+            <a href="{% url 'homepage' %}" class="navbar-brand">{% trans 'Audio Annotation' %}</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
               aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
-            </button>
+            </button> -->
             {% block navbar %}{% endblock %}
-          </div>
-      </nav>
-      {% block subnavbar %}{% endblock %}
+      <!-- </nav>
+    </div> -->
     {% endblock %}
 
     <main class="container">
