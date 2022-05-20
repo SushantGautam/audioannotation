@@ -67,3 +67,6 @@ class SaveAnnotation(View):
                     )
                 return render(self.request, 'worker/alerts/annotationSaveSuccess.html')
         return JsonResponse({"error": ""}, status=400)
+
+class ProfileView(TemplateView):
+    template_name = "speaker/profile.html"

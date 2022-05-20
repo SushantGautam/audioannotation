@@ -5,6 +5,7 @@ app_name = 'professor'
 
 urlpatterns = [
     path('', views.homepage, name='homepage'),
+    path('profile/', views.ProfileView.as_view(), name='profile'),
     path('professor_question_list', views.QuestionListPage.as_view(), name='question_list_page'),
     path('professor_question_create_ajax', views.QuestionsCreateView.as_view(), name='question_create_ajax'),
     path('professor_question/<int:pk>/update', views.QuestionsUpdateView.as_view(), name='question_update'),

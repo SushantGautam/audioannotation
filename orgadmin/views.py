@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import HttpResponse, render, redirect
+from django.views.generic import TemplateView
 
 
 def homepage(request):
@@ -35,3 +36,6 @@ def deployserver(request):
     command = "sh deploy.sh;"
     ret = subprocess.run(command, stdout=subprocess.PIPE, shell=True)
     return HttpResponse(ret.stdout.decode())
+
+class ProfileView(TemplateView):
+    template_name = "orgadmin/profile.html"

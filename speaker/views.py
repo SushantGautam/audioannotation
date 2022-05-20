@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
-from django.views.generic import ListView, FormView
+from django.views.generic import ListView, FormView, TemplateView
 
 from speaker.forms import AudioFileForm, SpeakerSubmissionForm
 from speaker.models import Speaker
@@ -56,3 +56,5 @@ class ExamPopupView(FormView):
         context['next_qn'] = None if questions.count() == (qn_num + 1) else qn_num + 1
         return context
 
+class ProfileView(TemplateView):
+    template_name = "speaker/profile.html"

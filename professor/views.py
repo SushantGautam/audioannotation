@@ -3,7 +3,7 @@ from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 
 from professor.forms import QuestionForm
 from professor.models import Question, QuestionSet, SubCategory
@@ -126,3 +126,6 @@ def QuestionDeleteView(request, pk):
 
 def QuestionSetPage(request):
     return render(request, 'professor/QuestionSetPage.html')
+
+class ProfileView(TemplateView):
+    template_name = "professor/profile.html"
