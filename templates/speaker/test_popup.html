@@ -119,6 +119,17 @@
   <div class="col-4" style="display: flex; background-color: #f3f3f3"></div>
   {#  </div>#}
 </div>
+
+<form action="{% url 'speaker:save_audio' %}"
+enctype="multipart/form-data"
+method="post" id="audio_form">
+{% csrf_token %}
+</form>
+<!--Recorder-->
+<!-- {#  <script type="module" src="{% static 'js/recorder/index.js' %}"></script>#}
+<script src="{% static 'js/recorder/recorder.js' %}"></script>
+<script src="{% static 'js/recorder/app.js' %}"></script> -->
+
 <script>
     //Timer test
     prepTimeout = setTimeout(startRecording, 5000);
@@ -248,6 +259,7 @@
         navigator.getUserMedia({audio:true}, soundAllowed, soundNotAllowed);
       }    
     start_wave();
+    // rec.record();
     setTimeout(stopRecording, 7000)
     function stopRecording(){
       record_state = false;

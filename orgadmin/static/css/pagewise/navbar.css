@@ -1,0 +1,67 @@
+.mytabs {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.mytabs input[type="radio"] {
+  display: none;
+}
+.mytabs label {
+  font-weight: bold;
+  padding: 0.25rem 0.5rem;
+  margin-right: 0.5rem;
+  color: gray;
+  border-bottom: 0;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+.mytabs label:hover {
+  border-bottom: 1.5px solid #f0f0f0;
+  color: #f0f0f0;
+}
+.mytabs .tab {
+  width: 100%;
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 0.65rem;
+  /* background: #f0f0f0; */
+  order: 1;
+  display: none;
+  transition: all 0.25s ease-in-out;
+}
+
+.mytabs input[type='radio']:checked + label + .tab {
+  display: block;
+  display: flex;
+  /* gap: 0.5rem; */
+}
+.mytabs input[type="radio"]:checked + label {
+  border-bottom: 2px solid #f0f0f0;
+  color: #f0f0f0;
+}
+
+.tab .tab-item{
+  all: unset;
+  font-size: 0.9rem;
+  color: #b1b1b1;
+  cursor: pointer;
+  /* padding: 0.25rem 0.5rem; */
+}
+
+.tab .tab-item:hover{
+  color: #f0f0f0;
+}
+
+.tab .tab-item.active{
+  color: #f0f0f0;
+}
+
+.nav-wrapper{
+  display: flex;
+}
+
+.navbar-profile{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline !important;
+}

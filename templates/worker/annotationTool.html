@@ -140,13 +140,16 @@
         text-align: center;
     }
 
-
+    .region-text {
+        position: absolute;
+        top: 50%;
+    }
 </style>
 
 <body itemscope itemtype="http://schema.org/WebApplication">
     <div class="container">
         <div class="header">
-            <h1>Audio Annotation</h1>
+            <h1>Audio Annotation </h1>
         </div>
 
         <div class="main-section">
@@ -278,22 +281,10 @@
 
                     <div class="result">
                         <div class="audio-details">
-                            <span class="serial-num badge rounded-pill bg-dark">01</span>
-                            <span><i class="fas fa-microphone-alt"></i> AudioTitle</span>
+                            No Region Selected.
                         </div>
                         <div class="audio-data">
-                            <div class="label-parent">
-                                <label>Label : </label>
-                                <span class="badge rounded-pill bg-dark"></span>
-                            </div>
-                            <div class="text-parent">
-                                <label>Text : </label>
-                                <span class="text"></span>
-                            </div>
-                            <div class="bottom-section">
-                                <button title="Add Metadata" class="btn btn-sm btn-secondary region-edit"><i class="fas fa-edit"></i></button>
-                                <button title="Delete" class="btn btn-sm btn-secondary region-delete"><i class="fas fa-trash"></i></button>
-                            </div>
+
                         </div>
                     </div>
 
@@ -381,8 +372,7 @@
     <link href="{% static 'annotationStatic/3rd/jsoneditor/jsoneditor.min.css' %}" rel="stylesheet" type="text/css">
     <script src="{% static 'annotationStatic/3rd/jsoneditor/jsoneditor.min.js' %}"></script>
 
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
     <script src="{% static 'annotationStatic/js/app.js' %}"></script>
     <script src="{% static 'annotationStatic/js/additionalJS.js' %}"></script>
     <script>
@@ -391,6 +381,8 @@
         const AUDIO_FILE = "{{ audio_obj.audio_file.url }}";
         const SAVE_ANNOTATION_URL = "{% url 'worker:save_annotation' audio_obj.id %}";
         var csrf_token = "{{ csrf_token }}";
+        const ANNOTATED_DATA = {% if annotated_data %}{{ annotated_data|safe }}{% else %}JSON.parse(JSON.stringify(STT_DATA.stt_predictions_annotations)){% endif %};
+
     </script>
 </footer>
 
