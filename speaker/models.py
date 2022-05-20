@@ -2,7 +2,7 @@ import os
 
 from django.db import models
 from orgadmin.models import BaseUserModel
-from professor.models import Question
+from professor.models import Question, QuestionSet, ExamSet
 
 
 class Speaker(BaseUserModel):
@@ -24,6 +24,16 @@ class AudioFile(models.Model):
         return self.audio_file.name
 
 
+# class QuestionSetSubmission(models.Model):
+#     speaker = models.ForeignKey(Speaker, on_delete=models.CASCADE)
+#     question_set = models.ForeignKey(QuestionSet, on_delete=models.CASCADE)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+#
+#     def __str__(self):
+#         return self.speaker + " -- " + self.question_set
+
+
 class SpeakerSubmission(models.Model):
     STATUS_CHOICES = (
         ('IS', 'Initial State'),
@@ -35,6 +45,8 @@ class SpeakerSubmission(models.Model):
 
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     speaker = models.ForeignKey(Speaker, on_delete=models.CASCADE)
+    exam_set = models.ForeignKey(ExamSet, on_delete=models.CASCADE)
+
     audio_file = models.FileField(upload_to=audio_filename)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -47,5 +59,7 @@ class SpeakerSubmission(models.Model):
 
     def filename(self):
         return os.path.basename(self.audio_file.name)
+
+
 
 
