@@ -26,6 +26,11 @@ class AnnotationPage(TemplateView):
 
         context['audio_obj'] = get_object_or_404(SpeakerSubmission, pk=kwargs.get('id'))
         context['stt_data'] = json.dumps(context['audio_obj'].stt_data)
+        annotated_data = ""
+        if WorkerSubmission.objects.filter(speaker_submission__pk=kwargs.get('id'), worker=self.request.user.worker).exists():
+            annotated_data = WorkerSubmission.objects.get(speaker_submission__pk=kwargs.get('id'), worker=self.request.user.worker).split_data
+        context['annotated_data'] = annotated_data
+
 
         # path = settings.MEDIA_ROOT
         # print(path)
