@@ -167,8 +167,12 @@ function init_wavesurfer() {
         });
         wavesurfer.on("region-click", editAnnotation);
         wavesurfer.on("region-click", (region) => {loadResults(region);});
+
         wavesurfer.on("region-created", function (region) {
             appendDeleteIcon(region.id);
+            var text_region = document.createElement('div');
+            text_region.className = 'region-text';
+            document.querySelector(`.wavesurfer-region[data-id=${region.id}]`).appendChild(text_region);
         });
         wavesurfer.on("region-updated", saveRegions);
         wavesurfer.on("region-removed", saveRegions);
