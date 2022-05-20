@@ -6,7 +6,7 @@ from django.views.generic import ListView, FormView
 from speaker.forms import AudioFileForm, SpeakerSubmissionForm
 from speaker.models import Speaker
 
-from professor.models import Question, QuestionSet
+from professor.models import Question, QuestionSet, ExamSet
 
 
 @csrf_protect
@@ -32,9 +32,16 @@ class QuestionSetList(ListView):
     template_name = 'speaker/question_set_list.html'
     model = QuestionSet
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        exam_set = ExamSet.objects.get(pk=self.request.GET['exam_set'])
+        context['object_list'] = exam_set.question_sets.all()
+        return context
+
+
+class ExamSetList(ListView):
+    template_name = 'speaker/exam_set_list.html'
+    model = ExamSet
 
 
 class ExamPopupView(FormView):

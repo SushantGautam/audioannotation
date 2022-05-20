@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+  <style>
+
+  </style>
+
+  <div>
+    <span>{% trans 'Exam Sets: ' %}</span>
+  </div>
+  {% for e_set in object_list %}
+    <div class="row mt-3">
+      <div class="col-10">{{ e_set }}</div>
+      <div class="col-2">
+        <a href="{% url 'speaker:question_set_list' %}?exam_set={{ e_set.pk }}">
+          <button type="button" data-ex_set_pk="{{ e_set.pk }}"
+                  class="btn btn-warning start_test_button">{% trans 'Question Sets' %}</button>
+        </a>
+      </div>
+    </div>
+  {% endfor %}
+
+{% endblock content %}
+
+{% block scripts %}
+  <script>
+  </script>
+
+{% endblock scripts %}
