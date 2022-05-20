@@ -2,6 +2,35 @@
 {% load static %}
 {% load i18n %}
 
+{% block styles %}
+    <style>
+        .card {
+            max-width: 25rem;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
-    {{ user.username }}
+
+    {% for speakerFiles in speaker_submission %}
+        <div class="card">
+            <div class="card-body">
+                <div class="card-header">
+                    <div>{{ speakerFiles }}</div>
+                </div>
+                <div class="card-body">
+                    <div class="items">
+                        <div>{{ speakerFiles.is_active }}</div>
+                        <div>{{ speakerFiles.status }}</div>
+                        <div>{{ speakerFiles.question }}</div>
+                        <div>{{ speakerFiles.filename }}</div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'worker:annotation_page' id=speakerFiles.id %}" class="btn btn-secondary"> Go </a>
+                </div>
+            </div>
+        </div>
+
+    {% endfor %}
 {% endblock %}

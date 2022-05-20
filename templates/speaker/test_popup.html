@@ -194,7 +194,7 @@
     h = document.getElementsByTagName('h1')[0];
     // path;
     report = 0;
-    
+    record_state =true;
     soundAllowed = function (stream) {
         //Audio stops listening in FF without // window.persistAudioStream = stream;
         //https://bugzilla.mozilla.org/show_bug.cgi?id=965483
@@ -219,7 +219,9 @@
             mask.appendChild(path);
         }
         var doDraw = function () {
-            requestAnimationFrame(doDraw);
+            if (record_state){
+              requestAnimationFrame(doDraw);
+            }
             analyser.getByteFrequencyData(frequencyArray);
           	var adjustedLength;
             for (var i = 0 ; i < 255; i++) {
@@ -241,7 +243,19 @@
                               navigator.webkitGetUserMedia ||
                               navigator.mozGetUserMedia    ||
                               null;*/
-    navigator.getUserMedia({audio:true}, soundAllowed, soundNotAllowed);
+    
+    start_wave = function (){
+        navigator.getUserMedia({audio:true}, soundAllowed, soundNotAllowed);
+      }    
+    start_wave();
+    setTimeout(stopRecording, 7000)
+    function stopRecording(){
+      record_state = false;
+      start_wave();
+      $("#visualizer").hide();
+      $('#recording_btn').removeClass('btn-info')
+      $('#recording_btn').addClass('btn-outline-info')
+    }                     
   }
 });
 

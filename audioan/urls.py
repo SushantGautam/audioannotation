@@ -17,7 +17,7 @@ urlpatterns = [
     path('professor/', decorator_include([login_required, authorize(lambda u: hasattr(u, 'professor'))], 'professor.urls')),
     path('speaker/', decorator_include([login_required, authorize(lambda u: hasattr(u, 'speaker'))], 'speaker.urls')),
     path('worker/', decorator_include([login_required, authorize(lambda u: hasattr(u, 'worker'))], 'worker.urls')),
-]  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if 'rosetta' in settings.INSTALLED_APPS and settings.DEBUG:
     urlpatterns += [

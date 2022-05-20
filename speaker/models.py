@@ -1,3 +1,5 @@
+import os
+
 from django.db import models
 from orgadmin.models import BaseUserModel
 from professor.models import Question
@@ -43,5 +45,7 @@ class SpeakerSubmission(models.Model):
     def __str__(self):
         return self.question.title
 
+    def filename(self):
+        return os.path.basename(self.audio_file.name)
 
 
