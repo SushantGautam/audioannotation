@@ -11,7 +11,7 @@ class Speaker(BaseUserModel):
     birth_date = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='F')
     nationality = models.CharField(max_length=2, choices=COUNTRY_CHOICES, default='KR')
-    language = models.CharField(max_length=2, choices=LANGUAGE_CHOICES, default='KO')
+    language = models.CharField(max_length=2, choices=LANGUAGE_CHOICES, default='ko')
     proficiency = models.CharField(max_length=1, choices=PROFICIENCY_CHOICES, default='B')
     topic_score = models.IntegerField(default=0)
     education_level = models.CharField(max_length=256, null=True, blank=True)
@@ -53,7 +53,7 @@ class SpeakerSubmission(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
     stt_data = models.JSONField(null=True, blank=True, default=dict)
-    status = models.CharField(max_length=2, choices=STATUS_CHOICES, default='IN')
+    status = models.CharField(max_length=2, choices=STATUS_CHOICES, default='IS')
 
     def __str__(self):
         return self.question.title
