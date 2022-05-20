@@ -21,6 +21,7 @@ $(document).ready(function () {
             data: data,
         });
         $('.result .text').html(region.data.text);
+        changeAnnotationText(region);
     });
 
     $('.annotation-form button[type=cancel]').on('click', (e) => {
@@ -57,4 +58,8 @@ $(document).ready(function () {
             console.log(err);
         });
     });
+
+    function changeAnnotationText(region) {
+        $(`.wavesurfer-region[data-id=${region.id}]`).find('.region-text').html(region.data.text);
+    }
 });

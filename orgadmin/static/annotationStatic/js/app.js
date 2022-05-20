@@ -62,7 +62,6 @@ function load_files(files) {
             reader.onload = () => {
                 try {
                     const d = JSON.parse(reader.result);
-                    console.log(item_name_annotation, d[item_name_annotation])
                     loadRegions(d[item_name_annotation]);
 
                     //meta
@@ -90,6 +89,7 @@ function init_wavesurfer() {
     {
         wavesurfer = WaveSurfer.create({
             container: "#waveform",
+            waveColor: '#b5b5b5',
             height: 300,
             pixelRatio: 1,
             skipLength: 0.5,
@@ -134,7 +134,7 @@ function init_wavesurfer() {
         localforage.getItem(key_annotation, (err, data_annotation) => {
             if (data_annotation === null) {
                 // If Localforage is empty, load from STT.
-                loadSTTData();
+                loadAnnotationData();
                 return;
             }
             loadRegions(data_annotation);
@@ -274,10 +274,10 @@ function loadSTTRegions() {
     });
 }
 
-// Load Data from STT Naver if localforage is not available.
-function loadSTTData() {
-    if (Object.keys(STT_DATA).length < 1) return;
-    loadRegions(STT_DATA.stt_predictions_annotations);
+// Load Data from Database if localforage is not available.
+function loadAnnotationData() {
+    if (Object.keys(ANNOTATED_DATA).length < 1) return false;
+    loadRegions(ANNOTATED_DATA);
 }
 
 function deleteRegionFunc() {
@@ -503,6 +503,7 @@ function loadRegions(regions) {
         region.color = "rgb(255, 242, 204, 0.2)";
         wavesurfer.addRegion(region);
         addRegionList(region);
+        addTextToAnnotationRegion(region);
     });
 }
 
@@ -674,6 +675,14 @@ function addTextToSTTRegion(region) {
     if(!region.id.includes('stt')) return false;
     var regionText = document.createElement('div');
     regionText.className = "region-stt-text";
+    regionText.innerHTML = ("text" in region.data) ? region.data.text == '' ? '' : region.data.text : '';
+    document.querySelector(`[data-id=${region.id}]`).appendChild(regionText);
+}
+
+function addTextToAnnotationRegion(region) {
+    if(region.id.includes('stt')) return false;
+    var regionText = document.createElement('div');
+    regionText.className = "region-text";
     regionText.innerHTML = ("text" in region.data) ? region.data.text == '' ? '' : region.data.text : '';
     document.querySelector(`[data-id=${region.id}]`).appendChild(regionText);
 }
