@@ -1,37 +1,82 @@
 {% load static %}
 {% load i18n %}
 
-<div class="collapse navbar-collapse" id="navbarCollapse">
-    <ul class="navbar-nav me-auto">
+{% block styles %}
+  <link rel="stylesheet" href="{% static 'css/pagewise/navbar.css' %}">
+{% endblock %}
+
+<div class="main-wrapper navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+  <nav class="navbar-profile container">
+    <div class="nav-wrapper">
+      <a href="{% url 'homepage' %}" class="navbar-brand">{% trans 'Audio Annotation' %}</a>
+      <div class="mytabs">
+        <input type="radio" id="home-tab" name="mytabs" checked>
+        <label for="home-tab">Home</label>
+        <div class="tab" id="home-tab-div">
+          <a href="" class="tab-item active">Dashboard</a>
+          <a href="" class="tab-item">Profile</a>
+        </div>
+  
+        <input type="radio" id="tasks-tab" name="mytabs">
+        <label for="tasks-tab">Tasks</label>
+        <div class="tab" id="tasks-tab-div">
+          <a href="" class="tab-item">Workers List</a>
+          <a href="" class="tab-item">Task Allocation</a>
+          <a href="" class="tab-item">Contracts</a>
+        </div>
+  
+        <input type="radio" id="records-tab" name="mytabs">
+        <label for="records-tab">Records</label>
+        <div class="tab" id="records-tab-div">
+          <a href="" class="tab-item">Speakers List</a>
+          <a href="" class="tab-item">Recording Allocation</a>
+          <a href="" class="tab-item">Contracts</a>
+        </div>
+  
+        <input type="radio" id="questions-tab" name="mytabs">
+        <label for="questions-tab">Questions</label>
+        <div class="tab" id="questions-tab-div">
+          <a href="" class="tab-item">Category Management</a>
+          <a href="" class="tab-item">Questions List</a>
+          <a href="" class="tab-item">Question Registration</a>
+          <a href="" class="tab-item">Question Set Creation</a>
+        </div>
+  
+        <input type="radio" id="evaluations-tab" name="mytabs">
+        <label for="evaluations-tab">Evaluations</label>
+        <div class="tab" id="evaluations-tab-div">
+          <a href="" class="tab-item">Evaluations List</a>
+          <a href="" class="tab-item">Evaluation Creation</a>
+        </div>
+  
+        <input type="radio" id="taggings-tab" name="mytabs">
+        <label for="taggings-tab">Taggings</label>
+        <div class="tab" id="taggings-tab-div">
+          <a href="" class="tab-item">Tags List</a>
+          <a href="" class="tab-item">Tag Creation</a>
+        </div>
+      </div>
+    </div>
+    <ul class="navbar-nav">
+    {% if user.is_authenticated %}
+      <li class="nav-item dropdown">
+        <a class="nav-link avatar-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+            <img src="{% static 'img/user.png' %}" class="rounded-circle align-self-center mr-2" style="width: 1.5rem;height: 1.5rem;">
+            <span class="h6 ps-2">{% trans 'Admin' %}</span>
+        </a>
+  
+        <div class="dropdown-menu dropdown-menu-end">
+          <h5 class="dropdown-item-text mb-0">{{ user.get_full_name }}</h5>
+          <p class="dropdown-item-text text-muted mb-0">{{ user.email }}</p>
+          <div class="dropdown-divider"></div>
+          <a href="{% url 'account_logout' %}" class="dropdown-item">{% trans 'Sign Out' %}</a>
+        </div>
+      </li>
+    {% else %}
       <li class="nav-item">
-        <a href="{% url 'homepage' %}" class="nav-link{% if request.resolver_match.view_name == 'homepage' %} active{% endif %}">{% trans 'Home' %}</a>
+        <a href="{% url 'account_login' %}" class="nav-link">{% trans 'Sign In' %}</a>
       </li>
-      <li class="nav-item">
-        <a href="#" class="nav-link{% if request.resolver_match.view_name == 'user' %} active{% endif %}">{% trans 'User Management' %}</a>
-      </li>
-      <li class="nav-item" data-turbolinks="false">
-        <a class="nav-link{% if request.resolver_match.view_name == 'profile' %} active{% endif %}" href="#">{% trans 'Profile' %}</a>
-      </li>
+    {% endif %}
     </ul>
-    <ul class="navbar-nav justify-content-end">
-      {% if user.is_authenticated %}
-        <li class="nav-item dropdown">
-          <a class="nav-link avatar-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
-              <img src="{% static 'img/user.png' %}" class="rounded-circle align-self-center mr-2" style="width: 32px;height: 32px;">
-              <span class="h6 ps-2">{% trans 'Admin' %}</span>
-          </a>
-          
-          <div class="dropdown-menu dropdown-menu-end">
-            <h5 class="dropdown-item-text mb-0">{{ user.get_full_name }}</h5>
-            <p class="dropdown-item-text text-muted mb-0">{{ user.email }}</p>
-            <div class="dropdown-divider"></div>
-            <a href="{% url 'account_logout' %}" class="dropdown-item">{% trans 'Sign Out' %}</a>
-          </div>
-        </li>
-      {% else %}
-        <li class="nav-item">
-          <a href="{% url 'account_login' %}" class="nav-link">{% trans 'Sign In' %}</a>
-        </li>
-      {% endif %}
-    </ul>
-  </div>
+  </nav>
+</div>
