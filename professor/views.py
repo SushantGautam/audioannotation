@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 
+from orgadmin.models import Organization
 from professor.forms import QuestionForm
 from professor.models import Question, QuestionSet, SubCategory
 
@@ -54,6 +55,7 @@ class QuestionsCreateView(AjaxableResponseMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['subcat'] = SubCategory.objects.all()
+        context['organization_code'] = Organization.objects.all()
         return context
 
     def form_valid(self, form):

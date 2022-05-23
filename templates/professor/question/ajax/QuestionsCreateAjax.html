@@ -72,7 +72,7 @@
   <div class="parent row ">
     <div class="title col-4">{% trans 'Description' %}</div>
     <div class="value col-8 description">
-        <textarea placeholder="{% trans 'Enter question description here...' %}" name="description" id="id_description"
+        <textarea placeholder="{% trans 'Enter description here...' %}" name="description" id="id_description"
                   cols="40" rows="3"
                   class="form-control" >{% if object %}{{ object.description }}{% endif %}</textarea>
     </div>
@@ -104,7 +104,7 @@
     </div>
   </div>
 
-  <div class="parent row ">
+  <div class="parent row file_upload_field">
     <div class="title col-4">{% trans 'File' %}</div>
     <div class="value col-8 file_upload">
 
@@ -142,7 +142,7 @@
   <div class="parent row question_form_table_row">
     <div class="title col-4 question_form_table_th">{% trans 'Difficulty Level' %} *</div>
     <div class="value col-8 question_form_table_td">
-      <input placeholder="{% trans 'Enter Question Difficulty level here...(0: both, 1: beginner, 2: advanced)' %}" type="number" required name="difficulty_level"
+      <input placeholder="{% trans 'Enter Difficulty level here...(0: both, 1: beginner, 2: advanced)' %}" type="number" required name="difficulty_level"
              maxlength="1" min="0" max="2"  id="id_level" class="form-control"
         {% if object %} value="{{ object.difficulty_level }}"{% endif %}>
       <div class="question_form_level_error question_form_error_div ">
@@ -154,7 +154,7 @@
 <div class="parent row question_form_table_row">
     <div class="title col-4 question_form_table_th">{% trans 'Ready Time ' %} *</div>
     <div class="value col-8 question_form_table_td">
-      <input placeholder="{% trans 'Enter Question Ready Time here...' %}" type="number" required name="ready_time"
+      <input placeholder="{% trans 'Enter Ready Time here...' %}" type="number" required name="ready_time"
               id="id_ready_time" class="form-control"  maxlength="5"
         {% if object %} value="{{ object.ready_time }}"{% endif %}>
       <div class="question_form_ready_time_error question_form_error_div ">
@@ -209,6 +209,40 @@
     </div>
   </div>
 
+
+  <div class="parent row question_form_table_row">
+      <div class="title col-4 question_form_table_th">{% trans 'Organization Code' %} *</div>
+      <div class="value col-8 question_form_table_td">
+
+{#        <input placeholder="{% trans 'Enter Organization Code here...' %}" type="text" required name="organization_code"#}
+{#               id="id_organization_code" class="form-control"#}
+{#          {% if object %} value="{{ object.organization_code }}"{% endif %}>#}
+ <select name="organization_code" id="id_organization_code" class="form-control">
+        {% if not object %}
+          <option value=""  selected="">------------</option>
+
+        {% endif %}
+
+          {% for organization in organization_code %}
+          <option value="{{ organization.pk }}"
+            {% if object.organization_code.pk == organization.pk %}
+                  selected
+
+            {% endif %}>
+            {% trans organization.name %}
+          </option>
+        {% endfor %}
+
+      </select>
+
+        <div class="question_form_question_keywords_error question_form_error_div">
+          {% trans 'Organization Code is required' %}
+        </div>
+      </div>
+    </div>
+
+
+
   <div class="parent row  question_form_table_row">
     <div class="title col-4 ">{% trans 'Option' %}</div>
     <div class="value col-8 question_form_table_td option_fields">
@@ -245,8 +279,7 @@
 <script>
 
 $(document).ready(function (){
-
-
+    $('.file_upload_field').css('display', 'none');
 })
 
  $("#question_submit_btn").click(function(){
@@ -297,6 +330,15 @@ $(document).ready(function (){
       return true;
     }
 
+    $('#id_upload_type').on('change', function(){
+
+      if($(this).val()==='NON'){
+        $('.file_upload_field').css('display', 'none');
+      }
+      else{
+        $('.file_upload_field').css('display', 'flex');
+      }
+    })
 
 
 </script>
