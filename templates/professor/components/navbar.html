@@ -1,33 +1,35 @@
 {% load static %}
 {% load i18n %}
 
-<div class="collapse navbar-collapse" id="navbarCollapse">
-    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-      <li class="nav-item">
-        <a href="{% url 'professor:homepage' %}" class="nav-link{% if request.resolver_match.view_name == 'homepage' %} active{% endif %}">{% trans 'Home' %}</a>
-      </li>
-      <li class="nav-item">
-        <a href="{% url 'professor:question_list_page' %}" class="nav-link{% if request.resolver_match.view_name == 'QuestionListPage' %} active{% endif %}">{% trans 'Questions' %}</a>
-      </li>
-    </ul>
-    <ul class="navbar-nav justify-content-end">
-      {% if user.is_authenticated %}
-        <li class="nav-item dropdown">
-          <a class="nav-link avatar-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
-              <img src="{% static 'img/user.png' %}" class="rounded-circle align-self-center mr-2" style="width: 32px;height: 32px;">
-              <span class="h6 ps-2">{% trans 'Professor' %}</span>
-          </a>
-          <div class="dropdown-menu dropdown-menu-end">
-            <h5 class="dropdown-item-text mb-0">{{ user.get_full_name }}</h5>
-            <p class="dropdown-item-text text-muted mb-0">{{ user.email }}</p>
-            <div class="dropdown-divider"></div>
-            <a href="{% url 'account_logout' %}" class="dropdown-item">{% trans 'Sign Out' %}</a>
-          </div>
-        </li>
-      {% else %}
-        <li class="nav-item">
-          <a href="{% url 'account_login' %}" class="nav-link">{% trans 'Sign In' %}</a>
-        </li>
-      {% endif %}
-    </ul>
+<div class="mytabs">
+  <input type="radio" id="home-tab" name="mytabs" checked>
+  <label for="home-tab">Home</label>
+  <div class="tab" id="home-tab-div">
+    <a href="" class="tab-item active">Dashboard</a>
+    <a href="" class="tab-item">Profile</a>
   </div>
+
+  <input type="radio" id="questions-tab" name="mytabs">
+  <label for="questions-tab">Questions</label>
+  <div class="tab" id="questions-tab-div">
+    <a href="#" class="tab-item">Exam Set</a>
+    <a href="#" class="tab-item">QuestionSet List</a>
+    <a href="#" class="tab-item">Questions List</a>
+    <a href="#" class="tab-item">Category Management</a>
+  </div>
+
+  <input type="radio" id="evaluations-tab" name="mytabs">
+  <label for="evaluations-tab">Evaluations</label>
+  <div class="tab" id="evaluations-tab-div">
+    <a href="" class="tab-item">Evaluations List</a>
+    <a href="" class="tab-item">Evaluation Creation</a>
+  </div>
+
+  <input type="radio" id="taggings-tab" name="mytabs">
+  <label for="taggings-tab">Taggings</label>
+  <div class="tab" id="taggings-tab-div">
+    <a href="" class="tab-item">Tags List</a>
+    <a href="" class="tab-item">Tag Creation</a>
+  </div>
+</div>
+    

@@ -8,9 +8,13 @@ body {
   /* Prevent scroll on narrow devices */
   font-size: 15px;
 }
+*, *:before, *:after {
+  box-sizing: border-box;
+}
 
 body {
-  padding-top: 56px;
+  /* padding-top: 56px; */
+  overflow-x: hidden;
 }
 
 :root {
@@ -23,6 +27,37 @@ body {
   --chinju-orange-dark: #db5c1e;
   --chinju-gray-light: #e7e1d6;
 }
+
+
+/* Custom scroillbar for webkit based browsers like Chrome, Safari and other Chromium based browsers */
+body::-webkit-scrollbar {
+  width: 0.65rem;
+  
+}
+ 
+body::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: rgb(188, 188, 188);
+}
+ 
+body::-webkit-scrollbar-thumb {
+  background-color: rgb(80, 80, 80);
+  outline: 1px solid slategrey;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+/* Custom scroillbar for webkit based browsers like Chrome, Safari and other Chromium based browsers */
+
+/* Custom scrollbar for Firefox */
+html{
+  /* overflow: scroll; */
+  scrollbar-color: rgb(77, 77, 77) rgb(168, 168, 168);
+  scrollbar-width: thin;
+}
+/* Custom scrollbar for Firefox */
+
+
 
 @media (max-width: 991.98px) {
   .offcanvas-collapse {
@@ -44,6 +79,11 @@ body {
     visibility: visible;
     transform: translateX(-100%);
   }
+}
+
+/* Margin for the content which was getting covered right below the navbar */
+.navbar + main{
+  margin-top: 6rem;
 }
 
 .nav-scroller {
