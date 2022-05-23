@@ -1,43 +1,12 @@
 {% load static %}
 {% load i18n %}
 
-{% block styles %}
-  <link rel="stylesheet" href="{% static 'css/pagewise/navbar.css' %}">
-{% endblock %}
-
-<div class="main-wrapper navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
-  <nav class="navbar-profile container">
-    <div class="nav-wrapper">
-      <a href="{% url 'homepage' %}" class="navbar-brand">{% trans 'Audio Annotation' %}</a>
-      <div class="mytabs">
-        <input type="radio" id="home-tab" name="mytabs" checked>
-        <label for="home-tab">Home</label>
-        <div class="tab" id="home-tab-div">
-          <a href="" class="tab-item active">Dashboard</a>
-          <a href="" class="tab-item">Profile</a>
-        </div>      
-      </div>
-    </div>
-    <ul class="navbar-nav">
-    {% if user.is_authenticated %}
-      <li class="nav-item dropdown">
-        <a class="nav-link avatar-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
-            <img src="{% static 'img/user.png' %}" class="rounded-circle align-self-center mr-2" style="width: 1.5rem;height: 1.5rem;">
-            <span class="h6 ps-2">{% trans 'Speaker' %}</span>
-        </a>
-  
-        <div class="dropdown-menu dropdown-menu-end">
-          <h5 class="dropdown-item-text mb-0">{{ user.get_full_name }}</h5>
-          <p class="dropdown-item-text text-muted mb-0">{{ user.email }}</p>
-          <div class="dropdown-divider"></div>
-          <a href="{% url 'account_logout' %}" class="dropdown-item">{% trans 'Sign Out' %}</a>
-        </div>
-      </li>
-    {% else %}
-      <li class="nav-item">
-        <a href="{% url 'account_login' %}" class="nav-link">{% trans 'Sign In' %}</a>
-      </li>
-    {% endif %}
-    </ul>
-  </nav>
+<a href="{% url 'homepage' %}" class="navbar-brand">{% trans 'Audio Annotation' %}</a>
+<div class="mytabs">
+  <input type="radio" id="home-tab" name="mytabs" checked>
+  <label for="home-tab">Home</label>
+  <div class="tab" id="home-tab-div">
+    <a href="" class="tab-item active">Dashboard</a>
+    <a href="" class="tab-item">Profile</a>
+  </div>      
 </div>
