@@ -14,6 +14,7 @@ body {
 
 body {
   /* padding-top: 56px; */
+  overflow-x: hidden;
 }
 
 :root {
@@ -50,7 +51,7 @@ body::-webkit-scrollbar-thumb {
 
 /* Custom scrollbar for Firefox */
 html{
-  overflow: scroll;
+  /* overflow: scroll; */
   scrollbar-color: rgb(77, 77, 77) rgb(168, 168, 168);
   scrollbar-width: thin;
 }
