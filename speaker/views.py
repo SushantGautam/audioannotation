@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
@@ -55,6 +56,7 @@ class ExamPopupView(FormView):
         qn_num = int(self.request.GET.get('qn_num', self.qn_num))
         qn_set = QuestionSet.objects.get(pk=qn_set)
         questions = qn_set.questions.all()
+        context['speaker'] = Speaker.objects.get(user=self.request.user)
         context['qn_set'] = qn_set
         context['qn'] = questions[qn_num]
         context['qn_num'] = qn_num
@@ -62,6 +64,30 @@ class ExamPopupView(FormView):
         context['prev_qn'] = None if qn_num == 0 else qn_num - 1
         context['next_qn'] = None if questions.count() == (qn_num + 1) else qn_num + 1
         return context
+
+    def form_valid(self, form):
+        if form.is_valid():
+            print("File saved")
+            obj = form.save(commit=False)
+            obj.exam_set = obj.question.questionset_set.first().examset_set.first()
+            obj.save()
+        else:
+            print("form invalid: ", form.errors)
+
+        res_dict = {
+            'success': 'true'
+        }
+
+        return JsonResponse(res_dict)
+
+    def form_invalid(self, form):
+        print("Error: ", form.errors)
+        res_dict = {
+            'success': 'false',
+            'error': str(form.errors),
+        }
+        return JsonResponse(res_dict)
+
 
 class ProfileView(TemplateView):
     template_name = "speaker/profile.html"

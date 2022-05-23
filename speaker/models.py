@@ -19,13 +19,18 @@ class Speaker(BaseUserModel):
     korea_residency = models.IntegerField(default=0)
     study_purpose = models.CharField(max_length=256, null=True, blank=True)
     learning_method = models.CharField(max_length=256, null=True, blank=True)
+
     class Meta:
         verbose_name = _('Speaker')
         verbose_name_plural = _('Speakers')
 
+    def __str__(self):
+        return self.user.username
+
 
 def audio_filename(instance, filename):
     return 'speaker/audio/{0}/{1}'.format(instance.speaker, str(instance.id) + filename)
+
 
 class AudioFile(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
@@ -34,6 +39,7 @@ class AudioFile(models.Model):
 
     def __str__(self):
         return self.audio_file.name
+
 
 class SpeakerSubmission(models.Model):
     STATUS_CHOICES = (
@@ -56,7 +62,7 @@ class SpeakerSubmission(models.Model):
     status = models.CharField(max_length=2, choices=STATUS_CHOICES, default='IS')
 
     def __str__(self):
-        return self.question.title
+        return self.question.question_title
 
     def filename(self):
         return os.path.basename(self.audio_file.name)

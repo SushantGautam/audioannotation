@@ -29,12 +29,19 @@
      
 
 </style>
-<form action="{% url 'speaker:save_audio' %}"
+<form action="{% url 'speaker:exam_popup' %}"
         enctype="multipart/form-data"
         method="post" id="audio_form">
     {% csrf_token %}
     <!-- record player -->
     <div id="record_player"></div>
+  <select name="question" id="id_question" style="display: none;">
+    <option value="{{ qn.pk }}" selected>{{ qn.question_title }}</option>
+  </select>
+  <select name="speaker" id="id_speaker" style="display: none;">
+    <option value="{{ speaker.pk }}" selected>{{ speaker.user }}</option>
+  </select>
+
  </form>   
 <div class="row" style="padding: 12px">
   <div class="col-12" style="background-color: #f3f3f3; padding: 10px">
