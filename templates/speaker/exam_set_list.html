@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "speaker/base.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -7,7 +7,7 @@
 
   </style>
 
-  <div>
+  <div class="mt-5">
     <span>{% trans 'Exam Sets: ' %}</span>
   </div>
   {% for e_set in object_list %}
