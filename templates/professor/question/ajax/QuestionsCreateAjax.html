@@ -86,16 +86,18 @@
           <option value="NON"  selected="">{% trans 'None' %}</option>
           <option value="IMG">{% trans 'Image Question' %}</option>
           <option value="AUD">{% trans 'Audio Question' %}</option>
+          {% else %}
+          <option name="upload_type" value="NON"  {% if 'NON' == object.upload_type %}selected{% endif %}>{% trans 'None' %}</option>
+          <option name="upload_type" value="IMG"  {% if 'IMG' == object.upload_type %}selected{% endif %}>{% trans 'Image Question' %}</option>
+          <option name="upload_type" value="AUD"  {% if 'AUD' == object.upload_type %}selected{% endif %}>{% trans 'Audio Question' %}</option>
+
         {% endif %}
 
-{#          <option #}
-{#            value="{{ category.pk }}"#}
-{#            {% if object.subcategory_code.pk == category.pk %}#}
-{#                  selected#}
-{#            {% endif %}#}
-{#          >#}
-{#            {% trans category.name %}#}
-{#          </option>#}
+
+
+
+
+
 
       </select>
       <div class="question_form_category_error question_form_error_div">
@@ -209,29 +211,23 @@
     </div>
   </div>
 
-
-  <div class="parent row question_form_table_row">
+{% comment %}
+  <div class="parent row question_form_table_row d-none">
       <div class="title col-4 question_form_table_th">{% trans 'Organization Code' %} *</div>
       <div class="value col-8 question_form_table_td">
 
-{#        <input placeholder="{% trans 'Enter Organization Code here...' %}" type="text" required name="organization_code"#}
-{#               id="id_organization_code" class="form-control"#}
-{#          {% if object %} value="{{ object.organization_code }}"{% endif %}>#}
  <select name="organization_code" id="id_organization_code" class="form-control">
         {% if not object %}
           <option value=""  selected="">------------</option>
-
         {% endif %}
+            {% for organization in organization_codes %}
+          {% if object %}
+              <option name="organization_code" value="{{ object.organization_code.pk }}"  {% if organization.pk == object.organization_code.pk %}selected{% endif %}>{{ object.organization_code.name }}</option>
+          {% else %}
+              <option name="organization_code" value="{{ organization.pk }}">{{ organization.name }}</option>
+            {% endif %}
+            {% endfor %}
 
-          {% for organization in organization_code %}
-          <option value="{{ organization.pk }}"
-            {% if object.organization_code.pk == organization.pk %}
-                  selected
-
-            {% endif %}>
-            {% trans organization.name %}
-          </option>
-        {% endfor %}
 
       </select>
 
@@ -240,7 +236,7 @@
         </div>
       </div>
     </div>
-
+{% endcomment %}
 
 
   <div class="parent row  question_form_table_row">
