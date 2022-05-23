@@ -166,7 +166,9 @@ function init_wavesurfer() {
             e.shiftKey ? region.playLoop() : region.play();
         });
         wavesurfer.on("region-click", editAnnotation);
-        wavesurfer.on("region-click", (region) => {loadResults(region);});
+        wavesurfer.on("region-click", (region) => {
+            loadResults(region);
+        });
 
         wavesurfer.on("region-created", function (region) {
             appendDeleteIcon(region.id);
@@ -272,7 +274,7 @@ function loadSTTRegions() {
         region.color = "rgba(0,0,0,0.15)";
         region.drag = false;
         region.resize = false;
-        region.id = "stt_"+region.id
+        region.id = "stt_" + region.id
         wavesurfer.addRegion(region);
         addTextToSTTRegion(region);
     });
@@ -296,6 +298,8 @@ function deleteRegionFunc() {
 function deleteRegion(regionId) {
     if (regionId) {
         wavesurfer.regions.list[regionId].remove();
+        saveRegions();
+        sortRegions();
     }
 }
 
@@ -496,6 +500,7 @@ function saveRegions() {
     localforage
         .setItem(key_annotation, mydata, () => {
             // on success
+            sortRegions();
         })
         .catch((err) => {
             alert(`Error on save: ${err}`);
@@ -676,7 +681,7 @@ function loadResults(region) {
 }
 
 function addTextToSTTRegion(region) {
-    if(!region.id.includes('stt')) return false;
+    if (!region.id.includes('stt')) return false;
     var regionText = document.createElement('div');
     regionText.className = "region-stt-text";
     regionText.innerHTML = ("text" in region.data) ? region.data.text == '' ? '' : region.data.text : '';
@@ -684,9 +689,30 @@ function addTextToSTTRegion(region) {
 }
 
 function addTextToAnnotationRegion(region) {
-    if(region.id.includes('stt')) return false;
+    if (region.id.includes('stt')) return false;
     var regionText = document.createElement('div');
     regionText.className = "region-text";
     regionText.innerHTML = ("text" in region.data) ? region.data.text == '' ? '' : region.data.text : '';
     document.querySelector(`[data-id=${region.id}]`).appendChild(regionText);
+}
+
+function sortRegions() {
+    localforage.getItem(key_annotation).then(function (value) {
+        // This code runs once the value has been loaded
+        // from the offline store.
+        var sorted = value.sort((a, b) => {
+            return a.start - b.start;
+        });
+        clearRegionList();
+        sorted.forEach(function (region) {
+            addRegionList(region);
+        });
+    }).catch(function (err) {
+        // This code runs if there were any errors
+        console.log(err);
+    });
+}
+
+function clearRegionList() {
+    document.getElementById('region-list').innerHTML = "";
 }
