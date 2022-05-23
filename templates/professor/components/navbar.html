@@ -14,7 +14,7 @@
   <div class="tab" id="questions-tab-div">
     <a href="#" class="tab-item">Exam Set</a>
     <a href="#" class="tab-item">QuestionSet List</a>
-    <a href="#" class="tab-item">Questions List</a>
+    <a href="{% url 'professor:question_list_page' %}" class="tab-item {% if 'professor_question_list' in request.path %}active{% endif %}">Questions List</a>
     <a href="#" class="tab-item">Category Management</a>
   </div>
 
