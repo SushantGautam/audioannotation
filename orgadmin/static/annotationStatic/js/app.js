@@ -514,6 +514,7 @@ function loadRegions(regions) {
         addRegionList(region);
         addTextToAnnotationRegion(region);
     });
+    document.getElementById('region-count').innerText = regions.length
 }
 
 function randomColor(alpha) {
@@ -707,6 +708,7 @@ function sortRegions() {
         sorted.forEach(function (region) {
             addRegionList(region);
         });
+        document.getElementById('region-count').innerText = sorted.length;
     }).catch(function (err) {
         // This code runs if there were any errors
         console.log(err);
