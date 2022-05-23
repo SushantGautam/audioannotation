@@ -8,9 +8,10 @@ class QuestionForm(forms.ModelForm):
         model = Question
         exclude = ['updated_at']
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['title'].widget.attrs['placeholder'] = _("Enter question title")
-        # self.fields['Question_Name'].label = ""
-        # self.fields['Question_Type'].widget = forms.HiddenInput()
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.fields['question_title'].widget.attrs['placeholder'] = _("Enter question title")
+    #     self.fields['question_title'].widget.attrs['placeholder'] = _("Enter question title")
+    #     # self.fields['Question_Name'].label = ""
+    #     # self.fields['Question_Type'].widget = forms.HiddenInput()
 

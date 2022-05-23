@@ -1,6 +1,6 @@
 {% load static %}
 {% load i18n %}
-
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
 
 <form id="QuestionRegistrationForm"
       action="{% if object %} {% url 'professor:question_update' object.id %} {% else %} {% url 'professor:question_create_ajax' %} {% endif %}"
@@ -10,14 +10,39 @@
   <div class="parent row question_form_table_row">
     <div class="title col-4 question_form_table_th">{% trans 'Title' %} *</div>
     <div class="value col-8 question_form_table_td">
-      <input placeholder="{% trans 'Enter Question title here...' %}" type="text" required name="title" maxlength="255"
-             id="id_title" class="form-control"
-        {% if object %} value="{{ object.title }}"{% endif %}>
+
+{#      <input placeholder="{% trans 'Enter Question title here...' %}" type="text" required name="question_title" maxlength="255"#}
+{#             id="id_title" class="form-control"#}
+{#        {% if object %} value="{{ object.title }}"{% endif %}>#}
+{#    #}
+
+        <textarea placeholder="{% trans 'Enter question title here...' %}" name="question_title" id="id_title"
+                  cols="40" rows="3"
+                  class="form-control" >{% if object %}{{ object.question_title }}{% endif %}</textarea>
+
+
+
       <div class="question_form_title_error question_form_error_div">
         {% trans 'Title is required' %}
       </div>
     </div>
   </div>
+
+    <div class="parent row question_form_table_row">
+    <div class="title col-4 question_form_table_th">{% trans 'Unique Code' %} *</div>
+    <div class="value col-8 question_form_table_td">
+
+      <input placeholder="{% trans 'Enter unique code here...' %}" type="text" required name="unique_code" maxlength="10"
+             id="id_unique_code" class="form-control"
+        {% if object %} value="{{ object.unique_code }}"{% endif %}>
+
+
+      <div class="question_form_unique_code_error question_form_error_div">
+        {% trans 'Unique Code is required' %}
+      </div>
+    </div>
+  </div>
+
 
 
   <div class="parent row">
@@ -53,6 +78,31 @@
     </div>
   </div>
 
+<div class="parent row">
+    <div class="title col-4">{% trans 'Upload type' %} *</div>
+    <div class="value col-8 question_form_table_td">
+      <select name="upload_type" id="id_upload_type" class="form-control">
+        {% if not object %}
+          <option value="NON"  selected="">{% trans 'None' %}</option>
+          <option value="IMG">{% trans 'Image Question' %}</option>
+          <option value="AUD">{% trans 'Audio Question' %}</option>
+        {% endif %}
+
+{#          <option #}
+{#            value="{{ category.pk }}"#}
+{#            {% if object.subcategory_code.pk == category.pk %}#}
+{#                  selected#}
+{#            {% endif %}#}
+{#          >#}
+{#            {% trans category.name %}#}
+{#          </option>#}
+
+      </select>
+      <div class="question_form_category_error question_form_error_div">
+        {% trans 'Upload Type is required' %}
+      </div>
+    </div>
+  </div>
 
   <div class="parent row ">
     <div class="title col-4">{% trans 'File' %}</div>
@@ -90,14 +140,71 @@
   </div>
 
   <div class="parent row question_form_table_row">
-    <div class="title col-4 question_form_table_th">{% trans 'Level' %} *</div>
+    <div class="title col-4 question_form_table_th">{% trans 'Difficulty Level' %} *</div>
     <div class="value col-8 question_form_table_td">
-      <input placeholder="{% trans 'Enter Question level here...' %}" type="number" required name="level"
-             maxlength="255"
-             id="id_level" class="form-control"
-        {% if object %} value="{{ object.level }}"{% endif %}>
-      <div class="question_form_level_error question_form_error_div">
-        {% trans 'Level is required' %}
+      <input placeholder="{% trans 'Enter Question Difficulty level here...(0: both, 1: beginner, 2: advanced)' %}" type="number" required name="difficulty_level"
+             maxlength="1" min="0" max="2"  id="id_level" class="form-control"
+        {% if object %} value="{{ object.difficulty_level }}"{% endif %}>
+      <div class="question_form_level_error question_form_error_div ">
+        {% trans 'Difficulty Level is required' %}
+      </div>
+    </div>
+  </div>
+
+<div class="parent row question_form_table_row">
+    <div class="title col-4 question_form_table_th">{% trans 'Ready Time ' %} *</div>
+    <div class="value col-8 question_form_table_td">
+      <input placeholder="{% trans 'Enter Question Ready Time here...' %}" type="number" required name="ready_time"
+              id="id_ready_time" class="form-control"  maxlength="5"
+        {% if object %} value="{{ object.ready_time }}"{% endif %}>
+      <div class="question_form_ready_time_error question_form_error_div ">
+        {% trans 'Ready Time is required' %}
+      </div>
+    </div>
+  </div>
+
+<div class="parent row question_form_table_row">
+    <div class="title col-4 question_form_table_th">{% trans 'Speaking Time ' %} *</div>
+    <div class="value col-8 question_form_table_td">
+      <input placeholder="{% trans 'Enter Speaking Time here...' %}" type="number" required name="speaking_time"
+              id="id_speaking_time" class="form-control" maxlength="5"
+        {% if object %} value="{{ object.speaking_time }}"{% endif %}>
+      <div class="question_form_speaking_time_error question_form_error_div ">
+        {% trans 'Speaking Time is required' %}
+      </div>
+    </div>
+  </div>
+
+
+
+
+ <div class="parent row question_form_table_row">
+    <div class="title col-4 question_form_table_th">{% trans 'Evaluation Purpose' %} *</div>
+    <div class="value col-8 question_form_table_td">
+
+      <input placeholder="{% trans 'Enter Evaluation Purpose here...' %}" type="text" required name="evaluation_purpose"
+             id="id_evaluation_purpose" class="form-control"
+        {% if object %} value="{{ object.evaluation_purpose }}"{% endif %}>
+
+
+      <div class="question_form_evaluation_purpose_error question_form_error_div">
+        {% trans 'Evaluation Purpose is required' %}
+      </div>
+    </div>
+  </div>
+
+
+<div class="parent row question_form_table_row">
+    <div class="title col-4 question_form_table_th">{% trans 'Question Keyword' %} *</div>
+    <div class="value col-8 question_form_table_td">
+
+      <input placeholder="{% trans 'Enter Question Keyword here...' %}" type="text" required name="question_keywords"
+             id="id_question_keywords" class="form-control"
+        {% if object %} value="{{ object.question_keywords }}"{% endif %}>
+
+
+      <div class="question_form_question_keywords_error question_form_error_div">
+        {% trans 'Question Keyword is required' %}
       </div>
     </div>
   </div>
