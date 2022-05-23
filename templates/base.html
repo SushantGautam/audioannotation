@@ -27,16 +27,7 @@
 
 <body>
     {% block header %}
-    <!-- <div class="main-header">
-      <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" style="display: flex; align-items:flex-start;">
-            <a href="{% url 'homepage' %}" class="navbar-brand">{% trans 'Audio Annotation' %}</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
-              aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button> -->
-            {% block navbar %}{% endblock %}
-      <!-- </nav>
-    </div> -->
+        {% block navbar %}{% endblock %}
     {% endblock %}
 
     <main class="container">
