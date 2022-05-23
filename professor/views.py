@@ -62,17 +62,7 @@ class QuestionsCreateView(AjaxableResponseMixin, CreateView):
         if form.is_valid():
             self.object = form.save(commit=False)
             self.object.organization_code = self.request.user.professor.organization_code
-            print('form objects', form)
             self.object.save()
-
-        # response = {'url': self.request.build_absolute_uri(reverse('professor:question_list_page')),
-        #             "status": "success",
-        #             "msg": "",
-        #             "qn_code": self.object.subcategory_code.name,
-        #             "qn_pk": self.object.pk,
-        #             "qn_title": self.object.question_title,
-        #             }
-        # return JsonResponse(response)
         return redirect('professor:question_list_page')
 
     def form_invalid(self, form):
@@ -99,15 +89,7 @@ class QuestionsUpdateView(AjaxableResponseMixin, UpdateView):
     def form_valid(self, form):
         if form.is_valid():
             self.object = form.save(commit=False)
-            # self.object.organization_code = self.request.user.professor.organization_code
             self.object.save()
-        # response = {'url': self.request.build_absolute_uri(reverse('professor:question_list_page')),
-        #             "status": "success",
-        #             "msg": "",
-        #             "qn_code": self.object.subcategory_code.name,
-        #             "qn_pk": self.object.pk,
-        #             "qn_title": self.object.question_title,
-        #             }
         return redirect('professor:question_list_page')
 
 class QuestionDetailView(DetailView):
