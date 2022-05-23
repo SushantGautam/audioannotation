@@ -175,8 +175,13 @@ function init_wavesurfer() {
             var text_region = document.createElement('div');
             text_region.className = 'region-text';
             document.querySelector(`.wavesurfer-region[data-id=${region.id}]`).appendChild(text_region);
+
+            // validateRegion(region);
         });
         wavesurfer.on("region-updated", saveRegions);
+        wavesurfer.on("region-update-end", (region) => {
+            validateRegion(region);
+        });
         wavesurfer.on("region-removed", saveRegions);
 
         wavesurfer.on("region-play", function (region) {
@@ -717,4 +722,22 @@ function sortRegions() {
 
 function clearRegionList() {
     document.getElementById('region-list').innerHTML = "";
+}
+
+// Check if region is overlaps
+function validateRegion(region) {
+    var overlap = false;
+    var value = wavesurfer.regions.list;
+    Object.keys(value).filter((key) => !key.includes('stt_')).reduce(function (r, e) {
+        // Overlap condition
+        if ((value[e].start > region.start && value[e].start < region.end) || (value[e].end > region.start && value[e].end < region.end)) {
+            overlap = true;
+            return;
+        }
+        return r;
+    }, {})
+
+    if (overlap) {
+        deleteRegion(region.id);
+    }
 }
