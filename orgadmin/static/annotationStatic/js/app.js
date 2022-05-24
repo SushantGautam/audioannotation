@@ -414,50 +414,50 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    document.getElementById("download_button").addEventListener("click", () => {
-        const dd = new Date();
-        const YYYY = dd.getFullYear();
-        const MM = (dd.getMonth() + 1).toString().padStart(2, "0");
-        const DD = dd.getDate().toString().padStart(2, "0");
-        const hh = dd.getHours().toString().padStart(2, "0");
-        const mm = dd.getMinutes().toString().padStart(2, "0");
-        const ss = dd.getSeconds().toString().padStart(2, "0");
-        const date_str = `${YYYY}-${MM}-${DD}-${hh}_${mm}_${ss}`;
-
-        const name = `annotations_${date_str}.json`;
-
-        localforage.getItem(key_annotation, (err, data_annotation) => {
-            data_annotation.sort((a, b) => {
-                if (a.start < b.start) {
-                    return -1;
-                }
-                return 1;
-            });
-
-            localforage.getItem(key_meta, (err, data_meta) => {
-                if (data_meta === null) {
-                    data_meta = {};
-                }
-
-                const out_data = {};
-                out_data[item_name_annotation] = data_annotation;
-                out_data[item_name_meta] = data_meta;
-
-                const out = JSON.stringify(out_data, undefined, 4) + "\n";
-                const url = URL.createObjectURL(
-                    new Blob([out], {
-                        type: "application/json",
-                    })
-                );
-                const a = document.createElement("a");
-                document.body.appendChild(a);
-                a.download = name;
-                a.href = url;
-                a.click();
-                a.remove();
-            });
-        });
-    });
+    // document.getElementById("download_button").addEventListener("click", () => {
+    //     const dd = new Date();
+    //     const YYYY = dd.getFullYear();
+    //     const MM = (dd.getMonth() + 1).toString().padStart(2, "0");
+    //     const DD = dd.getDate().toString().padStart(2, "0");
+    //     const hh = dd.getHours().toString().padStart(2, "0");
+    //     const mm = dd.getMinutes().toString().padStart(2, "0");
+    //     const ss = dd.getSeconds().toString().padStart(2, "0");
+    //     const date_str = `${YYYY}-${MM}-${DD}-${hh}_${mm}_${ss}`;
+    //
+    //     const name = `annotations_${date_str}.json`;
+    //
+    //     localforage.getItem(key_annotation, (err, data_annotation) => {
+    //         data_annotation.sort((a, b) => {
+    //             if (a.start < b.start) {
+    //                 return -1;
+    //             }
+    //             return 1;
+    //         });
+    //
+    //         localforage.getItem(key_meta, (err, data_meta) => {
+    //             if (data_meta === null) {
+    //                 data_meta = {};
+    //             }
+    //
+    //             const out_data = {};
+    //             out_data[item_name_annotation] = data_annotation;
+    //             out_data[item_name_meta] = data_meta;
+    //
+    //             const out = JSON.stringify(out_data, undefined, 4) + "\n";
+    //             const url = URL.createObjectURL(
+    //                 new Blob([out], {
+    //                     type: "application/json",
+    //                 })
+    //             );
+    //             const a = document.createElement("a");
+    //             document.body.appendChild(a);
+    //             a.download = name;
+    //             a.href = url;
+    //             a.click();
+    //             a.remove();
+    //         });
+    //     });
+    // });
 
     document.addEventListener("keydown", (e) => {
         if (!e.shiftKey) {

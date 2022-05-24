@@ -60,7 +60,6 @@ $(document).ready(function () {
     });
 
     function changeAnnotationText(region) {
-        console.log(region)
         $(`.wavesurfer-region[data-id=${region.id}]`).find('.region-text').html(region.data.text);
     }
 });
