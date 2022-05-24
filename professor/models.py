@@ -1,8 +1,8 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
-from orgadmin.models import BaseUserModel
+import os
+from orgadmin.models import BaseUserModel, Organization
 
 class Professor(BaseUserModel):
     class Meta:
@@ -60,9 +60,14 @@ class Question(models.Model):
     question_keywords = models.CharField(max_length=256, null=True, blank=True,
                                          help_text=_('Comma separated keywords'))
     subcategory_code = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
+    organization_code = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.unique_code
+
+
+    def filename(self):
+        return os.path.basename(self.upload_file.name)
 
 
 class QuestionSet(models.Model):

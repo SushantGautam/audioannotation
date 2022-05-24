@@ -2,19 +2,12 @@
 {% load static %} 
 
 {% block styles %}
-
-<link rel="stylesheet" href="{% static 'css/pagewise/homepage.css' %}">
-{% endblock %}
-
-{% block subnavbar %}
-    {% include "orgadmin/components/home_subnavbar.html" %}
+  <link rel="stylesheet" href="{% static 'css/pagewise/homepage.css' %}">
 {% endblock %}
 
 {% block content %}
+
 <main>
-
-
-  
   <section >
     <h2 class="my-3 title">User Metrics</h2>
     <div class="users">

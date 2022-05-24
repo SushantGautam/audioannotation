@@ -28,12 +28,24 @@
     <tbody>
     <tr class="">
       <td class="table-title">Title</td>
-      <td class="value text-left">{{ object.title }}</td>
+      <td class="value text-left">{{ object.question_title }}</td>
+    </tr>
+    <tr class="">
+      <td class="table-title">Unique Code</td>
+      <td class="value text-left">{{ object.unique_code }}</td>
     </tr>
 
     <tr class="">
       <td class="table-title">Description</td>
       <td class="value">{{ object.description }} </td>
+    </tr>
+     <tr class="">
+      <td class="table-title">Upload Type</td>
+      <td class="value file_upload_type">{{ object.get_upload_type_display }} </td>
+    </tr>
+     <tr class="file_upload">
+      <td class="table-title">File Upload</td>
+      <td class="value">{{ object.filename }} </td>
     </tr>
     <tr class="">
       <td class="table-title">Created At</td>
@@ -43,17 +55,13 @@
       <td class="table-title">Updated At</td>
       <td class="value">{{ object.updated_at }} </td>
     </tr>
-     <tr class="">
-      <td class="table-title">Status</td>
-      <td class="value">{% if object.is_active %}<span class="btn btn-sm btn-success"> <a class="text-white status-text">{% trans 'Active' %} </a></span>{% else %} <span class="btn btn-sm btn-warning"> <a class="text-white status-text">{% trans 'InActive' %} </a></span>{% endif %} </td>
 
-    </tr>
 
     <tr class="">
-      <td class="table-title ">Level</td>
+      <td class="table-title ">Difficulty Level</td>
 
       <td class="value">
-        {{ object.level }}
+        {{ object.difficulty_level }}
       </td>
 
 
@@ -68,9 +76,43 @@
 
     </tr>
 
+     <tr class="">
+      <td class="table-title">Ready Time</td>
+      <td class="value">{{ object.ready_time }} </td>
+    </tr>
+     <tr class="">
+      <td class="table-title">Speaking Time</td>
+      <td class="value">{{ object.speaking_time }} </td>
+    </tr>
+
+     <tr class="">
+      <td class="table-title">Evaluation Purpose</td>
+      <td class="value">{{ object.evaluation_purpose }} </td>
+    </tr>
+     <tr class="">
+      <td class="table-title">Question keyword</td>
+      <td class="value">{{ object.question_keywords }} </td>
+    </tr>
+
+    <tr class="">
+      <td class="table-title">Status</td>
+      <td class="value">{% if object.is_active %}<span class="btn btn-sm btn-success"> <a class="text-white status-text">{% trans 'Active' %} </a></span>{% else %} <span class="btn btn-sm btn-warning"> <a class="text-white status-text">{% trans 'InActive' %} </a></span>{% endif %} </td>
+
+    </tr>
     </tbody>
   </table>
 {% endblock content %}
 
 {% block scripts %}
+
+  <script>
+
+  $(document).ready(function(){
+    if($('.file_upload_type').html() === 'None '){
+      $('.file_upload').css('display', 'none')
+    }
+  })
+  </script>
+
+
 {% endblock scripts %}

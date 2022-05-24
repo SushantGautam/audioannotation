@@ -17,9 +17,13 @@
     <!-- Bootstrap Core CSS -->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'DataTables/datatables.min.css' %}" rel="stylesheet" type="text/css" >
 
+    <!-- custom css -->
     <link href="{% static 'css/custom.css' %}" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{% static 'DataTables/datatables.min.css' %}"/>
+    <link href="{% static 'css/pagewise/navbar.css' %}" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
 
     {% block styles %}{% endblock %}
@@ -27,16 +31,45 @@
 
 <body>
     {% block header %}
-    <!-- <div class="main-header">
-      <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" style="display: flex; align-items:flex-start;">
-            <a href="{% url 'homepage' %}" class="navbar-brand">{% trans 'Audio Annotation' %}</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
-              aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button> -->
+    <div class="main-wrapper navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+      <nav class="navbar-profile container">
+        <div class="nav-wrapper">
+          <a href="{% url 'homepage' %}" class="navbar-brand">{% trans 'Audio Annotation' %}</a>
             {% block navbar %}{% endblock %}
-      <!-- </nav>
-    </div> -->
+          </div>
+          <ul class="navbar-nav">
+          {% if user.is_authenticated %}
+            <li class="nav-item dropdown">
+              <a class="nav-link avatar-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                  <img src="{% static 'img/user.png' %}" class="rounded-circle align-self-center mr-2" style="width: 1.5rem;height: 1.5rem;">
+                  <span class="h6 ps-2">
+                    {% if '/professor' in request.path %}
+                      {% trans 'Professor' %}
+                    {% elif '/worker' in request.path %}
+                      {% trans 'Worker' %}
+                    {% elif '/speaker' in request.path %}
+                      {% trans 'Speaker' %}
+                    {% else %}
+                      {% trans 'Admin' %}
+                    {% endif %}
+                    </span>
+              </a>
+        
+              <div class="dropdown-menu dropdown-menu-end">
+                <h5 class="dropdown-item-text mb-0">{{ user.get_full_name }}</h5>
+                <p class="dropdown-item-text text-muted mb-0">{{ user.email }}</p>
+                <div class="dropdown-divider"></div>
+                <a href="{% url 'account_logout' %}" class="dropdown-item">{% trans 'Sign Out' %}</a>
+              </div>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a href="{% url 'account_login' %}" class="nav-link">{% trans 'Sign In' %}</a>
+            </li>
+          {% endif %}
+          </ul>
+        </nav>
+      </div>
     {% endblock %}
 
     <main class="container">
