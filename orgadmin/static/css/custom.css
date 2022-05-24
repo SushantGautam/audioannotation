@@ -190,3 +190,28 @@ html{
   justify-content: center;
 
 }
+
+.dropdown-menu{
+  width: max-content;
+}
+.dropdown-menu svg{
+  width: 1.75rem;
+  text-align: center;
+}
+
+.dropdown-menu p , .dropdown-menu a{
+font-size: 1rem;
+}
+.dropdown-item-text{
+  text-align: left;
+}
+
+.avatar-link{
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.animate__animated.animate__fadeInDown {
+  --animate-duration: 0.35s;
+}

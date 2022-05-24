@@ -58,10 +58,30 @@
 
 .nav-wrapper{
   display: flex;
+  gap: 1rem;
 }
 
 .navbar-profile{
   display: flex;
   justify-content: space-between;
   align-items: baseline !important;
+}
+
+.logo-section{
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.logo-section .logo{
+  width: 10rem;
+  height: 2.25rem;
+}
+
+a.brand-name{
+  all: unset;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: white;
+  /* cursor: pointer; */
 }
