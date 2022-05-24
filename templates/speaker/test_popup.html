@@ -2,39 +2,39 @@
 {% load i18n %}
 
 <style>
-  svg{
-          display: block;
-          width: 100%;
-          height: 100%;
-          padding: 0;
-          margin: auto;
-          /* position:absolute; */
-      }
-  
-  path{
-  stroke-linecap: square;
-  stroke: white;
-  stroke-width: 0.5px;
-  }
+    svg{
+        display: block;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: auto;
+        /* position:absolute; */
+    }
 
-  h1{
-    color: white;
-    margin-top: -35px;
-    font-size: 1.2rem;
-    
-  }
-  #record_player{
-    display: none;
-  }    
-     
+    path{
+        stroke-linecap: square;
+        stroke: white;
+        stroke-width: 0.5px;
+    }
+
+    h1{
+        color: white;
+        margin-top: -35px;
+        font-size: 1.2rem;
+
+    }
+    #record_player{
+        display: none;
+    }
+
 
 </style>
 <form action="{% url 'speaker:exam_popup' %}"
-        enctype="multipart/form-data"
-        method="post" id="audio_form">
-    {% csrf_token %}
-    <!-- record player -->
-    <div id="record_player"></div>
+      enctype="multipart/form-data"
+      method="post" id="audio_form">
+  {% csrf_token %}
+  <!-- record player -->
+  <div id="record_player"></div>
   <select name="question" id="id_question" style="display: none;">
     <option value="{{ qn.pk }}" selected>{{ qn.question_title }}</option>
   </select>
@@ -42,7 +42,7 @@
     <option value="{{ speaker.pk }}" selected>{{ speaker.user }}</option>
   </select>
 
- </form>   
+</form>
 <div class="row" style="padding: 12px">
   <div class="col-12" style="background-color: #f3f3f3; padding: 10px">
     {% for qn in qn_set.questions.all %}
@@ -103,37 +103,37 @@
   <div class="col-4" style="text-align: center; margin: auto; height: 100%; display: flex; background-color: #f3f3f3">
     <div class="recorder_wave"
          style="width: 80%; height: 60%; border: solid black; margin: auto; background-color: #360752">
-         <svg preserveAspectRatio="none" id="visualizer" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-          <defs>
+      <svg preserveAspectRatio="none" id="visualizer" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <defs>
 
-              <mask id="mask">
-                  <g id="maskGroup">
-                </g>
-              </mask>
-              <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" style="stop-color:#ff0a0a;stop-opacity:1" />
-                  <stop offset="20%" style="stop-color:#f1ff0a;stop-opacity:1" />
-                  <stop offset="90%" style="stop-color:#d923b9;stop-opacity:1" />
-                  <stop offset="100%" style="stop-color:#050d61;stop-opacity:1" />
-              </linearGradient>
-          </defs>
-          <rect x="0" y="0" width="100%" height="100%" fill="url(#gradient)" mask="url(#mask)"></rect>
-          
+          <mask id="mask">
+            <g id="maskGroup">
+            </g>
+          </mask>
+          <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#ff0a0a;stop-opacity:1" />
+            <stop offset="20%" style="stop-color:#f1ff0a;stop-opacity:1" />
+            <stop offset="90%" style="stop-color:#d923b9;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#050d61;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <rect x="0" y="0" width="100%" height="100%" fill="url(#gradient)" mask="url(#mask)"></rect>
+
       </svg>
-      <h1>{% trans 'Preparation' %}...</h1>
+      <h1></h1>
     </div>
-<!-- <h1>In <a href="https://codepen.io/zapplebee/full/gbNbZE/">Full Page view</a>, please allow the use of your microphone</h1> -->
+    <!-- <h1>In <a href="https://codepen.io/zapplebee/full/gbNbZE/">Full Page view</a>, please allow the use of your microphone</h1> -->
   </div>
   <div class="col-4" style="text-align: center; height: 100%; margin: auto; display: flex; background-color: #f3f3f3">
     {#      <div class="col-12">#}
-      <!-- <div id="controls">
-        <button type="button" id="recordButton">Record</button>
-        <button type="button" id="pauseButton" disabled>Pause</button>
-        <button type="button" id="stopButton" disabled>Stop</button>
-      </div> -->
+    <!-- <div id="controls">
+      <button type="button" id="recordButton">Record</button>
+      <button type="button" id="pauseButton" disabled>Pause</button>
+      <button type="button" id="stopButton" disabled>Stop</button>
+    </div> -->
 
     <button id='prep_btn' type="button" style="margin: auto; border-radius: 50%"
-            class="btn btn-info">{% trans 'Preparation' %}</button>
+            class="btn btn-outline-info">{% trans 'Preparation' %}</button>
     <button id='recording_btn' type="button"  style="margin: auto; border-radius: 50%"
             class="btn btn-outline-info ml-5">{% trans 'Recording' %}</button>
     {#      </div>#}
@@ -148,16 +148,16 @@
 <!-- <script src="{% static 'js/recorder/recorder.js' %}"></script>
 <script src="{% static 'js/recorder/app.js' %}"></script> -->
 
-<script>
-    //Timer test
-    prepTimeout = setTimeout(startWave, 5000);
-    function startWave(){
-      $('#prep_btn').removeClass('btn-info')
-      $('#prep_btn').addClass('btn-outline-info')
-      $('#recording_btn').removeClass('btn-outline-info')
-      $('#recording_btn').addClass('btn-info')
-     }
-</script>
+{#<script>#}
+{#  //Timer test#}
+{#  prepTimeout = setTimeout(startWave, 5000);#}
+{#  function startWave(){#}
+{#    $('#prep_btn').removeClass('btn-info')#}
+{#    $('#prep_btn').addClass('btn-outline-info')#}
+{#    $('#recording_btn').removeClass('btn-outline-info')#}
+{#    $('#recording_btn').addClass('btn-info')#}
+{#  }#}
+{#</script>#}
 <script>
   $("#test_modal_label").html("{{ qn_set.name }}");
   function prev_qn_btn_click(){
@@ -200,99 +200,104 @@
 <!--Recorder testing from here-->
 <script>
   $(document).ready(function(){
-  console.log('error');
-  console.log('Anusha');
-  $(".prev_qn_btn").attr("disabled", "disabled")
-  $(".next_qn_btn").attr("disabled", "disabled")
-  prepTimeout = setTimeout(startWave, 5000);
 
-  function startWave(){
-      $('#prep_btn').removeClass('btn-info')
-      $('#prep_btn').addClass('btn-outline-info')
-      $('#recording_btn').removeClass('btn-outline-info')
-      $('#recording_btn').addClass('btn-info')
-    // var paths = document.getElementsByTagName('path');
-    // var visualizer = document.getElementById('visualizer');
-    // var mask = visualizer.getElementById('mask');
-    // var h = document.getElementsByTagName('h1')[0];
-    // var path;
-    // var report = 0;
+    {% if qn.can_submit %}
 
-    paths = document.getElementsByTagName('path');
-    visualizer = document.getElementById('visualizer');
-    mask = visualizer.getElementById('mask');
-    h = document.getElementsByTagName('h1')[0];
-    // path;
-    report = 0;
-    record_state =true;
-    soundAllowed = function (stream) {
-        //Audio stops listening in FF without // window.persistAudioStream = stream;
-        //https://bugzilla.mozilla.org/show_bug.cgi?id=965483
-        //https://support.mozilla.org/en-US/questions/984179
-        window.persistAudioStream = stream;
-        h.innerHTML = "Thanks";
-        h.setAttribute('style', 'opacity: 0;');
-        var audioContent = new AudioContext();
-        var audioStream = audioContent.createMediaStreamSource( stream );
-        var analyser = audioContent.createAnalyser();
-        audioStream.connect(analyser);
-        analyser.fftSize = 1024;
+      $(".prev_qn_btn").attr("disabled", "disabled");
+      $(".next_qn_btn").attr("disabled", "disabled");
+      $(".recorder_wave h1").html("{% trans 'Preparation' %}...");
+      $('#prep_btn').removeClass('btn-outline-info');
+      $('#prep_btn').addClass('btn-info');
+      prepTimeout = setTimeout(startWave, 5000);
 
-        var frequencyArray = new Uint8Array(analyser.frequencyBinCount);
-        visualizer.setAttribute('viewBox', '0 0 255 255');
-      
-				//Through the frequencyArray has a length longer than 255, there seems to be no
-        //significant data after this point. Not worth visualizing.
-        for (var i = 0 ; i < 255; i++) {
+      function startWave(){
+        $('#prep_btn').removeClass('btn-info');
+        $('#prep_btn').addClass('btn-outline-info');
+        $('#recording_btn').removeClass('btn-outline-info');
+        $('#recording_btn').addClass('btn-info');
+        // var paths = document.getElementsByTagName('path');
+        // var visualizer = document.getElementById('visualizer');
+        // var mask = visualizer.getElementById('mask');
+        // var h = document.getElementsByTagName('h1')[0];
+        // var path;
+        // var report = 0;
+
+        paths = document.getElementsByTagName('path');
+        visualizer = document.getElementById('visualizer');
+        mask = visualizer.getElementById('mask');
+        h = document.getElementsByTagName('h1')[0];
+        // path;
+        report = 0;
+        record_state =true;
+        soundAllowed = function (stream) {
+          //Audio stops listening in FF without // window.persistAudioStream = stream;
+          //https://bugzilla.mozilla.org/show_bug.cgi?id=965483
+          //https://support.mozilla.org/en-US/questions/984179
+          window.persistAudioStream = stream;
+          // h.innerHTML = "Thanks";
+          h.setAttribute('style', 'opacity: 0;');
+          var audioContent = new AudioContext();
+          var audioStream = audioContent.createMediaStreamSource( stream );
+          var analyser = audioContent.createAnalyser();
+          audioStream.connect(analyser);
+          analyser.fftSize = 1024;
+
+          var frequencyArray = new Uint8Array(analyser.frequencyBinCount);
+          visualizer.setAttribute('viewBox', '0 0 255 255');
+
+          //Through the frequencyArray has a length longer than 255, there seems to be no
+          //significant data after this point. Not worth visualizing.
+          for (var i = 0 ; i < 255; i++) {
             path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
             path.setAttribute('stroke-dasharray', '4,1');
             mask.appendChild(path);
-        }
-        var doDraw = function () {
+          }
+          var doDraw = function () {
             if (record_state){
               requestAnimationFrame(doDraw);
             }
             analyser.getByteFrequencyData(frequencyArray);
-          	var adjustedLength;
+            var adjustedLength;
             for (var i = 0 ; i < 255; i++) {
-              	adjustedLength = Math.floor(frequencyArray[i]) - (Math.floor(frequencyArray[i]) % 5);
-                paths[i].setAttribute('d', 'M '+ (i) +',255 l 0,-' + adjustedLength);
+              adjustedLength = Math.floor(frequencyArray[i]) - (Math.floor(frequencyArray[i]) % 5);
+              paths[i].setAttribute('d', 'M '+ (i) +',255 l 0,-' + adjustedLength);
             }
 
+          }
+          doDraw();
         }
-        doDraw();
-    }
 
-    soundNotAllowed = function (error) {
-        h.innerHTML = "{% trans 'No mic' %}";
-        console.log(error);
-    }
+        soundNotAllowed = function (error) {
+          h.innerHTML = "{% trans 'No mic' %}";
+          console.log(error);
+        }
 
-    /*window.navigator = window.navigator || {};
-    /*navigator.getUserMedia =  navigator.getUserMedia       ||
-                              navigator.webkitGetUserMedia ||
-                              navigator.mozGetUserMedia    ||
-                              null;*/
-    
-    start_wave = function (){
-        navigator.getUserMedia({audio:true}, soundAllowed, soundNotAllowed);
-      }    
-    start_wave();
-    startRecording();
-    // rec.record();
-    setTimeout(stopWave, 7000)
-    function stopWave(){
-      record_state = false;
-      start_wave();
-      stopRecording();
-      on_form_submit();
-      $("#visualizer").hide();
-      $(".prev_qn_btn").removeAttr("disabled")
-      $(".next_qn_btn").removeAttr("disabled")
-      $('#recording_btn').removeClass('btn-info')
-      $('#recording_btn').addClass('btn-outline-info')
-    }                     
-  }
-});
+        /*window.navigator = window.navigator || {};
+        /*navigator.getUserMedia =  navigator.getUserMedia       ||
+                                  navigator.webkitGetUserMedia ||
+                                  navigator.mozGetUserMedia    ||
+                                  null;*/
+
+        start_wave = function (){
+          navigator.getUserMedia({audio:true}, soundAllowed, soundNotAllowed);
+        }
+        start_wave();
+        startRecording();
+        // rec.record();
+        setTimeout(stopWave, 7000)
+        function stopWave(){
+          record_state = false;
+          start_wave();
+          stopRecording();
+          on_form_submit();
+          $("#visualizer").hide();
+          $(".prev_qn_btn").removeAttr("disabled");
+          $(".next_qn_btn").removeAttr("disabled");
+          $('#recording_btn').removeClass('btn-info')
+          $('#recording_btn').addClass('btn-outline-info')
+        }
+      }
+    {% endif %}
+  });
 
 </script>

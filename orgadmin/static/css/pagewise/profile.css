@@ -1,0 +1,43 @@
+.header-section{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.profile-section , .header-section{
+    width: 60%;
+}
+
+.details-parent{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    font-size: 1rem;
+}
+.detail-row{
+    display: flex;
+    justify-content: space-between;
+    /* width: 100%; */
+    /* gap: 5rem; */
+}
+
+.detail-row .detail{
+    width: 50%;
+}
+
+.detail{
+    display: flex;
+}
+
+.detail .label{
+    font-weight: 600;
+    width: 12rem;
+    /* text-align: center; */
+}
+.detail .value{
+    font-weight: 500;
+}
+
+.label svg{
+    width: 2.5rem;
+    text-align: center;
+}

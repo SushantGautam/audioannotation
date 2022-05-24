@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.generic import ListView, FormView, TemplateView
 
 from speaker.forms import AudioFileForm, SpeakerSubmissionForm
-from speaker.models import Speaker
+from speaker.models import Speaker, SpeakerSubmission
 
 from professor.models import Question, QuestionSet, ExamSet
 
@@ -56,9 +56,17 @@ class ExamPopupView(FormView):
         qn_num = int(self.request.GET.get('qn_num', self.qn_num))
         qn_set = QuestionSet.objects.get(pk=qn_set)
         questions = qn_set.questions.all()
-        context['speaker'] = Speaker.objects.get(user=self.request.user)
-        context['qn_set'] = qn_set
+        speaker = Speaker.objects.get(user=self.request.user)
+
         context['qn'] = questions[qn_num]
+        exam_set = context['qn'].questionset_set.first().examset_set.first()
+        # que_set = context['qn'].questionset_set.first()
+        context['qn'].can_submit = not SpeakerSubmission.objects.filter(question=context['qn'],
+                                                                      speaker=speaker,
+                                                                      exam_set=exam_set).exists()
+
+        context['speaker'] = speaker
+        context['qn_set'] = qn_set
         context['qn_num'] = qn_num
         context['qn_num1'] = qn_num + 1
         context['prev_qn'] = None if qn_num == 0 else qn_num - 1
