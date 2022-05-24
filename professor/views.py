@@ -51,7 +51,6 @@ class QuestionsCreateView(AjaxableResponseMixin, CreateView):
     form_class = QuestionForm
     template_name = 'professor/question/ajax/QuestionsCreateAjax.html'
 
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['subcat'] = SubCategory.objects.all()
@@ -79,7 +78,6 @@ class QuestionsUpdateView(AjaxableResponseMixin, UpdateView):
     form_class = QuestionForm
     template_name = 'professor/question/ajax/QuestionsCreateAjax.html'
 
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['subcat'] = SubCategory.objects.all()
@@ -92,9 +90,11 @@ class QuestionsUpdateView(AjaxableResponseMixin, UpdateView):
             self.object.save()
         return redirect('professor:question_list_page')
 
+
 class QuestionDetailView(DetailView):
     model = Question
     template_name = 'professor/question/QuestionsDetailPage.html'
+
 
 def MultipleQuestionDeleteView(request):
     if request.method == 'POST':
@@ -115,9 +115,33 @@ def QuestionDeleteView(request, pk):
         return redirect("professor:question_list_page")
 
 
+class QuestionSetListView(ListView):
+    model = QuestionSet
+    template_name = 'professor/QuestionSetPage.html'
 
-def QuestionSetPage(request):
-    return render(request, 'professor/QuestionSetPage.html')
+    def get_context_data(self, *args, **kwargs):
+        context = super(QuestionSetListView, self).get_context_data(*args, **kwargs)
+        return context
+
+
+def MultipleQuestionSetDeleteView(request):
+    if request.method == 'POST':
+        try:
+            Obj = QuestionSet.objects.filter(pk__in=request.POST.getlist('questionset_ids[]'))
+            Obj.delete()
+            return redirect('professor:question_set_page')
+
+        except:
+            messages.error(request,
+                           "Cannot delete QuestionSet")
+            return JsonResponse({}, status=500)
+
+
+def QuestionSetDeleteView(request, pk):
+    if request.method == "POST":
+        QuestionSet.objects.filter(pk=pk).delete()
+        return redirect("professor:question_set_page")
+
 
 class ProfileView(TemplateView):
     template_name = "professor/profile.html"
