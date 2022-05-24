@@ -9,8 +9,12 @@ class QuestionForm(forms.ModelForm):
         exclude = ['updated_at', 'organization_code']
 
     # def __init__(self, *args, **kwargs):
-    #     self.request = kwargs.pop("request")
+    #     # self.request = kwargs.pop("request")
     #     super().__init__(*args, **kwargs)
+        # self.fields['upload_file']= forms.FileField(
+        #         label='Select a file',
+        #         help_text='max. 2 MB'
+        #     )
     #     self.fields['organization_code'].widget = forms.HiddenInput()
     #     self.fields['organization_code'].initial = self.request.user.professor.organization_code
 

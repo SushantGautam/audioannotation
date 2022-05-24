@@ -114,12 +114,9 @@
 
 
     <div class="input-group mb-3">
-      <input type="file" class="form-control" id="formFile" name="upload_file" accept="image/*" >
-{#      <label class="input-group-text" for="formFile">{% if object.upload_file %}#}
-{#        <a href="{{ object.upload_file.url }}">#}
-{#             {{ object.upload_file }}</a>#}
-{#        {% endif %}#}
-{#          </label>#}
+{#      <input type="file" class="form-control" id="formFile" name="upload_file" accept="image/*" >#}
+     {{ form.upload_file }}
+{#      <small>{{ form.upload_file|filesizeformat }}</small>#}
     </div>
 
 
@@ -276,6 +273,13 @@
 
 $(document).ready(function (){
     $('.file_upload_field').css('display', 'none');
+  {% if 'update' in request.path  %}
+    if($("#id_upload_type option:selected").val()!=='NON') {
+      $('.file_upload_field').css('display', 'flex');
+      $('.file_upload .input-group').css('display', 'inline');
+      $('#upload_file-clear_id').css('margin-left', '20px');
+    }
+  {% endif %}
 })
 
  $("#question_submit_btn").click(function(){
