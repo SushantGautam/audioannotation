@@ -202,6 +202,8 @@
   $(document).ready(function(){
   console.log('error');
   console.log('Anusha');
+  $(".prev_qn_btn").attr("disabled", "disabled")
+  $(".next_qn_btn").attr("disabled", "disabled")
   prepTimeout = setTimeout(startWave, 5000);
 
   function startWave(){
@@ -285,6 +287,8 @@
       stopRecording();
       on_form_submit();
       $("#visualizer").hide();
+      $(".prev_qn_btn").removeAttr("disabled")
+      $(".next_qn_btn").removeAttr("disabled")
       $('#recording_btn').removeClass('btn-info')
       $('#recording_btn').addClass('btn-outline-info')
     }                     
