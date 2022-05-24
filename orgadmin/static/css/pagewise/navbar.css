@@ -61,12 +61,6 @@
   gap: 1rem;
 }
 
-.navbar-profile{
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline !important;
-}
-
 .logo-section{
   display: flex;
   flex-direction: column;
