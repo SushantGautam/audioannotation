@@ -100,7 +100,7 @@
 
 
       </select>
-      <div class="question_form_category_error question_form_error_div">
+      <div class="question_form_upload_type_error question_form_error_div">
         {% trans 'Upload Type is required' %}
       </div>
     </div>
@@ -308,6 +308,13 @@ $(document).ready(function (){
         return false;
       }
 
+      if($("#id_unique_code").val().replaceAll(" ", "") === ""){
+        $("#id_unique_code").addClass('is-invalid');
+        $(".question_form_unique_code_error").show();
+        animate_and_focus("#id_unique_code")
+        return false;
+      }
+
       if($("#id_subcategory_code").val() === ""){
         $("#id_subcategory_code").addClass('is-invalid');
         $(".question_form_category_error").show();
@@ -315,10 +322,38 @@ $(document).ready(function (){
         return false;
       }
 
-      if($("#id_level").val() === ""){
+       if($("#id_level").val() === ""){
         $("#id_level").addClass('is-invalid');
         $(".question_form_level_error").show();
         animate_and_focus("#id_level")
+        return false;
+      }
+
+        if($("#id_ready_time").val() === ""){
+        $("#id_ready_time").addClass('is-invalid');
+        $(".question_form_ready_time_error").show();
+        animate_and_focus("#id_ready_time")
+        return false;
+      }
+
+         if($("#id_speaking_time").val() === ""){
+        $("#id_speaking_time").addClass('is-invalid');
+        $(".question_form_speaking_time_error").show();
+        animate_and_focus("#id_speaking_time")
+        return false;
+      }
+          if($("#id_evaluation_purpose").val() === ""){
+        $("#id_evaluation_purpose").addClass('is-invalid');
+        $(".question_form_evaluation_purpose_error").show();
+        animate_and_focus("#id_evaluation_purpose")
+        return false;
+      }
+
+
+      if($("#id_question_keywords").val() === ""){
+        $("#id_question_keywords").addClass('is-invalid');
+        $(".question_form_question_keywords_error").show();
+        animate_and_focus("#id_question_keywords")
         return false;
       }
 
