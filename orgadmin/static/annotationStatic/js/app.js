@@ -5,7 +5,6 @@ var wavesurfer; // eslint-disable-line no-var
 /* global JSONEditor */
 
 const key_audio = "key_audio_0";
-const key_annotation = "key_annotation_0";
 const key_meta = "key_meta_0";
 const item_name_annotation = "annotation";
 const item_name_meta = "meta";
@@ -420,7 +419,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            clear_annotations();
+            localforage.removeItem(key_annotation);
+            // clear_annotations();
 
             localforage
                 .removeItem(key_audio, () => {
