@@ -393,6 +393,7 @@
         const USER_ID = "{{ user.id }}";
         const STT_DATA = {{ stt_data|safe }};
         const AUDIO_FILE = "{{ audio_obj.audio_file.url }}";
+        const key_annotation = "key_annotation_{{ audio_obj.id }}";
         const SAVE_ANNOTATION_URL = "{% url 'worker:save_annotation' audio_obj.id %}";
         var csrf_token = "{{ csrf_token }}";
         const ANNOTATED_DATA = {% if annotated_data %}{{ annotated_data|safe }}{% else %}JSON.parse(JSON.stringify(STT_DATA.stt_predictions_annotations)){% endif %};
