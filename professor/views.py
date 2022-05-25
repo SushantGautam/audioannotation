@@ -124,7 +124,6 @@ class QuestionSetListView(ListView):
         return context
 
 
-
 class QuestionSetCreateView(AjaxableResponseMixin, CreateView):
     model = QuestionSet
     form_class = QuestionSetForm
@@ -133,38 +132,38 @@ class QuestionSetCreateView(AjaxableResponseMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['subcat'] = SubCategory.objects.all()
-
-        # context['mcq_list'] = CourseQuestionInfo.objects.filter(center=self.request.user.Center_Code,
-        #                                                         Question_Type='MCQ')
-        # context['saq_list'] = CourseQuestionInfo.objects.filter(center=self.request.user.Center_Code,
-        #                                                         Question_Type='SAQ')
-        #
-        # context['sel_mcq_list'] = [int(x) for x in self.request.GET['mcq_list'].split(",") if x]
-        # context['sel_saq_list'] = [int(x) for x in self.request.GET['saq_list'].split(",") if x]
-        #
-        # context['mcq_list'] = context['mcq_list'].exclude(pk__in=context['sel_mcq_list'])
-        # context['saq_list'] = context['saq_list'].exclude(pk__in=context['sel_saq_list'])
-
-        # context['organization_codes'] = Organization.objects.all()
+        context['qn_list'] = Question.objects.filter(organization_code=self.request.user.professor.organization_code)
+        # context['sel_qn_list'] = [int(x) for x in self.request.GET['qn_list'].split(",") if x]
+        # context['qn_list'] = context['qn_list'].exclude(pk__in=context['sel_qn_list'])
         return context
 
     def form_valid(self, form):
         if form.is_valid():
             self.object = form.save(commit=False)
-            self.object.organization_code = self.request.user.professor.organization_code
-            self.object.save()
-        return redirect('professor:question_list_page')
+            try:
+                selected_questions = self.request.POST.get("selected_questions").split(',')
+                print('type sel', type(selected_questions))
+                print('selected_questions', selected_questions)
+
+                self.object.organization_code = self.request.user.professor.organization_code
+                self.object.save()
+                for q in selected_questions:
+                    self.object.questions.add(Question.objects.get(pk=int(q)))
+                return redirect('professor:question_set_page')
+            except:
+                print('except')
+                self.object.delete()
+                return redirect('professor:question_set_page')
 
     def form_invalid(self, form):
         print('forn_error', form.errors)
+        # selected_questions = self.request.POST.getlist("selected_questions")
+        # print('selected_questions', selected_questions)
 
     # def get_form_kwargs(self, *args, **kwargs):
     #     kwargs =  super().get_form_kwargs(*args, **kwargs)
     #     kwargs['request'] = self.request
     #     return kwargs
-
-
-
 
 
 def MultipleQuestionSetDeleteView(request):
