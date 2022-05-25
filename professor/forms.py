@@ -24,5 +24,5 @@ class QuestionForm(forms.ModelForm):
 class QuestionSetForm(forms.ModelForm):
     class Meta:
         model = QuestionSet
-        exclude = ['updated_at']
+        exclude = ['updated_at', 'questions']
 
