@@ -192,6 +192,20 @@ function init_wavesurfer() {
         wavesurfer.on("region-play", function (region) {
             wavesurfer.play(region.start, region.end);
         });
+
+        wavesurfer.on("region-in", function (region) {
+            region.element.classList.add("active-region");
+            if (!region.id.includes("stt")) {
+                document.querySelector(`.region[data-region_id=${region.id}]`).classList.add("active-region-list");
+            }
+        });
+
+        wavesurfer.on("region-out", function (region) {
+            region.element.classList.remove("active-region");
+            if (!region.id.includes("stt")) {
+                document.querySelector(`.region[data-region_id="${region.id}"]`).classList.remove("active-region-list");
+            }
+        });
     }
 
     {
