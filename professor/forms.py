@@ -1,5 +1,5 @@
 from django import forms
-from professor.models import Question
+from professor.models import Question, QuestionSet
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -21,5 +21,8 @@ class QuestionForm(forms.ModelForm):
 
 
 
-
+class QuestionSetForm(forms.ModelForm):
+    class Meta:
+        model = QuestionSet
+        exclude = ['updated_at']
 
