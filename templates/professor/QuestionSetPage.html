@@ -25,7 +25,7 @@
 {% block content %}
 
 
-    <div class="bg-white pt-2">
+    <div class="bg-white pt-5">
 
       <h1 class="page-heading">{% trans "QuestionSet Lists" %}</h1>
 
@@ -70,7 +70,7 @@
                         <td>
                             <a class="btn btn-sm btn-secondary" id="{{ object.id }}" href="{% url 'professor:question_detail' object.id %}">{% trans "Detail" %}</a>
                         </td>
-                        <td> <a title="{% trans 'Update QuestionSet' %}" class="btn btn-sm btn-warning rounded-circle editQuestionset"  id="editQuestion_{{ object.pk }}"><i class ="text-white fa fa-pen" data-bs-toggle="modal" data-bs-target="#add_question_modal"> </i></a>
+                        <td> <a title="{% trans 'Update QuestionSet' %}" class="btn btn-sm btn-warning rounded-circle editQuestionset"  id="editQuestion_{{ object.pk }}"><i class ="text-white fa fa-pen" data-bs-toggle="modal" data-bs-target="#add_question_set_modal"> </i></a>
                             <a title="{% trans 'Delete QuestionSet' %}" class="btn btn-sm btn-danger rounded-circle deleteQuestionset confirm-delete ml-1" id="{{ object.id }}"><i class=" fa fa-trash"></i></a>
                         </td>
 
@@ -85,11 +85,11 @@
 
 
 
-    <div id="add_question_modal" class="modal fade" style="height: -webkit-fill-available;">
+    <div id="add_question_set_modal" class="modal fade" style="height: -webkit-fill-available;">
         <div class="modal-dialog modal-xl">
             <div class="modal-content" style="height: -webkit-fill-available; overflow: auto; overflow-x: hidden;">
                 <div class="modal-header">
-                    <h3 class="modal-title text-center" id="create_survey_modal_title" >
+                    <h3 class="modal-title text-center" id="create_question_set_modal_title" >
                         {% trans "QuestionSet Registration" %}
                     </h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
@@ -100,7 +100,7 @@
                     <div class="card">
 
                         <div class="card-body">
-                            <div class="question_form_div">
+                            <div class="question_set_form_div">
                             </div>
                         </div>
                     </div>
@@ -123,17 +123,17 @@
       $(".editQuestionset").click(function () {
         let object_id = $(this).attr('id').split("_")[1]
         console.log("object_ID", object_id)
-        $('.question_form_div').append('<div class="se-pre-con-ajax"></div>');
+        $('.question_set_form_div').append('<div class="se-pre-con-ajax"></div>');
         $.ajax({
           type: "GET",
           url: "{% url 'professor:question_update' pk='000123' %}".replace('000123', object_id),  // URL to your view that serves new info
           success: function (data) {
-            $(".question_form_div").html(data);
+            $(".question_set_form_div").html(data);
           },
           complete: function () {
             $(".se-pre-con-ajax").fadeOut("fast");
-            $("#create_survey_modal_title").html("")
-            $("#create_survey_modal_title").html("Update Question")
+            $("#create_question_set_modal_title").html("")
+            $("#create_question_set_modal_title").html("Update QuestionSet")
 
 
           }
@@ -145,8 +145,8 @@
       $(".register_btn").click(function () {
         // $('#QuestionRegistrationForm').empty();
   //      $('#QuestionRegistrationForm input').not(':button, :submit, :reset, :hidden').val('');
-        $("#create_survey_modal_title").html("")
-        $("#create_survey_modal_title").html("Question Registration")
+        $("#create_question_set_modal_title").html("")
+        $("#create_question_set_modal_title").html("QuestionSet  Registration")
 
 
       })
@@ -154,17 +154,17 @@
 
     })
 
-    function add_question() {
+    function add_question_set() {
 
 
-      $('.question_form_div').append('<div class="se-pre-con-ajax"></div>');
+      $('.question_set_form_div').append('<div class="se-pre-con-ajax"></div>');
       $.ajax({
         type: "GET",
-        url: "{% url 'professor:question_create_ajax' %}",  // URL to your view that serves new info
+        url: "{% url 'professor:question_set_create_ajax' %}",  // URL to your view that serves new info
         success: function (data) {
-          $(".question_form_div").html(data);
-          $("#create_survey_modal_title").html("")
-          $("#create_survey_modal_title").html("Question Registration")
+          $(".question_set_form_div").html(data);
+          $("#create_question_set_modal_title").html("")
+          $("#create_question_set_modal_title").html("QuestionSet Registration")
         },
         complete: function () {
           $(".se-pre-con-ajax").fadeOut("fast");
@@ -222,7 +222,7 @@ function delete_multi(){
 
             {
                 text: "<i class='fa fa-plus mr-2'></i> {% trans 'Register' %}",
-                action: add_question(),
+                action: add_question_set(),
                 className: "question_dt_right_btn btn-chinju-orange active btn btn-sm register_btn",
             },
             {
@@ -255,9 +255,9 @@ function delete_multi(){
              $('.question_dt_right_btn').css('margin-left', '10px');
              $('.register_btn').css('margin-right', '-22px');
               $('.register_btn').attr("data-bs-toggle", "modal");
-              $('.register_btn').attr("data-bs-target", "#add_question_modal");
+              $('.register_btn').attr("data-bs-target", "#add_question_set_modal");
             //   $('.editQuestion').attr("data-bs-toggle", "modal");
-           //   $('.editQuestion').attr("data-bs-target", "#add_question_modal");
+           //   $('.editQuestion').attr("data-bs-target", "#add_question_set_modal");
 
 
             $('.multiple-delete').parent().parent().attr({'class':'btn btn-sm btn-danger rounded-circle question_dt_right_btn  text-white mr-2 deleteCheckedQuestions',
