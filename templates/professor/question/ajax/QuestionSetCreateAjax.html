@@ -3,13 +3,16 @@
 <link href="{% static 'css/custom.css' %}" rel="stylesheet">
 <style>
   .survey_previous_questions_div {
-    border: 1px solid lightgray;
+        border: 1px solid lightgray;
     background: white;
     padding: 15px 10px 15px 10px;
     flex: 0 0 45%;
     max-width: 45%;
     height: 400px;
-   /* height: fit-content; */
+    /* height: fit-content; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
   .survey_choose_arrow_div {
     justify-content: center;
@@ -25,18 +28,44 @@
     padding: 15px 10px 15px 10px;
     flex: 0 0 45%;
     max-width: 45%;
-    /*height: fit-content; */
+    /* height: fit-content; */
     height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
   .btn-block{
       width: 100%;
-      background: brown;
-      color: white;
   }
   .survey_question_selection_boxes_row{
     height: 400px;
     margin-bottom: 25px
   }
+
+  .search-parent {
+    position: relative;
+}
+.search-icon {
+    position: absolute;
+    right: 0.5rem;
+    top: 0.5rem;
+    color: gray;
+}
+
+.qn_list_only_div>div>label>input {
+    position: relative !important;
+    display: none;
+}
+
+.qn_list_only_div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    overflow-y: auto;
+    /* height: 200px; */
+    height: 250px;
+    padding: 0.5rem 0;
+}
 
 </style>
 <form id="QuestionRegistrationForm"
@@ -45,7 +74,7 @@
   {% csrf_token %}
 
 
-  <div class="parent row">
+  <div class="parent-container row">
 
 
     <div class="survey_question_selection_div MCQ_type_select_div" data-qn_typ="MCQ">
@@ -54,7 +83,7 @@
           <h4 class="m-0">{% trans 'Question Selection' %}</h4>
         <!-- </div> -->
       </div>
-      <div class="row p-3 survey_question_selection_boxes_row">
+      <div class="row py-3 survey_question_selection_boxes_row">
         <div class="col-5 survey_previous_questions_div">
           <div class="survey_question_selection_box_side">
             <!-- <div class="ml-2 mb-3 survey_question_selection_subtitle_div"> -->
@@ -68,7 +97,7 @@
 
             <div class="qn_list_only_div">
               <div class="btn-group-toggle question_choose_qn_head_row" data-toggle="buttons">
-                <label class="btn btn-outline-secondary">
+                <label class="btn btn-sm btn-block btn-outline-secondary">
                   <input type="checkbox" autocomplete="off"> Question 1
                 </label>
               </div>
@@ -76,7 +105,7 @@
 
           </div>
           <div class="survey_question_selection_box_side_btn">
-            <button type="button" class="btn btn-chinju-gray btn-sm btn-block">
+            <button type="button" class="btn btn-dark btn-sm btn-block">
               <span>{% trans 'Select All' %}</span>
               <i class="fa fa-arrow-circle-right ml-2" aria-hidden="true"></i>
             </button>
@@ -84,12 +113,12 @@
         </div>
         <div class="col-2 survey_choose_arrow_div">
           <div>
-            <button type="button" class="btn btn-sm btn-outline-secondary mb-2 qn_to_left_btn">
+            <button type="button" class="btn btn-sm btn-outline-dark rounded-circle mb-2 qn_to_left_btn">
               <i class="fa fa-arrow-left" aria-hidden="true"></i>
             </button>
           </div>
           <div>
-            <button type="button" class="btn btn-sm btn-outline-secondary mt-2 qn_to_right_btn">
+            <button type="button" class="btn btn-sm btn-outline-dark rounded-circle mt-2 qn_to_right_btn">
               <i class="fa fa-arrow-right" aria-hidden="true"></i>
             </button>
           </div>
@@ -106,7 +135,7 @@
             </div>
             <div class="qn_list_only_div">
               <div class="btn-group-toggle question_choose_qn_head_row" data-toggle="buttons">
-                <label class="btn btn-outline-secondary">
+                <label class="btn btn-sm btn-block btn-outline-secondary">
                   <input type="checkbox" autocomplete="off">
                   <span class="badge badge-outline-secondary">1</span>
                   Question 1
@@ -115,7 +144,7 @@
             </div>
           </div>
           <div class="survey_question_selection_box_side_btn">
-            <button type="button" class="btn btn-chinju-gray btn-sm btn-block">
+            <button type="button" class="btn btn-dark btn-sm btn-block">
               <i class="fa fa-arrow-circle-left mr-2" aria-hidden="true"></i>
               <span>{% trans 'Clear All' %}</span>
             </button>
@@ -208,9 +237,9 @@
   </div>
 
 
-  <div class="row">
+  <!-- <div class="row"> -->
     <div class="col-12 text-center">
-      <button title="{% trans 'Submit created survey' %}" class="btn btn-primary mr-2" id="question_submit_btn"
+      <button title="{% trans 'Submit created survey' %}" class="btn btn-secondary" id="question_submit_btn"
               type="button">
         {% if object %}
           {% trans 'Update' %}
@@ -219,7 +248,7 @@
         {% endif %}
       </button>
     </div>
-  </div>
+  <!-- </div> -->
 
 </form>
 
