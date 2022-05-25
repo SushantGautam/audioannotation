@@ -28,23 +28,23 @@ function hms(sec) {
     return `${timeH}:${timeM}:${timeS}`;
 }
 
-function load_audio(file) {
-    if (file === null) {
-        return;
-    }
-    {
-        document.getElementById("title").innerText = `${file.name}`;
-        document.title = `${file.name} - Hachiue`;
-    }
-
-    const url_file = URL.createObjectURL(file);
-    const slider = document.querySelector("#slider");
-    slider.oninput = function () {
-        const zoomLevel = Number(slider.value);
-        wavesurfer.zoom(zoomLevel);
-    };
-    wavesurfer.load(url_file);
-}
+// function load_audio(file) {
+//     if (file === null) {
+//         return;
+//     }
+//     {
+//         document.getElementById("title").innerText = `${file.name}`;
+//         document.title = `${file.name} - Hachiue`;
+//     }
+//
+//     const url_file = URL.createObjectURL(file);
+//     const slider = document.querySelector("#slider");
+//     slider.oninput = function () {
+//         const zoomLevel = Number(slider.value);
+//         wavesurfer.zoom(zoomLevel);
+//     };
+//     wavesurfer.load(url_file);
+// }
 
 function load_files(files) {
     Array.from(files).forEach((f) => {
@@ -92,12 +92,17 @@ function init_wavesurfer() {
             waveColor: '#b5b5b5',
             height: 300,
             pixelRatio: 1,
+            // minPxPerSec: 15,
             skipLength: 0.5,
             scrollParent: true,
             normalize: true,
             minimap: true,
             backend: "MediaElement",
             cursorColor: "red",
+            // barWidth: 3,
+            // barMinHeight: 2,
+            // barHeight: 2,
+            responsive: true,
             plugins: [
                 WaveSurfer.regions.create(),
                 WaveSurfer.minimap.create({
@@ -141,9 +146,9 @@ function init_wavesurfer() {
         });
 
         loadSTTRegions();
-        localforage.getItem(key_audio, (err, data_audio) => {
-            load_audio(data_audio);
-        });
+        // localforage.getItem(key_audio, (err, data_audio) => {
+        //     load_audio(data_audio);
+        // });
     }
 
     {
@@ -298,11 +303,13 @@ function deleteRegionFunc() {
         wavesurfer.regions.list[regionId].remove();
         form.reset();
     }
+    emptyResults();
 }
 
 function deleteRegion(regionId) {
     if (regionId) {
         wavesurfer.regions.list[regionId].remove();
+        emptyResults();
         saveRegions();
         sortRegions();
     }
@@ -409,6 +416,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             wavesurfer.empty();
             wavesurfer.destroy();
+            emptyResults();
             init_wavesurfer();
         });
     }
@@ -484,6 +492,10 @@ document.addEventListener("DOMContentLoaded", function () {
         wavesurfer.playPause();
     });
 });
+
+function changePlaybackRate(elem) {
+    wavesurfer.setPlaybackRate(elem.value);
+}
 
 function createRegionsCallBack(region) {
     console.log('here', region)
@@ -684,6 +696,18 @@ function loadResults(region) {
 
     document.querySelector('.result-section .region-edit').dataset.region_id = region.id
     document.querySelector('.result-section .region-delete').dataset.region_id = region.id
+}
+
+function emptyResults() {
+    var elem = document.querySelector('.result-section .result');
+    elem.innerHTML = `
+        <div class="audio-details">
+            No Region Selected.
+        </div>
+        <div class="audio-data">
+
+        </div>
+    `;
 }
 
 function addTextToSTTRegion(region) {
