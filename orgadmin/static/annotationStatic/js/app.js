@@ -197,6 +197,7 @@ function init_wavesurfer() {
             region.element.classList.add("active-region");
             if (!region.id.includes("stt")) {
                 document.querySelector(`.region[data-region_id=${region.id}]`).classList.add("active-region-list");
+                document.querySelector(`.region[data-region_id="${region.id}"]`).scrollIntoView();
             }
         });
 
