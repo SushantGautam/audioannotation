@@ -3,7 +3,13 @@ $(document).ready(function () {
         $('.result .audio-data').addClass('d-none');
         $('.annotation-form-section').removeClass('d-none');
         var id = $('.result-section .region-edit').attr('data-region_id');
-        $('.annotation-form .annotation-text').val(wavesurfer.regions.list[id].data.text);
+
+        var text = wavesurfer.regions.list[id].data.text;
+        if (!wavesurfer.regions.list[id].data.text) {
+            text = 'stt_' + id in wavesurfer.regions.list ? wavesurfer.regions.list['stt_'+id].data.text : '';
+        }
+
+        $('.annotation-form .annotation-text').val(text);
         $('.annotation-form .region-id').val(wavesurfer.regions.list[id].id);
     });
 
@@ -38,7 +44,6 @@ $(document).ready(function () {
         localforage.getItem(key_annotation).then(function(value) {
             // This code runs once the value has been loaded
             // from the offline store.
-            console.log(value);
             $.ajax({
                 url: SAVE_ANNOTATION_URL,
                 type: 'POST',
