@@ -70,7 +70,7 @@
                         <td>
                             <a class="btn btn-sm btn-secondary" id="{{ object.id }}" href="{% url 'professor:question_detail' object.id %}">{% trans "Detail" %}</a>
                         </td>
-                        <td> <a title="{% trans 'Update Question' %}" class="btn btn-sm btn-warning rounded-circle editQuestion"  id="editQuestion_{{ object.pk }}"><i class ="text-white fa fa-pen" data-bs-toggle="modal" data-bs-target="#add_question_modal"> </i></a>
+                        <td style="width: 100px"> <a title="{% trans 'Update Question' %}" class="btn btn-sm btn-warning rounded-circle editQuestion"  id="editQuestion_{{ object.pk }}"><i class ="text-white fa fa-pen" data-bs-toggle="modal" data-bs-target="#add_question_modal"> </i></a>
 {#                            <a title="{% trans 'Delete survey' %}" class="btn btn-sm btn-chinju-gray rounded-circle ml-2" id="{{ object.id }}" href="{% url 'remove_course_from_evaluation' evaluation=object.id course_id=course.id %}"><i class="fa fa-trash"></i></a>#}
                             <a title="{% trans 'Delete Question' %}" class="btn btn-sm btn-danger rounded-circle deleteQuestion confirm-delete ml-1" id="{{ object.id }}"><i class=" fa fa-trash"></i></a>
                         </td>

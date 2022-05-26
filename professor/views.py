@@ -131,6 +131,36 @@ class QuestionSetCreateView(CreateView):
 
 
 
+class QuestionsSetUpdateView(UpdateView):
+    model = QuestionSet
+    form_class = QuestionSetForm
+    template_name = 'professor/question/ajax/QuestionSetCreateAjax.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['subcat'] = SubCategory.objects.all()
+        context['qn_list'] = Question.objects.filter(organization_code=self.request.user.professor.organization_code)
+        sel_qn_list = self.object.questions.values_list("id", flat=True)
+        context['sel_qn_list'] = sel_qn_list
+        # context['qn_list'] = context['qn_list'].exclude(pk__in=sel_qn_list)
+        return context
+
+    def form_valid(self, form):
+        if form.is_valid():
+            self.object = form.save(commit=False)
+            try:
+                selected_questions = self.request.POST.get("selected_questions").split(',')
+                print('type sel', type(selected_questions))
+                print('selected_questions', selected_questions)
+                self.object.save()
+                for q in selected_questions:
+                    self.object.questions.add(Question.objects.get(pk=int(q)))
+                return redirect('professor:question_set_page')
+            except:
+                print('except')
+                self.object.delete()
+                return redirect('professor:question_set_page')
+
 
 def MultipleQuestionSetDeleteView(request):
     if request.method == 'POST':

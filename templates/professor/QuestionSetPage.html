@@ -126,7 +126,7 @@
         $('.question_set_form_div').append('<div class="se-pre-con-ajax"></div>');
         $.ajax({
           type: "GET",
-          url: "{% url 'professor:question_update' pk='000123' %}".replace('000123', object_id),  // URL to your view that serves new info
+          url: "{% url 'professor:question_set_update' pk='000123' %}".replace('000123', object_id),  // URL to your view that serves new info
           success: function (data) {
             $(".question_set_form_div").html(data);
           },
@@ -143,8 +143,6 @@
 
 
       $(".register_btn").click(function () {
-        // $('#QuestionRegistrationForm').empty();
-  //      $('#QuestionRegistrationForm input').not(':button, :submit, :reset, :hidden').val('');
         $("#create_question_set_modal_title").html("")
         $("#create_question_set_modal_title").html("QuestionSet  Registration")
 
@@ -155,12 +153,12 @@
     })
 
     function add_question_set() {
-
+      console.log('HIIIIII')
 
       $('.question_set_form_div').append('<div class="se-pre-con-ajax"></div>');
       $.ajax({
         type: "GET",
-        url: "{% url 'professor:question_set_create_ajax' %}",  // URL to your view that serves new info
+        url: "{% url 'professor:question_set_create' %}",  // URL to your view that serves new info
         success: function (data) {
           $(".question_set_form_div").html(data);
           $("#create_question_set_modal_title").html("")
@@ -222,7 +220,7 @@ function delete_multi(){
 
             {
                 text: "<i class='fa fa-plus mr-2'></i> {% trans 'Register' %}",
-                action: add_question_set(),
+                action: add_question_set,
                 className: "question_dt_right_btn btn-chinju-orange active btn btn-sm register_btn",
             },
             {
