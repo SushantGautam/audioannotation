@@ -23,8 +23,9 @@ class AnnotationPage(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(AnnotationPage, self).get_context_data()
-
-        context['audio_obj'] = get_object_or_404(SpeakerSubmission, pk=kwargs.get('id'))
+        speakerObj = get_object_or_404(SpeakerSubmission, pk=kwargs.get('id'))
+        context['audio_obj'] = speakerObj
+        context['question_set'] = speakerObj.exam_set.question_sets.filter(questions__in=[speakerObj.question, ]).first()
         context['stt_data'] = json.dumps(context['audio_obj'].stt_data)
         annotated_data = ""
         if WorkerSubmission.objects.filter(speaker_submission__pk=kwargs.get('id'), worker=self.request.user.worker).exists():

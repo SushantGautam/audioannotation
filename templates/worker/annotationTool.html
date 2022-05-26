@@ -324,8 +324,20 @@
                 <!-- Region section starts here -->
                 <div class="region-section shadow-sm">
                     <div class="header-section flex-space">
-                        <h5 class="m-0">Regions (<span id="region-count">01</span>)</h5>
-                        <button title="Sort regions" class="sort-button btn btn-sm btn-dark"><i class="fa-solid fa-sort"></i></button>
+                        <div>
+                            <h5 class="m-0">{{ question_set.unique_code }} (<span id="region-count">01</span>)</h5>
+                        </div>
+                        {% for question in question_set.questions.all %}
+                            <div>
+                                {{ question.question_title }}
+                                {% if question.id == audio_obj.question.id %}
+                                    <div>
+                                        <button title="Sort regions" class="sort-button btn btn-sm btn-dark"><i class="fa-solid fa-sort"></i></button>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
                     </div>
 
                     <div class="region-list" id="region-list">
@@ -396,7 +408,15 @@
         const key_annotation = "key_annotation_{{ audio_obj.id }}";
         const SAVE_ANNOTATION_URL = "{% url 'worker:save_annotation' audio_obj.id %}";
         var csrf_token = "{{ csrf_token }}";
-        const ANNOTATED_DATA = {% if annotated_data %}{{ annotated_data|safe }}{% else %}JSON.parse(JSON.stringify(STT_DATA.stt_predictions_annotations)){% endif %};
+        {% if annotated_data %}
+            const ANNOTATED_DATA = {{ annotated_data|safe }}
+        {% else %}
+            var temp = JSON.parse(JSON.stringify(STT_DATA.stt_predictions_annotations));
+            Object.keys(temp).map(function (idx) {
+                temp[idx].data = {};
+            });
+            const ANNOTATED_DATA = temp;
+        {% endif %}
 
     </script>
 </footer>

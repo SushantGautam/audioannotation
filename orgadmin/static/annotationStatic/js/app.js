@@ -196,7 +196,7 @@ function init_wavesurfer() {
             region.element.classList.add("active-region");
             if (!region.id.includes("stt")) {
                 document.querySelector(`.region[data-region_id=${region.id}]`).classList.add("active-region-list");
-                document.querySelector(`.region[data-region_id="${region.id}"]`).scrollIntoView();
+                // document.querySelector(`.region[data-region_id="${region.id}"]`).scrollIntoView();
             }
         });
 
@@ -685,7 +685,16 @@ function addRegionList(region) {
 }
 
 function loadResults(region) {
+    document.querySelector('.annotation-form button[type=cancel]').click();
     var elem = document.querySelector('.result-section .result');
+    var text = region.data.text;
+    var labels = region.data.labels;
+    if (!region.data.text) {
+        text = 'stt_' + region.id in wavesurfer.regions.list ? wavesurfer.regions.list['stt_'+region.id].data.text : '';
+    }
+    if (!region.data.labels) {
+        labels = 'stt_' + region.id in wavesurfer.regions.list ? wavesurfer.regions.list['stt_'+region.id].data.labels : '';
+    }
     elem.innerHTML = `
         <div class="audio-details">
             <span class="serial-num badge rounded-pill bg-dark"></span>
@@ -695,11 +704,11 @@ function loadResults(region) {
         <div class="audio-data">
             <div class="label-parent">
                 <label>Label : </label>
-                <span class="badge rounded-pill bg-dark">${region.data.labels}</span>
+                <span class="badge rounded-pill bg-dark">${labels}</span>
             </div>
             <div class="text-parent">
                 <label>Text : </label>
-                <span class="text">${region.data.text}</span>
+                <span class="text">${text}</span>
             </div>
             
             <div class="bottom-section">
@@ -709,8 +718,12 @@ function loadResults(region) {
         </div>
     `;
 
-    document.querySelector('.result-section .region-edit').dataset.region_id = region.id
-    document.querySelector('.result-section .region-delete').dataset.region_id = region.id
+    document.querySelector('.result-section .region-edit').dataset.region_id = region.id;
+    document.querySelector('.result-section .region-delete').dataset.region_id = region.id;
+
+    if (!region.data.text) {
+        document.querySelector('.result-section .region-edit').click();
+    }
 }
 
 function emptyResults() {

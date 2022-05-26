@@ -44,7 +44,8 @@
 
 </form>
 <div class="row" style="padding: 12px">
-  <div class="col-12" style="background-color: #f3f3f3; padding: 10px">
+  <div class="{% if qn.upload_type == "AUD" %} col-9 {% else %} col-12 {% endif %}"
+       style="background-color: #f3f3f3; padding: 10px">
     {% for qn in qn_set.questions.all %}
 
       <button type="button"
@@ -59,6 +60,15 @@
 
     {% endfor %}
   </div>
+  {% if qn.upload_type == "AUD" %}
+    <div class="col-3" style="background-color: #f3f3f3; padding: 10px; display: flex">
+      <div class="slidecontainer volume_slider" style="margin: auto;">
+        <input type="range" min="1" max="100" value="100" class="slider"
+               style="width: 90%"
+               id="volume_slider_input">
+      </div>
+    </div>
+  {% endif %}
 </div>
 
 <div class="row" style="height: 60%">
@@ -91,6 +101,13 @@
         <div class="progress" style="width: 50%; margin: auto;">
           <div class="progress-bar audio_progress" role="progressbar" aria-valuenow="0"
                aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+        </div>
+      {% endif %}
+      {% if qn.upload_type == "IMG" %}
+        <div>
+          <img src="{{ qn.upload_file.url }}"
+               style="width: 70%"
+               alt="question image">
         </div>
       {% endif %}
 
@@ -225,6 +242,10 @@
     if (seconds < 10) {seconds = "0"+seconds;}
     return minutes+':'+seconds;
   }
+
+  $(".btn-close").click(function(){
+    location.reload();
+  });
 
 </script>
 <!--Recorder testing from here-->
@@ -380,6 +401,7 @@
 
       startPreparationTimer();
       {% if qn.upload_type == "AUD" %}
+        $("#qn_audio").prop("volume", 1.0);
         audioTimeLimit = Math.ceil(document.getElementById("qn_audio").duration);
         audioTimePassed = 0;
         audioTimeLeft = audioTimeLimit;
@@ -409,7 +431,14 @@
         }
 
         startAudioPlayerTimer();
-        $('#qn_audio').get(0).play();
+        $("#qn_audio").get(0).play();
+
+        $("#volume_slider_input").on( "input", function() {
+          // use ui.value to get the current value
+          let volume = parseFloat($(this).val()) / 100.0;
+          $("#qn_audio").prop("volume", volume);
+        });
+
       {% endif %}
 
     {% endif %}
