@@ -83,7 +83,7 @@ function load_files(files) {
     });
 }
 
-
+var regionCreated = false;
 function init_wavesurfer() {
     {
         wavesurfer = WaveSurfer.create({
@@ -152,7 +152,6 @@ function init_wavesurfer() {
 
     {
         // Regions
-
         wavesurfer.on("ready", function () {
             wavesurfer.enableDragSelection({
                 color: defaultColor(0.2),
@@ -169,12 +168,21 @@ function init_wavesurfer() {
             // Play on click, loop on shift click
             e.shiftKey ? region.playLoop() : region.play();
         });
+        wavesurfer.on("region-mouseenter", (region) => {
+            old_region = region;
+        });
+
+        wavesurfer.on("region-mouseleave", (region) => {
+            old_region = null;
+        });
+
         wavesurfer.on("region-click", editAnnotation);
         wavesurfer.on("region-click", (region) => {
             loadResults(region);
         });
 
         wavesurfer.on("region-created", function (region) {
+            regionCreated = true;
             appendDeleteIcon(region.id);
             var text_region = document.createElement('div');
             text_region.className = 'region-text';
@@ -182,10 +190,25 @@ function init_wavesurfer() {
 
             // validateRegion(region);
         });
-        wavesurfer.on("region-updated", saveRegions);
+        // wavesurfer.on("region-updated", saveRegions);
+
         wavesurfer.on("region-update-end", (region) => {
-            validateRegion(region);
-        });
+            var isValid = validateRegion(region);
+            if (isValid) {
+                saveRegions();
+            } else {
+                // wavesurfer.regions.list[region.id].remove();
+                deleteRegion(region.id);
+                // If Not new region, delete original region, then create new region in old place.
+                if (!regionCreated) {
+                    localforage.getItem(key_annotation, (err, data) => {
+                        var data = data.filter( i => i.id == region.id );
+                        loadRegions(data);
+                    });
+                }
+            }
+            regionCreated = false;
+         });
         wavesurfer.on("region-removed", saveRegions);
 
         wavesurfer.on("region-play", function (region) {
@@ -547,6 +570,8 @@ function loadRegions(regions) {
         addTextToAnnotationRegion(region);
     });
     document.getElementById('region-count').innerText = regions.length
+    regionCreated = false;
+    saveRegions();
 }
 
 function randomColor(alpha) {
@@ -782,14 +807,18 @@ function validateRegion(region) {
     var value = wavesurfer.regions.list;
     Object.keys(value).filter((key) => !key.includes('stt_')).reduce(function (r, e) {
         // Overlap condition
-        if ((value[e].start > region.start && value[e].start < region.end) || (value[e].end > region.start && value[e].end < region.end)) {
+        // If region right end is inside value and left is not overllaped.
+        var leftCondition = (value[e].start > region.start && value[e].start < region.end);
+        // If region left end is inside value and right is outside.
+        var rightCondition = (value[e].end > region.start && value[e].end < region.end);
+        // if engulfed.
+        var midCondition = (value[e].start < region.start && value[e].end > region.end);
+        if (leftCondition || rightCondition || midCondition)  {
             overlap = true;
             return;
         }
         return r;
     }, {})
 
-    if (overlap) {
-        deleteRegion(region.id);
-    }
+    return overlap ? false : true;
 }

@@ -28,6 +28,8 @@ $(document).ready(function () {
         });
         $('.result .text').html(region.data.text);
         changeAnnotationText(region);
+        // Save annotated data to local database.
+        saveRegions();
     });
 
     $('.annotation-form button[type=cancel]').on('click', (e) => {
