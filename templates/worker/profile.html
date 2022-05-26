@@ -1,0 +1,83 @@
+{% extends 'orgadmin/base.html' %}
+{% load static %} 
+
+{% block styles %}
+    <link href="{% static 'css/pagewise/profile.css' %}" rel="stylesheet">
+{% endblock %}
+ 
+{% block content %}
+    <div class="header-section w-60 py-3">
+        <h2 class="page-heading">Profile Information</h2>
+        <button title="Edit Profile" class="btn btn-sm btn-secondary rounded-circle"><i class="fa-solid fa-pen"></i></button>
+    </div>
+    <section class="profile-section w-60">
+
+        <div class="details-parent shadow-sm">
+            <div class="text-center">
+                <img src="{% static 'img/user.png' %}" class="rounded-circle" style="width: 10rem;height: 10rem;" alt="">
+                <h4>FirstName Lastname</h4>
+            </div>
+            <div class="detail-row">
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-id-badge"></i>Speaker ID  </div>
+                    <div class="value">9129274</div>
+                </div>
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-calendar-days"></i>Date of Birth </div>
+                    <div class="value">1888-12-12</div>
+                </div>
+            </div>
+            <div class="detail-row">
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-signature"></i>Name</div>
+                    <div class="value">Jeremy Lin</div>
+                </div>
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-arrow-down-1-9"></i></i>Resident Reg. Num</div>
+                    <div class="value">7851351263</div>
+                </div>
+            </div>
+            <div class="detail-row">
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-location-dot"></i></i>Address</div>
+                    <div class="value">Kathmandu , Nepal</div>
+                </div>
+                <!-- <div class="detail">
+                    <div class="label"><i class="fa-solid fa-graduation-cap"></i>Education</div>
+                    <div class="value">Bachelors Degree</div>
+                </div> -->
+            </div>
+            <div class="detail-row">
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-phone"></i>Phone Number</div>
+                    <div class="value">98238757394</div>
+                </div>
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-envelope"></i></i>Whale Address</div>
+                    <div class="value">whale@whalespace.org</div>
+                </div>
+            </div>
+            <div class="detail-row">
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-building-columns"></i></i>Bank name</div>
+                    <div class="value">Standard Chartered</div>
+                </div>
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-hashtag"></i>Account Number</div>
+                    <div class="value">1500983949003830</div>
+                </div>
+            </div>
+            <div class="detail-row">
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-graduation-cap"></i>Education</div>
+                    <div class="value">Bachelor's Degree</div>
+                </div>
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-book-bookmark"></i>Major</div>
+                    <div class="value">Computer Science</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+{% endblock %}
