@@ -324,8 +324,20 @@
                 <!-- Region section starts here -->
                 <div class="region-section shadow-sm">
                     <div class="header-section flex-space">
-                        <h5 class="m-0">Regions (<span id="region-count">01</span>)</h5>
-                        <button title="Sort regions" class="sort-button btn btn-sm btn-dark"><i class="fa-solid fa-sort"></i></button>
+                        <div>
+                            <h5 class="m-0">{{ question_set.unique_code }} (<span id="region-count">01</span>)</h5>
+                        </div>
+                        {% for question in question_set.questions.all %}
+                            <div>
+                                {{ question.question_title }}
+                                {% if question.id == audio_obj.question.id %}
+                                    <div>
+                                        <button title="Sort regions" class="sort-button btn btn-sm btn-dark"><i class="fa-solid fa-sort"></i></button>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
                     </div>
 
                     <div class="region-list" id="region-list">

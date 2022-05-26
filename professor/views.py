@@ -10,32 +10,6 @@ from professor.forms import QuestionForm, QuestionSetForm
 from professor.models import Question, QuestionSet, SubCategory
 
 
-class AjaxableResponseMixin:
-    """
-    Mixin to add AJAX support to a form.
-    Must be used with an object-based FormView (e.g. CreateView)
-    """
-
-    def form_invalid(self, form):
-        response = super().form_invalid(form)
-        if self.request.is_ajax():
-            return JsonResponse(form.errors, status=400)
-        else:
-            return response
-
-    def form_valid(self, form):
-        # We make sure to call the parent's form_valid() method because
-        # it might do some processing (in the case of CreateView, it will
-        # call form.save() for example).
-        response = super().form_valid(form)
-        if self.request.is_ajax():
-            data = {
-                'pk': self.object.pk,
-            }
-            return JsonResponse(data)
-        else:
-            return response
-
 
 def homepage(request):
     return render(request, 'professor/homepage.html')
@@ -46,7 +20,7 @@ class QuestionListPage(ListView):
     model = Question
 
 
-class QuestionsCreateView(AjaxableResponseMixin, CreateView):
+class QuestionsCreateView(CreateView):
     model = Question
     form_class = QuestionForm
     template_name = 'professor/question/ajax/QuestionsCreateAjax.html'
@@ -73,7 +47,7 @@ class QuestionsCreateView(AjaxableResponseMixin, CreateView):
     #     return kwargs
 
 
-class QuestionsUpdateView(AjaxableResponseMixin, UpdateView):
+class QuestionsUpdateView(UpdateView):
     model = Question
     form_class = QuestionForm
     template_name = 'professor/question/ajax/QuestionsCreateAjax.html'
@@ -124,7 +98,7 @@ class QuestionSetListView(ListView):
         return context
 
 
-class QuestionSetCreateView(AjaxableResponseMixin, CreateView):
+class QuestionSetCreateView(CreateView):
     model = QuestionSet
     form_class = QuestionSetForm
     template_name = 'professor/question/ajax/QuestionSetCreateAjax.html'
@@ -155,15 +129,37 @@ class QuestionSetCreateView(AjaxableResponseMixin, CreateView):
                 self.object.delete()
                 return redirect('professor:question_set_page')
 
-    def form_invalid(self, form):
-        print('forn_error', form.errors)
-        # selected_questions = self.request.POST.getlist("selected_questions")
-        # print('selected_questions', selected_questions)
 
-    # def get_form_kwargs(self, *args, **kwargs):
-    #     kwargs =  super().get_form_kwargs(*args, **kwargs)
-    #     kwargs['request'] = self.request
-    #     return kwargs
+
+class QuestionsSetUpdateView(UpdateView):
+    model = QuestionSet
+    form_class = QuestionSetForm
+    template_name = 'professor/question/ajax/QuestionSetCreateAjax.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['subcat'] = SubCategory.objects.all()
+        context['qn_list'] = Question.objects.filter(organization_code=self.request.user.professor.organization_code)
+        sel_qn_list = self.object.questions.values_list("id", flat=True)
+        context['sel_qn_list'] = sel_qn_list
+        # context['qn_list'] = context['qn_list'].exclude(pk__in=sel_qn_list)
+        return context
+
+    def form_valid(self, form):
+        if form.is_valid():
+            self.object = form.save(commit=False)
+            try:
+                selected_questions = self.request.POST.get("selected_questions").split(',')
+                print('type sel', type(selected_questions))
+                print('selected_questions', selected_questions)
+                self.object.save()
+                for q in selected_questions:
+                    self.object.questions.add(Question.objects.get(pk=int(q)))
+                return redirect('professor:question_set_page')
+            except:
+                print('except')
+                self.object.delete()
+                return redirect('professor:question_set_page')
 
 
 def MultipleQuestionSetDeleteView(request):
