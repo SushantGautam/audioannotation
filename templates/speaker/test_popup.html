@@ -81,9 +81,26 @@
     height: 80%;
     text-align: center;
     justify-content: center;
-    display: flex;
     border: 1px solid black;">
       <span style="margin: auto;">{{ qn.description }}</span>
+
+      {% if qn.upload_type == "AUD" %}
+        <audio id="qn_audio">
+          <source src="{{ qn.upload_file.url }}" type="audio/mpeg">
+        </audio>
+        <div class="progress" style="width: 50%; margin: auto;">
+          <div class="progress-bar audio_progress" role="progressbar" aria-valuenow="0"
+               aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+        </div>
+      {% endif %}
+    {% if qn.upload_type == "IMG" %}
+      <div>
+        <img src="{{ qn.upload_file.url }}"
+             style="width: 70%"
+             alt="question image">
+      </div>
+    {% endif %}
+
     </div>
     {#    </div>#}
 
@@ -216,6 +233,10 @@
     return minutes+':'+seconds;
   }
 
+  $(".btn-close").click(function(){
+    location.reload();
+  });
+
 </script>
 <!--Recorder testing from here-->
 <script>
@@ -239,7 +260,6 @@
       $('#prep_btn').removeClass('btn-outline-info');
       $('#prep_btn').addClass('btn-info');
       // prepTimeout = setTimeout(startWave, 5000);
-
 
       function startPreparationTimer(){
         if (!(typeof prepInterval === 'undefined')){
@@ -370,6 +390,38 @@
       }
 
       startPreparationTimer();
+      {% if qn.upload_type == "AUD" %}
+        audioTimeLimit = Math.ceil(document.getElementById("qn_audio").duration);
+        audioTimePassed = 0;
+        audioTimeLeft = audioTimeLimit;
+
+        function startAudioPlayerTimer(){
+          if (!(typeof audioInterval === 'undefined')){
+            clearInterval(audioInterval);
+          }
+
+          audioInterval = setInterval(() => {
+            audioTimePassed = audioTimePassed + 1;
+            audioTimeLeft = audioTimeLeft - audioTimePassed;
+            if (audioTimeLeft <= 0) {
+              clearInterval(audioInterval);
+
+              // startWave();
+            }
+            // $(".prep_timer_div").html(`${toHHMMSS(prepTimeLeft)}`);
+            audioTimeLimit = Math.ceil(document.getElementById("qn_audio").duration);
+            audioPercent = parseInt(audioTimePassed * 100 / audioTimeLimit );
+            $(".audio_progress").attr("aria-valuenow", String(audioPercent));
+            $(".audio_progress").css("width", String(audioPercent)+"%");
+
+            // debugger;
+
+          }, 1000);
+        }
+
+        startAudioPlayerTimer();
+        $('#qn_audio').get(0).play();
+      {% endif %}
 
     {% endif %}
   });
