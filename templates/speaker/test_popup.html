@@ -132,10 +132,18 @@
       <button type="button" id="stopButton" disabled>Stop</button>
     </div> -->
 
-    <button id='prep_btn' type="button" style="margin: auto; border-radius: 50%"
-            class="btn btn-outline-info">{% trans 'Preparation' %}</button>
-    <button id='recording_btn' type="button"  style="margin: auto; border-radius: 50%"
-            class="btn btn-outline-info ml-5">{% trans 'Recording' %}</button>
+    <div class="prep_button_div">
+      <button id='prep_btn' type="button" style="margin: auto; border-radius: 50%"
+              class="btn btn-outline-info">{% trans 'Preparation' %}</button>
+      <div class="prep_timer_div"></div>
+    </div>
+    <div class="rec_button_div">
+      <button id='recording_btn' type="button"  style="margin: auto; border-radius: 50%"
+              class="btn btn-outline-info ml-5">{% trans 'Recording' %}</button>
+      <div class="rec_timer_div"></div>
+    </div>
+
+
     {#      </div>#}
 
   </div>
@@ -196,6 +204,18 @@
     });
   }
 
+  function toHHMMSS (ip_sec) {
+    var sec_num = parseInt(ip_sec, 10); // don't forget the second param
+    var hours   = Math.floor(sec_num / 3600);
+    var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+    var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+    if (hours   < 10) {hours   = "0"+hours;}
+    if (minutes < 10) {minutes = "0"+minutes;}
+    if (seconds < 10) {seconds = "0"+seconds;}
+    return minutes+':'+seconds;
+  }
+
 </script>
 <!--Recorder testing from here-->
 <script>
@@ -203,12 +223,41 @@
 
     {% if qn.can_submit %}
 
+      prepTimeLimit = parseInt("{{ qn.ready_time }}");
+      prepTimePassed = 0;
+      prepTimeLeft = prepTimeLimit;
+      recTimeLimit = parseInt("{{ qn.speaking_time }}");
+      recTimePassed = 0;
+      recTimeLeft = recTimeLimit;
+      $(".prep_timer_div").html(`${toHHMMSS(prepTimeLeft)}`);
+      $(".rec_timer_div").html(`${toHHMMSS(recTimeLeft)}`);
+
+
       $(".prev_qn_btn").attr("disabled", "disabled");
       $(".next_qn_btn").attr("disabled", "disabled");
       $(".recorder_wave h1").html("{% trans 'Preparation' %}...");
       $('#prep_btn').removeClass('btn-outline-info');
       $('#prep_btn').addClass('btn-info');
-      prepTimeout = setTimeout(startWave, 5000);
+      // prepTimeout = setTimeout(startWave, 5000);
+
+
+      function startPreparationTimer(){
+        if (!(typeof prepInterval === 'undefined')){
+          clearInterval(prepInterval);
+        }
+
+        prepInterval = setInterval(() => {
+          prepTimePassed = prepTimePassed + 1;
+          prepTimeLeft = prepTimeLimit - prepTimePassed;
+          if (prepTimeLeft <= 0) {
+            clearInterval(prepInterval);
+            startWave();
+          }
+          $(".prep_timer_div").html(`${toHHMMSS(prepTimeLeft)}`);
+          // debugger;
+
+        }, 1000);
+      }
 
       function startWave(){
         $('#prep_btn').removeClass('btn-info');
@@ -284,7 +333,10 @@
         start_wave();
         startRecording();
         // rec.record();
-        setTimeout(stopWave, 7000)
+        //setTimeout(stopWave, 7000)
+
+        startRecordTimer();
+
         function stopWave(){
           record_state = false;
           start_wave();
@@ -296,7 +348,29 @@
           $('#recording_btn').removeClass('btn-info')
           $('#recording_btn').addClass('btn-outline-info')
         }
+
+        function startRecordTimer(){
+          if (!(typeof recInterval === 'undefined')){
+            clearInterval(recInterval);
+          }
+
+          recInterval = setInterval(() => {
+            recTimePassed = recTimePassed + 1;
+            recTimeLeft = recTimeLimit - recTimePassed;
+            if (recTimeLeft <= 0) {
+              clearInterval(recInterval);
+              stopWave();
+            }
+            $(".rec_timer_div").html(`${toHHMMSS(recTimeLeft)}`);
+            // debugger;
+
+          }, 1000);
+        }
+
       }
+
+      startPreparationTimer();
+
     {% endif %}
   });
 
