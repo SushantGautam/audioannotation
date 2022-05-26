@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.naver',
+    'whalespace',
     'orgadmin',
     'professor',
     'speaker',
@@ -156,6 +156,12 @@ SITE_ID = 1
 
 SOCIALACCOUNT_STORE_TOKENS = True
 ACCOUNT_EMAIL_VERIFICATION = 'none'
+# SOCIALACCOUNT_PROVIDERS = {
+#     'whalespace': {
+#         'SCOPE': ['profile', 'email'],
+#         # 'AUTH_PARAMS': {'access_type': 'online'}
+#     }
+# }
 
 # Google analytics
 GA_TRACKING_ID = env('GA_TRACKING_ID')
