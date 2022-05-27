@@ -33,7 +33,7 @@ class QuestionSetListView(ListView):
     model = SpeakerSubmission
 
     def get_queryset(self):
-        self.object_list = SpeakerSubmission.objects.all()
+        return SpeakerSubmission.objects.all()
 
 
 class AnnotationPage(TemplateView):
