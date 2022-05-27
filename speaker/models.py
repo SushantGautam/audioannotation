@@ -8,7 +8,6 @@ from speaker.choices import GENDER_CHOICES, COUNTRY_CHOICES, LANGUAGE_CHOICES, P
 
 
 class Speaker(BaseUserModel):
-    birth_date = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='F')
     nationality = models.CharField(max_length=2, choices=COUNTRY_CHOICES, default='KR')
     language = models.CharField(max_length=2, choices=LANGUAGE_CHOICES, default='ko')

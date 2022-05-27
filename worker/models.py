@@ -3,6 +3,10 @@ from django.db import models
 from orgadmin.models import BaseUserModel
 
 class Worker(BaseUserModel):
+    bank_name = models.CharField(max_length=256, null=True, blank=True)
+    bank_account_number = models.CharField(max_length=256, null=True, blank=True)
+    education_level = models.CharField(max_length=256, null=True, blank=True)
+    education_field = models.CharField(max_length=256, null=True, blank=True)
     class Meta:
         verbose_name = 'Worker'
         verbose_name_plural = 'Workers'

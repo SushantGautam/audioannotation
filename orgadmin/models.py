@@ -16,6 +16,10 @@ class BaseUserModel(models.Model):
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    permanent_address = models.CharField(max_length=256, null=True, blank=True)
+    current_address = models.CharField(max_length=256, null=True, blank=True)
+    birth_date = models.DateField(null=True, blank=True)
+    phone_number = models.CharField(max_length=256, null=True, blank=True)
     organization_code = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
     def __str__(self):
