@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'speaker',
     'worker',
     'rosetta',
+    'import_export',
     'fontawesomefree',
 ]
 
