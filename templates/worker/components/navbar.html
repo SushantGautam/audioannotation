@@ -1,0 +1,11 @@
+{% load static %}
+{% load i18n %}
+
+<div class="mytabs">
+    <input type="radio" id="home-tab" name="mytabs" checked>
+    <label for="home-tab">{% trans 'Home' %}</label>
+    <div class="tab" id="home-tab-div">
+        <a href="{% url 'worker:homepage' %}" class="tab-item active sadsa">{% trans 'Dashboard' %}</a>
+        <a href="{% url 'worker:profile' %}" class="tab-item">{% trans 'Profile' %}</a>
+    </div>
+</div>
