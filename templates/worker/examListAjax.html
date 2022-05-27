@@ -17,20 +17,26 @@
         </tr>
         </thead>
         <tbody>
-            {% for object in object_list %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ object.speaker.user.username }}</td>
-                    <td>{{ object.speaker.nationality }}</td>
-                    <td>{{ object.exam_set.exam_name }}</td>
-                    <td>{{ object.exam_set.question_sets.first.subcategory_code.name }}</td>
-                    <td>{{ object.exam_set.difficulty_level }}</td>
-                    <td>{{ object }}</td>
-                    <td>{{ object }}</td>
-                    <td>{{ object }}</td>
-                    <td>{{ object }}</td>
-                </tr>
-            {% endfor %}
+        {% for object in object_list %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ object.speaker.user.username }}</td>
+                <td>{{ object.speaker.nationality }}</td>
+                <td>{{ object.exam_set.exam_name }}</td>
+                <td>{{ object.exam_set.question_sets.first.subcategory_code.name }}</td>
+                <td>{{ object.exam_set.difficulty_level }}</td>
+                <td>{{ object }}</td>
+                <td>{{ object }}</td>
+                <td>{{ object }}</td>
+                <td>{{ object }}</td>
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('.table').DataTable();
+    });
+</script>
