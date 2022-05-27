@@ -8,4 +8,10 @@
         <a href="{% url 'worker:homepage' %}" class="tab-item active sadsa">{% trans 'Dashboard' %}</a>
         <a href="{% url 'worker:profile' %}" class="tab-item">{% trans 'Profile' %}</a>
     </div>
+
+    <input type="radio" id="exam-tab" name="mytabs">
+    <label for="exam-tab">{% trans 'Exams' %}</label>
+    <div class="tab" id="exam-tab-div">
+        <a href="{% url 'worker:homepage' %}" class="tab-item active sadsa">{% trans 'Exams' %}</a>
+    </div>
 </div>
