@@ -1,0 +1,36 @@
+{% load i18n %}
+
+<div class="table-responsive questionset_table" id="questionset_table" style="border: none; overflow-x: unset">
+    <table class="table pt-2" cellspacing="0" id="questionset_list_table">
+        <thead class="">
+        <tr class="tableTitleRow">
+            <th>{% trans "S. No." %}</th>
+            <th>{% trans "Speaker ID" %}</th>
+            <th>{% trans "Nationality" %}</th>
+            <th>{% trans "Exam Name" %}</th>
+            <th>{% trans "Type" %}</th>
+            <th>{% trans "Difficulty level" %}</th>
+            <th>{% trans "Question Set ID" %}</th>
+            <th>{% trans "No. of Questions" %}</th>
+            <th>{% trans "Status" %}</th>
+            <th>{% trans "Actions" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for object in object_list %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ object.speaker.user.username }}</td>
+                    <td>{{ object.speaker.nationality }}</td>
+                    <td>{{ object.exam_set.exam_name }}</td>
+                    <td>{{ object.exam_set.question_sets.first.subcategory_code.name }}</td>
+                    <td>{{ object.exam_set.difficulty_level }}</td>
+                    <td>{{ object }}</td>
+                    <td>{{ object }}</td>
+                    <td>{{ object }}</td>
+                    <td>{{ object }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,254 @@
+{% extends "worker/base.html" %}
+{% load static %}
+{% load i18n %}
+{% block styles %}
+    <style>
+        .question_dt_right_btn {
+            float: right;
+        }
+
+        .dataTables_filter svg {
+            z-index: 100;
+            transform: translateX(-5px);
+        }
+
+        .dataTables_filter input {
+            transform: translateX(20px);
+
+        }
+
+        .status-text {
+            cursor: auto;
+            text-decoration: none;
+        }
+
+
+    </style>
+{% endblock styles %}
+{% block content %}
+
+
+    <div class="bg-white pt-5">
+
+        <h1 class="page-heading">{% trans "QuestionSet Lists" %} {{ object_list }}</h1>
+
+        <div class="table-responsive questionset_table" id="questionset_table" style="border: none; overflow-x: unset">
+            <table class="table pt-2" cellspacing="0" id="questionset_list_table">
+                <thead class="">
+                <tr class="tableTitleRow">
+                    <th>
+                        <input type="checkbox" class="CheckAll">
+                    </th>
+                    <th>{% trans "S. No." %}</th>
+                    <th>{% trans "Unique Code" %}</th>
+                    <th>{% trans "Description" %}</th>
+                    <th>{% trans "Difficulty level" %}</th>
+                    <th>{% trans "SubCategory" %}</th>
+                    <th>{% trans "No. of Questions" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Details" %}</th>
+                    <th>{% trans "Actions" %}</th>
+                </tr>
+
+                </thead>
+                <tbody>
+
+                {% for object in object_list %}
+                    <tr>
+                        <td><input type="checkbox" class="questionCheckbox" value="{{ object.id }}">
+                        </td>
+                        <td> {{ forloop.counter }}</td>
+                        <td> {{ object.unique_code }}</td>
+                        <td> {{ object.description|truncatechars:40 }}</td>
+                        <td> {{ object.difficulty_level }}</td>
+                        <td>{{ object.subcategory_code.name }}</td>
+                        <td>{{ object.questions.count }}</td>
+
+                        {% if object.is_active %}
+                            <td><span class="btn btn-sm btn-success"><a class="text-white status-text">Active</a></span>
+                            </td>
+                        {% else %}
+                            <td><span class="btn btn-sm btn-secondary"><a
+                                    class="text-white status-text">Inactive</a></span></td>
+                        {% endif %}
+
+                        <td>
+                            <a class="btn btn-sm btn-secondary" id="{{ object.id }}"
+                               href="{% url 'professor:question_detail' object.id %}">{% trans "Detail" %}</a>
+                        </td>
+                        <td><a title="{% trans 'Update QuestionSet' %}"
+                               class="btn btn-sm btn-warning rounded-circle editQuestionset"
+                               id="editQuestion_{{ object.pk }}"><i class="text-white fa fa-pen" data-bs-toggle="modal"
+                                                                    data-bs-target="#add_question_set_modal"> </i></a>
+                            <a title="{% trans 'Delete QuestionSet' %}"
+                               class="btn btn-sm btn-danger rounded-circle deleteQuestionset confirm-delete ml-1"
+                               id="{{ object.id }}"><i class=" fa fa-trash"></i></a>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+            <span class="checkboxCheckedLength"></span>
+        </div>
+
+
+        <div id="add_question_set_modal" class="modal fade" style="height: -webkit-fill-available;">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content" style="height: -webkit-fill-available; overflow: auto; overflow-x: hidden;">
+                    <div class="modal-header">
+                        <h3 class="modal-title text-center" id="create_question_set_modal_title">
+                            {% trans "QuestionSet Registration" %}
+                        </h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="ti-close"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="QuestionForm">
+                        <div class="card">
+
+                            <div class="card-body">
+                                <div class="question_set_form_div">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    <script>
+
+        $(document).ready(function () {
+
+            $(".editQuestionset").click(function () {
+                let object_id = $(this).attr('id').split("_")[1]
+                console.log("object_ID", object_id)
+                $('.question_set_form_div').append('<div class="se-pre-con-ajax"></div>');
+                $.ajax({
+                    type: "GET",
+                    url: "{% url 'professor:question_set_update' pk='000123' %}".replace('000123', object_id),  // URL to your view that serves new info
+                    success: function (data) {
+                        $(".question_set_form_div").html(data);
+                    },
+                    complete: function () {
+                        $(".se-pre-con-ajax").fadeOut("fast");
+                        $("#create_question_set_modal_title").html("")
+                        $("#create_question_set_modal_title").html("Update QuestionSet")
+
+
+                    }
+                });
+
+            })
+
+
+            $(".register_btn").click(function () {
+                $("#create_question_set_modal_title").html("")
+                $("#create_question_set_modal_title").html("QuestionSet  Registration")
+
+
+            })
+
+
+        })
+
+        function add_question_set() {
+            console.log('HIIIIII')
+
+            $('.question_set_form_div').append('<div class="se-pre-con-ajax"></div>');
+            $.ajax({
+                type: "GET",
+                url: "{% url 'professor:question_set_create' %}",  // URL to your view that serves new info
+                success: function (data) {
+                    $(".question_set_form_div").html(data);
+                    $("#create_question_set_modal_title").html("")
+                    $("#create_question_set_modal_title").html("QuestionSet Registration")
+                },
+                complete: function () {
+                    $(".se-pre-con-ajax").fadeOut("fast");
+                    $(".question_form_error_div").hide();
+
+
+                }
+            });
+        }
+
+    </script>
+
+    <script>
+        $('#questionset_list_table').DataTable({
+            dom: 'lfBtp',
+            responsive: true,
+            pagingType: "full_numbers",
+            language: {
+                search: '_INPUT_',
+                searchPlaceholder: "{% trans 'Search' %}...",
+                lengthMenu: "&nbsp; _MENU_"
+            },
+
+
+            buttons: [
+
+                {
+                    text: "<i class='fa fa-plus mr-2'></i> {% trans 'Register' %}",
+                    action: add_question_set,
+                    className: "question_dt_right_btn btn-chinju-orange active btn btn-sm register_btn",
+                },
+                {
+                    text: "<i class='fa fa-trash  multiple-delete'></i>",
+                    className: "question_dt_right_btn ",
+                },
+            ],
+
+
+            oLanguage: {
+                oPaginate: {
+                    sFirst: '<i class="fas fa-angle-double-left"></i>',
+                    sNext: '<i class="fas fa-angle-right"></i>',
+                    sPrevious: '<i class="fas fa-angle-left"></i>',
+                    sLast: '<i class="fas fa-angle-double-right"></i>',
+                }
+
+            },
+            initComplete: function () {
+                $('.dataTables_filter').addClass('question_dt_right_btn');
+                $('.dataTables_length').addClass('question_dt_right_btn');
+                //  $('.dataTables_filter input').removeClass('form-control-sm');
+                $('.dataTables_filter input').after(`<span class="fa fa-search search-input-icon pr-5"></span>`);
+                $('.dataTables_length select').removeClass('custom-select-sm');
+                $('.dt-buttons button').addClass('btn-gray text-white');
+                $('.dt-buttons').removeClass('btn-group');
+                $('.question_dt_right_btn').css('margin-left', '10px');
+                $('.register_btn').css('margin-right', '-22px');
+                $('.register_btn').attr("data-bs-toggle", "modal");
+                $('.register_btn').attr("data-bs-target", "#add_question_set_modal");
+
+            },
+            stateSave: false,
+            responsive: true,
+            processing: true,
+
+            fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+
+                var index = iDisplayIndexFull + 1;
+                $("td:eq(1)", nRow).html(index);
+                return nRow;
+            },
+            columnDefs: [
+                {orderable: false, targets: [0, 7, 8]}
+            ],
+        });
+
+
+    </script>
+
+{% endblock scripts %}

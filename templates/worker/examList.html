@@ -1,0 +1,78 @@
+{% extends "worker/base.html" %}
+{% load static %}
+{% load i18n %}
+{% block styles %}
+
+{% endblock styles %}
+{% block content %}
+    <div class="bg-white pt-5">
+        <h3 class="page-heading">{% trans "Search Exams" %}</h3>
+        <div class="search-form">
+            <div class="parent row">
+                <div class="title col-4">{% trans 'Territories' %} *</div>
+                <div class="value col-8">
+                    <input class="p-3" type="checkbox" value="english"> {% trans 'English Region' %}
+                    <input class="p-3" type="checkbox" value="europe"> {% trans 'Europe Region' %}
+                    <input class="p-3" type="checkbox" value="asia"> {% trans 'Asia Region' %}
+                    <input class="p-3" type="checkbox" value="japan"> {% trans 'Sino Japanese Region' %}
+                </div>
+            </div>
+            <div class="parent row">
+                <div class="title col-4">{% trans 'Exam Type' %} *</div>
+                <div class="value col-8">
+                    <input class="p-3" type="checkbox" value="entire"> {% trans 'Beginner' %}
+                    <input class="p-3" type="checkbox" value="english"> {% trans 'Intermidiate' %}
+                </div>
+            </div>
+
+            <div class="parent row">
+                <div class="title col-4">{% trans 'Work Type' %} *</div>
+                <div class="value col-8">
+                    <input class="p-3" type="checkbox" value="entire"> {% trans 'First Slicing' %}
+                    <input class="p-3" type="checkbox" value="english"> {% trans 'Second Slicing' %}
+                    <input class="p-3" type="checkbox" value="english"> {% trans 'Tagging' %}
+                    <input class="p-3" type="checkbox" value="english"> {% trans 'Annotation' %}
+                </div>
+            </div>
+
+            <div class="parent row">
+                <div class="title col-4">{% trans 'Search Tags' %} *</div>
+                <div class="value col-8">
+                    <textarea></textarea>
+                </div>
+            </div>
+
+            <div class="parent row">
+                <button class="btn btn-dark" id="searchBtn">{% trans 'Search' %}</button>
+            </div>
+        </div>
+
+        <div class="mt-3 p-3" id="search-results">
+
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+    $('#searchBtn').on('click', () => {
+        $.ajax({
+            url: "{% url 'worker:exam_list_ajax' %}",
+            type: 'GET',
+            data: {
+
+            },
+            success: function (response) {
+                $('#search-results').empty();
+                $('#search-results').append(response);
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    });
+</script>
+{% endblock scripts %}

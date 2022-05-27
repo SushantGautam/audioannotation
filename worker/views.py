@@ -5,17 +5,35 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.views import View
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 
+from professor.models import ExamSet
 from speaker.models import SpeakerSubmission
 from worker.models import WorkerSubmission
 
 
 def homepage(request):
-    context = {
-        'speaker_submission': SpeakerSubmission.objects.all()
-    }
+    context = {}
     return render(request, 'worker/homepage.html', context)
+
+
+class ExamListView(TemplateView):
+    template_name = "worker/examList.html"
+
+
+class ExamListViewAjax(ListView):
+    template_name = "worker/examListAjax.html"
+
+    def get_queryset(self):
+        return SpeakerSubmission.objects.all()
+
+
+class QuestionSetListView(ListView):
+    template_name = "worker/questionSetList.html"
+    model = SpeakerSubmission
+
+    def get_queryset(self):
+        self.object_list = SpeakerSubmission.objects.all()
 
 
 class AnnotationPage(TemplateView):
@@ -25,27 +43,15 @@ class AnnotationPage(TemplateView):
         context = super(AnnotationPage, self).get_context_data()
         speakerObj = get_object_or_404(SpeakerSubmission, pk=kwargs.get('id'))
         context['audio_obj'] = speakerObj
-        context['question_set'] = speakerObj.exam_set.question_sets.filter(questions__in=[speakerObj.question, ]).first()
+        context['question_set'] = speakerObj.exam_set.question_sets.filter(
+            questions__in=[speakerObj.question, ]).first()
         context['stt_data'] = json.dumps(context['audio_obj'].stt_data)
         annotated_data = ""
-        if WorkerSubmission.objects.filter(speaker_submission__pk=kwargs.get('id'), worker=self.request.user.worker).exists():
-            annotated_data = WorkerSubmission.objects.get(speaker_submission__pk=kwargs.get('id'), worker=self.request.user.worker).split_data
+        if WorkerSubmission.objects.filter(speaker_submission__pk=kwargs.get('id'),
+                                           worker=self.request.user.worker).exists():
+            annotated_data = WorkerSubmission.objects.get(speaker_submission__pk=kwargs.get('id'),
+                                                          worker=self.request.user.worker).split_data
         context['annotated_data'] = annotated_data
-
-
-        # path = settings.MEDIA_ROOT
-        # print(path)
-        # final_path = path + '/naverResponseChanged.json'
-        # print(final_path)
-        # stt_data = []
-        # try:
-        #     with open(final_path, encoding='utf8') as json_file:
-        #         stt_data = json.load(json_file)
-        # except FileNotFoundError as e:
-        #     print("File does not exist at {}.".format(final_path))
-        #
-        # context['stt_data'] = json.dumps(stt_data)
-        # context['audio_file'] = os.path.join(path, "Speech.mp3")
 
         return context
 
@@ -55,9 +61,10 @@ class SaveAnnotation(View):
         if self.request.is_ajax and self.request.method == "POST":
             if SpeakerSubmission.objects.filter(pk=kwargs.get('id')).exists():
                 print(self.request.user.worker)
-                if WorkerSubmission.objects.filter(speaker_submission__pk=kwargs.get('id'), worker=self.request.user.worker).exists():
+                if WorkerSubmission.objects.filter(speaker_submission__pk=kwargs.get('id'),
+                                                   worker=self.request.user.worker).exists():
                     obj = WorkerSubmission.objects.get(speaker_submission__pk=kwargs.get('id'),
-                                                    worker=self.request.user.worker)
+                                                       worker=self.request.user.worker)
                     obj.split_data = self.request.POST.get('annotated_data')
                     obj.save()
                 else:
@@ -68,6 +75,7 @@ class SaveAnnotation(View):
                     )
                 return render(self.request, 'worker/alerts/annotationSaveSuccess.html')
         return JsonResponse({"error": ""}, status=400)
+
 
 class ProfileView(TemplateView):
     template_name = "worker/profile.html"

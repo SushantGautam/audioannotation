@@ -12,6 +12,12 @@
     <input type="radio" id="exam-tab" name="mytabs">
     <label for="exam-tab">{% trans 'Exams' %}</label>
     <div class="tab" id="exam-tab-div">
-        <a href="{% url 'worker:homepage' %}" class="tab-item active sadsa">{% trans 'Exams' %}</a>
+        <a href="{% url 'worker:exam_list' %}" class="tab-item active">{% trans 'Exams' %}</a>
+    </div>
+
+    <input type="radio" id="my-questions-tab" name="mytabs">
+    <label for="my-questions-tab">{% trans 'My Questions' %}</label>
+    <div class="tab" id="my-questions-tab-div">
+        <a href="{% url 'worker:question_set_list' %}" class="tab-item active">{% trans 'Slicing' %}</a>
     </div>
 </div>
