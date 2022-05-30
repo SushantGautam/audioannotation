@@ -54,7 +54,6 @@ class WorkerSubmission(models.Model):
     worker_task = models.ForeignKey(WorkerTask, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    split_data = models.JSONField(null=True, blank=True, default=dict)
-    tagging_data = models.JSONField(null=True, blank=True, default=dict)
+    work_data = models.JSONField(null=True, blank=True, default=dict)
     evaluation_data = models.ManyToManyField(EvaluationTitle, blank=True)
     status = models.BooleanField(default=False) # True = completed, False = not completed

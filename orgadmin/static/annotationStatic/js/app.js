@@ -84,6 +84,7 @@ function load_files(files) {
 }
 
 var regionCreated = false;
+
 function init_wavesurfer() {
     {
         wavesurfer = WaveSurfer.create({
@@ -103,6 +104,16 @@ function init_wavesurfer() {
             // barHeight: 2,
             responsive: true,
             plugins: [
+                WaveSurfer.cursor.create({
+                    showTime: true,
+                    opacity: 1,
+                    customShowTimeStyle: {
+                        'background-color': '#000',
+                        color: '#fff',
+                        padding: '2px',
+                        'font-size': '10px'
+                    }
+                }),
                 WaveSurfer.regions.create(),
                 WaveSurfer.minimap.create({
                     height: 30,
@@ -163,11 +174,11 @@ function init_wavesurfer() {
             )}`;
             document.getElementById("time-total-hms").innerText = hms(totalTime);
         });
-        wavesurfer.on("region-click", function (region, e) {
-            e.stopPropagation();
-            // Play on click, loop on shift click
-            e.shiftKey ? region.playLoop() : region.play();
-        });
+        // wavesurfer.on("region-click", function (region, e) {
+        //     e.stopPropagation();
+        //     // Play on click, loop on shift click
+        //     e.shiftKey ? region.playLoop() : region.play();
+        // });
         wavesurfer.on("region-mouseenter", (region) => {
             old_region = region;
         });
@@ -178,6 +189,7 @@ function init_wavesurfer() {
 
         wavesurfer.on("region-click", editAnnotation);
         wavesurfer.on("region-click", (region) => {
+            current_region = region;
             loadResults(region);
         });
 
@@ -202,13 +214,13 @@ function init_wavesurfer() {
                 // If Not new region, delete original region, then create new region in old place.
                 if (!regionCreated) {
                     localforage.getItem(key_annotation, (err, data) => {
-                        var data = data.filter( i => i.id == region.id );
+                        var data = data.filter(i => i.id == region.id);
                         loadRegions(data);
                     });
                 }
             }
             regionCreated = false;
-         });
+        });
         wavesurfer.on("region-removed", saveRegions);
 
         wavesurfer.on("region-play", function (region) {
@@ -313,6 +325,12 @@ function init_wavesurfer() {
         const form = document.forms.edit;
         form.style.opacity = 0;
     }
+}
+
+function playRegion(region, e) {
+    e.stopPropagation();
+    // Play on click, loop on shift click
+    e.shiftKey ? region.playLoop() : region.play();
 }
 
 function loadSTTRegions() {
@@ -624,6 +642,7 @@ function save_a_region(region) {
 }
 
 var old_region = null;
+var current_region = null;
 
 function editAnnotation(region) {
     if (old_region !== null && region != old_region) {
@@ -704,8 +723,9 @@ function addRegionList(region) {
     regionElem.innerHTML = region_innerHTMl;
     document.getElementById('region-list').appendChild(regionElem);
 
-    regionElem.addEventListener("click", function () {
-        document.querySelector(`.wavesurfer-region[data-id="${region.id}"]`).click();
+    regionElem.addEventListener("click", function (e) {
+        // document.querySelector(`.wavesurfer-region[data-id="${region.id}"]`).click();
+        playRegion(wavesurfer.regions.list[region.id], e);
     });
 }
 
@@ -715,10 +735,10 @@ function loadResults(region) {
     var text = region.data.text;
     var labels = region.data.labels;
     if (!region.data.text) {
-        text = 'stt_' + region.id in wavesurfer.regions.list ? wavesurfer.regions.list['stt_'+region.id].data.text : '';
+        text = 'stt_' + region.id in wavesurfer.regions.list ? wavesurfer.regions.list['stt_' + region.id].data.text : '';
     }
     if (!region.data.labels) {
-        labels = 'stt_' + region.id in wavesurfer.regions.list ? wavesurfer.regions.list['stt_'+region.id].data.labels : '';
+        labels = 'stt_' + region.id in wavesurfer.regions.list ? wavesurfer.regions.list['stt_' + region.id].data.labels : '';
     }
     elem.innerHTML = `
         <div class="audio-details">
@@ -813,7 +833,7 @@ function validateRegion(region) {
         var rightCondition = (value[e].end > region.start && value[e].end < region.end);
         // if engulfed.
         var midCondition = (value[e].start < region.start && value[e].end > region.end);
-        if (leftCondition || rightCondition || midCondition)  {
+        if (leftCondition || rightCondition || midCondition) {
             overlap = true;
             return;
         }
@@ -821,4 +841,29 @@ function validateRegion(region) {
     }, {})
 
     return overlap ? false : true;
+}
+
+
+function splitRegion(region) {
+    var current_time = wavesurfer.getCurrentTime();
+    deleteRegion(region.id);
+    localforage.getItem(key_annotation, (err, data) => {
+        var region_data = data.filter(i => i.id == region.id);
+
+        old_end = region_data[0].end;
+
+        region_data[0].data = {};
+
+        // First Region
+        region_data[0].id = region_data[0].id +"split_1";
+        region_data[0].end = current_time - 0.05;
+        loadRegions(region_data);
+
+        // Second Region
+        region_data[0].id = region_data[0].id +"split_2";
+        region_data[0].start = current_time+0.05;
+        region_data[0].end = old_end;
+        loadRegions(region_data);
+        sortRegions();
+    });
 }

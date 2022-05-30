@@ -264,7 +264,10 @@
                                 <span class="bi bi-download" aria-hidden="true"></span>
                             </button>
                             -->
-                            <button type="button" class="btn btn-sm btn-secondary" id="save-btn">Save</button>
+                            <button class="btn btn-outline-dark" id="split">
+                                <span class="bi bi-scissors"> {% trans 'Split' %}</span>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-secondary" id="save-btn">{% trans 'Save' %}</button>
                         </div>
                     </div>
                 </div>
@@ -314,7 +317,7 @@
 
                     <div class="form-group" id="annotation_item_area">
                     </div>
-                    
+
 
 
 
@@ -351,7 +354,7 @@
 
                         </div>
                     </div>
-                    
+
 
                     <div class="annotation-form-section d-none">
                         <form class="annotation-form" name="annotationForm">
@@ -414,16 +417,18 @@
 </body>
 
 <footer>
+    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+
     <script src="{% static 'annotationStatic/3rd/bootstrap/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'annotationStatic/3rd/wavesurfer.js/wavesurfer.min.js' %}"></script>
     <script src="{% static 'annotationStatic/3rd/wavesurfer.js/plugin/wavesurfer.timeline.min.js' %}"></script>
     <script src="{% static 'annotationStatic/3rd/wavesurfer.js/plugin/wavesurfer.regions.min.js' %}"></script>
     <script src="{% static 'annotationStatic/3rd/wavesurfer.js/plugin/wavesurfer.minimap.min.js' %}"></script>
+    <script src="{% static 'annotationStatic/3rd/wavesurfer.js/plugin/wavesurfer.cursor.min.js' %}"></script>
     <script src="{% static 'annotationStatic/3rd/localforage/localforage.min.js' %}"></script>
     <link href="{% static 'annotationStatic/3rd/jsoneditor/jsoneditor.min.css' %}" rel="stylesheet" type="text/css">
     <script src="{% static 'annotationStatic/3rd/jsoneditor/jsoneditor.min.js' %}"></script>
 
-    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
     <script src="{% static 'annotationStatic/js/app.js' %}"></script>
     <script src="{% static 'annotationStatic/js/additionalJS.js' %}"></script>
     <script>
