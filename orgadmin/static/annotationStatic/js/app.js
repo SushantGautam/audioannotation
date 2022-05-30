@@ -140,6 +140,7 @@ function init_wavesurfer() {
         wavesurfer.on("seek", function () {
             set_current_time();
         });
+
         wavesurfer.on("audioprocess", function () {
             if (wavesurfer.isPlaying()) {
                 set_current_time();
@@ -190,6 +191,7 @@ function init_wavesurfer() {
         wavesurfer.on("region-click", editAnnotation);
         wavesurfer.on("region-click", (region) => {
             current_region = region;
+            setRegionActive(region.id);
             loadResults(region);
         });
 
@@ -228,18 +230,11 @@ function init_wavesurfer() {
         });
 
         wavesurfer.on("region-in", function (region) {
-            region.element.classList.add("active-region");
-            if (!region.id.includes("stt")) {
-                document.querySelector(`.region[data-region_id=${region.id}]`).classList.add("active-region-list");
-                // document.querySelector(`.region[data-region_id="${region.id}"]`).scrollIntoView();
-            }
+            setRegionActive(region.id);
         });
 
         wavesurfer.on("region-out", function (region) {
-            region.element.classList.remove("active-region");
-            if (!region.id.includes("stt")) {
-                document.querySelector(`.region[data-region_id="${region.id}"]`).classList.remove("active-region-list");
-            }
+            setRegionInactive(region.id);
         });
     }
 
@@ -400,6 +395,28 @@ const escape_html_map = {
     "<": "&lt;",
     ">": "&gt;",
 };
+
+
+function setRegionActive(region_id) {
+    var region = wavesurfer.regions.list[region_id];
+    if (document.querySelectorAll('.active-region').length > 0)
+        document.querySelector('.active-region').classList.remove("active-region");
+    if (document.querySelectorAll('.active-region-list').length > 0)
+        document.querySelector('.active-region-list').classList.remove("active-region-list");
+    region.element.classList.add("active-region");
+    if (!region_id.includes("stt")) {
+        document.querySelector(`.region[data-region_id="${region_id}"]`).classList.add("active-region-list");
+    }
+}
+
+function setRegionInactive(region_id) {
+    var region = wavesurfer.regions.list[region_id];
+    region.element.classList.remove("active-region");
+    if (!region_id.includes("stt")) {
+        document.querySelector(`.region[data-region_id="${region_id}"]`).classList.remove("active-region-list");
+    }
+}
+
 
 function set_annotation_items(annotation_item_names) {
     const area = document.getElementById("annotation_item_area");
