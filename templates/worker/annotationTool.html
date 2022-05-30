@@ -25,10 +25,6 @@
 
 <body itemscope itemtype="http://schema.org/WebApplication">
     <div class="container">
-        <!-- <div class="header"> -->
-            <h1>{{ audio_obj.question.question_title }} </h1>
-        <!-- </div> -->
-
         <div class="main-section">
             <section class="right-section">
 
@@ -198,10 +194,12 @@
 
             </section>
 
-            <section class="left-section ">
+            <section class="left-section">
+
                 <div class="shadow-sm" id="demo">
                     <div class="row">
-                        <div class="col">
+                        <div class="col d-flex justify-content-between">
+                            <h3>{{ audio_obj.question.question_title }} </h3>
                             <p style="text-align:right;">
                                 <span id="time-current">0.00</span> / <span id="time-total">0.00</span><br>
                                 (<span id="time-current-hms">00:00:00</span> / <span id="time-total-hms">00:00:00</span>)
