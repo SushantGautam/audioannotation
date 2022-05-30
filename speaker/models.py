@@ -66,6 +66,15 @@ class SpeakerSubmission(models.Model):
     def filename(self):
         return os.path.basename(self.audio_file.name)
 
+class ExamSetSubmission(models.Model):
+    speaker = models.ForeignKey(Speaker, on_delete=models.CASCADE)
+    exam_set = models.ForeignKey(ExamSet, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.exam_set.exam_name
+
 
 
 
