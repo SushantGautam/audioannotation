@@ -12,6 +12,25 @@ class Worker(BaseUserModel):
         verbose_name = 'Worker'
         verbose_name_plural = 'Workers'
 
+class EvaluationTitle(models.Model):
+    EVALUATION_TYPE_CHOICES = (
+        ('P', 'Proficiency'),
+        ('F', 'Fluency'),
+        ('C', 'Content'),
+        ('D', 'Delivery'),
+        ('A', 'Accuracy'),
+    )
+    title = models.CharField(max_length=256)
+    score = models.IntegerField(default=0)
+    evaluation_type = models.CharField(max_length=1, choices=EVALUATION_TYPE_CHOICES)
+    subcategory_code = models.ForeignKey('professor.SubCategory', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.title
+
 class WorkerTask(models.Model):
     TASK_TYPE_CHOICES = (
         ('S', 'Slicing'),
@@ -36,4 +55,6 @@ class WorkerSubmission(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     split_data = models.JSONField(null=True, blank=True, default=dict)
+    tagging_data = models.JSONField(null=True, blank=True, default=dict)
+    evaluation_data = models.ManyToManyField(EvaluationTitle, blank=True)
     status = models.BooleanField(default=False) # True = completed, False = not completed
