@@ -11,10 +11,27 @@ class Worker(BaseUserModel):
         verbose_name = 'Worker'
         verbose_name_plural = 'Workers'
 
-class WorkerSubmission(models.Model):
+class WorkerTask(models.Model):
+    TASK_TYPE_CHOICES = (
+        ('S', 'Slicing'),
+        ('T', 'Tagging'),
+        ('E', 'Evaluation'),
+    )
     worker = models.ForeignKey(Worker, on_delete=models.CASCADE)
-    speaker_submission = models.ForeignKey('speaker.SpeakerSubmission', on_delete=models.CASCADE)
+    examset_submission = models.ForeignKey('speaker.ExamSetSubmission', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    is_active = models.BooleanField(default=True)
+    approved = models.BooleanField(null=True) # null = not yet approved
+    approved_at = models.DateTimeField(null=True)
+    task_type = models.CharField(max_length=1, choices=TASK_TYPE_CHOICES, default='S')
+    status = models.BooleanField(default=False) # True = completed, False = not completed
+
+    def __str__(self):
+        return '{} - {} - {}'.format(self.speaker_submission, self.task_type)
+
+class WorkerSubmission(models.Model):
+    speaker_submission = models.ForeignKey('speaker.SpeakerSubmission', on_delete=models.CASCADE)
+    worker_task = models.ForeignKey(WorkerTask, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     split_data = models.JSONField(null=True, blank=True, default=dict)

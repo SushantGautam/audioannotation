@@ -3,3 +3,4 @@ from .models import *
 
 admin.site.register(Speaker)
 admin.site.register(SpeakerSubmission)
+admin.site.register(ExamSetSubmission)
