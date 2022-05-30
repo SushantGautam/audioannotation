@@ -737,7 +737,7 @@ function loadResults(region) {
             </div>
             
             <div class="bottom-section">
-                <button title="Add Metadata" class="btn btn-sm btn-secondary region-edit" data-region_id="${region.id}"><i class="fas fa-edit"></i></button>
+                <button title="Edit text" class="btn btn-sm btn-secondary region-edit" data-region_id="${region.id}"><i class="fa-solid fa-pen"></i></button>
                 <button title="Delete" class="btn btn-sm btn-secondary region-delete" data-region_id="${region.id}"><i class="fas fa-trash"></i></button>
             </div>
         </div>
