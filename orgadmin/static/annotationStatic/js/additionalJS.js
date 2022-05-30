@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $('.right-section .result-section').on('click', '.region-edit', () => {
+    $('.result-section').on('click', '.region-edit', () => {
         $('.result .audio-data').addClass('d-none');
         $('.annotation-form-section').removeClass('d-none');
         var id = $('.result-section .region-edit').attr('data-region_id');

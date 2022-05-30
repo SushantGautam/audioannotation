@@ -145,6 +145,22 @@
         position: absolute;
         top: 50%;
     }
+
+    .utility-buttons-group{
+        display: flex;
+        align-items: center;
+        gap: 01rem;
+    }
+
+    .audio-data {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    }
+
+    .annotation-text{
+        width: 100%;
+    }
 </style>
 
 <body itemscope itemtype="http://schema.org/WebApplication">
@@ -154,8 +170,40 @@
         </div>
 
         <div class="main-section">
-            <section class="left-section shadow-sm">
-                <div id="demo">
+            <section class="right-section">
+
+
+
+
+                <!-- Region section starts here -->
+                <div class="region-section shadow-sm">
+                    <div class="header-section flex-space">
+                        <div>
+                            <h5 class="m-0">{{ question_set.unique_code }} (<span id="region-count">01</span>)</h5>
+                        </div>
+                        {% for question in question_set.questions.all %}
+                            <div>
+                                {{ question.question_title }}
+                                {% if question.id == audio_obj.question.id %}
+                                    <div>
+                                        <button title="Sort regions" class="sort-button btn btn-sm btn-dark"><i class="fa-solid fa-sort"></i></button>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+                    <div class="region-list" id="region-list">
+                        <!-- Render list of regions inside region-list section here -->
+                    </div>
+                </div>
+                <!-- Region section ends here -->
+
+            </section>
+
+            <section class="left-section ">
+                <div class="shadow-sm" id="demo">
                     <div class="row">
                         <div class="col">
                             <p style="text-align:right;">
@@ -166,34 +214,40 @@
                     </div>
                     <div id="wave-timeline"></div>
                     <div id="waveform"></div>
-                    <div class="row" style="margin: 30px 0">
-                        <div class="col-auto">
-                            <button class="btn btn-primary btn-block" id="button_play">
+                    <div class="utility-buttons-group" style="margin: 1rem 0">
+                        <div class="">
+                            <button class="btn btn-sm btn-primary btn-block" id="button_play">
                             <span id="play">
                                 <span class="bi bi-play"></span>
                                 Play
                             </span>
-                                <span id="pause" style="display: none">
-                                <span class="bi bi-pause"></span>
+                            <span id="pause" style="display: none">
+                            <span class="bi bi-pause"></span>
                                 Pause
                             </span>
                             </button>
                         </div>
-                        <div class="col-auto">
-                            <div style="text-align: right;">
+                        <div class=" flex-center">
+                            <!-- <div style="text-align: right;">
                                 <div class="bi bi-zoom-out" style="float: left;"></div>
                                 <div class="bi bi-zoom-in"></div>
-                            </div>
-                            <input id="slider" data-action="zoom" type="range" min="1" max="200" value="0" style="width: 100%" />
+                            </div> -->
+                            <div class="bi bi-zoom-out"></div>
+                            <input class="mx-1" id="slider" data-action="zoom" type="range" min="1" max="200" value="0" style="width: 100%" />
+                            <div class="bi bi-zoom-in"></div>
+
                         </div>
-                        <div class="col-auto">
-                            <div style="text-align: right;">
+                        <div class=" flex-center">
+                            <!-- <div style="text-align: right;">
                                 <div class="bi bi-volume-off" style="float: left;" id="volume_zero"></div>
                                 <div class="bi bi-volume-up" id="volume_max"></div>
-                            </div>
-                            <input id="volume" type="range" min="0" max="1" value="1" step="0.1" style="width: 100%" />
+                            </div> -->
+                            <div class="bi bi-volume-off" id="volume_zero"></div>
+                            <input class="mx-1/" id="volume" type="range" min="0" max="1" value="1" step="0.1" style="width: 100%" />
+                            <div class="bi bi-volume-up" id="volume_max"></div>
+
                         </div>
-                        <div class="col-auto">
+                        <div class="">
                             <select class="form-control-sm" onchange="changePlaybackRate(this);">
                                 <option value="0.25">0.25x</option>
                                 <option value="0.5">0.5x</option>
@@ -202,11 +256,11 @@
                                 <option value="2">2x</option>
                             </select>
                         </div>
-                        <div class="col-auto">
-                            <button class="btn btn-danger" id="reset">
+                        <div class="">
+                            <button class="btn btn-sm btn-danger" id="reset">
                                 <span class="bi bi-trash"> {% trans 'Reset' %}</span>
                             </button>
-                            <button class="btn btn-light" id="info" data-bs-toggle="modal" data-bs-target="#infoModal">
+                            <button class="btn btn-sm btn-light" id="info" data-bs-toggle="modal" data-bs-target="#infoModal">
                                 <span class="bi bi-info-circle" aria-hidden="true"></span>
                             </button>
                             <!--
@@ -214,10 +268,12 @@
                                 <span class="bi bi-download" aria-hidden="true"></span>
                             </button>
                             -->
-                            <button type="button" class="btn btn-secondary" id="save-btn">Save</button>
+                            <button type="button" class="btn btn-sm btn-secondary" id="save-btn">Save</button>
                         </div>
                     </div>
                 </div>
+
+
 
                 <form role="form" name="edit" style="display:none; opacity: 0; transition: opacity 300ms linear; margin: 30px 0;">
                     <div class="form-group row">
@@ -262,6 +318,7 @@
 
                     <div class="form-group" id="annotation_item_area">
                     </div>
+                    
 
 
 
@@ -276,9 +333,6 @@
                         </div>
                     </div>
                 </form>
-            </section>
-
-            <section class="right-section">
 
                 <!-- Result section starts here -->
                 <div class="result-section shadow-sm">
@@ -301,7 +355,7 @@
 
                         </div>
                     </div>
-
+                    
 
                     <div class="annotation-form-section d-none">
                         <form class="annotation-form" name="annotationForm">
@@ -319,34 +373,9 @@
 
                 </div>
                 <!-- Result section ends here -->
-
-
-                <!-- Region section starts here -->
-                <div class="region-section shadow-sm">
-                    <div class="header-section flex-space">
-                        <div>
-                            <h5 class="m-0">{{ question_set.unique_code }} (<span id="region-count">01</span>)</h5>
-                        </div>
-                        {% for question in question_set.questions.all %}
-                            <div>
-                                {{ question.question_title }}
-                                {% if question.id == audio_obj.question.id %}
-                                    <div>
-                                        <button title="Sort regions" class="sort-button btn btn-sm btn-dark"><i class="fa-solid fa-sort"></i></button>
-                                    </div>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-
-                    </div>
-
-                    <div class="region-list" id="region-list">
-                        <!-- Render list of regions inside region-list section here -->
-                    </div>
-                </div>
-                <!-- Region section ends here -->
-
             </section>
+
+
         </div>
 
 
