@@ -1,0 +1,444 @@
+[{
+	"model": "professor.question",
+	"pk": 1,
+	"fields": {
+		"question_title": "testQ",
+		"unique_code": "1234",
+		"description": "",
+		"upload_file": "",
+		"upload_type": "NON",
+		"created_at": "2022-05-24T11:10:23.979Z",
+		"updated_at": "2022-05-24T11:10:23.979Z",
+		"is_active": true,
+		"difficulty_level": 0,
+		"ready_time": 0,
+		"speaking_time": 0,
+		"evaluation_purpose": null,
+		"question_keywords": null,
+		"subcategory_code": 3,
+		"organization_code": 1
+	}
+}, {
+	"model": "professor.question",
+	"pk": 2,
+	"fields": {
+		"question_title": "test",
+		"unique_code": "12345",
+		"description": "",
+		"upload_file": "",
+		"upload_type": "NON",
+		"created_at": "2022-05-26T09:49:16.618Z",
+		"updated_at": "2022-05-26T09:49:16.618Z",
+		"is_active": true,
+		"difficulty_level": 0,
+		"ready_time": 0,
+		"speaking_time": 0,
+		"evaluation_purpose": null,
+		"question_keywords": null,
+		"subcategory_code": 3,
+		"organization_code": 1
+	}
+}, {
+	"model": "professor.questionset",
+	"pk": 1,
+	"fields": {
+		"unique_code": "2134",
+		"description": "",
+		"created_at": "2022-05-24T11:10:53.332Z",
+		"updated_at": "2022-05-26T09:49:20.731Z",
+		"is_active": true,
+		"difficulty_level": 0,
+		"subcategory_code": 3,
+		"questions": [1, 2]
+	}
+}, {
+	"model": "professor.questionset",
+	"pk": 2,
+	"fields": {
+		"unique_code": "1234",
+		"description": "asdsfd",
+		"created_at": "2022-05-27T10:08:34.483Z",
+		"updated_at": "2022-05-27T10:08:34.483Z",
+		"is_active": true,
+		"difficulty_level": 0,
+		"subcategory_code": 6,
+		"questions": [1, 2]
+	}
+}, {
+	"model": "professor.examset",
+	"pk": 1,
+	"fields": {
+		"exam_name": "testE",
+		"description": "",
+		"created_at": "2022-05-24T11:10:55.059Z",
+		"updated_at": "2022-05-24T11:10:55.059Z",
+		"is_active": true,
+		"difficulty_level": 0,
+		"question_sets": [1]
+	}
+}, {
+	"model": "speaker.speaker",
+	"pk": 2,
+	"fields": {
+		"user": 1,
+		"created_at": "2022-05-12T16:28:40.289Z",
+		"updated_at": "2022-05-12T16:28:40.289Z",
+		"permanent_address": null,
+		"current_address": null,
+		"birth_date": null,
+		"phone_number": null,
+		"organization_code": 1,
+		"gender": "F",
+		"nationality": "KR",
+		"language": "ko",
+		"proficiency": "B",
+		"topic_score": 0,
+		"education_level": null,
+		"learning_period": 0,
+		"korea_residency": 0,
+		"study_purpose": null,
+		"learning_method": null
+	}
+}, {
+	"model": "speaker.speaker",
+	"pk": 2,
+	"fields": {
+		"user": 1,
+		"created_at": "2022-05-27T09:55:34.314Z",
+		"updated_at": "2022-05-27T09:55:34.314Z",
+		"permanent_address": "test",
+		"current_address": "test",
+		"birth_date": "2022-05-27",
+		"phone_number": "123",
+		"organization_code": 1,
+		"gender": "F",
+		"nationality": "KR",
+		"language": "ko",
+		"proficiency": "B",
+		"topic_score": 0,
+		"education_level": null,
+		"learning_period": 0,
+		"korea_residency": 0,
+		"study_purpose": null,
+		"learning_method": null
+	}
+}, {
+	"model": "speaker.speakersubmission",
+	"pk": 1,
+	"fields": {
+		"question": 1,
+		"speaker": 2,
+		"exam_set": 1,
+		"audio_file": "speaker/audio/nsdevil/None2018_Toronto_Korean_Speech__Quiz_Contest_-_Grand_Prize_Tekol8h.mp3",
+		"created_at": "2022-05-24T11:11:34.867Z",
+		"updated_at": "2022-05-24T11:11:34.867Z",
+		"is_active": true,
+		"stt_data": {
+			"stt_predictions_annotations": [{
+				"start": 0.0,
+				"end": 9.14,
+				"id": "splitter_0",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": ["네 크리스씨 감사합니다. 다음으로는 콜리언 에지케이션 센터의 애니 왕 씨가 준비한 진짜 사나이라는 스피치 준비되어 있습니다."],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 10.13,
+				"end": 10.69,
+				"id": "splitter_1",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": [""],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 11.38,
+				"end": 12.09,
+				"id": "splitter_2",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": [""],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 13.48,
+				"end": 21.64,
+				"id": "splitter_3",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": ["안녕하세요. 여러분 저는 한국을 사랑하는 대만 사람 입니다."],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 21.93,
+				"end": 30.69,
+				"id": "splitter_4",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": ["제가 좀 특이한 취향이 있습니다. 무엇일까요. 와줘보세요. 맞아요. 저는 한국 군인 덕호입니다."],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 30.78,
+				"end": 35.19,
+				"id": "splitter_5",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": ["저는 처음부터 끝까지의 군대 계급을 모두 알고 있습니다."],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 35.73,
+				"end": 44.69,
+				"id": "splitter_6",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": ["이병 이병 3년 병장 하사 중사 상사 원사 준위 서위 중위 대비 서령 중년 대령 준장 서장 준장 대장 원수"],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 46.38,
+				"end": 57.74,
+				"id": "splitter_7",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": ["알면 알수록 너무 신기해서 유튜브 채널을 통해서 곧방 tv 시청도 해봤고 제가 한국을 여행했을 때 사단을 직접 방문도 해봤습니다."],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 58.53,
+				"end": 67.14,
+				"id": "splitter_8",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": ["제 주변 친구들 뭐도 내가 아는 여자인 친구들 중에서 군대를 좋아하는 여자애는 네가 처음이야라고 했습니다."],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 67.93,
+				"end": 76.89,
+				"id": "splitter_9",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": ["한국 남자에게 군대는 끔찍한 지역 같은 것인데 제가 왜 한국 군대에 관심을 갖는지 의아했습니다."],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 77.88,
+				"end": 86.14,
+				"id": "splitter_10",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": ["저는 우연히 진짜 사나이라는 한국의 군대 체험 예능 tv 프로그램을 보고 한국 군대 생활을 알게 되었습니다."],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 86.83,
+				"end": 94.59,
+				"id": "splitter_11",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": ["제가 가장 강녕받은 부분은 극한 상황에서도 누가 할 수 있다라는 생각으로 훈연에 임하는 것입니다."],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 95.53,
+				"end": 104.74,
+				"id": "splitter_12",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": ["영하의 날씨 속에서 야외에서 한 달간 훈련하고 눈물 콧물 다 쏘는 화전방 훈련을 힘겹게 버티고"],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 105.03,
+				"end": 112.89,
+				"id": "splitter_13",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": ["40km의 행군을 통해 쌓이는 자부심과 동료와의 유대감은 그들의 당당한 표전에서 드러났습니다."],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 113.93,
+				"end": 123.79,
+				"id": "splitter_14",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": ["이런 군인 정신을 끝까지 가지고 있는 군인들을 정말 존경합니다. 비록 그들이 군대에 관한 경험을 이야기를 할 때"],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 124.03,
+				"end": 133.789,
+				"id": "splitter_15",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": ["대부분 긍정적이지는 않지만 많은 한국 청년들과 제가 알고 있는 한국 남자 친구들이 한국에서 전쟁하면"],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 133.789,
+				"end": 139.85,
+				"id": "splitter_16",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": ["싸우러 가야 한다 하는 거 보면 한국 군대가 애국심을 키워주는 것 같습니다."],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 140.83,
+				"end": 147.64,
+				"id": "splitter_17",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": ["그들은 한국에 무슨 일이 생기면 언제든지 싸울 준비가 되어 있습니다."],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 148.68,
+				"end": 163.19,
+				"id": "splitter_18",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": ["저는 한국 군인들이 나라를 지키기 위해 단결된 신념을 갖고 힘든 훈련을 버티면서 자부심과 애국심을 느끼는 것을 매우 멋지고 대단하다고 생각합니다."],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 164.33,
+				"end": 174.04,
+				"id": "splitter_19",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": ["남자친구들이 제게 다음 달에 예비군을 가야 한다라고 말할 때마다 저는 항상 내가 대신 갈 수 있으면 좋겠다고 말합니다."],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 175.33,
+				"end": 185.64,
+				"id": "splitter_20",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": ["저는 마치 창고인처럼 제 에너지를 군대에서 불태우고 그 어떤 힘겨운 도전이 있더라도 제가 이겨낼 수 있다고 믿습니다."],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 186.58,
+				"end": 192.59,
+				"id": "splitter_21",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": ["그럼 마지막으로 자신의 국가를 지키고 있는 진짜 사나이들을 위해 박수를 쳐주고 싶습니다."],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 193.03,
+				"end": 201.14,
+				"id": "splitter_22",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": ["그들은 혹독한 상황 속에서도 국민의 평화와 안정을 위해서 지금도 성실하게 복무하고 있습니다."],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 201.68,
+				"end": 203.79,
+				"id": "splitter_23",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": ["제 이야기를 들어주셔서 감사합니다."],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 209.28,
+				"end": 210.44,
+				"id": "splitter_24",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": ["감사합니다."],
+					"labels": ["voice"]
+				}
+			}, {
+				"start": 210.58,
+				"end": 211.49,
+				"id": "splitter_25",
+				"user": "",
+				"created": "",
+				"updated": "",
+				"data": {
+					"text": ["네"],
+					"labels": ["voice"]
+				}
+			}]
+		},
+		"status": "SC"
+	}
+}, {
+	"model": "worker.worker",
+	"pk": 1,
+	"fields": {
+		"user": 1,
+		"created_at": "2022-05-24T11:09:13.376Z",
+		"updated_at": "2022-05-27T07:23:52.979Z",
+		"permanent_address": "Busan",
+		"current_address": "Seoul",
+		"birth_date": "2022-05-27",
+		"phone_number": "9841123456",
+		"organization_code": 1,
+		"bank_name": "bankName",
+		"bank_account_number": "123456",
+		"education_level": "Bachelors",
+		"education_field": "BSCScit"
+	}
+}]

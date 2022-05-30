@@ -48,9 +48,9 @@ class AnnotationPage(TemplateView):
         context['stt_data'] = json.dumps(context['audio_obj'].stt_data)
         annotated_data = ""
         if WorkerSubmission.objects.filter(speaker_submission__pk=kwargs.get('id'),
-                                           worker=self.request.user.worker).exists():
+                                           worker_task__worker=self.request.user.worker).exists():
             annotated_data = WorkerSubmission.objects.get(speaker_submission__pk=kwargs.get('id'),
-                                                          worker=self.request.user.worker).split_data
+                                                          worker_task__worker=self.request.user.worker).split_data
         context['annotated_data'] = annotated_data
 
         return context
@@ -62,14 +62,14 @@ class SaveAnnotation(View):
             if SpeakerSubmission.objects.filter(pk=kwargs.get('id')).exists():
                 print(self.request.user.worker)
                 if WorkerSubmission.objects.filter(speaker_submission__pk=kwargs.get('id'),
-                                                   worker=self.request.user.worker).exists():
+                                                   worker_task__worker=self.request.user.worker).exists():
                     obj = WorkerSubmission.objects.get(speaker_submission__pk=kwargs.get('id'),
-                                                       worker=self.request.user.worker)
+                                                       worker_task__worker=self.request.user.worker)
                     obj.split_data = self.request.POST.get('annotated_data')
                     obj.save()
                 else:
                     WorkerSubmission.objects.create(
-                        worker=self.request.user.worker,
+                        worker_task__worker=self.request.user.worker,
                         speaker_submission_id=int(kwargs.get('id')),
                         split_data=json.loads(self.request.POST.get('annotated_data'))
                     )

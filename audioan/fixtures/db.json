@@ -211,5 +211,23 @@
             "study_purpose": null,
             "learning_method": null
         }
+    },
+    {
+        "model": "worker.worker",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "created_at": "2022-05-24T11:09:13.376Z",
+            "updated_at": "2022-05-27T07:23:52.979Z",
+            "permanent_address": "Busan",
+            "current_address": "Seoul",
+            "birth_date": "2022-05-27",
+            "phone_number": "9841123456",
+            "organization_code": 1,
+            "bank_name": "bankName",
+            "bank_account_number": "123456",
+            "education_level": "Bachelors",
+            "education_field": "BSCScit"
+        }
     }
 ]
