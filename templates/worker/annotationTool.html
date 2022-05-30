@@ -22,176 +22,172 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/fontawesome.min.js"></script> -->
 </head>
 
-<style>
-    .flex-space{
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .flex-center{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .main-section{
-        display: flex;
-        gap: 2rem;
-    }
-
-    .left-section{
-        width: 75%;
-        border: 1px solid rgba(0,0,0,0.1);
-        border-radius: 0.25rem;
-        padding: 1rem;
-    }
-
-    .right-section{
-        width: 25%;
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-    }
-
-    .right-section > *{
-        border: 1px solid rgba(0,0,0,0.1);
-        border-radius: 0.25rem;
-        padding: 1rem;
-    }
-
-    .header-section button{
-        border-radius: 50%;
-    }
-
-    .result-section{
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-    .result{
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
-    .audio-details{
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .result label {
-        font-weight: 500;
-    }
-
-    .text-parent{
-        display: flex;
-        gap: 0.5rem;
-    }
-
-    .text-parent label{
-        min-width: 2.5rem;
-    }
-
-    .bottom-section button{
-        border-radius: 50%;
-        font-size: 0.75rem;
-    }
-
-    .region-section{
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-
-    .region-list{
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        max-height: 20rem;
-        overflow-y: auto;
-    }
-
-    .region{
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        cursor: pointer;
-    }
-
-    .sort-button{
-        padding-inline: 0.6rem ;
-    }
-
-    .audio-range-parent{
-        display: flex;
-        gap: 0.5rem;
-    }
-
-    .audio-range{
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-    }
-
-    .audio-range .start , .audio-range .end{
-        font-weight: 500;
-        width: 4rem;
-        text-align: center;
-    }
-
-    .region-text {
-        position: absolute;
-        top: 50%;
-    }
-
-    .utility-buttons-group{
-        display: flex;
-        align-items: center;
-        gap: 01rem;
-    }
-
-    .audio-data {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    }
-
-    .annotation-text{
-        width: 100%;
-    }
-</style>
 
 <body itemscope itemtype="http://schema.org/WebApplication">
     <div class="container">
-        <div class="header">
+        <!-- <div class="header"> -->
             <h1>{{ audio_obj.question.question_title }} </h1>
-        </div>
+        <!-- </div> -->
 
         <div class="main-section">
             <section class="right-section">
 
-
+                <!-- ExamSet section starts here -->
+                <div class="exam-set">
+                    <h5>Exam Set</h5>
+                    <!-- <div class=""> -->
+                        <div class="accordion accordion-flush question-sets" id="accordionFlushExample">
+                            <div class="accordion-item">
+                                <h4 class="accordion-header" id="flush-headingOne">
+                                    <button class="accordion-button collapsed question-set-name" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        Question set #1
+                                    </button>
+                                </h4>
+                                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">
+                                       <a class="question-parent shadow-sm">
+                                           <span class="question-num">1.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
+                                        </a>
+                                       <a class="question-parent shadow-sm">
+                                           <span class="question-num">2.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
+                                        </a>
+                                       <a class="question-parent shadow-sm">
+                                           <span class="question-num">3.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
+                                       </a>
+                                       <a class="question-parent shadow-sm">
+                                           <span class="question-num">4.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h4 class="accordion-header" id="flush-headingTwo">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                                        Question set #2
+                                    </button>
+                                </h4>
+                                <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">
+                                       <a class="question-parent shadow-sm">
+                                           <span class="question-num">1.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
+                                        </a>
+                                       <a class="question-parent shadow-sm">
+                                           <span class="question-num">2.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
+                                        </a>
+                                       <a class="question-parent shadow-sm">
+                                           <span class="question-num">3.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
+                                       </a>
+                                       <a class="question-parent shadow-sm">
+                                           <span class="question-num">4.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h4 class="accordion-header" id="flush-headingThree">
+                                <button class="accordion-button collapsed question-set-name" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                    Question set #3
+                                </button>
+                                </h4>
+                                <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                                                                        <div class="accordion-body">
+                                       <a class="question-parent shadow-sm">
+                                           <span class="question-num">1.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
+                                        </a>
+                                       <a class="question-parent shadow-sm">
+                                           <span class="question-num">2.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
+                                        </a>
+                                       <a class="question-parent shadow-sm">
+                                           <span class="question-num">3.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
+                                       </a>
+                                       <a class="question-parent shadow-sm">
+                                           <span class="question-num">4.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h4 class="accordion-header" id="flush-headingThree">
+                                <button class="accordion-button collapsed question-set-name" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                    Question set #3
+                                </button>
+                                </h4>
+                                <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                                                                        <div class="accordion-body">
+                                       <a class="question-parent shadow-sm">
+                                           <span class="question-num">1.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
+                                        </a>
+                                       <a class="question-parent shadow-sm">
+                                           <span class="question-num">2.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
+                                        </a>
+                                       <a class="question-parent shadow-sm">
+                                           <span class="question-num">3.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
+                                       </a>
+                                       <a class="question-parent shadow-sm">
+                                           <span class="question-num">4.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h4 class="accordion-header" id="flush-headingThree">
+                                <button class="accordion-button collapsed question-set-name" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                    Question set #3
+                                </button>
+                                </h4>
+                                <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                                                                        <div class="accordion-body">
+                                       <a class="question-parent shadow-sm">
+                                           <span class="question-num">1.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
+                                        </a>
+                                       <a class="question-parent shadow-sm">
+                                           <span class="question-num">2.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
+                                        </a>
+                                       <a class="question-parent shadow-sm">
+                                           <span class="question-num">3.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
+                                       </a>
+                                       <a class="question-parent shadow-sm">
+                                           <span class="question-num">4.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h4 class="accordion-header" id="flush-headingThree">
+                                <button class="accordion-button collapsed question-set-name" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                    Question set #3
+                                </button>
+                                </h4>
+                                <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                                                                        <div class="accordion-body">
+                                       <a class="question-parent shadow-sm">
+                                           <span class="question-num">1.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
+                                        </a>
+                                       <a class="question-parent shadow-sm">
+                                           <span class="question-num">2.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
+                                        </a>
+                                       <a class="question-parent shadow-sm">
+                                           <span class="question-num">3.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
+                                       </a>
+                                       <a class="question-parent shadow-sm">
+                                           <span class="question-num">4.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    <!-- </div> -->
+                </div>
+                <!-- ExamSet section ends here -->
 
 
                 <!-- Region section starts here -->
                 <div class="region-section shadow-sm">
-                    <div class="header-section flex-space">
-                        <div>
-                            <h5 class="m-0">{{ question_set.unique_code }} (<span id="region-count">01</span>)</h5>
-                        </div>
-                        {% for question in question_set.questions.all %}
-                            <div>
-                                {{ question.question_title }}
-                                {% if question.id == audio_obj.question.id %}
-                                    <div>
-                                        <button title="Sort regions" class="sort-button btn btn-sm btn-dark"><i class="fa-solid fa-sort"></i></button>
-                                    </div>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
 
+                    <div class="header-section flex-space">
+                        <h5 class="m-0">{{ audio_obj.question.question_title }} (<span id="region-count">01</span>)</h5>
+                        <button title="Sort regions" class="sort-button btn btn-sm btn-dark"><i class="fa-solid fa-sort"></i></button>
                     </div>
 
                     <div class="region-list" id="region-list">
@@ -214,9 +210,9 @@
                     </div>
                     <div id="wave-timeline"></div>
                     <div id="waveform"></div>
-                    <div class="utility-buttons-group" style="margin: 1rem 0">
+                    <div class="utility-buttons-group">
                         <div class="">
-                            <button class="btn btn-sm btn-primary btn-block" id="button_play">
+                            <button class="btn btn-sm btn-secondary play-button" id="button_play">
                             <span id="play">
                                 <span class="bi bi-play"></span>
                                 Play
