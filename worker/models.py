@@ -1,3 +1,4 @@
+from telnetlib import STATUS
 from django.db import models
 
 from orgadmin.models import BaseUserModel
@@ -35,3 +36,4 @@ class WorkerSubmission(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     split_data = models.JSONField(null=True, blank=True, default=dict)
+    status = models.BooleanField(default=False) # True = completed, False = not completed
