@@ -244,3 +244,8 @@ input{
     height: 50%;
     overflow-y: scroll;
 }
+
+.merge-button{
+    border: 1.5px solid dimgrey;
+    padding: 0.1rem 0.5rem;
+}
