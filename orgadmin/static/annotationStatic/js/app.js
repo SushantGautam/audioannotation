@@ -911,15 +911,19 @@ function mergeRegion(region, direction = 1) {
         wavesurfer.regions.list[toBeMergedRegion.id].remove();
         wavesurfer.regions.list[cursorRegion.id].remove();
 
-        var cursorText = 'text' in cursorRegion.data ? cursorRegion.data.text : "";
-        var mergeText = 'text' in toBeMergedRegion.data ? toBeMergedRegion.data.text : "";
+        var merged_text = null;
+        if ('text' in cursorRegion.data || 'text' in toBeMergedRegion.data) {
+            var cursorText = 'text' in cursorRegion.data ? cursorRegion.data.text : "";
+            var mergeText = 'text' in toBeMergedRegion.data ? toBeMergedRegion.data.text : "";
+            merged_text = [cursorText + " " + mergeText]
+        }
 
         var cursorLabel = 'labels' in cursorRegion.data ? cursorRegion.data.labels : [];
         var mergeLabel = 'labels' in toBeMergedRegion.data ? toBeMergedRegion.data.labels : [];
 
         if (direction > 0) {
             region_data[0].end = toBeMergedRegion.end;
-            region_data[0].data['text'] = [cursorText + " " + mergeText];
+            region_data[0].data['text'] = merged_text;
             region_data[0].data['labels'] = [...new Set([...cursorLabel, ...mergeLabel])];
         } else {
             region_data[0].start = toBeMergedRegion.start;
