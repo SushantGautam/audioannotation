@@ -30,7 +30,7 @@
 
                 <!-- ExamSet section starts here -->
                 <div class="exam-set">
-                    <h5>Exam Set</h5>
+                    <h5 class="exam-set-title">Exam Set</h5>
                     <!-- <div class=""> -->
                         <div class="accordion accordion-flush question-sets" id="accordionFlushExample">
                             <div class="accordion-item">
@@ -103,13 +103,13 @@
                                 </div>
                             </div>
                             <div class="accordion-item">
-                                <h4 class="accordion-header" id="flush-headingThree">
-                                <button class="accordion-button collapsed question-set-name" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                                    Question set #3
-                                </button>
+                                <h4 class="accordion-header" id="flush-headingFour">
+                                    <button class="accordion-button collapsed question-set-name" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">
+                                        Question set #4
+                                    </button>
                                 </h4>
-                                <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
-                                                                        <div class="accordion-body">
+                                <div id="flush-collapseFour" class="accordion-collapse collapse" aria-labelledby="flush-headingFour" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">
                                        <a class="question-parent shadow-sm">
                                            <span class="question-num">1.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
                                         </a>
@@ -126,13 +126,13 @@
                                 </div>
                             </div>
                             <div class="accordion-item">
-                                <h4 class="accordion-header" id="flush-headingThree">
-                                <button class="accordion-button collapsed question-set-name" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                                    Question set #3
+                                <h4 class="accordion-header" id="flush-headingFive">
+                                <button class="accordion-button collapsed question-set-name" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFive" aria-expanded="false" aria-controls="flush-collapseFive">
+                                    Question set #5
                                 </button>
                                 </h4>
-                                <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
-                                                                        <div class="accordion-body">
+                                <div id="flush-collapseFive" class="accordion-collapse collapse" aria-labelledby="flush-headingFive" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">
                                        <a class="question-parent shadow-sm">
                                            <span class="question-num">1.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
                                         </a>
@@ -149,13 +149,13 @@
                                 </div>
                             </div>
                             <div class="accordion-item">
-                                <h4 class="accordion-header" id="flush-headingThree">
-                                <button class="accordion-button collapsed question-set-name" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                                    Question set #3
-                                </button>
+                                <h4 class="accordion-header" id="flush-headingSix">
+                                    <button class="accordion-button collapsed question-set-name" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSix" aria-expanded="false" aria-controls="flush-collapseSix">
+                                        Question set #6
+                                    </button>
                                 </h4>
-                                <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
-                                                                        <div class="accordion-body">
+                                <div id="flush-collapseSix" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">
                                        <a class="question-parent shadow-sm">
                                            <span class="question-num">1.</span> <span class="question">Lorem, ipsum dolor sit amet consectetur adipisicing?</span>
                                         </a>
@@ -227,7 +227,7 @@
                                 <div class="bi bi-zoom-in"></div>
                             </div> -->
                             <div class="bi bi-zoom-out"></div>
-                            <input class="mx-1" id="slider" data-action="zoom" type="range" min="1" max="200" value="0" style="width: 100%" />
+                            <input class="mx-1" id="slider" data-action="zoom" type="range" min="1" max="200" value="0" >
                             <div class="bi bi-zoom-in"></div>
 
                         </div>
@@ -237,7 +237,7 @@
                                 <div class="bi bi-volume-up" id="volume_max"></div>
                             </div> -->
                             <div class="bi bi-volume-off" id="volume_zero"></div>
-                            <input class="mx-1/" id="volume" type="range" min="0" max="1" value="1" step="0.1" style="width: 100%" />
+                            <input class="mx-1" id="volume" type="range" min="0" max="1" value="1" step="0.1" >
                             <div class="bi bi-volume-up" id="volume_max"></div>
 
                         </div>
@@ -270,18 +270,18 @@
                             </button>
                         </div>
                         <div class="">
-                            <button class="btn btn-sm btn-light" id="info" data-bs-toggle="modal" data-bs-target="#infoModal">
-                                <span class="bi bi-info-circle" aria-hidden="true"></span>
-                            </button>
                             <button class="btn btn-sm btn-danger" id="reset">
                                 <span class="bi bi-trash"> {% trans 'Reset' %}</span>
                             </button>
                             <!--
-                            <button class="btn btn-light" id="download_button">
-                                <span class="bi bi-download" aria-hidden="true"></span>
-                            </button>
+                                <button class="btn btn-light" id="download_button">
+                                    <span class="bi bi-download" aria-hidden="true"></span>
+                                </button>
                             -->
                             <button type="button" class="btn btn-sm btn-secondary" id="save-btn">{% trans 'Save' %}</button>
+                            <button title="Shortcut keys" class="btn btn-sm btn-light" id="info" data-bs-toggle="modal" data-bs-target="#infoModal">
+                                <span class="bi bi-info-circle" aria-hidden="true"></span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -372,7 +372,7 @@
 
                     <div class="annotation-form-section d-none">
                         <form class="annotation-form" name="annotationForm">
-                            <textarea class="annotation-text">
+                            <textarea placeholder="Add annotation text here..." class="annotation-text">
                             </textarea>
                             <input type="hidden" value="" class="region-id">
                             <div class="bottom-section">
