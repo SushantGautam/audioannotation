@@ -67,10 +67,26 @@ class SpeakerSubmission(models.Model):
         return os.path.basename(self.audio_file.name)
 
 class ExamSetSubmission(models.Model):
+    STATUS_CHOICES = (
+        ('INS', _('Initial State')),
+        ('STC', _('STT Completed')),
+        ('SA1', _('Splitting Assigned level 1')),
+        ('SC1', _('Splitting Completed level 1')),
+        ('SA2', _('Splitting Assigned level 2')),
+        ('SC2', _('Splitting Completed level 2')),
+        ('TA1', _('Tagging Assigned level 1')),
+        ('TC1', _('Tagging Completed level 1')),
+        ('TA2', _('Tagging Assigned level 2')),
+        ('TC2', _('Tagging Completed level 2')),
+        ('EVA', _('Evaluation Assigned')),
+        ('EVC', _('Evaluation Completed')),
+        ('STF', _('STT Failed')),
+    )
     speaker = models.ForeignKey(Speaker, on_delete=models.CASCADE)
     exam_set = models.ForeignKey(ExamSet, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='INS')
 
     def __str__(self):
         return self.exam_set.exam_name
