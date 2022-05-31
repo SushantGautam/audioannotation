@@ -250,21 +250,29 @@
                                 <option value="2">2x</option>
                             </select>
                         </div>
-                        <div class="">
-                            <button class="btn btn-sm btn-danger" id="reset">
-                                <span class="bi bi-trash"> {% trans 'Reset' %}</span>
+                        <div>
+                            <button class="btn btn-sm btn-outline-dark" id="split">
+                                <span class="bi bi-scissors"> {% trans 'Split' %}</span>
                             </button>
+                            <button class="btn btn-sm btn-outline-dark" id="merge-left" title="Merge Left" data-title="Merge Left">
+                                <i class="bi bi-chevron-double-left"></i><span class="bi bi-union"></span>
+                            </button>
+                            <button class="btn btn-sm btn-outline-dark" id="merge-right" title="Merge Right" data-title="Merge Right">
+                                <span class="bi bi-union"></span><i class="bi bi-chevron-double-right"></i>
+                            </button>
+                        </div>
+                        <div class="">
                             <button class="btn btn-sm btn-light" id="info" data-bs-toggle="modal" data-bs-target="#infoModal">
                                 <span class="bi bi-info-circle" aria-hidden="true"></span>
+                            </button>
+                            <button class="btn btn-sm btn-danger" id="reset">
+                                <span class="bi bi-trash"> {% trans 'Reset' %}</span>
                             </button>
                             <!--
                             <button class="btn btn-light" id="download_button">
                                 <span class="bi bi-download" aria-hidden="true"></span>
                             </button>
                             -->
-                            <button class="btn btn-outline-dark" id="split">
-                                <span class="bi bi-scissors"> {% trans 'Split' %}</span>
-                            </button>
                             <button type="button" class="btn btn-sm btn-secondary" id="save-btn">{% trans 'Save' %}</button>
                         </div>
                     </div>

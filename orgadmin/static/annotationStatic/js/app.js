@@ -223,7 +223,7 @@ function init_wavesurfer() {
             }
             regionCreated = false;
         });
-        wavesurfer.on("region-removed", saveRegions);
+        // wavesurfer.on("region-removed", saveRegions);
 
         wavesurfer.on("region-play", function (region) {
             wavesurfer.play(region.start, region.end);
@@ -361,7 +361,6 @@ function deleteRegion(regionId) {
         wavesurfer.regions.list[regionId].remove();
         emptyResults();
         saveRegions();
-        sortRegions();
     }
 }
 
@@ -586,11 +585,10 @@ function saveRegions() {
             data: region.data,
         };
     });
-
     localforage
         .setItem(key_annotation, mydata, () => {
             // on success
-            sortRegions();
+            sortRegionList();
         })
         .catch((err) => {
             alert(`Error on save: ${err}`);
@@ -598,15 +596,20 @@ function saveRegions() {
 }
 
 function loadRegions(regions) {
-    regions.forEach(function (region) {
-        region.color = "rgb(255, 242, 204, 0.2)";
-        wavesurfer.addRegion(region);
-        addRegionList(region);
-        addTextToAnnotationRegion(region);
+    new Promise((resolve, reject) => {
+            regions.forEach(function (region) {
+                region.color = "rgb(255, 242, 204, 0.2)";
+                wavesurfer.addRegion(region);
+                addRegionList(region);
+                addTextToAnnotationRegion(region);
+            });
+            resolve('success');
+        }
+    ).then((value) => {
+        document.getElementById('region-count').innerText = regions.length;
+        regionCreated = false;
+        saveRegions();
     });
-    document.getElementById('region-count').innerText = regions.length
-    regionCreated = false;
-    saveRegions();
 }
 
 function randomColor(alpha) {
@@ -816,17 +819,23 @@ function addTextToAnnotationRegion(region) {
     document.querySelector(`[data-id=${region.id}]`).appendChild(regionText);
 }
 
-function sortRegions() {
+function sortRegions(value, order = 1) {
+    return value.sort((a, b) => {
+        return a.start - b.start;
+    });
+}
+
+function sortRegionList() {
     localforage.getItem(key_annotation).then(function (value) {
         // This code runs once the value has been loaded
         // from the offline store.
-        var sorted = value.sort((a, b) => {
-            return a.start - b.start;
-        });
+        var sorted = sortRegions(value, 1);
         clearRegionList();
         sorted.forEach(function (region) {
             addRegionList(region);
         });
+        localforage.setItem(key_annotation, sorted, () => {}
+        );
         document.getElementById('region-count').innerText = sorted.length;
     }).catch(function (err) {
         // This code runs if there were any errors
@@ -872,15 +881,52 @@ function splitRegion(region) {
         region_data[0].data = {};
 
         // First Region
-        region_data[0].id = region_data[0].id +"split_1";
+        region_data[0].id = region_data[0].id + "split_1";
         region_data[0].end = current_time - 0.05;
         loadRegions(region_data);
 
         // Second Region
-        region_data[0].id = region_data[0].id +"split_2";
-        region_data[0].start = current_time+0.05;
+        region_data[0].id = region_data[0].id + "split_2";
+        region_data[0].start = current_time + 0.05;
         region_data[0].end = old_end;
         loadRegions(region_data);
-        sortRegions();
+    });
+}
+
+// Direction 1 is right, -1 is left
+function mergeRegion(region, direction = 1) {
+    localforage.getItem(key_annotation, (err, data) => {
+        var region_data = data.filter(i => i.id == region.id);
+        var cursorIdx = data.map(e => e.id).indexOf(region.id);
+        var toBeMergedRegion = direction > 0 ? data[cursorIdx + 1] : data[cursorIdx - 1];
+
+        var cursorRegion = data[cursorIdx];
+
+
+        // deleteRegion(toBeMergedRegion.id);
+        // deleteRegion(cursorRegion.id);
+
+        // Delete Region Function is not used as not to save the same data again and again.
+        // Saving Data will be done after merging only.
+        wavesurfer.regions.list[toBeMergedRegion.id].remove();
+        wavesurfer.regions.list[cursorRegion.id].remove();
+
+        var cursorText = 'text' in cursorRegion.data ? cursorRegion.data.text : "";
+        var mergeText = 'text' in toBeMergedRegion.data ? toBeMergedRegion.data.text : "";
+
+        var cursorLabel = 'labels' in cursorRegion.data ? cursorRegion.data.labels : [];
+        var mergeLabel = 'labels' in toBeMergedRegion.data ? toBeMergedRegion.data.labels : [];
+
+        if (direction > 0) {
+            region_data[0].end = toBeMergedRegion.end;
+            region_data[0].data['text'] = [cursorText + " " + mergeText];
+            region_data[0].data['labels'] = [...new Set([...cursorLabel, ...mergeLabel])];
+        } else {
+            region_data[0].start = toBeMergedRegion.start;
+            region_data[0].data['text'] = toBeMergedRegion.data['text'] + " " + cursorRegion.data['text'];
+            region_data[0].data['labels'] = [...new Set([...mergeLabel, ...cursorLabel])];
+        }
+        loadRegions(region_data);
+
     });
 }

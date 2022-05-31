@@ -73,4 +73,13 @@ $(document).ready(function () {
     $('#split').on('click', () => {
         splitRegion(current_region);
     });
+
+    $('#merge-left').on('click', () => {
+        mergeRegion(current_region, -1);
+    });
+
+    $('#merge-right').on('click', () => {
+        mergeRegion(current_region, 1);
+    });
+
 });
