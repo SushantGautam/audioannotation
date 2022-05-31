@@ -76,58 +76,12 @@
 		"difficulty_level": 0,
 		"question_sets": [1]
 	}
-}, {
-	"model": "speaker.speaker",
-	"pk": 2,
-	"fields": {
-		"user": 1,
-		"created_at": "2022-05-12T16:28:40.289Z",
-		"updated_at": "2022-05-12T16:28:40.289Z",
-		"permanent_address": null,
-		"current_address": null,
-		"birth_date": null,
-		"phone_number": null,
-		"organization_code": 1,
-		"gender": "F",
-		"nationality": "KR",
-		"language": "ko",
-		"proficiency": "B",
-		"topic_score": 0,
-		"education_level": null,
-		"learning_period": 0,
-		"korea_residency": 0,
-		"study_purpose": null,
-		"learning_method": null
-	}
-}, {
-	"model": "speaker.speaker",
-	"pk": 2,
-	"fields": {
-		"user": 1,
-		"created_at": "2022-05-27T09:55:34.314Z",
-		"updated_at": "2022-05-27T09:55:34.314Z",
-		"permanent_address": "test",
-		"current_address": "test",
-		"birth_date": "2022-05-27",
-		"phone_number": "123",
-		"organization_code": 1,
-		"gender": "F",
-		"nationality": "KR",
-		"language": "ko",
-		"proficiency": "B",
-		"topic_score": 0,
-		"education_level": null,
-		"learning_period": 0,
-		"korea_residency": 0,
-		"study_purpose": null,
-		"learning_method": null
-	}
-}, {
+},{
 	"model": "speaker.speakersubmission",
 	"pk": 1,
 	"fields": {
 		"question": 1,
-		"speaker": 2,
+		"speaker": 1,
 		"exam_set": 1,
 		"audio_file": "speaker/audio/nsdevil/None2018_Toronto_Korean_Speech__Quiz_Contest_-_Grand_Prize_Tekol8h.mp3",
 		"created_at": "2022-05-24T11:11:34.867Z",
@@ -423,22 +377,5 @@
 			}]
 		},
 		"status": "SC"
-	}
-}, {
-	"model": "worker.worker",
-	"pk": 1,
-	"fields": {
-		"user": 1,
-		"created_at": "2022-05-24T11:09:13.376Z",
-		"updated_at": "2022-05-27T07:23:52.979Z",
-		"permanent_address": "Busan",
-		"current_address": "Seoul",
-		"birth_date": "2022-05-27",
-		"phone_number": "9841123456",
-		"organization_code": 1,
-		"bank_name": "bankName",
-		"bank_account_number": "123456",
-		"education_level": "Bachelors",
-		"education_field": "BSCScit"
 	}
 }]

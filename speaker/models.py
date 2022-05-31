@@ -75,6 +75,3 @@ class ExamSetSubmission(models.Model):
     def __str__(self):
         return self.exam_set.exam_name
 
-
-
-
