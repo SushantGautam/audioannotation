@@ -46,7 +46,7 @@ class WorkerTask(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     approved = models.BooleanField(null=True) # null = not yet approved
     approved_at = models.DateTimeField(null=True)
-    task_type = models.CharField(max_length=2, choices=TASK_TYPE_CHOICES, default='S')
+    task_type = models.CharField(max_length=2, choices=TASK_TYPE_CHOICES, default='S1')
     status = models.BooleanField(default=False) # True = completed, False = not completed
 
     def __str__(self):

@@ -31,15 +31,6 @@ def audio_filename(instance, filename):
     return 'speaker/audio/{0}/{1}'.format(instance.speaker, str(instance.id) + filename)
 
 
-class AudioFile(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True)
-    audio_file = models.FileField(upload_to=audio_filename)
-    speaker = models.ForeignKey(Speaker, on_delete=models.CASCADE, blank=True, null=True)
-
-    def __str__(self):
-        return self.audio_file.name
-
-
 class SpeakerSubmission(models.Model):
     STATUS_CHOICES = (
         ('IS', _('Initial State')),
@@ -79,8 +70,8 @@ class ExamSetSubmission(models.Model):
         ('TA2', _('Tagging Assigned level 2')),
         ('TC2', _('Tagging Completed level 2')),
         ('EA1', _('Evaluation Assigned level 1')),
-        ('EC1', _('Evaluation Completed level 2')),
-        ('EA2', _('Evaluation Assigned level 1')),
+        ('EC1', _('Evaluation Completed level 1')),
+        ('EA2', _('Evaluation Assigned level 2')),
         ('EC2', _('Evaluation Completed level 2')),
         ('STF', _('STT Failed')),
     )

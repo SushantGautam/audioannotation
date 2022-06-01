@@ -1,33 +1,16 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.template import RequestContext
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.generic import ListView, FormView, TemplateView
 
-from speaker.forms import AudioFileForm, SpeakerSubmissionForm
+from speaker.forms import SpeakerSubmissionForm
 from speaker.models import Speaker, SpeakerSubmission
 
 from professor.models import Question, QuestionSet, ExamSet
 
 
-@csrf_protect
 def homepage(request):
-    # return render(request, 'speaker/homepage.html')
     return render(request, 'speaker/homepage.html')
-
-
-def save_audio(request):
-    if request.method == 'POST':
-        form = AudioFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            print("File saved")
-            obj = form.save(commit=False)
-            obj.speaker = Speaker.objects.first()
-            obj.save()
-        else:
-            print("form invalid: ", form.errors)
-    return redirect('homepage')
-
 
 class QuestionSetList(ListView):
     template_name = 'speaker/question_set_list.html'
@@ -38,7 +21,6 @@ class QuestionSetList(ListView):
         exam_set = ExamSet.objects.get(pk=self.request.GET['exam_set'])
         context['object_list'] = exam_set.question_sets.all()
         return context
-
 
 class ExamSetList(ListView):
     template_name = 'speaker/exam_set_list.html'

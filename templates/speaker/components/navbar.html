@@ -2,10 +2,17 @@
 {% load i18n %}
 
 <div class="mytabs">
-  <input type="radio" id="home-tab" name="mytabs" checked>
+  <input type="radio" id="home-tab" name="mytabs" {% if request.path == '/speaker/' %}checked{% endif %}>
   <label for="home-tab">Home</label>
-  <div class="tab" id="home-tab-div">
-    <a href="" class="tab-item active">Dashboard</a>
-    <a href="" class="tab-item">Profile</a>
-  </div>      
+  <div class="tab animate__animated animate__fadeInUp" id="home-tab-div">
+    <a href="{% url 'speaker:homepage' %}" class="tab-item {% if request.path == '/speaker/' %}active{% endif %}">Dashboard</a>
+    <a href="{% url 'speaker:profile' %}" class="tab-item">Profile</a>
+    <a href="#" class="tab-item">Contracts</a>
+  </div>
+
+  <input type="radio" id="records-tab" name="mytabs" {% if 'exam' in request.path %}checked{% endif %}>
+  <label for="records-tab">Recording</label>
+  <div class="tab animate__animated animate__fadeInUp" id="records-tab-div">
+    <a href="{% url 'speaker:exam_set_list' %}" class="tab-item {% if 'exam' in request.path %}active{% endif %}">Exam Set</a>
+  </div>
 </div>

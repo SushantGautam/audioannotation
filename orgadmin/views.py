@@ -1,6 +1,8 @@
 from django.http import JsonResponse
 from django.shortcuts import HttpResponse, render, redirect
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
+
+from orgadmin.models import User
 
 
 def homepage(request):
@@ -39,3 +41,7 @@ def deployserver(request):
 
 class ProfileView(TemplateView):
     template_name = "orgadmin/profile.html"
+class UserListView(ListView):
+    template_name = "orgadmin/userList.html"
+    model = User
+

@@ -285,6 +285,7 @@ input{
 .exam-set{
     height: 50%;
     overflow-y: scroll;
+    padding: 0;
 }
 
 .exam-set-title{
@@ -292,10 +293,13 @@ input{
     top: 0;
     z-index: 100;
     background-color: white;
+    padding: 1rem 1rem 0.25rem 1rem;
+    /* padding-top: 1rem;
+    padding-left: 1rem; */
 }
 .question-sets{
-    margin-left: -0.85rem;
-    margin-right: -0.85rem;
+    /* margin-left: -0.85rem;
+    margin-right: -0.85rem; */
 }
 .merge-button{
     border: 1.5px solid dimgrey;
