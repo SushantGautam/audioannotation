@@ -12,10 +12,7 @@
             <div class="parent row">
                 <div class="title col-4">{% trans 'Territories' %} *</div>
                 <div class="value col-8">
-                    <input class="p-3" type="checkbox" value="english"> {% trans 'English Region' %}
-                    <input class="p-3" type="checkbox" value="europe"> {% trans 'Europe Region' %}
-                    <input class="p-3" type="checkbox" value="asia"> {% trans 'Asia Region' %}
-                    <input class="p-3" type="checkbox" value="japan"> {% trans 'Sino Japanese Region' %}
+                    {{ form.regions }}
                 </div>
             </div>
             <div class="parent row">
@@ -40,7 +37,8 @@
             </div>
 
             <div class="parent row">
-                <button class="btn btn-dark" id="searchBtn">{% trans 'Search' %}</button>
+                <input type="hidden" name="countries" id="countries">
+                <button type="submit" class="btn btn-dark" id="searchBtn">{% trans 'Search' %}</button>
             </div>
         </div>
         </form>
@@ -55,8 +53,21 @@
 
 {% block scripts %}
 <script>
+    const REGION_MAPPTING = {
+        'SJR': ['CN', 'JP'],
+        'EU': ['DE', 'FR', 'ES', 'DK', 'SE', 'EE', 'FI', 'PT'],
+        'ENG': ['US', 'GB', 'AU', 'CA'],
+        'ASIA': ['NP', 'ID', 'UZ', 'VN', 'BD', 'MN'],
+    }
     $("form[name='search-exam-form']").on('submit', function (e) {
         e.preventDefault();
+        var selected_countries = []
+        $('input[type=checkbox][name=regions]:checked').each(function () {
+            $('[name=regions]:checked').each(function() {
+                selected_countries = [...new Set([...selected_countries, ...REGION_MAPPTING[this.value]])];
+            });
+        })
+        $('#countries').val(selected_countries)
         $.ajax({
             url: this.action,
             type: this.method,

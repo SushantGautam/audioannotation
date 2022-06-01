@@ -13,6 +13,13 @@ class ExamSetSubmissionFilterForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ExamSetSubmissionFilterForm, self).__init__(*args, **kwargs)
 
+        REGION_CHOICES = (
+            ("ENG", "English"),
+            ("EU", "Europe"),
+            ("ASIA", "Asia"),
+            ("SJR", "Sino Japanese Region"),
+        )
+
         # Refer to professor/models.py
         DIFFICULTY_CHOICES = (
             ("1", "Beginner"),
@@ -26,6 +33,9 @@ class ExamSetSubmissionFilterForm(ModelForm):
             ('TC2', 'Evaluation Level 1'),
             ('EC1', 'Evaluation Level 2'),
         )
+        self.fields['regions'] = forms.MultipleChoiceField(choices=REGION_CHOICES,
+                                                                    widget=forms.CheckboxSelectMultiple(),
+                                                                    required=False)
         self.fields['difficulty_level'] = forms.MultipleChoiceField(choices=DIFFICULTY_CHOICES,
                                                                     widget=forms.CheckboxSelectMultiple(),
                                                                     required=False)

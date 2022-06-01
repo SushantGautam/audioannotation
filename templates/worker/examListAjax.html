@@ -26,7 +26,7 @@
                 <td>{{ object.exam_set.difficulty_level }}</td>
                 <td>{{ object.exam_set.get_question_count }}</td>
                 <td>{{ object }}</td>
-                <td>{% trans 'Apply' %}</td>
+                <td><button class="btn btn-sm btn-dark"> {% trans 'Apply' %}</button></td>
             </tr>
         {% endfor %}
         </tbody>

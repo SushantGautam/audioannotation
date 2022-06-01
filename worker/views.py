@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.views import View
-from django.views.generic import TemplateView, ListView, FormView
+from django.views.generic import TemplateView, ListView, FormView, CreateView
 
 from professor.models import ExamSet
 from speaker.models import SpeakerSubmission, ExamSetSubmission
@@ -27,11 +27,17 @@ class ExamListView(FormView):
         context = super(ExamListView, self).get_context_data(**kwargs)
         return context
 
+
 class ExamListViewAjax(ListView):
     template_name = "worker/examListAjax.html"
     difficulty_filters = {}
     task_type_filters = {}
+    region_filters = {}
+
     def dispatch(self, request, *args, **kwargs):
+        self.region_filters = {
+            'speaker__nationality__in': self.request.GET.get('countries').split(',')
+        }
         self.difficulty_filters = {
             'exam_set__difficulty_level__in': self.request.GET.getlist('difficulty_level'),
             'exam_set__difficulty_level': 0,
@@ -43,7 +49,8 @@ class ExamListViewAjax(ListView):
         return super(ExamListViewAjax, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        return ExamSetSubmission.objects.filter(**self.difficulty_filters, _connector=Q.OR).filter(**self.task_type_filters, _connector=Q.OR)
+        return ExamSetSubmission.objects.filter(**self.difficulty_filters, _connector=Q.OR).filter(
+            **self.task_type_filters, _connector=Q.OR).filter(**self.region_filters, _connector=Q.OR)
 
 
 class QuestionSetListView(ListView):
