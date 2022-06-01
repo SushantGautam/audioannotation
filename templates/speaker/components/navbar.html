@@ -6,7 +6,7 @@
   <label for="home-tab">Home</label>
   <div class="tab animate__animated animate__fadeInUp" id="home-tab-div">
     <a href="{% url 'speaker:homepage' %}" class="tab-item {% if request.path == '/speaker/' %}active{% endif %}">Dashboard</a>
-    <a href="#" class="tab-item">Profile</a>
+    <a href="{% url 'speaker:profile' %}" class="tab-item">Profile</a>
     <a href="#" class="tab-item">Contracts</a>
   </div>
 
