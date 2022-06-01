@@ -20,6 +20,7 @@ class BaseUserModel(models.Model):
     current_address = models.CharField(max_length=256, null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     phone_number = models.CharField(max_length=256, null=True, blank=True)
+    verified = models.BooleanField(default=False)
     organization_code = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
     def __str__(self):
