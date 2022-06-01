@@ -2,13 +2,15 @@ import json
 import os
 
 from django.conf import settings
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.views import View
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, FormView
 
 from professor.models import ExamSet
-from speaker.models import SpeakerSubmission
+from speaker.models import SpeakerSubmission, ExamSetSubmission
+from worker.forms import ExamSetSubmissionFilterForm
 from worker.models import WorkerSubmission
 
 
@@ -17,15 +19,31 @@ def homepage(request):
     return render(request, 'worker/homepage.html', context)
 
 
-class ExamListView(TemplateView):
+class ExamListView(FormView):
     template_name = "worker/examList.html"
+    form_class = ExamSetSubmissionFilterForm
 
+    def get_context_data(self, **kwargs):
+        context = super(ExamListView, self).get_context_data(**kwargs)
+        return context
 
 class ExamListViewAjax(ListView):
     template_name = "worker/examListAjax.html"
+    difficulty_filters = {}
+    task_type_filters = {}
+    def dispatch(self, request, *args, **kwargs):
+        self.difficulty_filters = {
+            'exam_set__difficulty_level__in': self.request.GET.getlist('difficulty_level'),
+            'exam_set__difficulty_level': 0,
+        }
+
+        self.task_type_filters = {
+            'status__in': self.request.GET.getlist('work_type'),
+        }
+        return super(ExamListViewAjax, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        return SpeakerSubmission.objects.all()
+        return ExamSetSubmission.objects.filter(**self.difficulty_filters, _connector=Q.OR).filter(**self.task_type_filters, _connector=Q.OR)
 
 
 class QuestionSetListView(ListView):

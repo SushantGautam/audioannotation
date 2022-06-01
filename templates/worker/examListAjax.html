@@ -10,7 +10,6 @@
             <th>{% trans "Exam Name" %}</th>
             <th>{% trans "Type" %}</th>
             <th>{% trans "Difficulty level" %}</th>
-            <th>{% trans "Question Set ID" %}</th>
             <th>{% trans "No. of Questions" %}</th>
             <th>{% trans "Status" %}</th>
             <th>{% trans "Actions" %}</th>
@@ -25,10 +24,9 @@
                 <td>{{ object.exam_set.exam_name }}</td>
                 <td>{{ object.exam_set.question_sets.first.subcategory_code.name }}</td>
                 <td>{{ object.exam_set.difficulty_level }}</td>
+                <td>{{ object.exam_set.get_question_count }}</td>
                 <td>{{ object }}</td>
-                <td>{{ object }}</td>
-                <td>{{ object }}</td>
-                <td>{{ object }}</td>
+                <td>{% trans 'Apply' %}</td>
             </tr>
         {% endfor %}
         </tbody>
