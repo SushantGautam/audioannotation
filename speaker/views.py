@@ -10,7 +10,6 @@ from professor.models import Question, QuestionSet, ExamSet
 
 
 def homepage(request):
-    # return render(request, 'speaker/homepage.html')
     return render(request, 'speaker/homepage.html')
 
 class QuestionSetList(ListView):
