@@ -33,9 +33,12 @@ class EvaluationTitle(models.Model):
 
 class WorkerTask(models.Model):
     TASK_TYPE_CHOICES = (
-        ('S', 'Slicing'),
-        ('T', 'Tagging'),
-        ('E', 'Evaluation'),
+        ('S1', 'Slicing Level 1'),
+        ('S2', 'Slicing Level 2'),
+        ('T1', 'Tagging Level 1'),
+        ('T2', 'Tagging Level 2'),
+        ('E1', 'Evaluation Level 1'),
+        ('E2', 'Evaluation Level 2'),
     )
     worker = models.ForeignKey(Worker, on_delete=models.CASCADE)
     examset_submission = models.ForeignKey('speaker.ExamSetSubmission', on_delete=models.CASCADE)
@@ -43,7 +46,7 @@ class WorkerTask(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     approved = models.BooleanField(null=True) # null = not yet approved
     approved_at = models.DateTimeField(null=True)
-    task_type = models.CharField(max_length=1, choices=TASK_TYPE_CHOICES, default='S')
+    task_type = models.CharField(max_length=2, choices=TASK_TYPE_CHOICES, default='S1')
     status = models.BooleanField(default=False) # True = completed, False = not completed
 
     def __str__(self):
