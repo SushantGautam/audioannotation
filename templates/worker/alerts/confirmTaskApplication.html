@@ -26,13 +26,13 @@
 <script>
     $('#task-confirm-modal').show();
 
-    $('form').on('submit', function (e) {
+    $('form[name=task-confirmation-form]').on('submit', function (e) {
         e.preventDefault();
-        var form = $(this);
+        console.log('here')
         $.ajax({
-            url: form.url,
-            method: form.action,
-            data: form.serialize(),
+            url: this.action,
+            method: this.method,
+            data: $(this).serialize(),
             success: function (data) {
                 $('#task-confirm-modal').hide();
             }

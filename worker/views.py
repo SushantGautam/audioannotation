@@ -79,7 +79,7 @@ class WorkerTaskCreate(CreateView):
             task_type=type
         )
         if ins:
-            return JsonResponse(status=201)
+            return JsonResponse({}, status=201)
 
 
 class QuestionSetListView(ListView):

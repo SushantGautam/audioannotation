@@ -50,7 +50,7 @@ class WorkerTask(models.Model):
     status = models.BooleanField(default=False) # True = completed, False = not completed
 
     def __str__(self):
-        return '{} - {} - {}'.format(self.speaker_submission, self.task_type)
+        return '{} - {}'.format(self.examset_submission, self.task_type)
 
 class WorkerSubmission(models.Model):
     speaker_submission = models.ForeignKey('speaker.SpeakerSubmission', on_delete=models.CASCADE)
