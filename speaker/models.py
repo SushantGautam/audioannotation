@@ -93,3 +93,18 @@ class ExamSetSubmission(models.Model):
     def __str__(self):
         return self.exam_set.exam_name
 
+    def complete(self):
+        return self.status == 'EC2'
+
+    def next_status(self):
+        current = list(filter(lambda x: self.status in x, self.STATUS_CHOICES))[0]
+        if self.STATUS_CHOICES.index(current) != self.STATUS_CHOICES.__len__() - 1:
+            return self.STATUS_CHOICES[self.STATUS_CHOICES.index(current)+1]
+        return None
+
+    def prev_status(self):
+        current = list(filter(lambda x: self.status in x, self.STATUS_CHOICES))[0]
+        if self.STATUS_CHOICES.index(current) != 0:
+            return self.STATUS_CHOICES[self.STATUS_CHOICES.index(current)-1]
+        return None
+

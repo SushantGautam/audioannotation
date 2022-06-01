@@ -11,7 +11,7 @@ from django.views.generic import TemplateView, ListView, FormView, CreateView
 from professor.models import ExamSet
 from speaker.models import SpeakerSubmission, ExamSetSubmission
 from worker.forms import ExamSetSubmissionFilterForm
-from worker.models import WorkerSubmission
+from worker.models import WorkerSubmission, WorkerTask
 
 
 def homepage(request):
@@ -51,6 +51,35 @@ class ExamListViewAjax(ListView):
     def get_queryset(self):
         return ExamSetSubmission.objects.filter(**self.difficulty_filters, _connector=Q.OR).filter(
             **self.task_type_filters, _connector=Q.OR).filter(**self.region_filters, _connector=Q.OR)
+
+
+def task_choice_map(status):
+    MAPPING = {
+        'SA1': 'S1',
+        'SA2': 'S2',
+        'TA1': 'T1',
+        'TA2': 'T2',
+        'EA1': 'E1',
+        'EA2': 'E2',
+    }
+    return MAPPING[status]
+
+class WorkerTaskCreate(CreateView):
+    def get(self, request, *args, **kwargs):
+        context = {
+            'examSetSubmission': request.GET.get('examSetSubmission')
+        }
+        return render(request, 'worker/alerts/confirmTaskApplication.html', context)
+
+    def post(self, request, *args, **kwargs):
+        type = task_choice_map(ExamSetSubmission.objects.get(pk=request.POST.get('examSetSubmission')).next_status()[0])
+        ins = WorkerTask.objects.create(
+            worker=self.request.user.worker,
+            examset_submission_id=request.POST.get('examSetSubmission'),
+            task_type=type
+        )
+        if ins:
+            return JsonResponse(status=201)
 
 
 class QuestionSetListView(ListView):

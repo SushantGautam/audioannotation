@@ -26,15 +26,29 @@
                 <td>{{ object.exam_set.difficulty_level }}</td>
                 <td>{{ object.exam_set.get_question_count }}</td>
                 <td>{{ object }}</td>
-                <td><button class="btn btn-sm btn-dark"> {% trans 'Apply' %}</button></td>
+                <td><button class="btn btn-sm btn-dark apply-task" data-id="{{ object.id }}"> {% trans 'Apply' %}</button></td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 </div>
 
+<div id="task-confirm"></div>
 <script>
     $(document).ready(function () {
         $('.table').DataTable();
+    });
+
+    $('.apply-task').on('click', function () {
+        $.ajax({
+            url: "{% url 'worker:task_create' %}",
+            method: 'GET',
+            data: {
+                'examSetSubmission': $(this).attr('data-id'),
+            },
+            success: function (response) {
+                $('#task-confirm').append(response);
+            }
+        })
     });
 </script>
