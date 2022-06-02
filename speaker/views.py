@@ -98,8 +98,9 @@ class ContractView(View):
         return render(request, 'speaker/contract.html', context)
 
     def post(self, request, **kwargs):
-        if self.request.user.speaker.has_submitted_contract():
-            contract = ContractSign.objects.get(user=self.request.user, contract_code__user_type='SPE', approved=None,
+        if ContractSign.objects.filter(user=self.request.user, contract_code__user_type='SPE', approved=False,
+                                       contract_code__created_by__organization_code=self.request.user.organization_code).exists():
+            contract = ContractSign.objects.get(user=self.request.user, contract_code__user_type='SPE', approved=False,
                                                 contract_code__created_by__organization_code=self.request.user.organization_code)
         else:
             contract = ContractSign()
