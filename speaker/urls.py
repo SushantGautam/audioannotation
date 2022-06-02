@@ -11,3 +11,8 @@ urlpatterns = [
     path('exam/question_set/', views.QuestionSetList.as_view(), name='question_set_list'),
     path('exam_popup/', views.ExamPopupView.as_view(), name='exam_popup'),
 ]
+
+# contract urls
+urlpatterns += [
+    path('contract/', views.ContractView.as_view(), name='contract'),
+]

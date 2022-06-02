@@ -1,7 +1,8 @@
-from telnetlib import STATUS
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
-from orgadmin.models import BaseUserModel
+from orgadmin.models import BaseUserModel, Contract, ContractSign
+
 
 class Worker(BaseUserModel):
     bank_name = models.CharField(max_length=256, null=True, blank=True)
@@ -9,20 +10,35 @@ class Worker(BaseUserModel):
     education_level = models.CharField(max_length=256, null=True, blank=True)
     education_field = models.CharField(max_length=256, null=True, blank=True)
     class Meta:
-        verbose_name = 'Worker'
-        verbose_name_plural = 'Workers'
+        verbose_name = _('Worker')
+        verbose_name_plural = _('Workers')
+
+    def has_contract(self):
+        return Contract.objects.filter(user_type='WOR', is_active=True,
+                                       created_by__organization_code=self.organization_code).exists()
+
+    def has_submitted_contract(self):
+        return ContractSign.objects.filter(user=self.user, contract_code__user_type='WOR', approved=None,
+                                           contract_code__created_by__organization_code=self.organization_code).exists()
+
+    def has_contract_approved(self):
+        return ContractSign.objects.filter(user=self.user, contract_code__user_type='WOR', approved=True,
+                                           contract_code__created_by__organization_code=self.organization_code).exists()
+
 
 class EvaluationTitle(models.Model):
     EVALUATION_TYPE_CHOICES = (
-        ('P', 'Proficiency'),
-        ('F', 'Fluency'),
-        ('C', 'Content'),
-        ('D', 'Delivery'),
-        ('A', 'Accuracy'),
+        ('PR', _('Pronunciation')),
+        ('FL', _('Fluency')),
+        ('CN', _('Content')),
+        ('DE', _('Delivery')),
+        ('CP', _('Comprehension')),
+        ('LU', _('Language Use')),
     )
     title = models.CharField(max_length=256)
     score = models.IntegerField(default=0)
-    evaluation_type = models.CharField(max_length=1, choices=EVALUATION_TYPE_CHOICES)
+    evaluation_code = models.CharField(max_length=256)
+    evaluation_type = models.CharField(max_length=2, choices=EVALUATION_TYPE_CHOICES)
     subcategory_code = models.ForeignKey('professor.SubCategory', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -33,12 +49,12 @@ class EvaluationTitle(models.Model):
 
 class WorkerTask(models.Model):
     TASK_TYPE_CHOICES = (
-        ('S1', 'Slicing Level 1'),
-        ('S2', 'Slicing Level 2'),
-        ('T1', 'Tagging Level 1'),
-        ('T2', 'Tagging Level 2'),
-        ('E1', 'Evaluation Level 1'),
-        ('E2', 'Evaluation Level 2'),
+        ('S1', _('Slicing Level 1')),
+        ('S2', _('Slicing Level 2')),
+        ('T1', _('Tagging Level 1')),
+        ('T2', _('Tagging Level 2')),
+        ('E1', _('Evaluation Level 1')),
+        ('E2', _('Evaluation Level 2')),
     )
     worker = models.ForeignKey(Worker, on_delete=models.CASCADE)
     examset_submission = models.ForeignKey('speaker.ExamSetSubmission', on_delete=models.CASCADE)

@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.template import RequestContext
 from django.views.generic import ListView, FormView, TemplateView
 
+from orgadmin.models import Contract
 from speaker.forms import SpeakerSubmissionForm
 from speaker.models import Speaker, SpeakerSubmission
 
@@ -11,6 +12,7 @@ from professor.models import Question, QuestionSet, ExamSet
 
 def homepage(request):
     return render(request, 'speaker/homepage.html')
+
 
 class QuestionSetList(ListView):
     template_name = 'speaker/question_set_list.html'
@@ -21,6 +23,7 @@ class QuestionSetList(ListView):
         exam_set = ExamSet.objects.get(pk=self.request.GET['exam_set'])
         context['object_list'] = exam_set.question_sets.all()
         return context
+
 
 class ExamSetList(ListView):
     template_name = 'speaker/exam_set_list.html'
@@ -44,8 +47,8 @@ class ExamPopupView(FormView):
         exam_set = context['qn'].questionset_set.first().examset_set.first()
         # que_set = context['qn'].questionset_set.first()
         context['qn'].can_submit = not SpeakerSubmission.objects.filter(question=context['qn'],
-                                                                      speaker=speaker,
-                                                                      exam_set=exam_set).exists()
+                                                                        speaker=speaker,
+                                                                        exam_set=exam_set).exists()
 
         context['speaker'] = speaker
         context['qn_set'] = qn_set
@@ -81,3 +84,13 @@ class ExamPopupView(FormView):
 
 class ProfileView(TemplateView):
     template_name = "speaker/profile.html"
+
+
+class ContractView(TemplateView):
+    template_name = "speaker/contract.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ContractView, self).get_context_data(**kwargs)
+        context['contract'] = Contract.objects.filter(user_type='SPE', is_active=True,
+                                                      created_by__organization_code=self.request.user.speaker.organization_code).first()
+        return context
