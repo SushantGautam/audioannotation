@@ -82,12 +82,15 @@ class WorkerTaskCreate(CreateView):
             return JsonResponse({}, status=201)
 
 
-class QuestionSetListView(ListView):
-    template_name = "worker/questionSetList.html"
-    model = SpeakerSubmission
+class WorkerTaskListView(ListView):
+    model = WorkerTask
+    template_name = 'worker/workerTaskList.html'
+
+    def get_template_names(self):
+        return self.template_name
 
     def get_queryset(self):
-        return SpeakerSubmission.objects.all()
+        return super().get_queryset()
 
 
 class AnnotationPage(TemplateView):
