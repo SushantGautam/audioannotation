@@ -40,7 +40,7 @@ class Contract(models.Model):
     USER_TYPE_CHOICES = (
         ('PRF', 'Professor'),
         ('WOR', 'Worker'),
-        ('STU', 'Student'),
+        ('SPE', 'Speaker'),
     )
     title = models.CharField(max_length=256)
     user_type = models.CharField(choices=USER_TYPE_CHOICES, max_length=3)
