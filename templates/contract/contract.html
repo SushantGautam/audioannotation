@@ -16,6 +16,7 @@
         text-align: center;
         margin-top: 3rem;
     }
+
     .form-container {
         margin-top: 3rem;
     }
@@ -26,7 +27,7 @@
         <div class="progress-bar {% if user.speaker.has_contract %}bg-success{% endif %}" style="width:33.33%">
             {% trans 'Contract Availability' %}
         </div>
-        <div class="progress-bar {% if user.speaker.has_contract_submitted %}bg-success{% endif %}"
+        <div class="progress-bar {% if user.speaker.has_submitted_contract or user.speaker.has_contract_approved %}bg-success{% endif %}"
              id="signed" style="width:33.33%">
             {% trans 'Contract Signed' %}
         </div>
@@ -41,9 +42,9 @@
 <div>
     {% if not user.speaker.has_contract %}
         Contract is not available.
-    {% elif user.speaker.has_contract_submitted and not user.speaker.has_contract_approved %}
+    {% elif user.speaker.has_submitted_contract and not user.speaker.has_contract_approved %}
         Your contract is waiting approval. Please be patient.
-    {% elif not user.speaker.has_contract_submitted %}
+    {% elif not user.speaker.has_submitted_contract and not user.speaker.has_contract_approved %}
         Please Submit the contract below.
 
         <div class="contract-container">
@@ -66,9 +67,11 @@
                 {% endif %}
             </div>
             <div class="form-container">
-                 <form name="contract-submission">
+                <form name="contract-submission" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
                     <div>
-                        <input type="file" name="contract-file">
+                        <input type="file" name="contract-file" required>
+                        <input type="hidden" name="contract-id" value="{{ contract.id }}">
                     </div>
                     <div>
                         <input type="checkbox" id="agree-terms" onchange="toggleDisabledFormButton(this)">
@@ -79,6 +82,8 @@
             </div>
 
         </div>
+    {% elif user.speaker.has_contract_approved %}
+        Congratulation. Your contract is approved.
     {% endif %}
 </div>
 

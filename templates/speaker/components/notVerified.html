@@ -19,7 +19,7 @@
     <div class="progress-bar {% if user.speaker.verified %}bg-success{% endif %}" id="verified" style="width:25%">
         {% trans 'Verified' %}
     </div>
-    <div class="progress-bar {% if user.speaker.verified and user.speaker.has_contract_submitted %}bg-success{% endif %}"
+    <div class="progress-bar {% if user.speaker.verified and user.speaker.has_submitted_contract %}bg-success{% endif %}"
          id="signed" style="width:25%">
         {% trans 'Contract Signed' %}
     </div>

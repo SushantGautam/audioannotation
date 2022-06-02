@@ -1,9 +1,10 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.template import RequestContext
+from django.views import View
 from django.views.generic import ListView, FormView, TemplateView
 
-from orgadmin.models import Contract
+from orgadmin.models import Contract, ContractSign
 from speaker.forms import SpeakerSubmissionForm
 from speaker.models import Speaker, SpeakerSubmission
 
@@ -86,11 +87,22 @@ class ProfileView(TemplateView):
     template_name = "speaker/profile.html"
 
 
-class ContractView(TemplateView):
-    template_name = "speaker/contract.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(ContractView, self).get_context_data(**kwargs)
+class ContractView(View):
+    def get(self, request, **kwargs):
+        context = {}
         context['contract'] = Contract.objects.filter(user_type='SPE', is_active=True,
                                                       created_by__organization_code=self.request.user.speaker.organization_code).first()
-        return context
+        return render(request, 'speaker/contract.html', context)
+
+    def post(self, request, **kwargs):
+        if self.request.user.speaker.has_submitted_contract():
+            contract = ContractSign.objects.get(user=self.request.user, contract_code__user_type='SPE', approved=None,
+                                                contract_code__created_by__organization_code=self.request.user.organization_code)
+        else:
+            contract = ContractSign()
+        contract.user = request.user
+        contract.upload_file = request.FILES['contract-file']
+        contract.approved = None
+        contract.contract_code_id = request.POST.get('contract-id')
+        contract.save()
+        return redirect('speaker:contract')
