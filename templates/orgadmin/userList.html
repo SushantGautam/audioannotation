@@ -1,0 +1,198 @@
+{% extends "orgadmin/base.html" %} 
+{% load static %}
+{% load i18n %}
+
+
+{% block styles %}
+<style>
+    main{
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+   }
+  
+   section{
+        margin-block:1rem;
+    }
+
+  .title{
+    font-weight: 500;
+  }
+
+  .users{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1rem;
+    background-color: white;
+    /* padding-block: 1rem; */
+  }
+
+  .user-card , .worker-stat{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    border: 2.5px solid lightgrey;
+  }
+
+  .user-card .right-side {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .new-additions , .time{
+    display: flex;
+    flex-direction: column;
+    padding: 0rem 0.45rem 0 0.25rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 0.25rem;
+    background-color: rgba(0,0,0, 0.05);
+    color: #0ab2a9;
+  }
+
+  .count {
+    font-weight: 600; 
+    font-size: 1.5rem;
+  }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<main class="users-list">
+    <h1 class="title">Users List</h1>
+
+    <section class="users">
+        <div class="user-card">
+        <div class="right-side">
+            <div>
+            <svg class="svg-inline--fa fa-users" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="users" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" data-fa-i2svg=""><path fill="currentColor" d="M319.9 320c57.41 0 103.1-46.56 103.1-104c0-57.44-46.54-104-103.1-104c-57.41 0-103.1 46.56-103.1 104C215.9 273.4 262.5 320 319.9 320zM369.9 352H270.1C191.6 352 128 411.7 128 485.3C128 500.1 140.7 512 156.4 512h327.2C499.3 512 512 500.1 512 485.3C512 411.7 448.4 352 369.9 352zM512 160c44.18 0 80-35.82 80-80S556.2 0 512 0c-44.18 0-80 35.82-80 80S467.8 160 512 160zM183.9 216c0-5.449 .9824-10.63 1.609-15.91C174.6 194.1 162.6 192 149.9 192H88.08C39.44 192 0 233.8 0 285.3C0 295.6 7.887 304 17.62 304h199.5C196.7 280.2 183.9 249.7 183.9 216zM128 160c44.18 0 80-35.82 80-80S172.2 0 128 0C83.82 0 48 35.82 48 80S83.82 160 128 160zM551.9 192h-61.84c-12.8 0-24.88 3.037-35.86 8.24C454.8 205.5 455.8 210.6 455.8 216c0 33.71-12.78 64.21-33.16 88h199.7C632.1 304 640 295.6 640 285.3C640 233.8 600.6 192 551.9 192z"></path></svg><!-- <i class="fa-solid fa-users"></i> Font Awesome fontawesome.com -->
+            <span class="count"> 1123</span>
+            </div>
+            <span class="title"> Total Users</span>
+        </div>
+        <span class="new-additions">+98</span>
+        </div>
+
+        <div class="user-card">
+        <div class="right-side">
+            <div>
+            <svg class="svg-inline--fa fa-microphone-lines" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="microphone-lines" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg=""><path fill="currentColor" d="M192 352c53.03 0 96-42.97 96-96h-80C199.2 256 192 248.8 192 240S199.2 224 208 224H288V192h-80C199.2 192 192 184.8 192 176S199.2 160 208 160H288V127.1h-80c-8.836 0-16-7.164-16-16s7.164-16 16-16L288 96c0-53.03-42.97-96-96-96s-96 42.97-96 96v160C96 309 138.1 352 192 352zM344 192C330.7 192 320 202.7 320 215.1V256c0 73.33-61.97 132.4-136.3 127.7c-66.08-4.169-119.7-66.59-119.7-132.8L64 215.1C64 202.7 53.25 192 40 192S16 202.7 16 215.1v32.15c0 89.66 63.97 169.6 152 181.7V464H128c-18.19 0-32.84 15.18-31.96 33.57C96.43 505.8 103.8 512 112 512h160c8.222 0 15.57-6.216 15.96-14.43C288.8 479.2 274.2 464 256 464h-40v-33.77C301.7 418.5 368 344.9 368 256V215.1C368 202.7 357.3 192 344 192z"></path></svg><!-- <i class="fa-solid fa-microphone-lines"></i> Font Awesome fontawesome.com -->
+            <span class="count">222</span>
+            </div>
+            <span class="title"> Speakers</span>
+        </div>
+        <span class="new-additions">+98</span>
+
+        </div>
+
+        <div class="user-card">
+        <div class="right-side">
+            <div>
+            <svg class="svg-inline--fa fa-person-chalkboard" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="person-chalkboard" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" data-fa-i2svg=""><path fill="currentColor" d="M144 48C144 21.49 165.5 0 192 0C218.5 0 240 21.49 240 48C240 74.51 218.5 96 192 96C165.5 96 144 74.51 144 48zM152 512C134.3 512 120 497.7 120 480V256.9L91.43 304.5C82.33 319.6 62.67 324.5 47.52 315.4C32.37 306.3 27.47 286.7 36.58 271.5L94.85 174.6C112.2 145.7 143.4 128 177.1 128H320V48C320 21.49 341.5 .0003 368 .0003H592C618.5 .0003 640 21.49 640 48V272C640 298.5 618.5 320 592 320H368C341.5 320 320 298.5 320 272V224H384V256H576V64H384V128H400C417.7 128 432 142.3 432 160C432 177.7 417.7 192 400 192H264V480C264 497.7 249.7 512 232 512C214.3 512 200 497.7 200 480V352H184V480C184 497.7 169.7 512 152 512L152 512z"></path></svg><!-- <i class="fa-solid fa-person-chalkboard"></i> Font Awesome fontawesome.com -->
+            <span class="count">123</span>
+            </div>
+            <span class="title"> Professors</span>
+        </div>
+        <span class="new-additions">+98</span>
+
+        </div>
+
+        <div class="user-card">
+        <div class="right-side">
+            <div>
+            <svg class="svg-inline--fa fa-person-digging" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="person-digging" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="currentColor" d="M272 95.93c26.5 0 47.99-21.47 47.99-47.97S298.5 0 272 0C245.5 0 224 21.47 224 47.97S245.5 95.93 272 95.93zM209.7 357.3c-25.75-17.25-52.25-33.24-79.5-48.11L58.62 270.2L1.246 471.1c-4.875 16.1 4.1 34.74 22 39.62s34.63-4.998 39.5-21.99l36.63-128.1l60.63 40.37v78.86c0 17.62 14.38 31.99 32 31.99s32-14.37 32-31.99l.0022-95.93C224 373.2 218.6 363.2 209.7 357.3zM311.1 416c-13.88 0-25.95 8.863-30.33 21.86l-24.75 74.07h319.9l-101.9-206.3c-11.38-22.49-43.1-23.63-56.1-2.01l-31.89 54.21l-65.26-35.64l-24-121.2C288.1 161.3 263.2 127.7 227.1 109.7c-1-.4999-2.125-.625-3.125-1.125c-2.25-1.125-4.752-1.1-7.252-2.625C201.5 99.85 185.2 95.98 168.7 95.98H95.1c-9.25 0-18.05 4.061-24.18 10.93l-55.95 63.92c-.75 .9998-1.5 2.124-2.25 3.249c-8.875 13.1-3 32.87 11.63 40.74l336.6 184.3l-9.837 16.87H311.1zM105.9 204.1l-23.5-12.87l28.13-32.12h34.38L105.9 204.1zM199.5 256.1l34.9-41.28l13.5 67.61L199.5 256.1z"></path></svg><!-- <i class="fa-solid fa-person-digging"></i> Font Awesome fontawesome.com -->
+            <span class="count">333</span>
+            </div>
+            <span class="title"> Workers</span>
+        </div>
+        <span class="new-additions">+98</span>
+        
+        </div>
+    </section>
+
+    <section class="table-section">
+        <table class="table py-3" cellspacing="0" id="">
+
+            <thead class="">
+                <tr class="">
+                    <th>{% trans "S. No." %}</th>
+                    <th>{% trans "User ID" %}</th>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Email" %}</th>
+                    <th>{% trans "Type" %}</th>
+                    
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td> 01</td>
+                    <td> 1234523</td>
+                    <td> Rickity Cricket</td>
+                    <td> rickity@whalespace.com</td>
+                    <td> Speaker</td>
+                </tr>
+            </tbody>
+            
+        </table>
+    </section>
+    <!-- <div class="row active-members-navbar ">
+    
+        <a class="member-info-card active" id="all_button" active="" href="javascript:void(0)">
+            <div class="member-info-details">
+                <span class="items count">41</span>
+                <span class="items">Total Users</span>
+            </div>
+            <i class="fas fa-users"></i>
+        </a>
+        <a class="member-info-card" id="teacher_button" href="javascript:void(0)" >
+            <div class="member-info-details">
+                <span class="items count">13</span>
+                <span class="items">Speakers</span>
+            </div>
+            <i class="fas fa-chalkboard-teacher"></i>
+        </a>
+        <a class="member-info-card" id="student_button" href="javascript:void(0)" >
+            <div class="member-info-details">
+                <span class="items count">29</span>
+                <span class="items">Workers</span>
+            </div>
+            <i class="fas fa-user-graduate"></i>
+        </a>
+    
+        <a class="member-info-card" id="inactive_button" href="javascript:void(0)">
+            <div class="member-info-details">
+                <span class="items count">0</span>
+                <span class="items">Professors</span>
+            </div>
+            <i class="fas fa-user-slash"></i>
+        </a>
+    
+    </div> -->
+</main>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    <script>
+
+        //Change the color of member-info-card on active and inactive states
+
+        var cards = document.querySelectorAll(".member-info-card");
+
+        cards.forEach(function(item) {
+            item.addEventListener("click", function() {
+                cards.forEach(function(card) {
+                    card.classList.remove("active");
+                });
+                this.classList.add('active')
+            })
+        });
+    </script>
+
+{% endblock %}
