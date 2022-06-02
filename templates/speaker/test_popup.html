@@ -26,6 +26,39 @@
     #record_player{
         display: none;
     }
+    .question-count-buttons{
+      display: flex;
+      gap: 0.5rem;
+      background-color: #f3f3f3; 
+      padding: 0.5rem;
+    }
+
+    .question-parent{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      /* padding: 0.5rem; */
+    }
+
+    .navigation-buttons{
+      text-align: center;
+      padding-block: 0.5rem;
+    }
+
+    .bottom-section {
+    height: 15%;
+    /* padding: 0 12px 21px 12px; */
+    gap: 2rem;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    justify-content: center;
+
+    }
+
+    .progress-buttons svg{
+      height: 2rem;
+    }
 
 
 </style>
@@ -43,20 +76,19 @@
   </select>
 
 </form>
-<div class="row" style="padding: 12px">
-  <div class="{% if qn.upload_type == "AUD" %} col-9 {% else %} col-12 {% endif %}"
-       style="background-color: #f3f3f3; padding: 10px">
+<div class="d-flex">
+  <div class="question-count-buttons {% if qn.upload_type == 'AUD' %} col-9 {% else %} col-12 {% endif %}">
     {% for qn in qn_set.questions.all %}
 
       <button type="button"
-              style="display: inline-flex"
-              class="btn
+              
+              class="btn btn-sm
               {% if qn_num == forloop.counter0 %}
-                btn-info
+                btn-dark
               {% else %}
-                btn-outline-info
+                btn-outline-dark
               {% endif %}">{{ forloop.counter }}</button>
-      {% if not forloop.last %}&nbsp;&nbsp; > &nbsp;&nbsp;{% endif %}
+      <!-- {% if not forloop.last %}&nbsp;&nbsp; > &nbsp;&nbsp;{% endif %} -->
 
     {% endfor %}
   </div>
@@ -71,27 +103,14 @@
   {% endif %}
 </div>
 
-<div class="row" style="height: 60%">
-  <div class="col-2" style="display: flex">
-    {% if prev_qn != None %}
-      <button type="button"
-              style="margin: auto;"
-              onclick="prev_qn_btn_click();"
-              class="btn btn-primary prev_qn_btn">{% trans 'Previous' %}</button>
-    {% endif %}
-  </div>
-  <div class="col-8">
-    {#    <div class="row">#}
-    <div class="col-12">
+<div class="p-2" >
+
+  <!-- <div class=""> -->
+    <div class="">
       <span>{{ qn_num1 }}. </span><span> {{ qn.question_title }}</span>
     </div>
-    {#    </div>#}
-    {#    <div class="row">#}
-    <div class="col-12" style="margin-top: 20px;
-    height: 80%;
-    text-align: center;
-    justify-content: center;
-    border: 1px solid black;">
+
+    <div class="question-parent">
       <span style="margin: auto;">{{ qn.description }}</span>
 
       {% if qn.upload_type == "AUD" %}
@@ -104,32 +123,35 @@
         </div>
       {% endif %}
       {% if qn.upload_type == "IMG" %}
-        <div>
-          <img src="{{ qn.upload_file.url }}"
-               style="width: 70%"
-               alt="question image">
-        </div>
+        <!-- <div> -->
+        <img src="{{ qn.upload_file.url }}"style="width: 100%" alt="question image">
+        <!-- </div> -->
       {% endif %}
 
     </div>
-    {#    </div>#}
 
-  </div>
-  <div class="col-2" style="display: flex">
-    {% if next_qn != None %}
-      <button type="button"
-              style="margin: auto;"
-              onclick="next_qn_btn_click();"
-              class="btn btn-primary next_qn_btn">{% trans 'Next' %}</button>
-    {% endif %}
-  </div>
+  <!-- </div> -->
 </div>
 
-<div class="row" style="height: 30%; padding: 0 12px 21px 12px;">
-  {#  <div class="col-12" style="height: 33%; background-color: #f3f3f3;">#}
-  <div class="col-4" style="text-align: center; margin: auto; height: 100%; display: flex; background-color: #f3f3f3">
+<div class="navigation-buttons">
+    {% if prev_qn != None %}
+      <button  onclick="prev_qn_btn_click();" class="btn btn-sm btn-secondary prev_qn_btn">
+        {% trans 'Previous question' %}
+      </button>
+    {% endif %}
+
+    {% if next_qn != None %}
+      <button onclick="next_qn_btn_click();" class="btn btn-sm btn-secondary next_qn_btn">
+        {% trans 'Next question' %}
+      </button>
+    {% endif %}
+</div>
+
+<div class="bottom-section">
+  <!-- {#  <div class="col-12" style="height: 33%; background-color: #f3f3f3;">#} -->
+  <div class="">
     <div class="recorder_wave"
-         style="width: 80%; height: 60%; border: solid black; margin: auto; background-color: #360752">
+         style="width: 15rem; height: 4rem;  margin: auto; background-color: #360752">
       <svg preserveAspectRatio="none" id="visualizer" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <defs>
 
@@ -151,8 +173,8 @@
     </div>
     <!-- <h1>In <a href="https://codepen.io/zapplebee/full/gbNbZE/">Full Page view</a>, please allow the use of your microphone</h1> -->
   </div>
-  <div class="col-4" style="text-align: center; height: 100%; margin: auto; display: flex; background-color: #f3f3f3">
-    {#      <div class="col-12">#}
+  <div class="progress-buttons" style="text-align: center; display: flex;">
+    <!-- {#      <div class="col-12">#} -->
     <!-- <div id="controls">
       <button type="button" id="recordButton">Record</button>
       <button type="button" id="pauseButton" disabled>Pause</button>
@@ -160,22 +182,23 @@
     </div> -->
 
     <div class="prep_button_div">
-      <button id='prep_btn' type="button" style="margin: auto; border-radius: 50%"
-              class="btn btn-outline-info">{% trans 'Preparation' %}</button>
+      <i class="fa-solid fa-stopwatch"></i>
+      <button id='prep_btn' type="button" class="btn btn-sm btn-dark">{% trans 'Preparation' %}</button>
       <div class="prep_timer_div"></div>
     </div>
+
     <div class="rec_button_div">
-      <button id='recording_btn' type="button"  style="margin: auto; border-radius: 50%"
-              class="btn btn-outline-info ml-5">{% trans 'Recording' %}</button>
+      <i class="fa-solid fa-microphone-lines"></i>
+      <button id='recording_btn' type="button" class="btn btn-sm btn-secondary">{% trans 'Recording' %}</button>
       <div class="rec_timer_div"></div>
     </div>
 
 
-    {#      </div>#}
+    <!-- {#      </div>#} -->
 
   </div>
-  <div class="col-4" style="display: flex; background-color: #f3f3f3"></div>
-  {#  </div>#}
+  <!-- <div class="" style="display: flex; background-color: #f3f3f3"></div> -->
+  <!-- {#  </div>#} -->
 </div>
 
 <!--Recorder-->
@@ -266,9 +289,9 @@
 
       $(".prev_qn_btn").attr("disabled", "disabled");
       $(".next_qn_btn").attr("disabled", "disabled");
-      $(".recorder_wave h1").html("{% trans 'Preparation' %}...");
-      $('#prep_btn').removeClass('btn-outline-info');
-      $('#prep_btn').addClass('btn-info');
+      // $(".recorder_wave h1").html("{% trans 'Preparation' %}...");
+      // $('#prep_btn').removeClass('btn-outline-info');
+      // $('#prep_btn').addClass('btn-info');
       // prepTimeout = setTimeout(startWave, 5000);
 
       function startPreparationTimer(){
@@ -290,10 +313,10 @@
       }
 
       function startWave(){
-        $('#prep_btn').removeClass('btn-info');
-        $('#prep_btn').addClass('btn-outline-info');
-        $('#recording_btn').removeClass('btn-outline-info');
-        $('#recording_btn').addClass('btn-info');
+        $('#prep_btn').removeClass('btn-dark');
+        $('#prep_btn').addClass('btn-secondary');
+        $('#recording_btn').removeClass('btn-secondary');
+        $('#recording_btn').addClass('btn-dark');
         // var paths = document.getElementsByTagName('path');
         // var visualizer = document.getElementById('visualizer');
         // var mask = visualizer.getElementById('mask');
