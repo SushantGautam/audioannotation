@@ -98,5 +98,9 @@ class ExamSet(models.Model):
     def __str__(self):
         return self.exam_name
 
+    def get_difficulty_level(self):
+        difficulty_level_map = ['Both', 'Beginner', 'Advanced']
+        return difficulty_level_map[self.difficulty_level]
+
     def get_question_count(self):
         return self.question_sets.all().values_list('questions', flat=True).count()

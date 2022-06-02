@@ -52,6 +52,12 @@ class WorkerTask(models.Model):
     def __str__(self):
         return '{} - {}'.format(self.examset_submission, self.task_type)
 
+    def get_approved_display(self):
+        if not self.approved:
+            return "Not Approved"
+        return "Approved" if self.approved else "Rejected"
+
+
 class WorkerSubmission(models.Model):
     speaker_submission = models.ForeignKey('speaker.SpeakerSubmission', on_delete=models.CASCADE)
     worker_task = models.ForeignKey(WorkerTask, on_delete=models.CASCADE)
