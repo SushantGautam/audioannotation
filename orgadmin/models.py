@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Organization(models.Model):
     name = models.CharField(max_length=256)
     address = models.CharField(max_length=256, null=True, blank=True)
@@ -11,6 +12,7 @@ class Organization(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class BaseUserModel(models.Model):
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
@@ -25,8 +27,22 @@ class BaseUserModel(models.Model):
 
     def __str__(self):
         return self.user.username
+
     class Meta:
         abstract = True
+
+    def has_contract(self):
+        return Contract.objects.filter(user_type=1, is_active=True,
+                                       created_by__organization_code=self.organization_code).exists()
+
+    def has_submitted_contract(self):
+        return ContractSign.objects.filter(user=self, contract_code__user_type=1, approved=None,
+                                           contract_code__created_by__organization_code=self.organization_code).exists()
+
+    def has_contract_approved(self):
+        return ContractSign.objects.filter(user=self, contract_code__user_type=1, approved=True,
+                                           contract_code__created_by__organization_code=self.organization_code).exists()
+
 
 class OrgAdmin(BaseUserModel):
     class Meta:
@@ -50,7 +66,8 @@ class Contract(models.Model):
 
     def __str__(self):
         return self.title
-  
+
+
 class ContractSign(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
