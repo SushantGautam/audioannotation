@@ -31,11 +31,11 @@ class Speaker(BaseUserModel):
                                        created_by__organization_code=self.organization_code).exists()
 
     def has_submitted_contract(self):
-        return ContractSign.objects.filter(user=self, contract_code__user_type='SPE', approved=None,
+        return ContractSign.objects.filter(user=self.user, contract_code__user_type='SPE', approved=None,
                                            contract_code__created_by__organization_code=self.organization_code).exists()
 
     def has_contract_approved(self):
-        return ContractSign.objects.filter(user=self, contract_code__user_type='SPE', approved=True,
+        return ContractSign.objects.filter(user=self.user, contract_code__user_type='SPE', approved=True,
                                            contract_code__created_by__organization_code=self.organization_code).exists()
 
 

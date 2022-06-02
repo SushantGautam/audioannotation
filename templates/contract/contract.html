@@ -1,0 +1,91 @@
+{% load i18n %}
+{% load static %}
+
+<style>
+    .progress {
+        height: 3rem;
+        border-radius: 2rem;
+    }
+
+    .progress-bar {
+        background-color: grey;
+        border: #085b00 1px solid;
+    }
+
+    .contract-container {
+        text-align: center;
+        margin-top: 3rem;
+    }
+    .form-container {
+        margin-top: 3rem;
+    }
+</style>
+
+<div>
+    <div class="progress">
+        <div class="progress-bar {% if user.speaker.has_contract %}bg-success{% endif %}" style="width:33.33%">
+            {% trans 'Contract Availability' %}
+        </div>
+        <div class="progress-bar {% if user.speaker.has_contract_submitted %}bg-success{% endif %}"
+             id="signed" style="width:33.33%">
+            {% trans 'Contract Signed' %}
+        </div>
+        <div class="progress-bar {% if user.speaker.has_contract_approved %}bg-success{% endif %}"
+             id="approved" style="width:33.33%">
+            {% trans 'Contract Approved' %}
+        </div>
+    </div>
+
+</div>
+
+<div>
+    {% if not user.speaker.has_contract %}
+        Contract is not available.
+    {% elif user.speaker.has_contract_submitted and not user.speaker.has_contract_approved %}
+        Your contract is waiting approval. Please be patient.
+    {% elif not user.speaker.has_contract_submitted %}
+        Please Submit the contract below.
+
+        <div class="contract-container">
+            <h5>
+                {{ contract.title }}
+            </h5>
+            <p>
+                {{ contract.description }}
+            </p>
+            <div>
+                {% if contract.upload_file.url %}
+                    <p>
+                        {{ contract.get_upload_file_name }}
+                    </p>
+                    <a href="{{ contract.upload_file.url }}" class="btn btn-sm btn-dark" target="_blank">
+                        Download Contract
+                    </a>
+                {% else %}
+                    No Attachment Available
+                {% endif %}
+            </div>
+            <div class="form-container">
+                 <form name="contract-submission">
+                    <div>
+                        <input type="file" name="contract-file">
+                    </div>
+                    <div>
+                        <input type="checkbox" id="agree-terms" onchange="toggleDisabledFormButton(this)">
+                        {% trans 'I agree to all terms and conditions' %}
+                    </div>
+                    <button type="submit" class="btn btn-dark" disabled id="submit-btn">{% trans 'Submit' %}</button>
+                </form>
+            </div>
+
+        </div>
+    {% endif %}
+</div>
+
+<script>
+
+    function toggleDisabledFormButton(elem) {
+        var btnelement = document.getElementById('submit-btn');
+        btnelement.disabled = !btnelement.disabled;
+    }
+</script>

@@ -1,3 +1,5 @@
+import os
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -57,6 +59,9 @@ class Contract(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_upload_file_name(self):
+        return os.path.basename(self.upload_file.name)
 
 def contract_sign_file_name(instance, filename):
     return 'contract/contract_sign/{0}/{1}'.format(instance.user, filename)
