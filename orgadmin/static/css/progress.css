@@ -1,0 +1,264 @@
+@charset "UTF-8";
+/*font Variables*/
+/*Color Variables*/
+@import url("https://fonts.googleapis.com/css?family=Roboto:300i,400,400i,500,700,900");
+.multi_step_progress {
+  background: #f6f9fb;
+  display: block;
+  overflow: hidden;
+}
+.multi_step_progress #msprogress {
+  text-align: center;
+  position: relative;
+  padding-top: 50px;
+  margin: 0 auto;
+  background: #ffffff;
+  z-index: 1;
+}
+.multi_step_progress #msprogress .title {
+  text-align: center;
+  padding-bottom: 55px;
+}
+.multi_step_progress #msprogress .title h2 {
+  font: 500 24px/35px "Roboto", sans-serif;
+  color: #3f4553;
+  padding-bottom: 5px;
+}
+.multi_step_progress #msprogress .title p {
+  font: 400 16px/28px "Roboto", sans-serif;
+  color: #5f6771;
+}
+
+.multi_step_progress #msprogress fieldset .progress_group {
+  padding-bottom: 100px;
+  width: 100%;
+}
+.multi_step_progress #msprogress fieldset .progress-control,
+.multi_step_progress #msprogress fieldset .process_options {
+  border-radius: 3px;
+  border: 2px solid #d8e1e7;
+  padding: 0 20px;
+  height: auto;
+  font: 400 15px/48px "Roboto", sans-serif;
+  color: #5f6771;
+  box-shadow: none;
+  outline: none;
+  width: 50%;
+  text-align: center;
+}
+.multi_step_progress #msprogress fieldset .progress-control.placeholder,
+.multi_step_progress #msprogress fieldset .process_options.placeholder {
+  color: #5f6771;
+}
+.multi_step_progress #msprogress fieldset .progress-control:-moz-placeholder,
+.multi_step_progress #msprogress fieldset .process_options:-moz-placeholder {
+  color: #5f6771;
+}
+.multi_step_progress #msprogress fieldset .progress-control::-moz-placeholder,
+.multi_step_progress #msprogress fieldset .process_options::-moz-placeholder {
+  color: #5f6771;
+}
+.multi_step_progress #msprogress fieldset .progress-control::-webkit-input-placeholder,
+.multi_step_progress #msprogress fieldset .process_options::-webkit-input-placeholder {
+  color: #5f6771;
+}
+.multi_step_progress #msprogress fieldset .progress-control:hover, .multi_step_progress #msprogress fieldset .progress-control:focus,
+.multi_step_progress #msprogress fieldset .process_options:hover,
+.multi_step_progress #msprogress fieldset .process_options:focus {
+  border-color: #65BA4D;
+}
+.multi_step_progress #msprogress fieldset .progress-control:focus.placeholder,
+.multi_step_progress #msprogress fieldset .process_options:focus.placeholder {
+  color: transparent;
+}
+.multi_step_progress #msprogress fieldset .progress-control:focus:-moz-placeholder,
+.multi_step_progress #msprogress fieldset .process_options:focus:-moz-placeholder {
+  color: transparent;
+}
+.multi_step_progress #msprogress fieldset .progress-control:focus::-moz-placeholder,
+.multi_step_progress #msprogress fieldset .process_options:focus::-moz-placeholder {
+  color: transparent;
+}
+.multi_step_progress #msprogress fieldset .progress-control:focus::-webkit-input-placeholder,
+.multi_step_progress #msprogress fieldset .process_options:focus::-webkit-input-placeholder {
+  color: transparent;
+}
+.multi_step_progress #msprogress fieldset .process_options:after {
+  display: none;
+}
+.multi_step_progress #msprogress fieldset .process_options:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 20px;
+  font: normal normal normal 24px/48px Ionicons;
+  color: #5f6771;
+}
+.multi_step_progress #msprogress fieldset .process_options .list {
+  width: 100%;
+}
+.multi_step_progress #msprogress fieldset .done_text {
+  padding-top: 40px;
+}
+.multi_step_progress #msprogress fieldset .done_text .done_icon {
+  height: 36px;
+  width: 36px;
+  line-height: 36px;
+  font-size: 22px;
+  margin-bottom: 10px;
+  background: #65BA4D;
+  display: inline-block;
+  border-radius: 50%;
+  color: #65BA4D;
+  text-align: center;
+}
+.multi_step_progress #msprogress fieldset .done_text h6 {
+  line-height: 23px;
+}
+.multi_step_progress #msprogress fieldset .upload_screenplay {
+  margin-top: -10px;
+  padding-bottom: 30px;
+  position: relative;
+}
+.multi_step_progress #msprogress fieldset .upload_screenplay .done_icon {
+  height: 36px;
+  width: 36px;
+  line-height: 36px;
+  font-size: 22px;
+  position: absolute;
+  top: 4px;
+  right: 0;
+  background: #65BA4D;
+  display: inline-block;
+  border-radius: 50%;
+  color: #ffffff;
+  text-align: center;
+}
+.multi_step_progress #msprogress fieldset .upload_screenplay h4 {
+  font: 500 15px/23px "Roboto", sans-serif;
+  color: #5f6771;
+  padding: 0;
+}
+.multi_step_progress #msprogress fieldset .upload_screenplay p {
+  font: 100 15px/23px "Roboto", sans-serif;
+  color: #5f6771;
+  padding: 0;
+}
+.multi_step_progress #msprogress fieldset .input_group {
+  padding-bottom: 40px;
+}
+.multi_step_progress #msprogress fieldset .input_group .custom_file {
+  width: 100%;
+  height: auto;
+}
+.multi_step_progress #msprogress fieldset .input_group .custom_file .custom_file_label {
+  width: 168px;
+  border-radius: 5px;
+  cursor: pointer;
+  font: 700 14px/40px "Roboto", sans-serif;
+  border: 1px solid #99a2a8;
+  text-align: center;
+  transition: all 300ms linear 0s;
+  color: #5f6771;
+}
+.multi_step_progress #msprogress fieldset .input_group .custom_file .custom_file_label i {
+  font-size: 20px;
+  padding-right: 10px;
+}
+.multi_step_progress #msprogress fieldset .input_group .custom_file .custom_file_label:hover, .multi_step_progress #msprogress fieldset .input_group .custom_file .custom_file_label:focus {
+  background: #65BA4D;
+  border-color: #65BA4D;
+  color: #fff;
+}
+.multi_step_progress #msprogress fieldset .input_group .custom_file input {
+  display: none;
+}
+.multi_step_progress #msprogress fieldset .files_added {
+  text-align: left;
+  padding-left: 190px;
+  padding-bottom: 20px;
+}
+.multi_step_progress #msprogress fieldset .files_added li {
+  font: 400 15px/28px "Roboto", sans-serif;
+  color: #5f6771;
+  padding-left: 5px;
+}
+.multi_step_progress #msprogress fieldset .files_added li a {
+  color: #65BA4D;
+  font-weight: 500;
+  display: inline-block;
+  position: relative;
+  padding-left: 15px;
+}
+.multi_step_progress #msprogress fieldset .files_added li a i {
+  font-size: 22px;
+  padding-right: 8px;
+  position: absolute;
+  left: 0;
+  transform: rotate(20deg);
+}
+.multi_step_progress #msprogress #progressbar {
+  margin-bottom: 30px;
+  overflow: hidden;
+}
+.multi_step_progress #msprogress #progressbar li {
+  list-style-type: none;
+  color: #99a2a8;
+  font-size: 9px;
+  width: calc(100%/4);
+  float: left;
+  position: relative;
+  font: 500 13px/1 "Roboto", sans-serif;
+}
+.multi_step_progress #msprogress #progressbar li:nth-child(1):before {
+  font: var(--fa-font-solid);
+  content: "\2b";
+  line-height: 50px;
+  font-size: 1.2em;
+}
+.multi_step_progress #msprogress #progressbar li:nth-child(2):before {
+  font: var(--fa-font-solid);
+  content: "\f2c2";
+  line-height: 50px;
+  font-size: 1.2em;
+}
+.multi_step_progress #msprogress #progressbar li:nth-child(3):before {
+  font: var(--fa-font-solid);
+  content: "\f573";
+  line-height: 50px;
+  font-size: 1.2em;
+}
+.multi_step_progress #msprogress #progressbar li:nth-child(4):before {
+  font: var(--fa-font-solid);
+  content: "\f56c";
+  line-height: 50px;
+  font-size: 1.2em;
+}
+.multi_step_progress #msprogress #progressbar li:before {
+  width: 50px;
+  height: 50px;
+  display: block;
+  background: #eaf0f4;
+  border-radius: 50%;
+  margin: 0 auto 10px auto;
+}
+.multi_step_progress #msprogress #progressbar li:after {
+  content: "";
+  width: 100%;
+  height: 10px;
+  background: #eaf0f4;
+  position: absolute;
+  left: -50%;
+  top: 21px;
+  z-index: -1;
+}
+.multi_step_progress #msprogress #progressbar li:last-child:after {
+  width: 150%;
+}
+.multi_step_progress #msprogress #progressbar li.active {
+  color: #65BA4D;
+}
+.multi_step_progress #msprogress #progressbar li.active:before, .multi_step_progress #msprogress #progressbar li.active:after {
+  background: #65BA4D;
+  color: white;
+}
