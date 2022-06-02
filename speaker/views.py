@@ -92,6 +92,9 @@ class ContractView(View):
         context = {}
         context['contract'] = Contract.objects.filter(user_type='SPE', is_active=True,
                                                       created_by__organization_code=self.request.user.speaker.organization_code).first()
+        context['has_contract'] = request.user.speaker.has_contract
+        context['has_submitted_contract'] = request.user.speaker.has_contract
+        context['has_contract_approved'] = request.user.speaker.has_contract_approved
         return render(request, 'speaker/contract.html', context)
 
     def post(self, request, **kwargs):

@@ -24,14 +24,14 @@
 
 <div>
     <div class="progress">
-        <div class="progress-bar {% if user.speaker.has_contract %}bg-success{% endif %}" style="width:33.33%">
+        <div class="progress-bar {% if has_contract %}bg-success{% endif %}" style="width:33.33%">
             {% trans 'Contract Availability' %}
         </div>
-        <div class="progress-bar {% if user.speaker.has_submitted_contract or user.speaker.has_contract_approved %}bg-success{% endif %}"
+        <div class="progress-bar {% if has_submitted_contract or has_contract_approved %}bg-success{% endif %}"
              id="signed" style="width:33.33%">
             {% trans 'Contract Signed' %}
         </div>
-        <div class="progress-bar {% if user.speaker.has_contract_approved %}bg-success{% endif %}"
+        <div class="progress-bar {% if has_contract_approved %}bg-success{% endif %}"
              id="approved" style="width:33.33%">
             {% trans 'Contract Approved' %}
         </div>
@@ -40,11 +40,11 @@
 </div>
 
 <div>
-    {% if not user.speaker.has_contract %}
+    {% if not has_contract %}
         Contract is not available.
-    {% elif user.speaker.has_submitted_contract and not user.speaker.has_contract_approved %}
+    {% elif has_submitted_contract and not has_contract_approved %}
         Your contract is waiting approval. Please be patient.
-    {% elif not user.speaker.has_submitted_contract and not user.speaker.has_contract_approved %}
+    {% elif not has_submitted_contract and not has_contract_approved %}
         Please Submit the contract below.
 
         <div class="contract-container">
@@ -82,7 +82,7 @@
             </div>
 
         </div>
-    {% elif user.speaker.has_contract_approved %}
+    {% elif has_contract_approved %}
         Congratulation. Your contract is approved.
     {% endif %}
 </div>

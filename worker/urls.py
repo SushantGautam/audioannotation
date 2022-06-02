@@ -8,6 +8,11 @@ urlpatterns = [
     path('profile/', views.ProfileView.as_view(), name='profile'),
 ]
 
+# contract urls
+urlpatterns += [
+    path('contract/', views.ContractView.as_view(), name='contract'),
+]
+
 # Worker Tasks URLS
 urlpatterns += [
     path('exam/', views.ExamListView.as_view(), name='exam_list'),

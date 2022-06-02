@@ -4,10 +4,11 @@ import os
 from django.conf import settings
 from django.db.models import Q
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.views.generic import TemplateView, ListView, FormView, CreateView
 
+from orgadmin.models import Contract, ContractSign
 from professor.models import ExamSet
 from speaker.models import SpeakerSubmission, ExamSetSubmission
 from worker.forms import ExamSetSubmissionFilterForm
@@ -136,3 +137,27 @@ class SaveAnnotation(View):
 
 class ProfileView(TemplateView):
     template_name = "worker/profile.html"
+
+
+class ContractView(View):
+    def get(self, request, **kwargs):
+        context = {}
+        context['contract'] = Contract.objects.filter(user_type='WOR', is_active=True,
+                                                      created_by__organization_code=self.request.user.worker.organization_code).first()
+        context['has_contract'] = request.user.worker.has_contract
+        context['has_submitted_contract'] = request.user.worker.has_submitted_contract
+        context['has_contract_approved'] = request.user.worker.has_contract_approved
+        return render(request, 'worker/contract.html', context)
+
+    def post(self, request, **kwargs):
+        if self.request.user.worker.has_submitted_contract():
+            contract = ContractSign.objects.get(user=self.request.user, contract_code__user_type='SPE', approved=None,
+                                                contract_code__created_by__organization_code=self.request.user.worker.organization_code)
+        else:
+            contract = ContractSign()
+        contract.user = request.user
+        contract.upload_file = request.FILES['contract-file']
+        contract.approved = None
+        contract.contract_code_id = request.POST.get('contract-id')
+        contract.save()
+        return redirect('worker:contract')

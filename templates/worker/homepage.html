@@ -2,6 +2,31 @@
 {% load static %}
 {% load i18n %}
 
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/progress.css' %}">
+{% endblock %}
+
 {% block content %}
-    This is Homepage
+    <!-- Multi step progress -->
+    <section class="multi_step_progress">
+        <div id="msprogress">
+            <!-- progressbar -->
+            <ul id="progressbar">
+                <li class="active">{% trans 'Registered' %}</li>
+                <li class="{% if user.worker.verified %}active{% endif %}">{% trans 'Profile Verified' %}</li>
+                <li class="{% if user.worker.verified and user.worker.has_submitted_contract %}active{% endif %}">{% trans 'Contract Signed' %}</li>
+                <li class="{% if user.worker.verified and user.worker.has_contract_approved %}active{% endif %}">{% trans 'Contract Approved' %}</li>
+            </ul>
+            <!-- title -->
+            {% if not user.worker.verified %}
+                <div class="title mt-5">
+                    <h2>Your Profile is not Verified</h2>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+    <!-- End Multi step progress -->
+    {% if user.worker.verified %}
+        If the user is verified. Display data here.
+    {% endif %}
 {% endblock %}

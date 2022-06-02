@@ -7,18 +7,23 @@
     <div class="tab" id="home-tab-div">
         <a href="{% url 'worker:homepage' %}" class="tab-item active sadsa">{% trans 'Dashboard' %}</a>
         <a href="{% url 'worker:profile' %}" class="tab-item">{% trans 'Profile' %}</a>
+        {% if user.worker.verified %}
+            <a href="{% url 'worker:contract' %}" class="tab-item">Contracts</a>
+        {% endif %}
     </div>
 
-    <input type="radio" id="exam-tab" name="mytabs">
-    <label for="exam-tab">{% trans 'Exams' %}</label>
-    <div class="tab" id="exam-tab-div">
-        <a href="{% url 'worker:exam_list' %}" class="tab-item active">{% trans 'Exams' %}</a>
-        <a href="{% url 'worker:task_list' %}" class="tab-item active">{% trans 'My Tasks' %}</a>
-    </div>
+    {% if user.worker.has_contract_approved %}
+        <input type="radio" id="exam-tab" name="mytabs">
+        <label for="exam-tab">{% trans 'Exams' %}</label>
+        <div class="tab" id="exam-tab-div">
+            <a href="{% url 'worker:exam_list' %}" class="tab-item active">{% trans 'Exams' %}</a>
+            <a href="{% url 'worker:task_list' %}" class="tab-item active">{% trans 'My Tasks' %}</a>
+        </div>
 
-    <input type="radio" id="my-questions-tab" name="mytabs">
-    <label for="my-questions-tab">{% trans 'My Tasks' %}</label>
-    <div class="tab" id="my-questions-tab-div">
-        <a href="{% url 'worker:task_list' %}" class="tab-item active">{% trans 'Slicing' %}</a>
-    </div>
+        <input type="radio" id="my-questions-tab" name="mytabs">
+        <label for="my-questions-tab">{% trans 'My Tasks' %}</label>
+        <div class="tab" id="my-questions-tab-div">
+            <a href="{% url 'worker:task_list' %}" class="tab-item active">{% trans 'Slicing' %}</a>
+        </div>
+    {% endif %}
 </div>
