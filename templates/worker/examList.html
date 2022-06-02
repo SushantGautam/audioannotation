@@ -1,9 +1,18 @@
 {% extends "worker/base.html" %}
 {% load static %}
 {% load i18n %}
-{% block styles %}
 
+{% block styles %}
+<style>
+    .search-form ul {
+        display: flex;
+        justify-content: flex-start;
+        gap: 3rem;
+        list-style-type: none;
+    }
+</style>
 {% endblock styles %}
+
 {% block content %}
     <div class="bg-white pt-5">
         <h3 class="page-heading">{% trans "Search Exams" %}</h3>
