@@ -3,5 +3,9 @@
 {% load i18n %}
 
 {% block content %}
-
+    {% if not user.speaker.verified %}
+        {% include 'speaker/components/notVerified.html' %}
+    {% else %}
+        If the user is verified. Display data here.
+    {% endif %}
 {% endblock %}
