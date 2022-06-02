@@ -81,7 +81,7 @@
 	"pk": 1,
 	"fields": {
 		"question": 1,
-		"speaker": 1,
+		"speaker": 2,
 		"exam_set": 1,
 		"audio_file": "speaker/audio/nsdevil/None2018_Toronto_Korean_Speech__Quiz_Contest_-_Grand_Prize_Tekol8h.mp3",
 		"created_at": "2022-05-24T11:11:34.867Z",
