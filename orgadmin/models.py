@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Organization(models.Model):
     name = models.CharField(max_length=256)
     address = models.CharField(max_length=256, null=True, blank=True)
@@ -11,6 +12,7 @@ class Organization(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class BaseUserModel(models.Model):
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
@@ -25,8 +27,10 @@ class BaseUserModel(models.Model):
 
     def __str__(self):
         return self.user.username
+
     class Meta:
         abstract = True
+
 
 class OrgAdmin(BaseUserModel):
     class Meta:
@@ -56,7 +60,6 @@ class Contract(models.Model):
 
 def contract_sign_file_name(instance, filename):
     return 'contract/contract_sign/{0}/{1}'.format(instance.user, filename)
-
 class ContractSign(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     upload_file = models.FileField(upload_to=contract_sign_file_name, null=True, blank=True)

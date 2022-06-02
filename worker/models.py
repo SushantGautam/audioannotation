@@ -1,7 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from orgadmin.models import BaseUserModel
+from orgadmin.models import BaseUserModel, Contract, ContractSign
+
 
 class Worker(BaseUserModel):
     bank_name = models.CharField(max_length=256, null=True, blank=True)
@@ -11,6 +12,19 @@ class Worker(BaseUserModel):
     class Meta:
         verbose_name = _('Worker')
         verbose_name_plural = _('Workers')
+
+    def has_contract(self):
+        return Contract.objects.filter(user_type='WOR', is_active=True,
+                                       created_by__organization_code=self.organization_code).exists()
+
+    def has_submitted_contract(self):
+        return ContractSign.objects.filter(user=self, contract_code__user_type='WOR', approved=None,
+                                           contract_code__created_by__organization_code=self.organization_code).exists()
+
+    def has_contract_approved(self):
+        return ContractSign.objects.filter(user=self, contract_code__user_type='WOR', approved=True,
+                                           contract_code__created_by__organization_code=self.organization_code).exists()
+
 
 class EvaluationTitle(models.Model):
     EVALUATION_TYPE_CHOICES = (

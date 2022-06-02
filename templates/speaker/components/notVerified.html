@@ -1,0 +1,31 @@
+{% load static %}
+{% load i18n %}
+
+<style>
+    .progress {
+        height: 3rem;
+        border-radius: 2rem;
+    }
+    .progress-bar {
+        background-color: grey;
+        border: #085b00 1px solid;
+    }
+</style>
+<div class="progress">
+    <div class="progress-bar bg-success" id="registered" style="width:25%">
+        {% trans 'Registered' %}
+    </div>
+    <div class="progress-bar {% if user.speaker.verified %}bg-success{% endif %}" id="verified" style="width:25%">
+        {% trans 'Verified' %}
+    </div>
+    <div class="progress-bar {% if user.speaker.verified %}bg-success{% endif %}" id="signed" style="width:25%">
+        {% trans 'Contract Signed' %}
+    </div>
+    <div class="progress-bar {% if user.speaker.verified %}bg-success{% endif %}" id="approved" style="width:25%">
+        {% trans 'Contract Approved' %}
+    </div>
+</div>
+
+<script>
+
+</script>
