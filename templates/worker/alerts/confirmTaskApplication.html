@@ -1,40 +1,40 @@
 {% load i18n %}
 
-<div class="modal" tabindex="-1" id="task-confirm-modal">
+<!-- Modal -->
+<div class="modal fade" id="task-confirm-modal" tabindex="-1" aria-hidden="true">
+    <form name="task-confirmation-form" method="post" action="{% url 'worker:task_create' %}">
+    {% csrf_token %}
     <div class="modal-dialog">
-        <form name="task-confirmation-form" method="post" action="{% url 'worker:task_create' %}">
-            {% csrf_token %}
-            <div class="modal-content">
-                <div class="modal-body">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
                     <p>{% trans 'Apply for Work?' %}</p>
                     <p>{% trans 'The deadline for work after approval is 7 days.' %}</p>
                     <p>{% trans 'If you do not complete work within deadline day, it will be removed from your account.' %}</p>
                 </div>
-
-                <div class="modal-footer">
-                    <input type="hidden" name="examSetSubmission" id="examSetSubmission"
-                           value="{{ examSetSubmission }}">
-                    <!--<input type="hidden" name="type" id="examSetSubmission" value="">-->
-                    <button type="submit" class="btn btn-dark">{% trans 'Confirm' %}</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans 'Close' %}</button>
-                </div>
+            <div class="modal-footer">
+                <input type="hidden" name="examSetSubmission" id="examSetSubmission" value="{{ examSetSubmission }}">
+                <button type="submit" class="btn btn-primary">{% trans 'Confirm' %}</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans 'Close' %}</button>
             </div>
-        </form>
+        </div>
     </div>
+    </form>
 </div>
 
 <script>
-    $('#task-confirm-modal').show();
+    $('#task-confirm-modal').modal('show');
 
     $('form[name=task-confirmation-form]').on('submit', function (e) {
         e.preventDefault();
-        console.log('here')
         $.ajax({
             url: this.action,
             method: this.method,
             data: $(this).serialize(),
             success: function (data) {
-                $('#task-confirm-modal').hide();
+                $('#task-confirm-modal').modal('hide');
             }
         })
     })
