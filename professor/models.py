@@ -54,8 +54,8 @@ class Question(models.Model):
     is_active = models.BooleanField(default=True)
     difficulty_level = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(2)], 
                                             help_text=_('0: both, 1: beginner, 2: advanced'))
-    ready_time = models.IntegerField(default=0)
-    speaking_time = models.IntegerField(default=0)
+    ready_time = models.IntegerField(default=2, help_text=_('Time in seconds'))
+    speaking_time = models.IntegerField(default=3, help_text=_('Time in seconds'))
     evaluation_purpose = models.CharField(max_length=256, null=True, blank=True)
     question_keywords = models.CharField(max_length=256, null=True, blank=True,
                                          help_text=_('Comma separated keywords'))
