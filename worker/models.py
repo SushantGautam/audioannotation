@@ -18,7 +18,7 @@ class Worker(BaseUserModel):
         return VerificationRequest.objects.filter(user=self.user).exists()
 
     def has_contract(self):
-        return Contract.objects.filter(user_type='SPE', created_by__organization_code=self.organization_code).exists()
+        return Contract.objects.filter(user_type='WOR', created_by__organization_code=self.organization_code).exists()
 
     def has_contract_submitted(self):
         return ContractSign.objects.filter(user=self.user, approved=None).exists()
