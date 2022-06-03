@@ -70,7 +70,7 @@ class ContractSign(models.Model):
     upload_file = models.FileField(upload_to=contract_sign_file_name, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    approved = models.BooleanField(default=None, null=True)
+    approved = models.BooleanField(null=True)
     approved_at = models.DateTimeField(null=True, blank=True)
     contract_code = models.ForeignKey(Contract, on_delete=models.CASCADE)
 
