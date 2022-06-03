@@ -28,11 +28,11 @@ class Worker(BaseUserModel):
 
 class EvaluationTitle(models.Model):
     EVALUATION_TYPE_CHOICES = (
-        ('PR', _('Pronunciation')),
+        ('AC', _('Accentedness')),
         ('FL', _('Fluency')),
         ('CN', _('Content')),
         ('DE', _('Delivery')),
-        ('CP', _('Comprehension')),
+        ('CO', _('Comprehensibility')),
         ('LU', _('Language Use')),
     )
     title = models.CharField(max_length=256)
