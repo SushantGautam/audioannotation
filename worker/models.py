@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from orgadmin.models import BaseUserModel, Contract, ContractSign
+from orgadmin.models import BaseUserModel, Contract, ContractSign, VerificationRequest
 
 
 class Worker(BaseUserModel):
@@ -14,18 +14,17 @@ class Worker(BaseUserModel):
         verbose_name = _('Worker')
         verbose_name_plural = _('Workers')
 
+    def has_request_verification(self):
+        return VerificationRequest.objects.filter(user=self.user).exists()
 
     def has_contract(self):
-        from audioan.contract_methods import has_contract
-        return has_contract('WOR', self.organization_code)
+        return Contract.objects.filter(user_type='SPE', created_by__organization_code=self.organization_code).exists()
 
     def has_contract_submitted(self):
-        from audioan.contract_methods import has_contract_submitted
-        return has_contract_submitted(self.user, 'WOR', self.organization_code)
+        return ContractSign.objects.filter(user=self.user, approved=None).exists()
 
     def has_contract_approved(self):
-        from audioan.contract_methods import has_contract_approved
-        return has_contract_approved(self.user, 'WOR', self.organization_code)
+        return ContractSign.objects.filter(user=self.user, approved=True).exists()
 
 
 class EvaluationTitle(models.Model):

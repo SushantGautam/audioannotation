@@ -41,19 +41,6 @@ class Speaker(BaseUserModel):
         return ContractSign.objects.filter(user=self.user, approved=True).exists()
 
 
-    # def has_contract(self):
-    #     from audioan.contract_methods import has_contract
-    #     return has_contract('SPE', self.organization_code)
-
-    # def has_contract_submitted(self):
-    #     from audioan.contract_methods import has_contract_submitted
-    #     return has_contract_submitted(self.user, 'SPE', self.organization_code)
-
-    # def has_contract_approved(self):
-    #     from audioan.contract_methods import has_contract_approved
-    #     return has_contract_approved(self.user, 'SPE', self.organization_code)
-
-
 def audio_filename(instance, filename):
     return 'speaker/audio/{0}/{1}'.format(instance.speaker, str(instance.id) + filename)
 
