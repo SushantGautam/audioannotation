@@ -37,6 +37,7 @@ class EvaluationTitle(models.Model):
     )
     title = models.CharField(max_length=256)
     score = models.IntegerField(default=0)
+    evaluation_code = models.CharField(max_length=128)
     evaluation_type = models.CharField(max_length=2, choices=EVALUATION_TYPE_CHOICES)
     subcategory_code = models.ForeignKey('professor.SubCategory', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
