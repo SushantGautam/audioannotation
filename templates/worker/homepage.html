@@ -14,7 +14,7 @@
             <ul id="progressbar">
                 <li class="active">{% trans 'Registered' %}</li>
                 <li class="{% if user.worker.verified %}active{% endif %}">{% trans 'Profile Verified' %}</li>
-                <li class="{% if user.worker.verified and user.worker.has_submitted_contract %}active{% endif %}">{% trans 'Contract Signed' %}</li>
+                <li class="{% if user.worker.verified and user.worker.has_contract_submitted or user.worker.has_contract_approved  %}active{% endif %}">{% trans 'Contract Signed' %}</li>
                 <li class="{% if user.worker.verified and user.worker.has_contract_approved %}active{% endif %}">{% trans 'Contract Approved' %}</li>
             </ul>
             <!-- title -->

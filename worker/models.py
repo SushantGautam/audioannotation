@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from orgadmin.models import BaseUserModel, Contract, ContractSign
@@ -13,17 +14,18 @@ class Worker(BaseUserModel):
         verbose_name = _('Worker')
         verbose_name_plural = _('Workers')
 
-    def has_contract(self):
-        return Contract.objects.filter(user_type='WOR', is_active=True,
-                                       created_by__organization_code=self.organization_code).exists()
 
-    def has_submitted_contract(self):
-        return ContractSign.objects.filter(user=self.user, contract_code__user_type='WOR', approved=None,
-                                           contract_code__created_by__organization_code=self.organization_code).exists()
+    def has_contract(self):
+        from audioan.contract_methods import has_contract
+        return has_contract('WOR', self.organization_code)
+
+    def has_contract_submitted(self):
+        from audioan.contract_methods import has_contract_submitted
+        return has_contract_submitted(self.user, 'WOR', self.organization_code)
 
     def has_contract_approved(self):
-        return ContractSign.objects.filter(user=self.user, contract_code__user_type='WOR', approved=True,
-                                           contract_code__created_by__organization_code=self.organization_code).exists()
+        from audioan.contract_methods import has_contract_approved
+        return has_contract_approved(self.user, 'WOR', self.organization_code)
 
 
 class EvaluationTitle(models.Model):
@@ -70,8 +72,12 @@ class WorkerTask(models.Model):
 
     def get_approved_display(self):
         if not self.approved:
-            return "Not Approved"
+            return "Pending"
         return "Approved" if self.approved else "Rejected"
+
+    def get_task_url(self):
+        if self.task_type in ['S1', 'S2']:
+            return reverse('worker:annotation_page', args=(self.pk, ))
 
 
 class WorkerSubmission(models.Model):

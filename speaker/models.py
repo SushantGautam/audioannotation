@@ -33,16 +33,16 @@ class Speaker(BaseUserModel):
 
 
     def has_contract(self):
-        return Contract.objects.filter(user_type='SPE', is_active=True,
-                                       created_by__organization_code=self.organization_code).exists()
+        from audioan.contract_methods import has_contract
+        return has_contract('SPE', self.organization_code)
 
-    def has_submitted_contract(self):
-        return ContractSign.objects.filter(user=self.user, contract_code__user_type='SPE', approved=None,
-                                           contract_code__created_by__organization_code=self.organization_code).exists()
+    def has_contract_submitted(self):
+        from audioan.contract_methods import has_contract_submitted
+        return has_contract_submitted(self.user, 'SPE', self.organization_code)
 
     def has_contract_approved(self):
-        return ContractSign.objects.filter(user=self.user, contract_code__user_type='SPE', approved=True,
-                                           contract_code__created_by__organization_code=self.organization_code).exists()
+        from audioan.contract_methods import has_contract_approved
+        return has_contract_approved(self.user, 'SPE', self.organization_code)
 
 
 def audio_filename(instance, filename):

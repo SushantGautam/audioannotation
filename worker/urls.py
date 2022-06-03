@@ -8,9 +8,9 @@ urlpatterns = [
     path('profile/', views.ProfileView.as_view(), name='profile'),
 ]
 
-# contract urls
+# verification urls
 urlpatterns += [
-    path('contract/', views.ContractView.as_view(), name='contract'),
+    path('verification/', views.ContractView.as_view(), name='verification'),
 ]
 
 # Worker Tasks URLS
@@ -18,9 +18,11 @@ urlpatterns += [
     path('exam/', views.ExamListView.as_view(), name='exam_list'),
     path('exam/ajax/', views.ExamListViewAjax.as_view(), name='exam_list_ajax'),
 
-    path('task/', views.WorkerTaskListView.as_view(), name='task_list'),
-
     path('task/create/', views.WorkerTaskCreate.as_view(), name='task_create'),
+
+    path('task/', views.WorkerTaskListView.as_view(), name='task_list'),
+    path('task/me/', views.MyTaskListView.as_view(), name='my_task_list'),
+
 ]
 # Annotation Tool URLs
 urlpatterns += [

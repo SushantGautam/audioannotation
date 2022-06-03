@@ -95,6 +95,24 @@ class WorkerTaskListView(ListView):
         return super().get_queryset()
 
 
+class MyTaskListView(ListView):
+    model = WorkerTask
+    template_name = 'worker/myTaskList.html'
+
+    def get_template_names(self):
+        return self.template_name
+
+    def get_queryset(self):
+        qs = super().get_queryset().filter(worker=self.request.user.worker, approved=True)
+        if not 'type' in self.request.GET or self.request.GET.get('type') == 'slicing':
+            qs = qs.filter(task_type__in=['S1', 'S2'])
+        elif self.request.GET.get('type') == 'tagging':
+            qs = qs.filter(task_type__in=['T1', 'T2'])
+        elif self.request.GET.get('type') == 'evaluation':
+            qs = qs.filter(task_type__in=['E1', 'E2'])
+        return qs
+
+
 class AnnotationPage(TemplateView):
     template_name = 'worker/annotationTool.html'
 
@@ -143,10 +161,10 @@ class ProfileView(TemplateView):
 class ContractView(View):
     def get(self, request, **kwargs):
         context = {}
-        context['contract'] = Contract.objects.filter(user_type='WOR', is_active=True,
+        context['verification'] = Contract.objects.filter(user_type='WOR', is_active=True,
                                                       created_by__organization_code=self.request.user.worker.organization_code).first()
         context['has_contract'] = request.user.worker.has_contract
-        context['has_submitted_contract'] = request.user.worker.has_submitted_contract
+        context['has_contract_submitted'] = request.user.worker.has_contract_submitted
         context['has_contract_approved'] = request.user.worker.has_contract_approved
         return render(request, 'worker/contract.html', context)
 
@@ -158,8 +176,8 @@ class ContractView(View):
         else:
             contract = ContractSign()
         contract.user = request.user
-        contract.upload_file = request.FILES['contract-file']
+        contract.upload_file = request.FILES['verification-file']
         contract.approved = None
-        contract.contract_code_id = request.POST.get('contract-id')
+        contract.contract_code_id = request.POST.get('verification-id')
         contract.save()
-        return redirect('worker:contract')
+        return redirect('worker:verification')
