@@ -32,7 +32,7 @@
                 {% endif %}
             {% elif not user.speaker.has_submitted_contract %}
                 <h2>{% trans 'Please Sign and Upload the Contract' %}</h2>
-                <a href="{% url 'speaker:contract' %}"><button class="btn btn-outline-secondary">
+                <a href="{% url 'speaker:verification' %}"><button class="btn btn-outline-secondary">
                     {% trans 'Go to Contract' %}
                 </button></a>
             {% elif not user.speaker.has_contract_approved %}
