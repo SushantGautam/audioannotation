@@ -161,10 +161,10 @@ class ProfileView(TemplateView):
 class ContractView(View):
     def get(self, request, **kwargs):
         context = {}
-        context['contract'] = Contract.objects.filter(user_type='WOR', is_active=True,
+        context['verification'] = Contract.objects.filter(user_type='WOR', is_active=True,
                                                       created_by__organization_code=self.request.user.worker.organization_code).first()
         context['has_contract'] = request.user.worker.has_contract
-        context['has_submitted_contract'] = request.user.worker.has_submitted_contract
+        context['has_contract_submitted'] = request.user.worker.has_contract_submitted
         context['has_contract_approved'] = request.user.worker.has_contract_approved
         return render(request, 'worker/contract.html', context)
 
@@ -176,8 +176,8 @@ class ContractView(View):
         else:
             contract = ContractSign()
         contract.user = request.user
-        contract.upload_file = request.FILES['contract-file']
+        contract.upload_file = request.FILES['verification-file']
         contract.approved = None
-        contract.contract_code_id = request.POST.get('contract-id')
+        contract.contract_code_id = request.POST.get('verification-id')
         contract.save()
-        return redirect('worker:contract')
+        return redirect('worker:verification')

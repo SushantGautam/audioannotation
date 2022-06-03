@@ -12,7 +12,7 @@ urlpatterns = [
     path('exam_popup/', views.ExamPopupView.as_view(), name='exam_popup'),
 ]
 
-# contract urls
+# verification urls
 urlpatterns += [
-    path('contract/', views.ContractView.as_view(), name='contract'),
+    path('verification/', views.ContractView.as_view(), name='verification'),
 ]

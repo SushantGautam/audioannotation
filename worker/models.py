@@ -14,17 +14,18 @@ class Worker(BaseUserModel):
         verbose_name = _('Worker')
         verbose_name_plural = _('Workers')
 
-    def has_contract(self):
-        return Contract.objects.filter(user_type='WOR', is_active=True,
-                                       created_by__organization_code=self.organization_code).exists()
 
-    def has_submitted_contract(self):
-        return ContractSign.objects.filter(user=self.user, contract_code__user_type='WOR', approved=None,
-                                           contract_code__created_by__organization_code=self.organization_code).exists()
+    def has_contract(self):
+        from audioan.contract_methods import has_contract
+        return has_contract('WOR', self.organization_code)
+
+    def has_contract_submitted(self):
+        from audioan.contract_methods import has_contract_submitted
+        return has_contract_submitted(self.user, 'WOR', self.organization_code)
 
     def has_contract_approved(self):
-        return ContractSign.objects.filter(user=self.user, contract_code__user_type='WOR', approved=True,
-                                           contract_code__created_by__organization_code=self.organization_code).exists()
+        from audioan.contract_methods import has_contract_approved
+        return has_contract_approved(self.user, 'WOR', self.organization_code)
 
 
 class EvaluationTitle(models.Model):

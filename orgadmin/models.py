@@ -40,7 +40,7 @@ class OrgAdmin(BaseUserModel):
         verbose_name_plural = 'Organization Admins'
 
 def contract_file_name(instance, filename):
-    return 'contract/{0}_contract/{1}'.format(instance.created_by.organization_code, filename)
+    return 'verification/{0}_contract/{1}'.format(instance.created_by.organization_code, filename)
 
 class Contract(models.Model):
     USER_TYPE_CHOICES = (
@@ -64,7 +64,7 @@ class Contract(models.Model):
         return os.path.basename(self.upload_file.name)
 
 def contract_sign_file_name(instance, filename):
-    return 'contract/contract_sign/{0}/{1}'.format(instance.user, filename)
+    return 'verification/contract_sign/{0}/{1}'.format(instance.user, filename)
 class ContractSign(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     upload_file = models.FileField(upload_to=contract_sign_file_name, null=True, blank=True)

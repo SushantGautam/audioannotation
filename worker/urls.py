@@ -8,9 +8,9 @@ urlpatterns = [
     path('profile/', views.ProfileView.as_view(), name='profile'),
 ]
 
-# contract urls
+# verification urls
 urlpatterns += [
-    path('contract/', views.ContractView.as_view(), name='contract'),
+    path('verification/', views.ContractView.as_view(), name='verification'),
 ]
 
 # Worker Tasks URLS
