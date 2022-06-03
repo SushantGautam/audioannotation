@@ -18,6 +18,8 @@ class Speaker(BaseUserModel):
     korea_residency = models.IntegerField(default=0)
     study_purpose = models.CharField(max_length=256, null=True, blank=True)
     learning_method = models.CharField(max_length=256, null=True, blank=True)
+    bank_name = models.CharField(max_length=256, null=True, blank=True)
+    bank_account_number = models.CharField(max_length=256, null=True, blank=True)
 
     class Meta:
         verbose_name = _('Speaker')

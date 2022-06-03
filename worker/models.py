@@ -30,16 +30,16 @@ class Worker(BaseUserModel):
 
 class EvaluationTitle(models.Model):
     EVALUATION_TYPE_CHOICES = (
-        ('PR', _('Pronunciation')),
+        ('AC', _('Accentedness')),
         ('FL', _('Fluency')),
         ('CN', _('Content')),
         ('DE', _('Delivery')),
-        ('CP', _('Comprehension')),
+        ('CO', _('Comprehensibility')),
         ('LU', _('Language Use')),
     )
     title = models.CharField(max_length=256)
     score = models.IntegerField(default=0)
-    evaluation_code = models.CharField(max_length=256)
+    evaluation_code = models.CharField(max_length=128)
     evaluation_type = models.CharField(max_length=2, choices=EVALUATION_TYPE_CHOICES)
     subcategory_code = models.ForeignKey('professor.SubCategory', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)

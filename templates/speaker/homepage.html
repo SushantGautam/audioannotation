@@ -19,11 +19,16 @@
                 <li class="{% if user.speaker.verified and user.speaker.has_contract_approved %}active{% endif %}">{% trans 'Contract Approved' %}</li>
             </ul>
             <!-- title -->
+            <div class="title mt-5">
             {% if not user.speaker.verified %}
-                <div class="title mt-5">
-                    <h2>Your Profile is not Verified</h2>
-                </div>
+                <h2>{% trans 'Your Profile is not Verified' %}</h2>
+            {% elif not user.speaker.has_submitted_contract %}
+                <h2>{% trans 'Please Sign and Upload the Contract' %}</h2>
+            {% elif not user.speaker.has_contract_approved %}
+                <h2>{% trans 'Your Contract is not Approved Yet' %}</h2>
+                <h4>{% trans '.................' %}</h4>
             {% endif %}
+            </div>
         </div>
     </section>
     <!-- End Multi step progress -->
