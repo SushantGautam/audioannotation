@@ -2,7 +2,7 @@ import os
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from orgadmin.models import BaseUserModel, Contract, ContractSign
+from orgadmin.models import BaseUserModel, Contract, ContractSign, VerificationRequest
 from professor.models import Question, ExamSet
 from speaker.choices import GENDER_CHOICES, COUNTRY_CHOICES, LANGUAGE_CHOICES, PROFICIENCY_CHOICES
 
@@ -27,6 +27,10 @@ class Speaker(BaseUserModel):
 
     def __str__(self):
         return self.user.username
+    
+    def has_request_verification(self):
+        return VerificationRequest.objects.filter(user=self.user).exists()
+
 
     def has_contract(self):
         return Contract.objects.filter(user_type='SPE', is_active=True,
