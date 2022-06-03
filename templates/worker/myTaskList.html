@@ -5,11 +5,11 @@
 
 {% endblock styles %}
 {% block content %}
-
-
     <div class="bg-white pt-5">
-        <h1 class="page-heading">{% trans "Task Lists" %} </h1>
-
+        <h1 class="page-heading">{% trans "My Task Lists" %} </h1>
+        <a href="{% url 'worker:my_task_list' %}?type=slicing" class="btn btn-sm btn-dark">{% trans 'Slicing' %}</a>
+        <a href="{% url 'worker:my_task_list' %}?type=tagging" class="btn btn-sm btn-dark">{% trans 'Tagging' %}</a>
+        <a href="{% url 'worker:my_task_list' %}?type=evaluation" class="btn btn-sm btn-dark">{% trans 'Evaluation' %}</a>
         <div class="table-responsive questionset_table" id="questionset_table" style="border: none; overflow-x: unset">
             <table class="table pt-2" cellspacing="0" id="questionset_list_table">
                 <thead class="">
@@ -21,7 +21,7 @@
                     <th>{% trans "Nationality" %}</th>
                     <th>{% trans "Difficulty Level" %}</th>
                     <th>{% trans "Task Type" %}</th>
-                    <th>{% trans "Approval Status" %}</th>
+                    <th>{% trans "Action" %}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -34,7 +34,7 @@
                         <td>{{ object.examset_submission.speaker.get_nationality_display }}</td>
                         <td>{{ object.examset_submission.exam_set.get_difficulty_level }}</td>
                         <td>{{ object.get_task_type_display }}</td>
-                        <td>{{ object.get_approved_display }}</td>
+                        <td><a href="{{ object.get_task_url }}" class="btn btn-sm btn-dark">{% trans 'Go' %}</a> </td>
                     </tr>
                 {% endfor %}
                 </tbody>

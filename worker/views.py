@@ -95,6 +95,24 @@ class WorkerTaskListView(ListView):
         return super().get_queryset()
 
 
+class MyTaskListView(ListView):
+    model = WorkerTask
+    template_name = 'worker/myTaskList.html'
+
+    def get_template_names(self):
+        return self.template_name
+
+    def get_queryset(self):
+        qs = super().get_queryset().filter(worker=self.request.user.worker, approved=True)
+        if not 'type' in self.request.GET or self.request.GET.get('type') == 'slicing':
+            qs = qs.filter(task_type__in=['S1', 'S2'])
+        elif self.request.GET.get('type') == 'tagging':
+            qs = qs.filter(task_type__in=['T1', 'T2'])
+        elif self.request.GET.get('type') == 'evaluation':
+            qs = qs.filter(task_type__in=['E1', 'E2'])
+        return qs
+
+
 class AnnotationPage(TemplateView):
     template_name = 'worker/annotationTool.html'
 
