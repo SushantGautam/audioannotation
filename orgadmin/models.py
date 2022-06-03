@@ -2,7 +2,7 @@ import os
 
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.utils.translation import gettext_lazy as _
 
 class Organization(models.Model):
     name = models.CharField(max_length=256)
@@ -76,3 +76,17 @@ class ContractSign(models.Model):
 
     def __str__(self):
         return self.contract_code.title
+
+class VerificationRequest(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    feedback = models.TextField(null=True, blank=True)
+    approved = models.BooleanField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = _('Verification Request')
+        verbose_name_plural = _('Verification Requests')
+
+    def __str__(self):
+        return self.user.username + ' ' + str(self.approved)

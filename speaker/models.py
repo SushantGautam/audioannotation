@@ -40,20 +40,6 @@ class Speaker(BaseUserModel):
         return ContractSign.objects.filter(user=self.user, contract_code__user_type='SPE', approved=True,
                                            contract_code__created_by__organization_code=self.organization_code).exists()
 
-class VerificationRequest(models.Model):
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    feedback = models.TextField(null=True, blank=True)
-    approved = models.BooleanField(null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name = _('Verification Request')
-        verbose_name_plural = _('Verification Requests')
-
-    def __str__(self):
-        return self.user.username + ' ' + str(self.approved)
-        
 
 def audio_filename(instance, filename):
     return 'speaker/audio/{0}/{1}'.format(instance.speaker, str(instance.id) + filename)
