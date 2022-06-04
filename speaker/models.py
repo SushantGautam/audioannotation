@@ -2,7 +2,7 @@ import os
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from orgadmin.models import BaseUserModel, Contract, ContractSign
+from orgadmin.models import BaseUserModel, Contract, ContractSign, VerificationRequest
 from professor.models import Question, ExamSet
 from speaker.choices import GENDER_CHOICES, COUNTRY_CHOICES, LANGUAGE_CHOICES, PROFICIENCY_CHOICES
 
@@ -18,6 +18,8 @@ class Speaker(BaseUserModel):
     korea_residency = models.IntegerField(default=0)
     study_purpose = models.CharField(max_length=256, null=True, blank=True)
     learning_method = models.CharField(max_length=256, null=True, blank=True)
+    bank_name = models.CharField(max_length=256, null=True, blank=True)
+    bank_account_number = models.CharField(max_length=256, null=True, blank=True)
 
     class Meta:
         verbose_name = _('Speaker')
@@ -25,18 +27,18 @@ class Speaker(BaseUserModel):
 
     def __str__(self):
         return self.user.username
+    
+    def has_request_verification(self):
+        return VerificationRequest.objects.filter(user=self.user).exists()
 
     def has_contract(self):
-        return Contract.objects.filter(user_type='SPE', is_active=True,
-                                       created_by__organization_code=self.organization_code).exists()
-
-    def has_submitted_contract(self):
-        return ContractSign.objects.filter(user=self.user, contract_code__user_type='SPE', approved=None,
-                                           contract_code__created_by__organization_code=self.organization_code).exists()
-
+        return Contract.objects.filter(user_type='SPE', created_by__organization_code=self.organization_code).exists()
+    
+    def has_contract_submitted(self):
+        return ContractSign.objects.filter(user=self.user, approved=None).exists()
+    
     def has_contract_approved(self):
-        return ContractSign.objects.filter(user=self.user, contract_code__user_type='SPE', approved=True,
-                                           contract_code__created_by__organization_code=self.organization_code).exists()
+        return ContractSign.objects.filter(user=self.user, approved=True).exists()
 
 
 def audio_filename(instance, filename):

@@ -2,7 +2,7 @@ import os
 
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.utils.translation import gettext_lazy as _
 
 class Organization(models.Model):
     name = models.CharField(max_length=256)
@@ -70,9 +70,23 @@ class ContractSign(models.Model):
     upload_file = models.FileField(upload_to=contract_sign_file_name, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    approved = models.BooleanField(default=None, null=True)
+    approved = models.BooleanField(null=True)
     approved_at = models.DateTimeField(null=True, blank=True)
     contract_code = models.ForeignKey(Contract, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.contract_code.title
+
+class VerificationRequest(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    feedback = models.TextField(null=True, blank=True)
+    approved = models.BooleanField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = _('Verification Request')
+        verbose_name_plural = _('Verification Requests')
+
+    def __str__(self):
+        return self.user.username + ' ' + str(self.approved)

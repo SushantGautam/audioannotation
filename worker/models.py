@@ -1,7 +1,8 @@
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from orgadmin.models import BaseUserModel, Contract, ContractSign
+from orgadmin.models import BaseUserModel, Contract, ContractSign, VerificationRequest
 
 
 class Worker(BaseUserModel):
@@ -13,31 +14,31 @@ class Worker(BaseUserModel):
         verbose_name = _('Worker')
         verbose_name_plural = _('Workers')
 
-    def has_contract(self):
-        return Contract.objects.filter(user_type='WOR', is_active=True,
-                                       created_by__organization_code=self.organization_code).exists()
+    def has_request_verification(self):
+        return VerificationRequest.objects.filter(user=self.user).exists()
 
-    def has_submitted_contract(self):
-        return ContractSign.objects.filter(user=self.user, contract_code__user_type='WOR', approved=None,
-                                           contract_code__created_by__organization_code=self.organization_code).exists()
+    def has_contract(self):
+        return Contract.objects.filter(user_type='WOR', created_by__organization_code=self.organization_code).exists()
+
+    def has_contract_submitted(self):
+        return ContractSign.objects.filter(user=self.user, approved=None).exists()
 
     def has_contract_approved(self):
-        return ContractSign.objects.filter(user=self.user, contract_code__user_type='WOR', approved=True,
-                                           contract_code__created_by__organization_code=self.organization_code).exists()
+        return ContractSign.objects.filter(user=self.user, approved=True).exists()
 
 
 class EvaluationTitle(models.Model):
     EVALUATION_TYPE_CHOICES = (
-        ('PR', _('Pronunciation')),
+        ('AC', _('Accentedness')),
         ('FL', _('Fluency')),
         ('CN', _('Content')),
         ('DE', _('Delivery')),
-        ('CP', _('Comprehension')),
+        ('CO', _('Comprehensibility')),
         ('LU', _('Language Use')),
     )
     title = models.CharField(max_length=256)
     score = models.IntegerField(default=0)
-    evaluation_code = models.CharField(max_length=256)
+    evaluation_code = models.CharField(max_length=128)
     evaluation_type = models.CharField(max_length=2, choices=EVALUATION_TYPE_CHOICES)
     subcategory_code = models.ForeignKey('professor.SubCategory', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -70,8 +71,12 @@ class WorkerTask(models.Model):
 
     def get_approved_display(self):
         if not self.approved:
-            return "Not Approved"
+            return "Pending"
         return "Approved" if self.approved else "Rejected"
+
+    def get_task_url(self):
+        if self.task_type in ['S1', 'S2']:
+            return reverse('worker:annotation_page', args=(self.pk, ))
 
 
 class WorkerSubmission(models.Model):
