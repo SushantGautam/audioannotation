@@ -1,7 +1,6 @@
 from django.forms import ModelForm
 
-from professor.models import Question
-from speaker.models import SpeakerSubmission
+from speaker.models import SpeakerSubmission, Speaker
 
 
 class SpeakerSubmissionForm(ModelForm):
@@ -10,4 +9,7 @@ class SpeakerSubmissionForm(ModelForm):
         fields = ["question", "speaker", "audio_file"]
 
 
-
+class ProfileEditForm(ModelForm):
+    class Meta:
+        model = Speaker
+        exclude = ('organization_code', 'user', 'verified')

@@ -1,29 +1,31 @@
 {% extends 'speaker/base.html' %}
-{% load static %} 
+{% load static %}
 
 {% block styles %}
     <link href="{% static 'css/pagewise/profile.css' %}" rel="stylesheet">
 {% endblock %}
- 
+
 {% block content %}
     <div class="header-section w-60 py-3">
         <h2 class="page-heading">Profile Information</h2>
-        <button title="Edit Profile" class="btn btn-sm btn-secondary rounded-circle"><i class="fa-solid fa-pen"></i></button>
+        <a href="{% url 'speaker:edit_profile' pk=user.speaker.id  %}" title="Edit Profile" class="btn btn-sm btn-secondary rounded-circle"><i
+                class="fa-solid fa-pen"></i></a>
     </div>
     <section class="profile-section w-60">
 
         <div class="details-parent shadow-sm">
             <div class="text-center">
-                <img src="{% static 'img/user.png' %}" class="rounded-circle" style="width: 10rem;height: 10rem;" alt="">
+                <img src="{% static 'img/user.png' %}" class="rounded-circle" style="width: 10rem;height: 10rem;"
+                     alt="">
                 <h4>FirstName Lastname</h4>
             </div>
             <div class="detail-row">
                 <div class="detail">
-                    <div class="label"><i class="fa-solid fa-id-badge"></i>Speaker ID  </div>
+                    <div class="label"><i class="fa-solid fa-id-badge"></i>Speaker ID</div>
                     <div class="value">9129274</div>
                 </div>
                 <div class="detail">
-                    <div class="label"><i class="fa-solid fa-calendar-days"></i>Date of Birth </div>
+                    <div class="label"><i class="fa-solid fa-calendar-days"></i>Date of Birth</div>
                     <div class="value">1888-12-12</div>
                 </div>
             </div>

@@ -1,11 +1,12 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from django.template import RequestContext
+from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView, FormView, TemplateView
+from django.views.generic import ListView, FormView, TemplateView, UpdateView
 
+from orgadmin.forms import UserChangeForm
 from orgadmin.models import Contract, ContractSign
-from speaker.forms import SpeakerSubmissionForm
+from speaker.forms import SpeakerSubmissionForm, ProfileEditForm
 from speaker.models import Speaker, SpeakerSubmission
 
 from professor.models import Question, QuestionSet, ExamSet
@@ -86,6 +87,32 @@ class ExamPopupView(FormView):
 class ProfileView(TemplateView):
     template_name = "speaker/profile.html"
 
+
+class ProfileEditView(FormView):
+    # model = Speaker
+    form_class = ProfileEditForm
+    base_user_form_class = UserChangeForm
+    template_name = 'speaker/edit_profile.html'
+    success_url = reverse_lazy('speaker:profile')
+
+    def get(self, request, *args, **kwargs):
+        super(ProfileEditView, self).get(request, *args, **kwargs)
+        form = self.form_class(instance=self.request.user.speaker)
+        userForm = self.base_user_form_class(instance=self.request.user)
+        return self.render_to_response(self.get_context_data(form=form, userForm=userForm))
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, instance=self.request.user.speaker)
+        userForm = self.base_user_form_class(request.POST, instance=self.request.user)
+
+        if form.is_valid() and userForm.is_valid():
+            form.save()
+            userForm.save()
+
+            return redirect(self.success_url)
+        else:
+            return self.render_to_response(
+                self.get_context_data(form=form, form2=userForm))
 
 class ContractView(View):
     def get(self, request, **kwargs):

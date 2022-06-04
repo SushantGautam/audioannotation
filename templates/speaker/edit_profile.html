@@ -1,0 +1,10 @@
+{% load static %}
+{% load i18n %}
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+{{ userForm.as_p }}
+    <button type="submit">Submit</button>
+</form>
