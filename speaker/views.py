@@ -5,7 +5,7 @@ from django.views import View
 from django.views.generic import ListView, FormView, TemplateView, UpdateView
 
 from orgadmin.forms import UserChangeForm
-from orgadmin.models import Contract, ContractSign
+from orgadmin.models import Contract, ContractSign, VerificationRequest
 from speaker.forms import SpeakerSubmissionForm, ProfileEditForm
 from speaker.models import Speaker, SpeakerSubmission
 
@@ -107,12 +107,20 @@ class ProfileEditView(FormView):
 
         if form.is_valid() and userForm.is_valid():
             form.save()
+            userForm.save(commit=False)
+
+            # After profile edit, admin needs to re-verify the account
+            userForm.verified = False
             userForm.save()
+            # Create Verification Request if no pending requests.
+            if not self.request.user.speaker.is_pending_verification():
+                VerificationRequest.objects.create(user=self.request.user)
 
             return redirect(self.success_url)
         else:
             return self.render_to_response(
                 self.get_context_data(form=form, form2=userForm))
+
 
 class ContractView(View):
     def get(self, request, **kwargs):

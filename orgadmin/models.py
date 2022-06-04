@@ -33,6 +33,9 @@ class BaseUserModel(models.Model):
     class Meta:
         abstract = True
 
+    def is_pending_verification(self):
+        return self.user.verificationrequest_set.filter(approved=None).exists()
+
 
 class OrgAdmin(BaseUserModel):
     class Meta:
