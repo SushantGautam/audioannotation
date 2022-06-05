@@ -1,10 +1,107 @@
 {% load static %}
 {% load i18n %}
 
-<form method="post">
+<form method="post" action="{% url 'speaker:edit_profile' pk=user.speaker.id %}" method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    <section class="profile-edit-section w-60">
 
-    {{ userForm.as_p }}
-    <button type="submit">Submit</button>
+        <div class="details-parent shadow-sm">
+            <div class="text-center">
+                <img src="{% static 'img/user.png' %}" class="rounded-circle" style="width: 10rem;height: 10rem;"
+                     alt="">
+                <h4>
+                    {{ userForm.first_name }}
+                    {{ userForm.last_name }}
+                </h4>
+            </div>
+            <div class="detail-row">
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-id-badge"></i>Speaker ID</div>
+                    <div class="value">9129274</div>
+                </div>
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-calendar-days"></i>{{ form.birth_date.label_tag }}</div>
+                    <div class="value">{{ form.birth_date }}</div>
+                </div>
+            </div>
+            <div class="detail-row">
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-passport"></i>{{ form.nationality.label_tag }}</div>
+                    <div class="value">{{ form.nationality }}</div>
+                </div>
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-language"></i>{{ form.language.label_tag }}</div>
+                    <div class="value">{{ form.language }}</div>
+                </div>
+            </div>
+            <div class="detail-row">
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-mars-and-venus"></i>{{ form.gender.label_tag }}</div>
+                    <div class="value">{{ form.gender }}</div>
+                </div>
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-graduation-cap"></i>{{ form.education_level.label_tag }}
+                    </div>
+                    <div class="value">{{ form.education_level }}</div>
+                </div>
+            </div>
+            <div class="detail-row">
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-layer-group"></i>{{ form.proficiency.label_tag }}</div>
+                    <div class="value">{{ form.proficiency }}</div>
+                </div>
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-star-half-stroke"></i>{{ form.topic_score.label_tag }}
+                    </div>
+                    <div class="value">{{ form.topic_score }}</div>
+                </div>
+            </div>
+            <div class="detail-row">
+                <div class="detail">
+                    <div class="label"><i
+                            class="fa-solid fa-hourglass"></i>{{ form.learning_period.label_tag }} {% trans '(in years)' %}
+                    </div>
+                    <div class="value">{{ form.learning_period }} </div>
+                </div>
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-earth-asia"></i>{{ form.korea_residency.label_tag }}</div>
+                    <div class="value">{{ form.korea_residency }}</div>
+                </div>
+            </div>
+            <div class="detail-row">
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-clipboard-question"></i>{{ form.study_purpose.label_tag }}
+                    </div>
+                    <div class="value">{{ form.study_purpose }}</div>
+                </div>
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-chalkboard-user"></i>{{ form.learning_method.label_tag }}
+                    </div>
+                    <div class="value">{{ form.learning_method }}</div>
+                </div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-clipboard-question"></i>{{ form.bank_name.label_tag }}
+                    </div>
+                    <div class="value">{{ form.bank_name }}</div>
+                </div>
+                <div class="detail">
+                    <div class="label"><i
+                            class="fa-solid fa-chalkboard-user"></i>{{ form.bank_account_number.label_tag }}</div>
+                    <div class="value">{{ form.bank_account_number }}</div>
+                </div>
+            </div>
+        </div>
+        <button type="submit">Submit</button>
+        <button type="button" id="cancel-edit">Cancel</button>
+    </section>
 </form>
+
+<script>
+    $('#cancel-edit').on('click', function (e) {
+        $('.profile-edit-section').remove();
+        $('.profile-section').removeClass('d-none');
+    });
+</script>
