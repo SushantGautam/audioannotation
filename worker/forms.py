@@ -2,7 +2,13 @@ from django.forms import ModelForm
 from django import forms
 
 from speaker.models import ExamSetSubmission
-from worker.models import WorkerTask
+from worker.models import Worker
+
+
+class ProfileEditForm(ModelForm):
+    class Meta:
+        model = Worker
+        exclude = ('organization_code', 'user', 'verified')
 
 
 class ExamSetSubmissionFilterForm(ModelForm):

@@ -5,19 +5,55 @@ from django.conf import settings
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView, ListView, FormView, CreateView
 
-from orgadmin.models import Contract, ContractSign
-from professor.models import ExamSet
+from orgadmin.forms import UserChangeForm
+from orgadmin.models import Contract, ContractSign, VerificationRequest
+
 from speaker.models import SpeakerSubmission, ExamSetSubmission
-from worker.forms import ExamSetSubmissionFilterForm
+
+from worker.forms import ExamSetSubmissionFilterForm, ProfileEditForm
 from worker.models import WorkerSubmission, WorkerTask
 
 
 def homepage(request):
     context = {}
     return render(request, 'worker/homepage.html', context)
+
+
+class ProfileEditView(FormView):
+    form_class = ProfileEditForm
+    base_user_form_class = UserChangeForm
+    template_name = 'worker/edit_profile.html'
+    success_url = reverse_lazy('worker:profile')
+
+    def get(self, request, *args, **kwargs):
+        super(ProfileEditView, self).get(request, *args, **kwargs)
+        form = self.form_class(instance=self.request.user.worker)
+        userForm = self.base_user_form_class(instance=self.request.user)
+        return self.render_to_response(self.get_context_data(form=form, userForm=userForm))
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, instance=self.request.user.worker)
+        userForm = self.base_user_form_class(request.POST, instance=self.request.user)
+
+        if form.is_valid() and userForm.is_valid():
+            form.save()
+            userForm.save(commit=False)
+
+            # After profile edit, admin needs to re-verify the account
+            userForm.verified = False
+            userForm.save()
+            # Create Verification Request if no pending requests.
+            if not self.request.user.worker.is_pending_verification():
+                VerificationRequest.objects.create(user=self.request.user)
+
+            return redirect(self.success_url)
+        else:
+            return self.render_to_response(
+                self.get_context_data(form=form, form2=userForm))
 
 
 class ExamListView(FormView):
