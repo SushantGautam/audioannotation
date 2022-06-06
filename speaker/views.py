@@ -14,14 +14,16 @@ from professor.models import Question, QuestionSet, ExamSet
 
 
 def homepage(request):
-    verification_request = VerificationRequest.objects.filter(user=request.user).latest('id')
-    contract_sign = ContractSign.objects.filter(user=request.user).latest('id')
+    verification_request = VerificationRequest.objects.filter(user=request.user)
+    contract_sign = ContractSign.objects.filter(user=request.user)
     profile_register_date, profile_approved_date = '', ''
     contract_sign_date, contract_approved_date = '', ''
     if verification_request:
+        verification_request = verification_request.latest('id')
         profile_register_date = verification_request.created_at.strftime('%Y-%m-%d (%H:%M %p)')
         profile_approved_date = verification_request.approved_at.strftime('%Y-%m-%d (%H:%M %p)') if verification_request.approved_at else ''
     if contract_sign:
+        contract_sign = contract_sign.latest('id')
         contract_sign_date = contract_sign.created_at.strftime('%Y-%m-%d (%H:%M %p)')
         contract_approved_date = contract_sign.approved_at.strftime('%Y-%m-%d (%H:%M %p)') if contract_sign.approved_at else ''
 
