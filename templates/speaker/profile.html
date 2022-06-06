@@ -108,6 +108,7 @@
                 url: $(this).attr('href'),
                 method: 'GET',
                 success: function (response) {
+                    $('#edit-profile-btn').addClass('d-none');
                     $('.profile-section').addClass('d-none');
                     $('.profile-section-container').append(response);
                 }

@@ -8,7 +8,7 @@
 
 {% block content %}
     <div class="header-section w-60 py-3">
-        <h2 class="page-heading">{% trans 'Profile Information' %}</h2>
+        <h2 class="page-heading">{% trans 'Profile Information' %} </h2>
         <a href="{% url 'worker:edit_profile' pk=user.worker.id %}" title="Edit Profile"
            class="btn btn-sm btn-secondary rounded-circle" id="edit-profile-btn"><i
                 class="fa-solid fa-pen"></i></a>
@@ -84,14 +84,15 @@
                 </div>
 
             </div>
-            {% if not user.worker.verified and not user.has_request_verification %}
+
+            {% if not user.worker.verified and not user.worker.has_request_verification %}
                 <form action="{% url 'worker:verify_profile' %}" method="post">
                     {% csrf_token %}
                     <div>
                         <button type="submit" class="btn btn-dark btn-sm">{% trans 'Request Verification' %} </button>
                     </div>
                 </form>
-            {% elif user.has_request.verification %}
+            {% elif user.worker.has_request_verification %}
                 <div>
                     {% trans 'Pending Verification' %}
                 </div>
@@ -108,6 +109,7 @@
                 url: $(this).attr('href'),
                 method: 'GET',
                 success: function (response) {
+                    $('#edit-profile-btn').addClass('d-none');
                     $('.profile-section').addClass('d-none');
                     $('.profile-section-container').append(response);
                 }
