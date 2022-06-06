@@ -84,6 +84,7 @@ class VerificationRequest(models.Model):
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     feedback = models.TextField(null=True, blank=True)
     approved = models.BooleanField(null=True)
+    approved_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

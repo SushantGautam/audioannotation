@@ -13,11 +13,23 @@
         <div id="msprogress">
             <!-- progressbar -->
             <ul id="progressbar">
-                <li class="{% if user.speaker.has_request_verification %}active{% endif %}">{% trans 'Registered' %}</li>
-                <li class="{% if user.speaker.verified %}active{% endif %}">{% trans 'Profile Verified' %}</li>
+                <li class="{% if user.speaker.has_request_verification %}active{% endif %}">
+                    <div class="h6">{% trans 'Profile Registered' %}</div>
+                    <div>{{ profile_register_date }}</div>
+                </li>
+                <li class="{% if user.speaker.verified %}active{% endif %}">
+                    <div class="h6">{% trans 'Profile Verified' %}</div>
+                    <div>{{ profile_approved_date }}</div>
+                </li>
                 <li class="{% if user.speaker.verified and user.speaker.has_contract_submitted or user.speaker.has_contract_approved %}active
-                            {% elif user.speaker.has_contract_rejected %}inactive{% endif %}">{% trans 'Contract Signed' %}</li>
-                <li class="{% if user.speaker.verified and user.speaker.has_contract_approved %}active{% endif %}">{% trans 'Contract Approved' %}</li>
+                            {% elif user.speaker.has_contract_rejected %}inactive{% endif %}">
+                    <div class="h6">{% trans 'Contract Signed' %}</div>
+                    <div>{{ contract_sign_date }}</div>
+                </li>
+                <li class="{% if user.speaker.verified and user.speaker.has_contract_approved %}active{% endif %}">
+                    <div class="h6">{% trans 'Contract Approved' %}</div>
+                    <div>{{ contract_approved_date }}</div>
+                </li>
             </ul>
             <!-- title -->
             <div class="title mt-5">
