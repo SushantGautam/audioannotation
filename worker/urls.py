@@ -7,6 +7,7 @@ urlpatterns = [
     path('', views.homepage, name='homepage'),
     path('profile/', views.ProfileView.as_view(), name='profile'),
     path('profile/<int:pk>/edit/', views.ProfileEditView.as_view(), name='edit_profile'),
+    path('profile/verify/', views.RequestVerification.as_view(), name='verify_profile'),
 ]
 
 # contract urls

@@ -106,12 +106,12 @@ class ProfileEditView(FormView):
         userForm = self.base_user_form_class(request.POST, instance=self.request.user)
 
         if form.is_valid() and userForm.is_valid():
-            form.save()
-            userForm.save(commit=False)
+            obj = form.save(commit=False)
+            userForm.save()
 
             # After profile edit, admin needs to re-verify the account
-            userForm.verified = False
-            userForm.save()
+            obj.verified = False
+            obj.save()
 
             return redirect(self.success_url)
         else:

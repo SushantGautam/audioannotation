@@ -1,5 +1,4 @@
-from django.forms import ModelForm
-from django import forms
+from django.forms import ModelForm, DateInput
 
 from speaker.models import ExamSetSubmission
 from worker.models import Worker
@@ -9,6 +8,15 @@ class ProfileEditForm(ModelForm):
     class Meta:
         model = Worker
         exclude = ('organization_code', 'user', 'verified')
+
+        widgets = {
+            'birth_date': DateInput(
+                format=('%Y-%m-%d'),
+                attrs={'class': 'form-control',
+                       'placeholder': 'Select a date',
+                       'type': 'date'
+                       }),
+        }
 
 
 class ExamSetSubmissionFilterForm(ModelForm):

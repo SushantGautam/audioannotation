@@ -84,6 +84,18 @@
                 </div>
 
             </div>
+            {% if not user.worker.verified and not user.has_request_verification %}
+                <form action="{% url 'worker:verify_profile' %}" method="post">
+                    {% csrf_token %}
+                    <div>
+                        <button type="submit" class="btn btn-dark btn-sm">{% trans 'Request Verification' %} </button>
+                    </div>
+                </form>
+            {% elif user.has_request.verification %}
+                <div>
+                    {% trans 'Pending Verification' %}
+                </div>
+            {% endif %}
         </section>
     </section>
 {% endblock %}

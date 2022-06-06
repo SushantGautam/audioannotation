@@ -40,20 +40,26 @@ class ProfileEditView(FormView):
         userForm = self.base_user_form_class(request.POST, instance=self.request.user)
 
         if form.is_valid() and userForm.is_valid():
-            form.save()
-            userForm.save(commit=False)
+            obj = form.save(commit=False)
+            userForm.save()
 
             # After profile edit, admin needs to re-verify the account
-            userForm.verified = False
-            userForm.save()
-            # Create Verification Request if no pending requests.
-            if not self.request.user.worker.is_pending_verification():
-                VerificationRequest.objects.create(user=self.request.user)
+            obj.verified = False
+            obj.save()
 
             return redirect(self.success_url)
         else:
             return self.render_to_response(
                 self.get_context_data(form=form, form2=userForm))
+
+
+class RequestVerification(FormView):
+    success_url = reverse_lazy('worker:profile')
+    def post(self, request, *args, **kwargs):
+        # Create Verification Request if no pending requests.
+        if not self.request.user.worker.is_pending_verification():
+            VerificationRequest.objects.create(user=self.request.user)
+        return redirect(self.success_url)
 
 
 class ExamListView(FormView):
