@@ -2,13 +2,14 @@
 {% load i18n %}
 
 <div class="mytabs">
-    <input type="radio" id="home-tab" name="mytabs" {% if request.path == '/speaker/' %}checked{% endif %}>
+    <input type="radio" id="home-tab" name="mytabs" 
+        {% if request.path == '/speaker/' or 'profile' in request.path or 'contract' in request.path %}checked{% endif %}>
     <label for="home-tab">Home</label>
     <div class="tab animate__animated animate__fadeInUp" id="home-tab-div">
         <a href="{% url 'speaker:homepage' %}" class="tab-item {% if request.path == '/speaker/' %}active{% endif %}">Dashboard</a>
-        <a href="{% url 'speaker:profile' %}" class="tab-item">Profile</a>
+        <a href="{% url 'speaker:profile' %}" class="tab-item {% if 'profile' in request.path %}active{% endif %}">Profile</a>
         {% if user.speaker.verified %}
-            <a href="{% url 'speaker:contract' %}" class="tab-item">Contracts</a>
+            <a href="{% url 'speaker:contract' %}" class="tab-item {% if 'contract' in request.path %}active{% endif %}">Contracts</a>
         {% endif %}
     </div>
 
