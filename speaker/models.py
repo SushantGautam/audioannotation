@@ -34,10 +34,13 @@ class Speaker(BaseUserModel):
     def has_contract(self):
         return Contract.objects.filter(user_type='SPE', created_by__organization_code=self.organization_code).exists()
     
-    def has_contract_submitted(self):
+    def has_contract_submitted(self): #submitted and pending approval
         return ContractSign.objects.filter(user=self.user, approved=None).exists()
     
-    def has_contract_approved(self):
+    def has_contract_rejected(self): #submitted and rejected
+        return ContractSign.objects.filter(user=self.user, approved=False).exists()
+    
+    def has_contract_approved(self): #submitted and approved
         return ContractSign.objects.filter(user=self.user, approved=True).exists()
 
 
