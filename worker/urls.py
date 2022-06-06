@@ -28,6 +28,6 @@ urlpatterns += [
 ]
 # Annotation Tool URLs
 urlpatterns += [
-    path('annotation/<int:id>/', views.AnnotationPage.as_view(), name='annotation_page'),
+    path('task/<int:workertask_id>/', views.AnnotationPage.as_view(), name='annotation_page'),
     path('annotation/<int:id>/save/', views.SaveAnnotation.as_view(), name='save_annotation'),
 ]

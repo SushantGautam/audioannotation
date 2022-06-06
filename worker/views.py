@@ -11,6 +11,7 @@ from django.views.generic import TemplateView, ListView, FormView, CreateView
 
 from orgadmin.forms import UserChangeForm
 from orgadmin.models import Contract, ContractSign, VerificationRequest
+from professor.models import Question
 
 from speaker.models import SpeakerSubmission, ExamSetSubmission
 
@@ -55,6 +56,7 @@ class ProfileEditView(FormView):
 
 class RequestVerification(FormView):
     success_url = reverse_lazy('worker:profile')
+
     def post(self, request, *args, **kwargs):
         # Create Verification Request if no pending requests.
         if not self.request.user.worker.is_pending_verification():
@@ -160,15 +162,25 @@ class AnnotationPage(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(AnnotationPage, self).get_context_data()
-        speakerObj = get_object_or_404(SpeakerSubmission, pk=kwargs.get('id'))
-        context['audio_obj'] = speakerObj
-        context['question_set'] = speakerObj.exam_set.question_sets.filter(
-            questions__in=[speakerObj.question, ]).first()
-        context['stt_data'] = json.dumps(context['audio_obj'].stt_data)
+        workerTaskObj = get_object_or_404(WorkerTask, pk=kwargs.get('workertask_id'))
+
+        context['worker_task'] = workerTaskObj
+        context['exam_set'] = workerTaskObj.examset_submission.exam_set
+        context['question_sets'] = workerTaskObj.examset_submission.exam_set.question_sets.all()
+
+        if self.request.GET.get('question'):
+            question = Question.objects.get(pk=self.request.GET.get('question'))
+        else:
+            question = workerTaskObj.examset_submission.exam_set.question_sets.first().questions.first()
+        speakerSubmissionObj = SpeakerSubmission.objects.get(speaker=workerTaskObj.examset_submission.speaker,
+                                                             question=question)
+
+        context['audio_obj'] = speakerSubmissionObj
+        context['stt_data'] = json.dumps(speakerSubmissionObj.stt_data)
         annotated_data = ""
-        if WorkerSubmission.objects.filter(speaker_submission__pk=kwargs.get('id'),
+        if WorkerSubmission.objects.filter(speaker_submission__pk=speakerSubmissionObj.id,
                                            worker_task__worker=self.request.user.worker).exists():
-            annotated_data = WorkerSubmission.objects.get(speaker_submission__pk=kwargs.get('id'),
+            annotated_data = WorkerSubmission.objects.get(speaker_submission__pk=speakerSubmissionObj.id,
                                                           worker_task__worker=self.request.user.worker).split_data
         context['annotated_data'] = annotated_data
 
