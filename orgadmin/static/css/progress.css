@@ -262,3 +262,10 @@
   background: #65BA4D;
   color: white;
 }
+.multi_step_progress #msprogress #progressbar li.inactive {
+  color: #ba4d4d;
+}
+.multi_step_progress #msprogress #progressbar li.inactive:before, .multi_step_progress #msprogress #progressbar li.inactive:after {
+  background: #ba4d4d;
+  color: white;
+}

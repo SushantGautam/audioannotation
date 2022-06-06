@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -13,7 +14,25 @@ from professor.models import Question, QuestionSet, ExamSet
 
 
 def homepage(request):
-    return render(request, 'speaker/homepage.html')
+    verification_request = VerificationRequest.objects.filter(user=request.user).latest('id')
+    contract_sign = ContractSign.objects.filter(user=request.user).latest('id')
+    profile_register_date, profile_approved_date = '', ''
+    contract_sign_date, contract_approved_date = '', ''
+    if verification_request:
+        profile_register_date = verification_request.created_at.strftime('%Y-%m-%d (%H:%M %p)')
+        profile_approved_date = verification_request.approved_at.strftime('%Y-%m-%d (%H:%M %p)') if verification_request.approved_at else ''
+    if contract_sign:
+        contract_sign_date = contract_sign.created_at.strftime('%Y-%m-%d (%H:%M %p)')
+        contract_approved_date = contract_sign.approved_at.strftime('%Y-%m-%d (%H:%M %p)') if contract_sign.approved_at else ''
+
+    context = {
+        'profile_register_date': profile_register_date,
+        'profile_approved_date': profile_approved_date,
+        'contract_sign_date': contract_sign_date,
+        'contract_approved_date': contract_approved_date,
+    }
+
+    return render(request, 'speaker/homepage.html', context)
 
 
 class QuestionSetList(ListView):
