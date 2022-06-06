@@ -7,6 +7,7 @@ urlpatterns = [
     path('', views.homepage, name='homepage'),
     path('profile/', views.ProfileView.as_view(), name='profile'),
     path('profile/<int:pk>/edit/', views.ProfileEditView.as_view(), name='edit_profile'),
+    path('profile/verify/', views.RequestVerification.as_view(), name='verify_profile'),
 ]
 
 # contract urls
@@ -27,6 +28,6 @@ urlpatterns += [
 ]
 # Annotation Tool URLs
 urlpatterns += [
-    path('annotation/<int:id>/', views.AnnotationPage.as_view(), name='annotation_page'),
+    path('task/<int:workertask_id>/', views.AnnotationPage.as_view(), name='annotation_page'),
     path('annotation/<int:id>/save/', views.SaveAnnotation.as_view(), name='save_annotation'),
 ]

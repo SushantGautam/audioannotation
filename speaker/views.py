@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -13,7 +14,25 @@ from professor.models import Question, QuestionSet, ExamSet
 
 
 def homepage(request):
-    return render(request, 'speaker/homepage.html')
+    verification_request = VerificationRequest.objects.filter(user=request.user).latest('id')
+    contract_sign = ContractSign.objects.filter(user=request.user).latest('id')
+    profile_register_date, profile_approved_date = '', ''
+    contract_sign_date, contract_approved_date = '', ''
+    if verification_request:
+        profile_register_date = verification_request.created_at.strftime('%Y-%m-%d (%H:%M %p)')
+        profile_approved_date = verification_request.approved_at.strftime('%Y-%m-%d (%H:%M %p)') if verification_request.approved_at else ''
+    if contract_sign:
+        contract_sign_date = contract_sign.created_at.strftime('%Y-%m-%d (%H:%M %p)')
+        contract_approved_date = contract_sign.approved_at.strftime('%Y-%m-%d (%H:%M %p)') if contract_sign.approved_at else ''
+
+    context = {
+        'profile_register_date': profile_register_date,
+        'profile_approved_date': profile_approved_date,
+        'contract_sign_date': contract_sign_date,
+        'contract_approved_date': contract_approved_date,
+    }
+
+    return render(request, 'speaker/homepage.html', context)
 
 
 class QuestionSetList(ListView):
@@ -106,20 +125,26 @@ class ProfileEditView(FormView):
         userForm = self.base_user_form_class(request.POST, instance=self.request.user)
 
         if form.is_valid() and userForm.is_valid():
-            form.save()
-            userForm.save(commit=False)
+            obj = form.save(commit=False)
+            userForm.save()
 
             # After profile edit, admin needs to re-verify the account
-            userForm.verified = False
-            userForm.save()
-            # Create Verification Request if no pending requests.
-            if not self.request.user.speaker.is_pending_verification():
-                VerificationRequest.objects.create(user=self.request.user)
+            obj.verified = False
+            obj.save()
 
             return redirect(self.success_url)
         else:
             return self.render_to_response(
                 self.get_context_data(form=form, form2=userForm))
+
+
+class RequestVerification(FormView):
+    success_url = reverse_lazy('speaker:profile')
+    def post(self, request, *args, **kwargs):
+        # Create Verification Request if no pending requests.
+        if not self.request.user.speaker.is_pending_verification():
+            VerificationRequest.objects.create(user=self.request.user)
+        return redirect(self.success_url)
 
 
 class ContractView(View):
