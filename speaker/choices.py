@@ -15,6 +15,15 @@ LEVEL_CHOICES = (
     ('B', _('Beginner')),
     ('A', _('Advanced')),
 )
+EDUCATION_LEVEL_CHOICES = (
+    ('HD', _('High School Diploma')),
+    ('CD', _('College Diploma')),
+    ('TD', _('Technical Diploma')),
+    ('BD', _('Bachelor’s Degree')),
+    ('MD', _('Master’s Degree')),
+    ('DD', _('Doctorate Degree')),
+    ('OD', _('Other')),
+)
 TOPIK_LEVEL_CHOICES = (
     ('0', _('None')),
     ('1', _('1')),

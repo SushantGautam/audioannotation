@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from orgadmin.models import BaseUserModel, Contract, ContractSign, VerificationRequest
 from professor.models import Question, ExamSet
 from speaker.choices import GENDER_CHOICES, COUNTRY_CHOICES, LANGUAGE_CHOICES, PROFICIENCY_CHOICES, \
-                            LEVEL_CHOICES, TOPIK_LEVEL_CHOICES
+                            LEVEL_CHOICES, TOPIK_LEVEL_CHOICES, EDUCATION_LEVEL_CHOICES
 
 
 class Speaker(BaseUserModel):
@@ -14,8 +14,8 @@ class Speaker(BaseUserModel):
     language = models.CharField(max_length=2, choices=LANGUAGE_CHOICES, default='ko')
     proficiency = models.CharField(max_length=1, choices=PROFICIENCY_CHOICES, default='B')
     level = models.CharField(max_length=1, choices=LEVEL_CHOICES, default='B')
-    topik_score = models.CharField(max_length=1, choices=TOPIK_LEVEL_CHOICES, default='None')
-    education_level = models.CharField(max_length=256)
+    topik_score = models.CharField(max_length=1, choices=TOPIK_LEVEL_CHOICES, default='0')
+    education_level = models.CharField(max_length=2, choices=EDUCATION_LEVEL_CHOICES, default='HD')
     learning_period = models.IntegerField(default=0, help_text=_('In years'))
     korea_residency = models.IntegerField(default=0, help_text=_('In years'))
     study_purpose = models.CharField(max_length=256)
