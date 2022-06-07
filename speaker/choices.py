@@ -5,12 +5,34 @@ GENDER_CHOICES = (
     ("F", _("Female")),
     ("O", _("Other")),
 )
-
 PROFICIENCY_CHOICES = (
     ("B", _("Begineer")),
+    ('I', _('Intermediate')),
     ("A", _("Advance")),
+    ('F', _('Fluent')),
 )
-
+LEVEL_CHOICES = (
+    ('B', _('Beginner')),
+    ('A', _('Advanced')),
+)
+EDUCATION_LEVEL_CHOICES = (
+    ('HD', _('High School Diploma')),
+    ('CD', _('College Diploma')),
+    ('TD', _('Technical Diploma')),
+    ('BD', _('Bachelor’s Degree')),
+    ('MD', _('Master’s Degree')),
+    ('DD', _('Doctorate Degree')),
+    ('OD', _('Other')),
+)
+TOPIK_LEVEL_CHOICES = (
+    ('0', _('None')),
+    ('1', _('1')),
+    ('2', _('2')),
+    ('3', _('3')),
+    ('4', _('4')),
+    ('5', _('5')),
+    ('6', _('6')),
+)
 COUNTRY_CHOICES = (
     ("AF", _("Afghanistan")),
     ("AX", _("Aland Islands")),
