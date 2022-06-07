@@ -30,6 +30,9 @@ class Speaker(BaseUserModel):
     
     def has_request_verification(self):
         return VerificationRequest.objects.filter(user=self.user).exists()
+    
+    def has_profile_rejected(self):
+        return VerificationRequest.objects.filter(user=self.user, approved=False).exists()
 
     def has_contract(self):
         return Contract.objects.filter(user_type='SPE', created_by__organization_code=self.organization_code).exists()

@@ -16,7 +16,8 @@
                     <div class="h6">{% trans 'Profile Registered' %}</div>
                     <div>{{ profile_register_date }}</div>
                 </li>
-                <li class="{% if user.speaker.verified %}active{% endif %}">
+                <li class="{% if user.speaker.verified %}active
+                           {% elif user.speaker.has_profile_rejected %}inactive{% endif %}">
                     <div class="h6">{% trans 'Profile Verified' %}</div>
                     <div>{{ profile_approved_date }}</div>
                 </li>
@@ -34,6 +35,11 @@
             {% if not user.speaker.verified %}
                 {% if not user.speaker.has_request_verification %}
                     <h2>{% trans 'Please register your profile and submit for verification' %}</h2>
+                    <a href="{% url 'speaker:profile' %}"><button class="btn btn-outline-secondary">
+                        {% trans 'Go to Profile' %}
+                    </button></a>
+                {% elif user.speaker.has_profile_rejected %}
+                    <h2>{% trans 'Your profile is rejected, please update and submit for re-verification' %}</h2>
                     <a href="{% url 'speaker:profile' %}"><button class="btn btn-outline-secondary">
                         {% trans 'Go to Profile' %}
                     </button></a>
