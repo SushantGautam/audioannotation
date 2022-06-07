@@ -15,7 +15,7 @@
     <a href="#" class="tab-item">Exam Set</a>
     <a href="{% url 'professor:question_set_page' %}" class="tab-item {% if 'professor_question_set' in request.path %}active{% endif %}">QuestionSet List</a>
     <a href="{% url 'professor:question_list_page' %}" class="tab-item {% if 'professor_question_list' in request.path %}active{% endif %}">Questions List</a>
-    <a href="#" class="tab-item">Category Management</a>
+    <a href="{% url  'professor:category_management_page' %}" class="tab-item">Category Management</a>
   </div>
 
   <input type="radio" id="evaluations-tab" name="mytabs">

@@ -7,12 +7,26 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 
 from orgadmin.models import Organization
 from professor.forms import QuestionForm, QuestionSetForm
-from professor.models import Question, QuestionSet, SubCategory
-
+from professor.models import Question, QuestionSet, SubCategory, Category
 
 
 def homepage(request):
     return render(request, 'professor/homepage.html')
+
+
+class CategoryManagementListView(ListView):
+    model = SubCategory
+    template_name = 'professor/CategoryManagement/CategoryManagement.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(CategoryManagementListView, self).get_context_data(*args, **kwargs)
+        context['categories'] = Category.objects.filter().distinct()
+        return context
+
+
+
+
+
 
 
 class QuestionListPage(ListView):

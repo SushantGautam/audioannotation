@@ -46,6 +46,18 @@ $(document).ready(function () {
         localforage.getItem(key_annotation).then(function(value) {
             // This code runs once the value has been loaded
             // from the offline store.
+            Object.keys(value).map(function (idx) {
+                if (Object.keys(value[idx].data).length == 0) {
+                    var stt_data = STT_DATA.stt_predictions_annotations.filter(k => {
+                        if(k.id == value[idx].id) {
+                            return k;
+                        }
+                    });
+                    if (stt_data.length > 0) {
+                        value[idx].data = stt_data[0].data;
+                    }
+                }
+            });
             $.ajax({
                 url: SAVE_ANNOTATION_URL,
                 type: 'POST',
@@ -54,7 +66,8 @@ $(document).ready(function () {
                     'annotated_data': JSON.stringify(value),
                 },
                 success: function (response) {
-                    console.log(response);
+                    loadRegions(value);
+                    $('body').append(response);
                 },
                 error: function (err) {
                     console.log(err);

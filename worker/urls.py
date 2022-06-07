@@ -29,5 +29,5 @@ urlpatterns += [
 # Annotation Tool URLs
 urlpatterns += [
     path('task/<int:workertask_id>/', views.AnnotationPage.as_view(), name='annotation_page'),
-    path('annotation/<int:id>/save/', views.SaveAnnotation.as_view(), name='save_annotation'),
+    path('annotation/<int:task_id>/save/<int:speakersubmission_id>/', views.SaveAnnotation.as_view(), name='save_annotation'),
 ]
