@@ -17,4 +17,5 @@ urlpatterns = [
     path('professor_question/delete_multiple_question', views.MultipleQuestionDeleteView, name='delete_multiple_question'),
     path('professor_question/delete_multiple_question_set', views.MultipleQuestionSetDeleteView, name='delete_multiple_questionset'),
     path('professor_question_set', views.QuestionSetListView.as_view(), name='question_set_page'),
+    path('category_management', views.CategoryManagementListView.as_view(), name='category_management_page'),
 ]
