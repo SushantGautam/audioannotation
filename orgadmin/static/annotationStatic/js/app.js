@@ -83,6 +83,7 @@ function load_files(files) {
     });
 }
 
+var regionCreated = false;
 
 function init_wavesurfer() {
     {
@@ -96,13 +97,23 @@ function init_wavesurfer() {
             scrollParent: true,
             normalize: true,
             minimap: true,
-            backend: "MediaElement",
+            backend: "WebAudio",
             cursorColor: "red",
             // barWidth: 3,
             // barMinHeight: 2,
             // barHeight: 2,
             responsive: true,
             plugins: [
+                WaveSurfer.cursor.create({
+                    showTime: true,
+                    opacity: 1,
+                    customShowTimeStyle: {
+                        'background-color': '#000',
+                        color: '#fff',
+                        padding: '2px',
+                        'font-size': '10px'
+                    }
+                }),
                 WaveSurfer.regions.create(),
                 WaveSurfer.minimap.create({
                     height: 30,
@@ -129,6 +140,7 @@ function init_wavesurfer() {
         wavesurfer.on("seek", function () {
             set_current_time();
         });
+
         wavesurfer.on("audioprocess", function () {
             if (wavesurfer.isPlaying()) {
                 set_current_time();
@@ -145,14 +157,10 @@ function init_wavesurfer() {
         });
 
         loadSTTRegions();
-        // localforage.getItem(key_audio, (err, data_audio) => {
-        //     load_audio(data_audio);
-        // });
     }
 
     {
         // Regions
-
         wavesurfer.on("ready", function () {
             wavesurfer.enableDragSelection({
                 color: defaultColor(0.2),
@@ -164,47 +172,59 @@ function init_wavesurfer() {
             )}`;
             document.getElementById("time-total-hms").innerText = hms(totalTime);
         });
-        wavesurfer.on("region-click", function (region, e) {
-            e.stopPropagation();
-            // Play on click, loop on shift click
-            e.shiftKey ? region.playLoop() : region.play();
+
+        wavesurfer.on("region-mouseenter", (region) => {
+            old_region = region;
         });
-        wavesurfer.on("region-click", editAnnotation);
+
+        wavesurfer.on("region-mouseleave", (region) => {
+            old_region = null;
+        });
+
         wavesurfer.on("region-click", (region) => {
+            editAnnotation(region);
+            current_region = region;
+            setRegionActive(region.id);
             loadResults(region);
         });
 
         wavesurfer.on("region-created", function (region) {
+            regionCreated = true;
             appendDeleteIcon(region.id);
             var text_region = document.createElement('div');
             text_region.className = 'region-text';
             document.querySelector(`.wavesurfer-region[data-id=${region.id}]`).appendChild(text_region);
+        });
 
-            // validateRegion(region);
-        });
-        wavesurfer.on("region-updated", saveRegions);
         wavesurfer.on("region-update-end", (region) => {
-            validateRegion(region);
+            var isValid = validateRegion(region);
+            if (isValid) {
+                saveRegions();
+            } else {
+                // wavesurfer.regions.list[region.id].remove();
+                deleteRegion(region.id);
+                // If Not new region, delete original region, then create new region in old place.
+                if (!regionCreated) {
+                    localforage.getItem(key_annotation, (err, data) => {
+                        var data = data.filter(i => i.id == region.id);
+                        loadRegions(data);
+                    });
+                }
+            }
+            regionCreated = false;
         });
-        wavesurfer.on("region-removed", saveRegions);
+        // wavesurfer.on("region-removed", saveRegions);
 
         wavesurfer.on("region-play", function (region) {
             wavesurfer.play(region.start, region.end);
         });
 
         wavesurfer.on("region-in", function (region) {
-            region.element.classList.add("active-region");
-            if (!region.id.includes("stt")) {
-                document.querySelector(`.region[data-region_id=${region.id}]`).classList.add("active-region-list");
-                // document.querySelector(`.region[data-region_id="${region.id}"]`).scrollIntoView();
-            }
+            setRegionActive(region.id);
         });
 
         wavesurfer.on("region-out", function (region) {
-            region.element.classList.remove("active-region");
-            if (!region.id.includes("stt")) {
-                document.querySelector(`.region[data-region_id="${region.id}"]`).classList.remove("active-region-list");
-            }
+            setRegionInactive(region.id);
         });
     }
 
@@ -292,6 +312,12 @@ function init_wavesurfer() {
     }
 }
 
+function playRegion(region, e) {
+    e.stopPropagation();
+    // Play on click, loop on shift click
+    e.shiftKey ? region.playLoop() : region.play();
+}
+
 function loadSTTRegions() {
     var stt_data = JSON.parse(JSON.stringify(STT_DATA.stt_predictions_annotations));
     stt_data.forEach(function (region) {
@@ -325,7 +351,6 @@ function deleteRegion(regionId) {
         wavesurfer.regions.list[regionId].remove();
         emptyResults();
         saveRegions();
-        sortRegions();
     }
 }
 
@@ -359,6 +384,28 @@ const escape_html_map = {
     "<": "&lt;",
     ">": "&gt;",
 };
+
+
+function setRegionActive(region_id) {
+    var region = wavesurfer.regions.list[region_id];
+    if (document.querySelectorAll('.active-region').length > 0)
+        document.querySelector('.active-region').classList.remove("active-region");
+    if (document.querySelectorAll('.active-region-list').length > 0)
+        document.querySelector('.active-region-list').classList.remove("active-region-list");
+    region.element.classList.add("active-region");
+    if (!region_id.includes("stt")) {
+        document.querySelector(`.region[data-region_id="${region_id}"]`).classList.add("active-region-list");
+    }
+}
+
+function setRegionInactive(region_id) {
+    var region = wavesurfer.regions.list[region_id];
+    region.element.classList.remove("active-region");
+    if (!region_id.includes("stt")) {
+        document.querySelector(`.region[data-region_id="${region_id}"]`).classList.remove("active-region-list");
+    }
+}
+
 
 function set_annotation_items(annotation_item_names) {
     const area = document.getElementById("annotation_item_area");
@@ -528,11 +575,10 @@ function saveRegions() {
             data: region.data,
         };
     });
-
     localforage
         .setItem(key_annotation, mydata, () => {
             // on success
-            sortRegions();
+            sortRegionList();
         })
         .catch((err) => {
             alert(`Error on save: ${err}`);
@@ -540,13 +586,20 @@ function saveRegions() {
 }
 
 function loadRegions(regions) {
-    regions.forEach(function (region) {
-        region.color = "rgb(255, 242, 204, 0.2)";
-        wavesurfer.addRegion(region);
-        addRegionList(region);
-        addTextToAnnotationRegion(region);
+    new Promise((resolve, reject) => {
+            regions.forEach(function (region) {
+                region.color = "rgb(255, 242, 204, 0.2)";
+                wavesurfer.addRegion(region);
+                addRegionList(region);
+                addTextToAnnotationRegion(region);
+            });
+            resolve('success');
+        }
+    ).then((value) => {
+        document.getElementById('region-count').innerText = regions.length;
+        regionCreated = false;
+        saveRegions();
     });
-    document.getElementById('region-count').innerText = regions.length
 }
 
 function randomColor(alpha) {
@@ -599,6 +652,7 @@ function save_a_region(region) {
 }
 
 var old_region = null;
+var current_region = null;
 
 function editAnnotation(region) {
     if (old_region !== null && region != old_region) {
@@ -679,8 +733,9 @@ function addRegionList(region) {
     regionElem.innerHTML = region_innerHTMl;
     document.getElementById('region-list').appendChild(regionElem);
 
-    regionElem.addEventListener("click", function () {
-        document.querySelector(`.wavesurfer-region[data-id="${region.id}"]`).click();
+    regionElem.addEventListener("click", function (e) {
+        // document.querySelector(`.wavesurfer-region[data-id="${region.id}"]`).click();
+        playRegion(wavesurfer.regions.list[region.id], e);
     });
 }
 
@@ -690,10 +745,10 @@ function loadResults(region) {
     var text = region.data.text;
     var labels = region.data.labels;
     if (!region.data.text) {
-        text = 'stt_' + region.id in wavesurfer.regions.list ? wavesurfer.regions.list['stt_'+region.id].data.text : '';
+        text = 'stt_' + region.id in wavesurfer.regions.list ? wavesurfer.regions.list['stt_' + region.id].data.text : '';
     }
     if (!region.data.labels) {
-        labels = 'stt_' + region.id in wavesurfer.regions.list ? wavesurfer.regions.list['stt_'+region.id].data.labels : '';
+        labels = 'stt_' + region.id in wavesurfer.regions.list ? wavesurfer.regions.list['stt_' + region.id].data.labels : '';
     }
     elem.innerHTML = `
         <div class="audio-details">
@@ -712,7 +767,7 @@ function loadResults(region) {
             </div>
             
             <div class="bottom-section">
-                <button title="Add Metadata" class="btn btn-sm btn-secondary region-edit" data-region_id="${region.id}"><i class="fas fa-edit"></i></button>
+                <button title="Edit text" class="btn btn-sm btn-secondary region-edit" data-region_id="${region.id}"><i class="fa-solid fa-pen"></i></button>
                 <button title="Delete" class="btn btn-sm btn-secondary region-delete" data-region_id="${region.id}"><i class="fas fa-trash"></i></button>
             </div>
         </div>
@@ -754,17 +809,23 @@ function addTextToAnnotationRegion(region) {
     document.querySelector(`[data-id=${region.id}]`).appendChild(regionText);
 }
 
-function sortRegions() {
+function sortRegions(value, order = 1) {
+    return value.sort((a, b) => {
+        return a.start - b.start;
+    });
+}
+
+function sortRegionList() {
     localforage.getItem(key_annotation).then(function (value) {
         // This code runs once the value has been loaded
         // from the offline store.
-        var sorted = value.sort((a, b) => {
-            return a.start - b.start;
-        });
+        var sorted = sortRegions(value, 1);
         clearRegionList();
         sorted.forEach(function (region) {
             addRegionList(region);
         });
+        localforage.setItem(key_annotation, sorted, () => {}
+        );
         document.getElementById('region-count').innerText = sorted.length;
     }).catch(function (err) {
         // This code runs if there were any errors
@@ -782,14 +843,84 @@ function validateRegion(region) {
     var value = wavesurfer.regions.list;
     Object.keys(value).filter((key) => !key.includes('stt_')).reduce(function (r, e) {
         // Overlap condition
-        if ((value[e].start > region.start && value[e].start < region.end) || (value[e].end > region.start && value[e].end < region.end)) {
+        // If region right end is inside value and left is not overllaped.
+        var leftCondition = (value[e].start > region.start && value[e].start < region.end);
+        // If region left end is inside value and right is outside.
+        var rightCondition = (value[e].end > region.start && value[e].end < region.end);
+        // if engulfed.
+        var midCondition = (value[e].start < region.start && value[e].end > region.end);
+        if (leftCondition || rightCondition || midCondition) {
             overlap = true;
             return;
         }
         return r;
     }, {})
 
-    if (overlap) {
-        deleteRegion(region.id);
-    }
+    return overlap ? false : true;
+}
+
+
+function splitRegion(region) {
+    var current_time = wavesurfer.getCurrentTime();
+    deleteRegion(region.id);
+    localforage.getItem(key_annotation, (err, data) => {
+        var region_data = data.filter(i => i.id == region.id);
+
+        old_end = region_data[0].end;
+
+        region_data[0].data = {};
+
+        // First Region
+        region_data[0].id = region_data[0].id + "split_1";
+        region_data[0].end = current_time - 0.05;
+        loadRegions(region_data);
+
+        // Second Region
+        region_data[0].id = region_data[0].id + "split_2";
+        region_data[0].start = current_time + 0.05;
+        region_data[0].end = old_end;
+        loadRegions(region_data);
+    });
+}
+
+// Direction 1 is right, -1 is left
+function mergeRegion(region, direction = 1) {
+    localforage.getItem(key_annotation, (err, data) => {
+        var region_data = data.filter(i => i.id == region.id);
+        var cursorIdx = data.map(e => e.id).indexOf(region.id);
+        var toBeMergedRegion = direction > 0 ? data[cursorIdx + 1] : data[cursorIdx - 1];
+
+        var cursorRegion = data[cursorIdx];
+
+
+        // deleteRegion(toBeMergedRegion.id);
+        // deleteRegion(cursorRegion.id);
+
+        // Delete Region Function is not used as not to save the same data again and again.
+        // Saving Data will be done after merging only.
+        wavesurfer.regions.list[toBeMergedRegion.id].remove();
+        wavesurfer.regions.list[cursorRegion.id].remove();
+
+        var merged_text = null;
+        if ('text' in cursorRegion.data || 'text' in toBeMergedRegion.data) {
+            var cursorText = 'text' in cursorRegion.data ? cursorRegion.data.text : "";
+            var mergeText = 'text' in toBeMergedRegion.data ? toBeMergedRegion.data.text : "";
+            merged_text = [cursorText + " " + mergeText]
+        }
+
+        var cursorLabel = 'labels' in cursorRegion.data ? cursorRegion.data.labels : [];
+        var mergeLabel = 'labels' in toBeMergedRegion.data ? toBeMergedRegion.data.labels : [];
+
+        if (direction > 0) {
+            region_data[0].end = toBeMergedRegion.end;
+            region_data[0].data['text'] = merged_text;
+            region_data[0].data['labels'] = [...new Set([...cursorLabel, ...mergeLabel])];
+        } else {
+            region_data[0].start = toBeMergedRegion.start;
+            region_data[0].data['text'] = toBeMergedRegion.data['text'] + " " + cursorRegion.data['text'];
+            region_data[0].data['labels'] = [...new Set([...mergeLabel, ...cursorLabel])];
+        }
+        loadRegions(region_data);
+
+    });
 }

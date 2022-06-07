@@ -1,0 +1,119 @@
+{% extends 'worker/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block styles %}
+    <link href="{% static 'css/pagewise/profile.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="header-section w-60 py-3">
+        <h2 class="page-heading">{% trans 'Profile Information' %} </h2>
+        <a href="{% url 'worker:edit_profile' pk=user.worker.id %}" title="Edit Profile"
+           class="btn btn-sm btn-secondary rounded-circle" id="edit-profile-btn"><i
+                class="fa-solid fa-pen"></i></a>
+    </div>
+    <section class="profile-section-container">
+        <section class="profile-section w-60">
+
+            <div class="details-parent shadow-sm">
+                <div class="text-center">
+                    <img src="{% static 'img/user.png' %}" class="rounded-circle" style="width: 10rem;height: 10rem;"
+                         alt="">
+                    <h4>{{ request.user.get_full_name }}</h4>
+                </div>
+                <div class="detail-row">
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-id-badge"></i>{% trans 'Worker ID' %}  </div>
+                        <div class="value">{{ request.user.pk }}</div>
+                    </div>
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-calendar-days"></i>{% trans 'Date of Birth' %} </div>
+                        <div class="value">{{ request.user.worker.birth_date }}</div>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-signature"></i>Name</div>
+                        <div class="value">{{ request.user.get_full_name }}</div>
+                    </div>
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-arrow-down-1-9"></i></i>Resident Reg. Num</div>
+                        <div class="value">7851351263</div>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-location-dot"></i></i>{% trans 'Address' %}</div>
+                        <div class="value">{{ request.user.worker.permanent_address }}</div>
+                    </div>
+                    <!-- <div class="detail">
+                        <div class="label"><i class="fa-solid fa-graduation-cap"></i>Education</div>
+                        <div class="value">Bachelors Degree</div>
+                    </div> -->
+                </div>
+                <div class="detail-row">
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-phone"></i>{% trans 'Phone Number' %}</div>
+                        <div class="value">{{ request.user.worker.phone_number }}</div>
+                    </div>
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-envelope"></i></i>{% trans 'Whale Address' %}</div>
+                        <div class="value">{{ request.user.email }}</div>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-building-columns"></i></i>{% trans 'Bank Name' %}</div>
+                        <div class="value">{{ request.user.worker.bank_name }}</div>
+                    </div>
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-hashtag"></i>{% trans 'Account Number' %}</div>
+                        <div class="value">{{ request.user.worker.bank_account_number }}</div>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-graduation-cap"></i>{% trans 'Education' %}</div>
+                        <div class="value">{{ request.user.worker.education_level }}</div>
+                    </div>
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-book-bookmark"></i>{% trans 'Major' %}</div>
+                        <div class="value">{{ request.user.worker.education_field }}</div>
+                    </div>
+                </div>
+
+            </div>
+
+            {% if not user.worker.verified and not user.worker.has_request_verification %}
+                <form action="{% url 'worker:verify_profile' %}" method="post">
+                    {% csrf_token %}
+                    <div>
+                        <button type="submit" class="btn btn-dark btn-sm">{% trans 'Request Verification' %} </button>
+                    </div>
+                </form>
+            {% elif user.worker.has_request_verification %}
+                <div>
+                    {% trans 'Pending Verification' %}
+                </div>
+            {% endif %}
+        </section>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('#edit-profile-btn').on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: $(this).attr('href'),
+                method: 'GET',
+                success: function (response) {
+                    $('#edit-profile-btn').addClass('d-none');
+                    $('.profile-section').addClass('d-none');
+                    $('.profile-section-container').append(response);
+                }
+            });
+        });
+    </script>
+{% endblock %}

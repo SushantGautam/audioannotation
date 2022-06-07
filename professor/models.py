@@ -54,8 +54,8 @@ class Question(models.Model):
     is_active = models.BooleanField(default=True)
     difficulty_level = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(2)], 
                                             help_text=_('0: both, 1: beginner, 2: advanced'))
-    ready_time = models.IntegerField(default=0)
-    speaking_time = models.IntegerField(default=0)
+    ready_time = models.IntegerField(default=2, help_text=_('Time in seconds'))
+    speaking_time = models.IntegerField(default=3, help_text=_('Time in seconds'))
     evaluation_purpose = models.CharField(max_length=256, null=True, blank=True)
     question_keywords = models.CharField(max_length=256, null=True, blank=True,
                                          help_text=_('Comma separated keywords'))
@@ -88,6 +88,8 @@ class QuestionSet(models.Model):
 class ExamSet(models.Model):
     exam_name = models.CharField(max_length=256)
     description = models.TextField(null=True, blank=True)
+    start_date = models.DateTimeField(null=True, blank=True)
+    end_date = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
@@ -97,3 +99,10 @@ class ExamSet(models.Model):
 
     def __str__(self):
         return self.exam_name
+
+    def get_difficulty_level(self):
+        difficulty_level_map = ['Both', 'Beginner', 'Advanced']
+        return difficulty_level_map[self.difficulty_level]
+
+    def get_question_count(self):
+        return self.question_sets.all().values_list('questions', flat=True).count()

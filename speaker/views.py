@@ -1,32 +1,40 @@
+from multiprocessing import context
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from django.template import RequestContext
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
-from django.views.generic import ListView, FormView, TemplateView
+from django.urls import reverse_lazy
+from django.views import View
+from django.views.generic import ListView, FormView, TemplateView, UpdateView
 
-from speaker.forms import AudioFileForm, SpeakerSubmissionForm
+from orgadmin.forms import UserChangeForm
+from orgadmin.models import Contract, ContractSign, VerificationRequest
+from speaker.forms import SpeakerSubmissionForm, ProfileEditForm
 from speaker.models import Speaker, SpeakerSubmission
 
 from professor.models import Question, QuestionSet, ExamSet
 
 
-@csrf_protect
 def homepage(request):
-    # return render(request, 'speaker/homepage.html')
-    return render(request, 'speaker/homepage.html')
+    verification_request = VerificationRequest.objects.filter(user=request.user)
+    contract_sign = ContractSign.objects.filter(user=request.user)
+    profile_register_date, profile_approved_date = '', ''
+    contract_sign_date, contract_approved_date = '', ''
+    if verification_request:
+        verification_request = verification_request.latest('id')
+        profile_register_date = verification_request.created_at.strftime('%Y-%m-%d (%H:%M %p)')
+        profile_approved_date = verification_request.approved_at.strftime('%Y-%m-%d (%H:%M %p)') if verification_request.approved_at else ''
+    if contract_sign:
+        contract_sign = contract_sign.latest('id')
+        contract_sign_date = contract_sign.created_at.strftime('%Y-%m-%d (%H:%M %p)')
+        contract_approved_date = contract_sign.approved_at.strftime('%Y-%m-%d (%H:%M %p)') if contract_sign.approved_at else ''
 
+    context = {
+        'profile_register_date': profile_register_date,
+        'profile_approved_date': profile_approved_date,
+        'contract_sign_date': contract_sign_date,
+        'contract_approved_date': contract_approved_date,
+    }
 
-def save_audio(request):
-    if request.method == 'POST':
-        form = AudioFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            print("File saved")
-            obj = form.save(commit=False)
-            obj.speaker = Speaker.objects.first()
-            obj.save()
-        else:
-            print("form invalid: ", form.errors)
-    return redirect('homepage')
+    return render(request, 'speaker/homepage.html', context)
 
 
 class QuestionSetList(ListView):
@@ -62,8 +70,8 @@ class ExamPopupView(FormView):
         exam_set = context['qn'].questionset_set.first().examset_set.first()
         # que_set = context['qn'].questionset_set.first()
         context['qn'].can_submit = not SpeakerSubmission.objects.filter(question=context['qn'],
-                                                                      speaker=speaker,
-                                                                      exam_set=exam_set).exists()
+                                                                        speaker=speaker,
+                                                                        exam_set=exam_set).exists()
 
         context['speaker'] = speaker
         context['qn_set'] = qn_set
@@ -99,3 +107,68 @@ class ExamPopupView(FormView):
 
 class ProfileView(TemplateView):
     template_name = "speaker/profile.html"
+
+
+class ProfileEditView(FormView):
+    # model = Speaker
+    form_class = ProfileEditForm
+    base_user_form_class = UserChangeForm
+    template_name = 'speaker/edit_profile.html'
+    success_url = reverse_lazy('speaker:profile')
+
+    def get(self, request, *args, **kwargs):
+        super(ProfileEditView, self).get(request, *args, **kwargs)
+        form = self.form_class(instance=self.request.user.speaker)
+        userForm = self.base_user_form_class(instance=self.request.user)
+        return self.render_to_response(self.get_context_data(form=form, userForm=userForm))
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, instance=self.request.user.speaker)
+        userForm = self.base_user_form_class(request.POST, instance=self.request.user)
+
+        if form.is_valid() and userForm.is_valid():
+            obj = form.save(commit=False)
+            userForm.save()
+
+            # After profile edit, admin needs to re-verify the account
+            obj.verified = False
+            obj.save()
+
+            return redirect(self.success_url)
+        else:
+            return self.render_to_response(
+                self.get_context_data(form=form, form2=userForm))
+
+
+class RequestVerification(FormView):
+    success_url = reverse_lazy('speaker:profile')
+    def post(self, request, *args, **kwargs):
+        # Create Verification Request if no pending requests.
+        if not self.request.user.speaker.is_pending_verification():
+            VerificationRequest.objects.create(user=self.request.user)
+        return redirect(self.success_url)
+
+
+class ContractView(View):
+    def get(self, request, **kwargs):
+        context = {}
+        context['contract'] = Contract.objects.filter(user_type='SPE', is_active=True,
+                                                      created_by__organization_code=self.request.user.speaker.organization_code).first()
+        context['has_contract'] = request.user.speaker.has_contract()
+        context['has_contract_submitted'] = request.user.speaker.has_contract_submitted()
+        context['has_contract_approved'] = request.user.speaker.has_contract_approved()
+        return render(request, 'speaker/contract.html', context)
+
+    def post(self, request, **kwargs):
+        if ContractSign.objects.filter(user=self.request.user, contract_code__user_type='SPE', approved=False,
+                                       contract_code__created_by__organization_code=self.request.user.speaker.organization_code).exists():
+            contract = ContractSign.objects.get(user=self.request.user, contract_code__user_type='SPE', approved=False,
+                                                contract_code__created_by__organization_code=self.request.user.speaker.organization_code)
+        else:
+            contract = ContractSign()
+        contract.user = request.user
+        contract.upload_file = request.FILES['contract-file']
+        contract.approved = None
+        contract.contract_code_id = request.POST.get('contract-id')
+        contract.save()
+        return redirect('speaker:contract')

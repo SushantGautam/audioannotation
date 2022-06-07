@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $('.right-section .result-section').on('click', '.region-edit', () => {
+    $('.result-section').on('click', '.region-edit', () => {
         $('.result .audio-data').addClass('d-none');
         $('.annotation-form-section').removeClass('d-none');
         var id = $('.result-section .region-edit').attr('data-region_id');
@@ -28,6 +28,8 @@ $(document).ready(function () {
         });
         $('.result .text').html(region.data.text);
         changeAnnotationText(region);
+        // Save annotated data to local database.
+        saveRegions();
     });
 
     $('.annotation-form button[type=cancel]').on('click', (e) => {
@@ -44,6 +46,18 @@ $(document).ready(function () {
         localforage.getItem(key_annotation).then(function(value) {
             // This code runs once the value has been loaded
             // from the offline store.
+            Object.keys(value).map(function (idx) {
+                if (Object.keys(value[idx].data).length == 0) {
+                    var stt_data = STT_DATA.stt_predictions_annotations.filter(k => {
+                        if(k.id == value[idx].id) {
+                            return k;
+                        }
+                    });
+                    if (stt_data.length > 0) {
+                        value[idx].data = stt_data[0].data;
+                    }
+                }
+            });
             $.ajax({
                 url: SAVE_ANNOTATION_URL,
                 type: 'POST',
@@ -52,7 +66,8 @@ $(document).ready(function () {
                     'annotated_data': JSON.stringify(value),
                 },
                 success: function (response) {
-                    console.log(response);
+                    loadRegions(value);
+                    $('body').append(response);
                 },
                 error: function (err) {
                     console.log(err);
@@ -67,4 +82,17 @@ $(document).ready(function () {
     function changeAnnotationText(region) {
         $(`.wavesurfer-region[data-id=${region.id}]`).find('.region-text').html(region.data.text);
     }
+
+    $('#split').on('click', () => {
+        splitRegion(current_region);
+    });
+
+    $('#merge-left').on('click', () => {
+        mergeRegion(current_region, -1);
+    });
+
+    $('#merge-right').on('click', () => {
+        mergeRegion(current_region, 1);
+    });
+
 });

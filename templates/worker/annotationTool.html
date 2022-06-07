@@ -5,388 +5,340 @@
 <html>
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Audio Annotation</title>
 
-    <link href="data:image/gif;" rel="icon" type="image/x-icon" />
+    <link href="data:image/gif;" rel="icon" type="image/x-icon"/>
     <meta name="viewport" content="width=device-width,initial-scale=1">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.5/umd/popper.min.js" integrity="sha512-8cU710tp3iH9RniUh6fq5zJsGnjLzOWLWdZqBMLtqaoZUA6AWIE34lwMB3ipUNiTBP5jEZKY95SfbNnQ8cCKvA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+          integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.5/umd/popper.min.js"
+            integrity="sha512-8cU710tp3iH9RniUh6fq5zJsGnjLzOWLWdZqBMLtqaoZUA6AWIE34lwMB3ipUNiTBP5jEZKY95SfbNnQ8cCKvA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="{% static 'annotationStatic/3rd/bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'annotationStatic/3rd/bootstrap-icons/bootstrap-icons.css' %}">
-    <link rel="stylesheet" href="{% static 'annotationStatic/css/style.css' %}" />
-    <link rel="stylesheet" href="{% static 'annotationStatic/css/app.css' %}" />
+    <link rel="stylesheet" href="{% static 'annotationStatic/css/style.css' %}"/>
+    <link rel="stylesheet" href="{% static 'annotationStatic/css/app.css' %}"/>
 
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/fontawesome.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/fontawesome.min.js"></script> -->
 </head>
 
-<style>
-    .flex-space{
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .flex-center{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .main-section{
-        display: flex;
-        gap: 2rem;
-    }
-
-    .left-section{
-        width: 75%;
-        border: 1px solid rgba(0,0,0,0.1);
-        border-radius: 0.25rem;
-        padding: 1rem;
-    }
-
-    .right-section{
-        width: 25%;
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-    }
-
-    .right-section > *{
-        border: 1px solid rgba(0,0,0,0.1);
-        border-radius: 0.25rem;
-        padding: 1rem;
-    }
-
-    .header-section button{
-        border-radius: 50%;
-    }
-
-    .result-section{
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-    .result{
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
-    .audio-details{
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .result label {
-        font-weight: 500;
-    }
-
-    .text-parent{
-        display: flex;
-        gap: 0.5rem;
-    }
-
-    .text-parent label{
-        min-width: 2.5rem;
-    }
-
-    .bottom-section button{
-        border-radius: 50%;
-        font-size: 0.75rem;
-    }
-
-    .region-section{
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-
-    .region-list{
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        max-height: 20rem;
-        overflow-y: auto;
-    }
-
-    .region{
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        cursor: pointer;
-    }
-
-    .sort-button{
-        padding-inline: 0.6rem ;
-    }
-
-    .audio-range-parent{
-        display: flex;
-        gap: 0.5rem;
-    }
-
-    .audio-range{
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-    }
-
-    .audio-range .start , .audio-range .end{
-        font-weight: 500;
-        width: 4rem;
-        text-align: center;
-    }
-
-    .region-text {
-        position: absolute;
-        top: 50%;
-    }
-</style>
 
 <body itemscope itemtype="http://schema.org/WebApplication">
-    <div class="container">
-        <div class="header">
-            <h1>Audio Annotation </h1>
-        </div>
+<div class="container">
+    <div class="main-section">
+        <section class="right-section">
 
-        <div class="main-section">
-            <section class="left-section shadow-sm">
-                <div id="demo">
-                    <div class="row">
-                        <div class="col">
-                            <p style="text-align:right;">
-                                <span id="time-current">0.00</span> / <span id="time-total">0.00</span><br>
-                                (<span id="time-current-hms">00:00:00</span> / <span id="time-total-hms">00:00:00</span>)
-                            </p>
+            <!-- ExamSet section starts here -->
+            <div class="exam-set">
+                <h5 class="exam-set-title">{{ exam_set.exam_name }}</h5>
+                <!-- <div class=""> -->
+                <div class="accordion accordion-flush question-sets" id="accordionFlushExample">
+                    {% for question_set in question_sets %}
+                        <div class="accordion-item">
+                            <h4 class="accordion-header" id="flush-headingOne">
+                                <button class="accordion-button collapsed question-set-name" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
+                                        aria-expanded="false" aria-controls="flush-collapseOne">
+                                    {{ question_set.unique_code }}
+                                </button>
+                            </h4>
+                            <div id="flush-collapseOne" class="accordion-collapse collapse"
+                                 aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                <div class="accordion-body">
+                                    {% for question in question_set.questions.all %}
+                                        {% if audio_obj.question.id == question.id %}
+                                            <a href="javascript:void(0)" class="question-parent shadow-sm active">
+                                                <span class="question-num">{{ forloop.counter }}</span>
+                                                <span class="question">{{ question.question_title }}</span>
+                                            </a>
+                                        {% else %}
+                                            <a class="question-parent shadow-sm"
+                                               href="{% url 'worker:annotation_page' workertask_id=worker_task.id %}?question={{ question.id }}">
+                                                <span class="question-num">{{ forloop.counter }}</span>
+                                                <span class="question">{{ question.question_title }}</span>
+                                            </a>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
                         </div>
+                    {% endfor %}
+                </div>
+
+                <!-- </div> -->
+            </div>
+            <!-- ExamSet section ends here -->
+
+
+            <!-- Region section starts here -->
+            <div class="region-section shadow-sm">
+
+                <div class="header-section flex-space">
+                    <h5 class="m-0">{{ audio_obj.question.question_title }} (<span id="region-count">01</span>)</h5>
+                    <button title="Sort regions" class="sort-button btn btn-sm btn-dark"><i
+                            class="fa-solid fa-sort"></i></button>
+                </div>
+
+                <div class="region-list" id="region-list">
+                    <!-- Render list of regions inside region-list section here -->
+                </div>
+            </div>
+            <!-- Region section ends here -->
+
+        </section>
+
+        <section class="left-section">
+
+            <div class="shadow-sm" id="demo">
+                <div class="row">
+                    <div class="col d-flex justify-content-between">
+                        <h3>{{ audio_obj.question.question_title }} </h3>
+                        <p style="text-align:right;">
+                            <span id="time-current">0.00</span> / <span id="time-total">0.00</span><br>
+                            (<span id="time-current-hms">00:00:00</span> / <span id="time-total-hms">00:00:00</span>)
+                        </p>
                     </div>
-                    <div id="wave-timeline"></div>
-                    <div id="waveform"></div>
-                    <div class="row" style="margin: 30px 0">
-                        <div class="col-auto">
-                            <button class="btn btn-primary btn-block" id="button_play">
+                </div>
+                <div id="wave-timeline"></div>
+                <div id="waveform"></div>
+                <div class="utility-buttons-group">
+                    <div class="">
+                        <button class="btn btn-sm btn-secondary play-button" id="button_play">
                             <span id="play">
                                 <span class="bi bi-play"></span>
                                 Play
                             </span>
-                                <span id="pause" style="display: none">
-                                <span class="bi bi-pause"></span>
+                            <span id="pause" style="display: none">
+                            <span class="bi bi-pause"></span>
                                 Pause
                             </span>
-                            </button>
-                        </div>
-                        <div class="col-auto">
-                            <div style="text-align: right;">
-                                <div class="bi bi-zoom-out" style="float: left;"></div>
-                                <div class="bi bi-zoom-in"></div>
-                            </div>
-                            <input id="slider" data-action="zoom" type="range" min="1" max="200" value="0" style="width: 100%" />
-                        </div>
-                        <div class="col-auto">
-                            <div style="text-align: right;">
-                                <div class="bi bi-volume-off" style="float: left;" id="volume_zero"></div>
-                                <div class="bi bi-volume-up" id="volume_max"></div>
-                            </div>
-                            <input id="volume" type="range" min="0" max="1" value="1" step="0.1" style="width: 100%" />
-                        </div>
-                        <div class="col-auto">
-                            <select class="form-control-sm" onchange="changePlaybackRate(this);">
-                                <option value="0.25">0.25x</option>
-                                <option value="0.5">0.5x</option>
-                                <option value="1" selected>1x</option>
-                                <option value="1.5">1.5x</option>
-                                <option value="2">2x</option>
-                            </select>
-                        </div>
-                        <div class="col-auto">
-                            <button class="btn btn-danger" id="reset">
-                                <span class="bi bi-trash"> {% trans 'Reset' %}</span>
-                            </button>
-                            <button class="btn btn-light" id="info" data-bs-toggle="modal" data-bs-target="#infoModal">
-                                <span class="bi bi-info-circle" aria-hidden="true"></span>
-                            </button>
-                            <!--
+                        </button>
+                    </div>
+                    <div class=" flex-center">
+                        <!-- <div style="text-align: right;">
+                            <div class="bi bi-zoom-out" style="float: left;"></div>
+                            <div class="bi bi-zoom-in"></div>
+                        </div> -->
+                        <div class="bi bi-zoom-out"></div>
+                        <input class="mx-1" id="slider" data-action="zoom" type="range" min="1" max="200" value="0">
+                        <div class="bi bi-zoom-in"></div>
+
+                    </div>
+                    <div class=" flex-center">
+                        <!-- <div style="text-align: right;">
+                            <div class="bi bi-volume-off" style="float: left;" id="volume_zero"></div>
+                            <div class="bi bi-volume-up" id="volume_max"></div>
+                        </div> -->
+                        <div class="bi bi-volume-off" id="volume_zero"></div>
+                        <input class="mx-1" id="volume" type="range" min="0" max="1" value="1" step="0.1">
+                        <div class="bi bi-volume-up" id="volume_max"></div>
+
+                    </div>
+                    <div class="">
+                        <select class="" onchange="changePlaybackRate(this);">
+                            <option value="0.25">0.25x</option>
+                            <option value="0.5">0.5x</option>
+                            <option value="1" selected>1x</option>
+                            <option value="1.5">1.5x</option>
+                            <option value="2">2x</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-dark" id="split">
+                            <i class="fa-solid fa-scissors"> </i> {% trans 'Split' %}
+                        </button>
+                        <button class="btn btn-sm merge-button" id="merge-left" title="Merge Left"
+                                data-title="Merge Left">
+                            <!-- <i class="bi bi-chevron-double-left"></i><span class="bi bi-union"></span> -->
+                            <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg" style="transform:rotateY(180deg);">
+                                <path d="M7.586 8.00366L4 8.00366C3.44772 8.00366 3 7.55595 3 7.00366C3 6.45138 3.44772 6.00366 4 6.00366L8 6.00366C8.26509 6.00366 8.51933 6.10892 8.70685 6.2963L13.414 11H18.5845L15.2931 7.71103C14.9025 7.32065 14.9023 6.68748 15.2926 6.29681C15.683 5.90615 16.3162 5.90592 16.7068 6.2963L21.7068 11.2926C21.8945 11.4802 22 11.7346 22 11.9998C22 12.2651 21.8947 12.5195 21.7071 12.7071L16.7071 17.7071C16.3166 18.0976 15.6834 18.0976 15.2929 17.7071C14.9024 17.3166 14.9024 16.6834 15.2929 16.2929L18.5858 13H13.4142L8.70711 17.7071C8.51957 17.8947 8.26522 18 8 18H4C3.44772 18 3 17.5523 3 17C3 16.4477 3.44772 16 4 16H7.58579L11.5855 12.0003L7.586 8.00366Z"
+                                      fill="#212121"/>
+                            </svg>
+
+
+                        </button>
+                        <button class="btn btn-sm merge-button" id="merge-right" title="Merge Right"
+                                data-title="Merge Right">
+                            <!-- <span class="bi bi-union"></span><i class="bi bi-chevron-double-right"></i> -->
+                            <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7.586 8.00366L4 8.00366C3.44772 8.00366 3 7.55595 3 7.00366C3 6.45138 3.44772 6.00366 4 6.00366L8 6.00366C8.26509 6.00366 8.51933 6.10892 8.70685 6.2963L13.414 11H18.5845L15.2931 7.71103C14.9025 7.32065 14.9023 6.68748 15.2926 6.29681C15.683 5.90615 16.3162 5.90592 16.7068 6.2963L21.7068 11.2926C21.8945 11.4802 22 11.7346 22 11.9998C22 12.2651 21.8947 12.5195 21.7071 12.7071L16.7071 17.7071C16.3166 18.0976 15.6834 18.0976 15.2929 17.7071C14.9024 17.3166 14.9024 16.6834 15.2929 16.2929L18.5858 13H13.4142L8.70711 17.7071C8.51957 17.8947 8.26522 18 8 18H4C3.44772 18 3 17.5523 3 17C3 16.4477 3.44772 16 4 16H7.58579L11.5855 12.0003L7.586 8.00366Z"
+                                      fill="#212121"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="">
+                        <button class="btn btn-sm btn-danger" id="reset">
+                            <span class="bi bi-trash"> {% trans 'Reset' %}</span>
+                        </button>
+                        <!--
                             <button class="btn btn-light" id="download_button">
                                 <span class="bi bi-download" aria-hidden="true"></span>
                             </button>
-                            -->
-                            <button type="button" class="btn btn-secondary" id="save-btn">Save</button>
-                        </div>
-                    </div>
-                </div>
-
-                <form role="form" name="edit" style="display:none; opacity: 0; transition: opacity 300ms linear; margin: 30px 0;">
-                    <div class="form-group row">
-                        <div class="col">
-                            <div class="row">
-                                <div class="col-5">
-                                    <label for="start">Start</label>
-                                    <input class="form-control" id="start" name="start" type="number" step="0.01" />
-                                </div>
-                                <div class="col-5">
-                                    <label for="start-hms"></label>
-                                    <input class="form-control" id="start-hms" name="start-hms" readonly />
-                                </div>
-                                <div class="col-2">
-                                    <label for="start-setnow"></label>
-                                    <button class="btn btn-info w-100" id="start-setnow">
-                                        <span class="bi bi-chevron-bar-down" aria-hidden="true"></span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="row">
-                                <div class="col-5">
-                                    <label for="end">End</label>
-                                    <input class="form-control" id="end" name="end" type="number" step="0.01" />
-                                </div>
-                                <div class="col-5">
-                                    <label for="end-hms"></label>
-                                    <input class="form-control" id="end-hms" name="end-hms" readonly />
-                                </div>
-                                <div class="col-2">
-                                    <label for="end-setnow"></label>
-                                    <button class="btn btn-info w-100" id="end-setnow">
-                                        <span class="bi bi-chevron-bar-down" aria-hidden="true"></span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group" id="annotation_item_area">
-                    </div>
-
-
-
-                    <div class="form-group row">
-                        <div class="col">
-                        </div>
-                        <div class="col">
-                            <button type="submit" class="btn btn-success btn-block">Save</button>
-                        </div>
-                        <div class="col">
-                            <button type="button" class="btn btn-danger btn-block" data-action="delete-region">Delete</button>
-                        </div>
-                    </div>
-                </form>
-            </section>
-
-            <section class="right-section">
-
-                <!-- Result section starts here -->
-                <div class="result-section shadow-sm">
-
-                    <div class="header-section flex-space">
-                        <h5 class="m-0">Results</h5>
-                        <!--
-                        <button class="btn btn-sm btn-dark" data-toggle="tooltip" data-placement="top" title="Delete all">
-                            <i class="fas fa-trash"></i>
-                        </button>
                         -->
-                    </div>
-
-
-                    <div class="result">
-                        <div class="audio-details">
-                            No Region Selected.
-                        </div>
-                        <div class="audio-data">
-
-                        </div>
-                    </div>
-
-
-                    <div class="annotation-form-section d-none">
-                        <form class="annotation-form" name="annotationForm">
-                            <textarea class="annotation-text">
-                            </textarea>
-                            <input type="hidden" value="" class="region-id">
-                            <div class="bottom-section">
-                                <button type="submit" title="Save" class="btn btn-sm btn-dark">
-                                    <i class="fas fa-check"></i></button>
-                                <button type="cancel" title="Cancel" class="btn btn-sm btn-dark">
-                                    <i class="fas fa-times"></i></button>
-                            </div>
-                        </form>
-                    </div>
-
-                </div>
-                <!-- Result section ends here -->
-
-
-                <!-- Region section starts here -->
-                <div class="region-section shadow-sm">
-                    <div class="header-section flex-space">
-                        <h5 class="m-0">Regions (<span id="region-count">01</span>)</h5>
-                        <button title="Sort regions" class="sort-button btn btn-sm btn-dark"><i class="fa-solid fa-sort"></i></button>
-                    </div>
-
-                    <div class="region-list" id="region-list">
-                        <!-- Render list of regions inside region-list section here -->
-                    </div>
-                </div>
-                <!-- Region section ends here -->
-
-            </section>
-        </div>
-
-
-
-
-
-        <div class="modal fade" id="infoModal" tabindex="-1">
-            <div class="modal-dialog modal-dialog-fluid">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title">Information</h3>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancel"></button>
-                    </div>
-                    <div class="modal-body">
-                        <h4>Key biddings</h4>
-                        <ul>
-                            <li>Shift + ←: Backward 0.2 seconds</li>
-                            <li>Shift + →: Forward 0.2 seconds</li>
-                            <li>Shift + Space: Play or Stop</li>
-                        </ul>
+                        <button type="button" class="btn btn-sm btn-secondary" id="save-btn">{% trans 'Save' %}</button>
+                        <button title="Shortcut keys" class="btn btn-sm btn-light" id="info" data-bs-toggle="modal"
+                                data-bs-target="#infoModal">
+                            <span class="bi bi-info-circle" aria-hidden="true"></span>
+                        </button>
                     </div>
                 </div>
             </div>
-        </div>
 
 
+            <form role="form" name="edit"
+                  style="display:none; opacity: 0; transition: opacity 300ms linear; margin: 30px 0;">
+                <div class="form-group row">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col-5">
+                                <label for="start">Start</label>
+                                <input class="form-control" id="start" name="start" type="number" step="0.01"/>
+                            </div>
+                            <div class="col-5">
+                                <label for="start-hms"></label>
+                                <input class="form-control" id="start-hms" name="start-hms" readonly/>
+                            </div>
+                            <div class="col-2">
+                                <label for="start-setnow"></label>
+                                <button class="btn btn-info w-100" id="start-setnow">
+                                    <span class="bi bi-chevron-bar-down" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="row">
+                            <div class="col-5">
+                                <label for="end">End</label>
+                                <input class="form-control" id="end" name="end" type="number" step="0.01"/>
+                            </div>
+                            <div class="col-5">
+                                <label for="end-hms"></label>
+                                <input class="form-control" id="end-hms" name="end-hms" readonly/>
+                            </div>
+                            <div class="col-2">
+                                <label for="end-setnow"></label>
+                                <button class="btn btn-info w-100" id="end-setnow">
+                                    <span class="bi bi-chevron-bar-down" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" id="annotation_item_area">
+                </div>
 
 
+                <div class="form-group row">
+                    <div class="col">
+                    </div>
+                    <div class="col">
+                        <button type="submit" class="btn btn-success btn-block">Save</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-danger btn-block" data-action="delete-region">Delete
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Result section starts here -->
+            <div class="result-section shadow-sm">
+
+                <div class="header-section flex-space">
+                    <h5 class="m-0">Results</h5>
+                    <!--
+                    <button class="btn btn-sm btn-dark" data-toggle="tooltip" data-placement="top" title="Delete all">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    -->
+                </div>
+
+
+                <div class="result">
+                    <div class="audio-details">
+                        No Region Selected.
+                    </div>
+                    <div class="audio-data">
+
+                    </div>
+                </div>
+
+
+                <div class="annotation-form-section d-none">
+                    <form class="annotation-form" name="annotationForm">
+                            <textarea placeholder="Add annotation text here..." class="annotation-text">
+                            </textarea>
+                        <input type="hidden" value="" class="region-id">
+                        <div class="bottom-section">
+                            <button type="submit" title="Save" class="btn btn-sm btn-dark">
+                                <i class="fas fa-check"></i></button>
+                            <button type="cancel" title="Cancel" class="btn btn-sm btn-dark">
+                                <i class="fas fa-times"></i></button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <!-- Result section ends here -->
+        </section>
 
 
     </div>
 
-    <!-- <div class="footer">
-        <div class="container" style="text-align:right;">
-            <a target="_blank" rel="noreferrer" href="https://github.com/koniwa/hachiue">Hachiue</a>
-            by
-            <a target="_blank" rel="noreferrer" href="https://github.com/koniwa">Koniwa Project</a>
+
+    <div class="modal fade" id="infoModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-fluid">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Information</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancel"></button>
+                </div>
+                <div class="modal-body">
+                    <h4>Key biddings</h4>
+                    <ul>
+                        <li>Shift + ←: Backward 0.2 seconds</li>
+                        <li>Shift + →: Forward 0.2 seconds</li>
+                        <li>Shift + Space: Play or Stop</li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </div> -->
+    </div>
+
+
+</div>
+
+<!-- <div class="footer">
+    <div class="container" style="text-align:right;">
+        <a target="_blank" rel="noreferrer" href="https://github.com/koniwa/hachiue">Hachiue</a>
+        by
+        <a target="_blank" rel="noreferrer" href="https://github.com/koniwa">Koniwa Project</a>
+    </div>
+</div> -->
 </body>
 
 <footer>
+    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+
     <script src="{% static 'annotationStatic/3rd/bootstrap/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'annotationStatic/3rd/wavesurfer.js/wavesurfer.min.js' %}"></script>
     <script src="{% static 'annotationStatic/3rd/wavesurfer.js/plugin/wavesurfer.timeline.min.js' %}"></script>
     <script src="{% static 'annotationStatic/3rd/wavesurfer.js/plugin/wavesurfer.regions.min.js' %}"></script>
     <script src="{% static 'annotationStatic/3rd/wavesurfer.js/plugin/wavesurfer.minimap.min.js' %}"></script>
+    <script src="{% static 'annotationStatic/3rd/wavesurfer.js/plugin/wavesurfer.cursor.min.js' %}"></script>
     <script src="{% static 'annotationStatic/3rd/localforage/localforage.min.js' %}"></script>
     <link href="{% static 'annotationStatic/3rd/jsoneditor/jsoneditor.min.css' %}" rel="stylesheet" type="text/css">
     <script src="{% static 'annotationStatic/3rd/jsoneditor/jsoneditor.min.js' %}"></script>
 
-    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
     <script src="{% static 'annotationStatic/js/app.js' %}"></script>
     <script src="{% static 'annotationStatic/js/additionalJS.js' %}"></script>
     <script>
@@ -394,7 +346,7 @@
         const STT_DATA = {{ stt_data|safe }};
         const AUDIO_FILE = "{{ audio_obj.audio_file.url }}";
         const key_annotation = "key_annotation_{{ audio_obj.id }}";
-        const SAVE_ANNOTATION_URL = "{% url 'worker:save_annotation' audio_obj.id %}";
+        const SAVE_ANNOTATION_URL = "{% url 'worker:save_annotation' task_id=worker_task.id speakersubmission_id=audio_obj.id %}";
         var csrf_token = "{{ csrf_token }}";
         {% if annotated_data %}
             const ANNOTATED_DATA = {{ annotated_data|safe }}

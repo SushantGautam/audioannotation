@@ -1,0 +1,94 @@
+{% extends "worker/base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block styles %}
+<style>
+    .search-form ul {
+        display: flex;
+        justify-content: flex-start;
+        gap: 3rem;
+        list-style-type: none;
+    }
+</style>
+{% endblock styles %}
+
+{% block content %}
+    <div class="bg-white pt-5">
+        <h3 class="page-heading">{% trans "Search Exams" %}</h3>
+        <form method="get" action="{% url 'worker:exam_list_ajax' %}" name="search-exam-form">
+            <div class="search-form">
+            <div class="parent row">
+                <div class="title col-4">{% trans 'Territories' %} *</div>
+                <div class="value col-8">
+                    {{ form.regions }}
+                </div>
+            </div>
+            <div class="parent row">
+                <div class="title col-4">{% trans 'Exam Type' %} *</div>
+                <div class="value col-8">
+                    {{ form.difficulty_level }}
+                </div>
+            </div>
+
+            <div class="parent row">
+                <div class="title col-4">{% trans 'Work Type' %} *</div>
+                <div class="value col-8">
+                    {{ form.work_type }}
+                </div>
+            </div>
+
+            <div class="parent row">
+                <div class="title col-4">{% trans 'Search Tags' %} *</div>
+                <div class="value col-8">
+                    {{ form.tags }}
+                </div>
+            </div>
+
+            <div class="parent row">
+                <input type="hidden" name="countries" id="countries">
+                <button type="submit" class="btn btn-dark" id="searchBtn">{% trans 'Search' %}</button>
+            </div>
+        </div>
+        </form>
+        <div class="mt-3 p-3" id="search-results">
+
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+    const REGION_MAPPTING = {
+        'SJR': ['CN', 'JP'],
+        'EU': ['DE', 'FR', 'ES', 'DK', 'SE', 'EE', 'FI', 'PT'],
+        'ENG': ['US', 'GB', 'AU', 'CA'],
+        'ASIA': ['NP', 'ID', 'UZ', 'VN', 'BD', 'MN'],
+    }
+    $("form[name='search-exam-form']").on('submit', function (e) {
+        e.preventDefault();
+        var selected_countries = []
+        $('input[type=checkbox][name=regions]:checked').each(function () {
+            $('[name=regions]:checked').each(function() {
+                selected_countries = [...new Set([...selected_countries, ...REGION_MAPPTING[this.value]])];
+            });
+        })
+        $('#countries').val(selected_countries);
+        $.ajax({
+            url: this.action,
+            type: this.method,
+            data: $(this).serialize(),
+            success: function (response) {
+                $('#search-results').empty();
+                $('#search-results').append(response);
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    });
+</script>
+{% endblock scripts %}

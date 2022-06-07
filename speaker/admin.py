@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import *
+from .models import Speaker, SpeakerSubmission, ExamSetSubmission
 
 admin.site.register(Speaker)
 admin.site.register(SpeakerSubmission)
+admin.site.register(ExamSetSubmission)

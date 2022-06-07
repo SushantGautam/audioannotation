@@ -5,8 +5,9 @@
   <input type="radio" id="home-tab" name="mytabs" checked>
   <label for="home-tab">Home</label>
   <div class="tab animate__animated animate__fadeInUp" id="home-tab-div">
-    <a href="" class="tab-item active">Dashboard</a>
-    <a href="" class="tab-item">Profile</a>
+    <a href="{% url 'homepage' %}" class="tab-item active">Dashboard</a>
+    <a href="{% url 'profile' %}" class="tab-item">Profile</a>
+    <a href="{% url 'user_list' %}" class="tab-item">Users List</a>
   </div>
 
   <input type="radio" id="tasks-tab" name="mytabs">

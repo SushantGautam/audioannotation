@@ -137,7 +137,7 @@ function create_record_player(blob){
 function send_to_backend(blob){
 	var formData = new FormData($("#audio_form")[0]);
 	var recording = new Blob([blob], { type: "audio/wav" });
-	formData.append("audio_file", recording);
+	formData.append("audio_file", recording, new Date().getTime()+".mp3");
 	// for (var key of formData.entries()) {
   //       console.log(key[0] + ', ' + key[1]);
   //   }

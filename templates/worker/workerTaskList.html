@@ -1,0 +1,55 @@
+{% extends "worker/base.html" %}
+{% load static %}
+{% load i18n %}
+{% block styles %}
+
+{% endblock styles %}
+{% block content %}
+
+
+    <div class="bg-white pt-5">
+        <h1 class="page-heading">{% trans "Task Lists" %} </h1>
+
+        <div class="table-responsive questionset_table" id="questionset_table" style="border: none; overflow-x: unset">
+            <table class="table pt-2" cellspacing="0" id="questionset_list_table">
+                <thead class="">
+                <tr class="tableTitleRow">
+                    <th>{% trans "S. No." %}</th>
+                    <th>{% trans "ExamSet Name" %}</th>
+                    <th>{% trans "Question Count" %}</th>
+                    <th>{% trans "Speaker ID" %}</th>
+                    <th>{% trans "Nationality" %}</th>
+                    <th>{% trans "Difficulty Level" %}</th>
+                    <th>{% trans "Task Type" %}</th>
+                    <th>{% trans "Approval Status" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for object in object_list %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ object.examset_submission.exam_set.exam_name }}</td>
+                        <td>{{ object.examset_submission.exam_set.get_question_count }}</td>
+                        <td>{{ object.examset_submission.speaker.user.username }}</td>
+                        <td>{{ object.examset_submission.speaker.get_nationality_display }}</td>
+                        <td>{{ object.examset_submission.exam_set.get_difficulty_level }}</td>
+                        <td>{{ object.get_task_type_display }}</td>
+                        <td>{{ object.get_approved_display }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+    <script>
+        $('.table').DataTable();
+    </script>
+
+{% endblock scripts %}

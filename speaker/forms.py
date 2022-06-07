@@ -1,13 +1,6 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, DateTimeField, DateTimeInput
 
-from professor.models import Question
-from speaker.models import AudioFile, SpeakerSubmission
-
-
-class AudioFileForm(ModelForm):
-    class Meta:
-        model = AudioFile
-        fields = ["audio_file"]
+from speaker.models import SpeakerSubmission, Speaker
 
 
 class SpeakerSubmissionForm(ModelForm):
@@ -16,4 +9,16 @@ class SpeakerSubmissionForm(ModelForm):
         fields = ["question", "speaker", "audio_file"]
 
 
+class ProfileEditForm(ModelForm):
+    class Meta:
+        model = Speaker
+        exclude = ('organization_code', 'user', 'verified')
 
+        widgets = {
+            'birth_date': DateTimeInput(
+                format=('%Y-%m-%d'),
+                attrs={'class': 'form-control',
+                       'placeholder': 'Select a date',
+                       'type': 'date'
+                       }),
+        }

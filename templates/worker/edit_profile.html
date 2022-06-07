@@ -1,0 +1,65 @@
+{% load static %}
+{% load i18n %}
+
+<form method="post" action="{% url 'worker:edit_profile' pk=user.worker.id %}" method="post">
+    {% csrf_token %}
+    <section class="profile-edit-section w-60">
+
+        <div class="details-parent shadow-sm">
+            <div class="text-center">
+                <img src="{% static 'img/user.png' %}" class="rounded-circle" style="width: 10rem;height: 10rem;"
+                     alt="">
+                <h4>
+                    {{ userForm.first_name }}
+                    {{ userForm.last_name }}
+                </h4>
+            </div>
+            <div class="detail-row">
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-envelope"></i></i>{% trans 'Whale Address' %}</div>
+                    <div class="value">{{ userForm.email }}</div>
+                </div>
+
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-calendar-days"></i>{{ form.birth_date.label_tag }}</div>
+                    <div class="value">{{ form.birth_date }}</div>
+                </div>
+            </div>
+            <div class="detail-row">
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-graduation-cap"></i>{{ form.education_level.label_tag }}
+                    </div>
+                    <div class="value">{{ form.education_level }}</div>
+                </div>
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-mars-and-venus"></i>{{ form.education_field.label_tag }}
+                    </div>
+                    <div class="value">{{ form.education_field }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="detail-row">
+            <div class="detail">
+                <div class="label"><i class="fa-solid fa-clipboard-question"></i>{{ form.bank_name.label_tag }}
+                </div>
+                <div class="value">{{ form.bank_name }}</div>
+            </div>
+            <div class="detail">
+                <div class="label"><i
+                        class="fa-solid fa-chalkboard-user"></i>{{ form.bank_account_number.label_tag }}</div>
+                <div class="value">{{ form.bank_account_number }}</div>
+            </div>
+        </div>
+       
+        <button type="submit">Submit</button>
+        <button type="button" id="cancel-edit">Cancel</button>
+    </section>
+</form>
+
+<script>
+    $('#cancel-edit').on('click', function (e) {
+        $('.profile-edit-section').remove();
+        $('.profile-section').removeClass('d-none');
+        $('#edit-profile-btn').removeClass('d-none');
+    });
+</script>

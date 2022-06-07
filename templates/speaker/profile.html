@@ -1,83 +1,118 @@
-{% extends 'orgadmin/base.html' %}
-{% load static %} 
+{% extends 'speaker/base.html' %}
+{% load static %}
+{% load i18n %}
 
 {% block styles %}
     <link href="{% static 'css/pagewise/profile.css' %}" rel="stylesheet">
 {% endblock %}
- 
+
 {% block content %}
     <div class="header-section w-60 py-3">
         <h2 class="page-heading">Profile Information</h2>
-        <button title="Edit Profile" class="btn btn-sm btn-secondary rounded-circle"><i class="fa-solid fa-pen"></i></button>
+        <a href="{% url 'speaker:edit_profile' pk=user.speaker.id %}" title="Edit Profile"
+           class="btn btn-sm btn-secondary rounded-circle" id="edit-profile-btn"><i
+                class="fa-solid fa-pen"></i></a>
     </div>
-    <section class="profile-section w-60">
+    <section class="profile-section-container">
+        <section class="profile-section w-60">
 
-        <div class="details-parent shadow-sm">
-            <div class="text-center">
-                <img src="{% static 'img/user.png' %}" class="rounded-circle" style="width: 10rem;height: 10rem;" alt="">
-                <h4>FirstName Lastname</h4>
-            </div>
-            <div class="detail-row">
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-id-badge"></i>Speaker ID  </div>
-                    <div class="value">9129274</div>
+            <div class="details-parent shadow-sm">
+                <div class="text-center">
+                    <img src="{% static 'img/user.png' %}" class="rounded-circle" style="width: 10rem;height: 10rem;"
+                         alt="">
+                    <h4>FirstName Lastname</h4>
                 </div>
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-calendar-days"></i>Date of Birth </div>
-                    <div class="value">1888-12-12</div>
+                <div class="detail-row">
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-id-badge"></i>Speaker ID</div>
+                        <div class="value">9129274</div>
+                    </div>
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-calendar-days"></i>Date of Birth</div>
+                        <div class="value">1888-12-12</div>
+                    </div>
                 </div>
-            </div>
-            <div class="detail-row">
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-passport"></i>Nationality</div>
-                    <div class="value">Nepalese</div>
+                <div class="detail-row">
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-passport"></i>Nationality</div>
+                        <div class="value">Nepalese</div>
+                    </div>
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-language"></i>Language</div>
+                        <div class="value">Nepali</div>
+                    </div>
                 </div>
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-language"></i>Language</div>
-                    <div class="value">Nepali</div>
+                <div class="detail-row">
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-mars-and-venus"></i>Gender</div>
+                        <div class="value">Female</div>
+                    </div>
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-graduation-cap"></i>Education</div>
+                        <div class="value">Bachelors Degree</div>
+                    </div>
                 </div>
-            </div>
-            <div class="detail-row">
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-mars-and-venus"></i>Gender</div>
-                    <div class="value">Female</div>
+                <div class="detail-row">
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-layer-group"></i>Profeciency</div>
+                        <div class="value">Expert</div>
+                    </div>
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-star-half-stroke"></i>Topik Score</div>
+                        <div class="value">90</div>
+                    </div>
                 </div>
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-graduation-cap"></i>Education</div>
-                    <div class="value">Bachelors Degree</div>
+                <div class="detail-row">
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-hourglass"></i>Learning Period</div>
+                        <div class="value">5+ years</div>
+                    </div>
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-earth-asia"></i>Korea Residency</div>
+                        <div class="value">No</div>
+                    </div>
                 </div>
-            </div>
-            <div class="detail-row">
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-layer-group"></i>Profeciency</div>
-                    <div class="value">Expert</div>
+                <div class="detail-row">
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-clipboard-question"></i>Purpose</div>
+                        <div class="value">Hobby</div>
+                    </div>
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-chalkboard-user"></i>Learning Method</div>
+                        <div class="value">Online</div>
+                    </div>
                 </div>
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-star-half-stroke"></i>Topik Score</div>
-                    <div class="value">90</div>
-                </div>
-            </div>
-            <div class="detail-row">
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-hourglass"></i>Learning Period</div>
-                    <div class="value">5+ years</div>
-                </div>
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-earth-asia"></i>Korea Residency</div>
-                    <div class="value">No</div>
-                </div>
-            </div>
-            <div class="detail-row">
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-clipboard-question"></i>Purpose</div>
-                    <div class="value">Hobby</div>
-                </div>
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-chalkboard-user"></i>Learning Method</div>
-                    <div class="value">Online</div>
-                </div>
-            </div>
 
-        </div>
+            </div>
+            {% if not user.speaker.verified and not user.speaker.has_request_verification %}
+                <form action="{% url 'speaker:verify_profile' %}" method="post">
+                    {% csrf_token %}
+                    <div>
+                        <button type="submit" class="btn btn-dark btn-sm">{% trans 'Request Verification' %} </button>
+                    </div>
+                </form>
+            {% elif user.speaker.has_request_verification %}
+                <div>
+                    {% trans 'Pending Verification' %}
+                </div>
+            {% endif %}
+        </section>
     </section>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('#edit-profile-btn').on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: $(this).attr('href'),
+                method: 'GET',
+                success: function (response) {
+                    $('#edit-profile-btn').addClass('d-none');
+                    $('.profile-section').addClass('d-none');
+                    $('.profile-section-container').append(response);
+                }
+            });
+        });
+    </script>
 {% endblock %}

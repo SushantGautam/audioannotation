@@ -1,3 +1,37 @@
+body{
+    padding: 1rem 0;
+    height: 100vh;
+    /* overflow: hidden; */
+}
+
+/* Custom scroillbar for webkit based browsers like Chrome, Safari and other Chromium based browsers */
+::-webkit-scrollbar {
+  width: 0.25rem;
+  height: 0.5rem;
+  
+}
+ 
+::-webkit-scrollbar-track {
+  /* box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); */
+  background-color: transparent;
+}
+ 
+::-webkit-scrollbar-thumb {
+  background-color: rgb(142, 142, 142);
+  outline: 1px solid slategrey;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+/* Custom scroillbar for webkit based browsers like Chrome, Safari and other Chromium based browsers */
+
+/* Custom scrollbar for Firefox */
+html{
+  scrollbar-color: rgb(108, 108, 108) transparent;
+  scrollbar-width: thin;
+}
+/* Custom scrollbar for Firefox */
+
 .wavesurfer-region {
     font-size: 0.85rem;
     font-weight: 600;
@@ -67,4 +101,207 @@
     border: 1px solid;
     overflow-y: scroll;
     max-height: 15rem;
+}
+
+
+
+.flex-space{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.flex-center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-section{
+    display: flex;
+    gap: 2rem;
+}
+
+.left-section{
+    width: 75%;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 0.25rem;
+    padding: 1rem;
+}
+
+.right-section{
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    height: 96vh;
+}
+
+.right-section > *{
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 0.25rem;
+    padding: 1rem;
+}
+
+.header-section button{
+    border-radius: 50%;
+}
+
+.result-section{
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.result{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.audio-details{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.result label {
+    font-weight: 500;
+}
+
+.text-parent{
+    display: flex;
+    gap: 0.5rem;
+}
+
+.text-parent label{
+    min-width: 2.5rem;
+}
+
+.bottom-section button{
+    border-radius: 50%;
+    font-size: 0.75rem;
+}
+
+.region-section{
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    height: 50%;
+    padding-right: 0;
+}
+
+.region-list{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 100%;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.region{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    margin-right: 0.5rem;
+}
+
+.sort-button{
+    padding-inline: 0.6rem ;
+}
+
+.audio-range-parent{
+    display: flex;
+    gap: 0.5rem;
+}
+
+.audio-range{
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.audio-range .start , .audio-range .end{
+    font-weight: 500;
+    width: 4rem;
+    text-align: center;
+}
+
+.region-text {
+    position: absolute;
+    top: 50%;
+}
+
+.utility-buttons-group{
+    display: flex;
+    align-items: center;
+    /* justify-content: space-between; */
+    margin: 1rem 0;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+input[type='range']{
+    width: 9rem;
+}
+
+.audio-data {
+display: flex;
+flex-direction: column;
+gap: 0.5rem;
+}
+
+.annotation-text{
+    width: 100%;
+    padding: 0.25rem 0.5rem;
+}
+
+.play-button{
+    width: 4.5rem;
+}
+
+input{
+    accent-color: rgb(66, 66, 66);
+}
+
+.accordion-body{
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem 0 1rem 0.75rem;
+}
+
+.accordion-body a{
+    all: unset;
+    cursor: pointer;
+    padding: 0.2rem 0.5rem;
+}
+
+.accordion-body a.active{
+    background-color: lightgrey;
+}
+
+.exam-set{
+    height: 50%;
+    overflow-y: scroll;
+    padding: 0;
+}
+
+.exam-set-title{
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: white;
+    padding: 1rem 1rem 0.25rem 1rem;
+    /* padding-top: 1rem;
+    padding-left: 1rem; */
+}
+.question-sets{
+    /* margin-left: -0.85rem;
+    margin-right: -0.85rem; */
+}
+.merge-button{
+    border: 1.5px solid dimgrey;
+    padding: 0.1rem 0.5rem;
 }

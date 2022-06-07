@@ -1,36 +1,32 @@
-{% extends "base.html" %}
+{% extends "worker/base.html" %}
 {% load static %}
 {% load i18n %}
 
 {% block styles %}
-    <style>
-        .card {
-            max-width: 25rem;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/progress.css' %}">
 {% endblock %}
 
 {% block content %}
-
-    {% for speakerFiles in speaker_submission %}
-        <div class="card">
-            <div class="card-body">
-                <div class="card-header">
-                    <div>{{ speakerFiles }}</div>
+    <!-- Multi step progress -->
+    <section class="multi_step_progress">
+        <div id="msprogress">
+            <!-- progressbar -->
+            <ul id="progressbar">
+                <li class="active">{% trans 'Registered' %}</li>
+                <li class="{% if user.worker.verified %}active{% endif %}">{% trans 'Profile Verified' %}</li>
+                <li class="{% if user.worker.verified and user.worker.has_contract_submitted or user.worker.has_contract_approved  %}active{% endif %}">{% trans 'Contract Signed' %}</li>
+                <li class="{% if user.worker.verified and user.worker.has_contract_approved %}active{% endif %}">{% trans 'Contract Approved' %}</li>
+            </ul>
+            <!-- title -->
+            {% if not user.worker.verified %}
+                <div class="title mt-5">
+                    <h2>Your Profile is not Verified</h2>
                 </div>
-                <div class="card-body">
-                    <div class="items">
-                        <div>{{ speakerFiles.is_active }}</div>
-                        <div>{{ speakerFiles.status }}</div>
-                        <div>{{ speakerFiles.question }}</div>
-                        <div>{{ speakerFiles.filename }}</div>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <a href="{% url 'worker:annotation_page' id=speakerFiles.id %}" class="btn btn-secondary"> Go </a>
-                </div>
-            </div>
+            {% endif %}
         </div>
-
-    {% endfor %}
+    </section>
+    <!-- End Multi step progress -->
+    {% if user.worker.verified %}
+        If the user is verified. Display data here.
+    {% endif %}
 {% endblock %}
