@@ -97,7 +97,7 @@ function init_wavesurfer() {
             scrollParent: true,
             normalize: true,
             minimap: true,
-            backend: "MediaElement",
+            backend: "WebAudio",
             cursorColor: "red",
             // barWidth: 3,
             // barMinHeight: 2,
@@ -157,9 +157,6 @@ function init_wavesurfer() {
         });
 
         loadSTTRegions();
-        // localforage.getItem(key_audio, (err, data_audio) => {
-        //     load_audio(data_audio);
-        // });
     }
 
     {
