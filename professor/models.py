@@ -88,6 +88,8 @@ class QuestionSet(models.Model):
 class ExamSet(models.Model):
     exam_name = models.CharField(max_length=256)
     description = models.TextField(null=True, blank=True)
+    start_date = models.DateTimeField(null=True, blank=True)
+    end_date = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
