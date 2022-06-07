@@ -175,11 +175,7 @@ function init_wavesurfer() {
             )}`;
             document.getElementById("time-total-hms").innerText = hms(totalTime);
         });
-        // wavesurfer.on("region-click", function (region, e) {
-        //     e.stopPropagation();
-        //     // Play on click, loop on shift click
-        //     e.shiftKey ? region.playLoop() : region.play();
-        // });
+
         wavesurfer.on("region-mouseenter", (region) => {
             old_region = region;
         });
@@ -188,8 +184,8 @@ function init_wavesurfer() {
             old_region = null;
         });
 
-        wavesurfer.on("region-click", editAnnotation);
         wavesurfer.on("region-click", (region) => {
+            editAnnotation(region);
             current_region = region;
             setRegionActive(region.id);
             loadResults(region);
@@ -201,10 +197,7 @@ function init_wavesurfer() {
             var text_region = document.createElement('div');
             text_region.className = 'region-text';
             document.querySelector(`.wavesurfer-region[data-id=${region.id}]`).appendChild(text_region);
-
-            // validateRegion(region);
         });
-        // wavesurfer.on("region-updated", saveRegions);
 
         wavesurfer.on("region-update-end", (region) => {
             var isValid = validateRegion(region);

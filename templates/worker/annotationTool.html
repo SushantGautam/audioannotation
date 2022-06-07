@@ -346,7 +346,7 @@
         const STT_DATA = {{ stt_data|safe }};
         const AUDIO_FILE = "{{ audio_obj.audio_file.url }}";
         const key_annotation = "key_annotation_{{ audio_obj.id }}";
-        const SAVE_ANNOTATION_URL = "{% url 'worker:save_annotation' audio_obj.id %}";
+        const SAVE_ANNOTATION_URL = "{% url 'worker:save_annotation' task_id=worker_task.id speakersubmission_id=audio_obj.id %}";
         var csrf_token = "{{ csrf_token }}";
         {% if annotated_data %}
             const ANNOTATED_DATA = {{ annotated_data|safe }}

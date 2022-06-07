@@ -181,7 +181,7 @@ class AnnotationPage(TemplateView):
         if WorkerSubmission.objects.filter(speaker_submission__pk=speakerSubmissionObj.id,
                                            worker_task__worker=self.request.user.worker).exists():
             annotated_data = WorkerSubmission.objects.get(speaker_submission__pk=speakerSubmissionObj.id,
-                                                          worker_task__worker=self.request.user.worker).split_data
+                                                          worker_task__worker=self.request.user.worker).work_data
         context['annotated_data'] = annotated_data
 
         return context
@@ -190,19 +190,20 @@ class AnnotationPage(TemplateView):
 class SaveAnnotation(View):
     def post(self, *args, **kwargs):
         if self.request.is_ajax and self.request.method == "POST":
-            if SpeakerSubmission.objects.filter(pk=kwargs.get('id')).exists():
-                print(self.request.user.worker)
-                if WorkerSubmission.objects.filter(speaker_submission__pk=kwargs.get('id'),
-                                                   worker_task__worker=self.request.user.worker).exists():
-                    obj = WorkerSubmission.objects.get(speaker_submission__pk=kwargs.get('id'),
-                                                       worker_task__worker=self.request.user.worker)
+            if SpeakerSubmission.objects.filter(pk=kwargs.get('speakersubmission_id')).exists():
+                if WorkerSubmission.objects.filter(speaker_submission__pk=kwargs.get('speakersubmission_id'),
+                                                   worker_task__worker=self.request.user.worker,
+                                                   worker_task_id=kwargs.get('task_id')).exists():
+                    obj = WorkerSubmission.objects.get(speaker_submission__pk=kwargs.get('speakersubmission_id'),
+                                                       worker_task__worker=self.request.user.worker,
+                                                       worker_task_id=kwargs.get('task_id'))
                     obj.split_data = self.request.POST.get('annotated_data')
                     obj.save()
                 else:
                     WorkerSubmission.objects.create(
-                        worker_task__worker=self.request.user.worker,
-                        speaker_submission_id=int(kwargs.get('id')),
-                        split_data=json.loads(self.request.POST.get('annotated_data'))
+                        worker_task_id=kwargs.get('task_id'),
+                        speaker_submission_id=int(kwargs.get('speakersubmission_id')),
+                        work_data=json.loads(self.request.POST.get('annotated_data'))
                     )
                 return render(self.request, 'worker/alerts/annotationSaveSuccess.html')
         return JsonResponse({"error": ""}, status=400)
