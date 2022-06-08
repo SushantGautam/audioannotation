@@ -5,97 +5,114 @@
     {% csrf_token %}
     <section class="profile-edit-section w-60">
 
-        <div class="details-parent shadow-sm">
-            <div class="text-center">
-                <img src="{% static 'img/user.png' %}" class="rounded-circle" style="width: 10rem;height: 10rem;"
-                     alt="">
-                <h4>
-                    {{ userForm.first_name }}
-                    {{ userForm.last_name }}
-                </h4>
-            </div>
-            <div class="detail-row">
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-id-badge"></i>Speaker ID</div>
-                    <div class="value">9129274</div>
+    {% if form.errors %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
                 </div>
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-calendar-days"></i>{{ form.birth_date.label_tag }}</div>
-                    <div class="value">{{ form.birth_date }}</div>
-                </div>
-            </div>
-            <div class="detail-row">
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-passport"></i>{{ form.nationality.label_tag }}</div>
-                    <div class="value">{{ form.nationality }}</div>
-                </div>
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-language"></i>{{ form.language.label_tag }}</div>
-                    <div class="value">{{ form.language }}</div>
-                </div>
-            </div>
-            <div class="detail-row">
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-mars-and-venus"></i>{{ form.gender.label_tag }}</div>
-                    <div class="value">{{ form.gender }}</div>
-                </div>
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-graduation-cap"></i>{{ form.education_level.label_tag }}
-                    </div>
-                    <div class="value">{{ form.education_level }}</div>
-                </div>
-            </div>
-            <div class="detail-row">
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-layer-group"></i>{{ form.proficiency.label_tag }}</div>
-                    <div class="value">{{ form.proficiency }}</div>
-                </div>
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-star-half-stroke"></i>{{ form.topic_score.label_tag }}
-                    </div>
-                    <div class="value">{{ form.topic_score }}</div>
-                </div>
-            </div>
-            <div class="detail-row">
-                <div class="detail">
-                    <div class="label"><i
-                            class="fa-solid fa-hourglass"></i>{{ form.learning_period.label_tag }} {% trans '(in years)' %}
-                    </div>
-                    <div class="value">{{ form.learning_period }} </div>
-                </div>
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-earth-asia"></i>{{ form.korea_residency.label_tag }}</div>
-                    <div class="value">{{ form.korea_residency }}</div>
-                </div>
-            </div>
-            <div class="detail-row">
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-clipboard-question"></i>{{ form.study_purpose.label_tag }}
-                    </div>
-                    <div class="value">{{ form.study_purpose }}</div>
-                </div>
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-chalkboard-user"></i>{{ form.learning_method.label_tag }}
-                    </div>
-                    <div class="value">{{ form.learning_method }}</div>
-                </div>
-            </div>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+    <section id="basic-section" class="d-flex">
+        <div class="text-center justify-content-start">
+            <img src="{% static 'img/user.png' %}" class="rounded-circle" style="width: 10rem;height: 10rem;"
+                 alt="">
+        </div>
 
-            <div class="detail-row">
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-clipboard-question"></i>{{ form.bank_name.label_tag }}
-                    </div>
-                    <div class="value">{{ form.bank_name }}</div>
-                </div>
-                <div class="detail">
-                    <div class="label"><i
-                            class="fa-solid fa-chalkboard-user"></i>{{ form.bank_account_number.label_tag }}</div>
-                    <div class="value">{{ form.bank_account_number }}</div>
-                </div>
+        <div>
+            {{ userForm.first_name.label_tag }}{{ userForm.first_name }}
+            {{ userForm.last_name.label_tag }}{{ userForm.last_name }}
+            {{ form.gender.label_tag }}
+            {% for gender in form.gender %}
+                {{ gender }}
+            {% endfor %}
+            {{ form.birth_date.label_tag }}{{ form.birth_date }}
+        </div>
+    </section>
+
+    <section>
+        <h3>{% trans 'Contact Information' %}</h3>
+        <div class="detail-row">
+            <div class="detail">
+                {{ userForm.email.label_tag }} {{ userForm.email }}
+            </div>
+            <div class="detail">
+                {{ form.phone_number.label_tag }} {{ form.phone_number }}
+            </div>
+            <div class="detail">
+                {{ form.permanent_address.label_tag }} {{ form.permanent_address }}
+            </div>
+            <div class="detail">
+                {{ form.current_address.label_tag }} {{ form.current_address }}
             </div>
         </div>
-        <button type="submit">Save</button>
-        <button type="button" id="cancel-edit">Cancel</button>
+    </section>
+
+    <section>
+        <h3>{% trans 'Bank Information' %}</h3>
+        <div class="detail-row">
+            <div class="detail">
+                {{ form.bank_name.label_tag }} {{ form.bank_name }}
+            </div>
+            <div class="detail">
+                {{ form.bank_iban.label_tag }} {{ form.bank_iban }}
+            </div>
+            <div class="detail">
+                {{ form.bank_swift_code.label_tag }} {{ form.bank_swift_code }}
+            </div>
+            <div class="detail">
+                {{ form.bank_account_name.label_tag }} {{ form.bank_account_name }}
+            </div>
+            <div class="detail">
+                {{ form.bank_address.label_tag }} {{ form.bank_address }}
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h3>{% trans 'Language Information' %}</h3>
+        <div class="detail-row">
+            <div class="detail">
+                {{ form.proficiency.label_tag }} {{ form.proficiency }}
+            </div>
+            <div class="detail">
+                {{ form.topik_score.label_tag }} {{ form.topik_score }}
+            </div>
+            <div class="detail">
+                {{ form.level.label_tag }} {{ form.level }}
+            </div>
+            <div class="detail">
+                {{ form.learning_period.label_tag }} {{ form.learning_period }}
+            </div>
+            <div class="detail">
+                {{ form.learning_method.label_tag }} {{ form.learning_method }}
+            </div>
+            <div class="detail">
+                {{ form.study_purpose.label_tag }} {{ form.study_purpose }}
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h3>{% trans 'Additional Information' %}</h3>
+        <div class="detail-row">
+            <div class="detail">
+                {{ form.nationality.label_tag }} {{ form.nationality }}
+            </div>
+            <div class="detail">
+                {{ form.language.label_tag }} {{ form.language }}
+            </div>
+            <div class="detail">
+                {{ form.education_level.label_tag }} {{ form.education_level }}
+            </div>
+            <div class="detail">
+                {{ form.korea_residency.label_tag }} {{ form.korea_residency }}
+            </div>
+        </div>
+    </section>
+    <button type="submit" class="btn btn-dark">{% trans 'Save' %}</button>
+    <button type="button" class="btn btn-dark" id="cancel-edit">{% trans 'Cancel' %}</button>
     </section>
 </form>
 
@@ -104,5 +121,22 @@
         $('.profile-edit-section').remove();
         $('.profile-section').removeClass('d-none');
         $('#edit-profile-btn').removeClass('d-none');
+    });
+
+    $('form').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: $(this).attr('action'),
+            method: $(this).attr('method'),
+            data: $(this).serialize(),
+            success: function (e) {
+                console.log('success')
+                location.reload();
+            },
+            error: function (err) {
+                console.log(err);
+                $('.profile-section-container').empty().append(err.responseText);
+            }
+        })
     });
 </script>
