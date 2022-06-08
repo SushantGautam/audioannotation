@@ -95,6 +95,7 @@ class ExamSet(models.Model):
     question_sets = models.ManyToManyField(QuestionSet)
     difficulty_level = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(2)],
                                                 help_text=_('0: both, 1: beginner, 2: advanced'))
+    organization_code = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.exam_name

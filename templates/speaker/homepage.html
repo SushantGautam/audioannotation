@@ -12,7 +12,7 @@
     <section class="multi_step_progress">
         <div id="msprogress">
             <ul id="progressbar">
-                <li class="{% if user.speaker.has_request_verification %}active{% endif %}">
+                <li class="{% if user.speaker.has_request_verification or user.speaker.is_verified %}active{% endif %}">
                     <div class="h6">{% trans 'Profile Registered' %}</div>
                     <div>{{ profile_register_date }}</div>
                 </li>
