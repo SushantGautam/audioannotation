@@ -25,8 +25,7 @@ class Speaker(BaseUserModel):
     bank_swift_code = models.CharField(max_length=256)
     bank_account_name = models.CharField(max_length=256)
     bank_address = models.CharField(max_length=256)
-
-
+    
     class Meta:
         verbose_name = _('Speaker')
         verbose_name_plural = _('Speakers')
