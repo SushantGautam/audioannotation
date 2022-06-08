@@ -43,7 +43,6 @@ class Question(models.Model):
         ('IMG', _('Image Question')),
         ('AUD', _('Audio Question')),
     )
-    # question_set = models.ForeignKey(QuestionSet, on_delete=models.CASCADE)
     question_title = models.TextField()
     unique_code = models.CharField(max_length=10, unique=True)
     description = models.TextField(null=True, blank=True)
