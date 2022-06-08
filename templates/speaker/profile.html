@@ -84,7 +84,7 @@
                 </div>
 
             </div>
-            {% if not user.speaker.verified and not user.speaker.has_request_verification %}
+            {% if not user.speaker.is_verified and not user.speaker.has_request_verification %}
                 <form action="{% url 'speaker:verify_profile' %}" method="post">
                     {% csrf_token %}
                     <div>

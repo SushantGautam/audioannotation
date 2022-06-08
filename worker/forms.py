@@ -7,7 +7,7 @@ from worker.models import Worker
 class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Worker
-        exclude = ('organization_code', 'user', 'verified')
+        exclude = ('organization_code', 'user', 'is_verified')
 
         widgets = {
             'birth_date': forms.DateInput(

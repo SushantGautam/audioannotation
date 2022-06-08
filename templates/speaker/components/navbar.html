@@ -8,13 +8,13 @@
     <div class="tab animate__animated animate__fadeInUp" id="home-tab-div">
         <a href="{% url 'speaker:homepage' %}" class="tab-item {% if request.path == '/speaker/' %}active{% endif %}">{% trans 'Dashboard' %}</a>
         <a href="{% url 'speaker:profile' %}" class="tab-item {% if 'profile' in request.path %}active{% endif %}">{% trans 'Profile' %}</a>
-        {% if user.speaker.verified %}
+        {% if user.speaker.is_verified %}
             <a href="{% url 'speaker:contract' %}" class="tab-item {% if 'contract' in request.path %}active{% endif %}">{% trans 'Contracts' %}</a>
         {% endif %}
     </div>
 
     <!-- Display this section only if the speaker is verified by the admin -->
-    {% if user.speaker.verified and user.speaker.has_contract_approved %}
+    {% if user.speaker.is_verified and user.speaker.has_contract_approved %}
         <input type="radio" id="records-tab" name="mytabs" {% if 'exam' in request.path %}checked{% endif %}>
         <label for="records-tab">{% trans 'Recording' %}</label>
         <div class="tab animate__animated animate__fadeInUp" id="records-tab-div">

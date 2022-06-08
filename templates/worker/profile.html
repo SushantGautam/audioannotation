@@ -85,7 +85,7 @@
 
             </div>
 
-            {% if not user.worker.verified and not user.worker.has_request_verification %}
+            {% if not user.worker.is_verified and not user.worker.has_request_verification %}
                 <form action="{% url 'worker:verify_profile' %}" method="post">
                     {% csrf_token %}
                     <div>

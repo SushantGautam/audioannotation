@@ -16,23 +16,23 @@
                     <div class="h6">{% trans 'Profile Registered' %}</div>
                     <div>{{ profile_register_date }}</div>
                 </li>
-                <li class="{% if user.speaker.verified %}active
+                <li class="{% if user.speaker.is_verified %}active
                            {% elif user.speaker.has_profile_rejected %}inactive{% endif %}">
                     <div class="h6">{% trans 'Profile Verified' %}</div>
                     <div>{{ profile_approved_date }}</div>
                 </li>
-                <li class="{% if user.speaker.verified and user.speaker.has_contract_submitted or user.speaker.has_contract_approved %}active
+                <li class="{% if user.speaker.is_verified and user.speaker.has_contract_submitted or user.speaker.has_contract_approved %}active
                             {% elif user.speaker.has_contract_rejected %}inactive{% endif %}">
                     <div class="h6">{% trans 'Contract Signed' %}</div>
                     <div>{{ contract_sign_date }}</div>
                 </li>
-                <li class="{% if user.speaker.verified and user.speaker.has_contract_approved %}active{% endif %}">
+                <li class="{% if user.speaker.is_verified and user.speaker.has_contract_approved %}active{% endif %}">
                     <div class="h6">{% trans 'Contract Approved' %}</div>
                     <div>{{ contract_approved_date }}</div>
                 </li>
             </ul>
             <div class="title mt-5">
-            {% if not user.speaker.verified %}
+            {% if not user.speaker.is_verified %}
                 {% if not user.speaker.has_request_verification %}
                     <h2>{% trans 'Please register your profile and submit for verification' %}</h2>
                     <a href="{% url 'speaker:profile' %}"><button class="btn btn-outline-secondary">
@@ -68,7 +68,7 @@
         </div>
     </section>
     <!-- End Multi step progress -->
-    {% if user.speaker.verified and user.speaker.has_contract_approved %}
+    {% if user.speaker.is_verified and user.speaker.has_contract_approved %}
         <!-- Dashboard area here -->
     {% endif %}
 {% endblock %}

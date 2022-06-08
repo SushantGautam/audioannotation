@@ -45,7 +45,7 @@ class ProfileEditView(FormView):
             userForm.save()
 
             # After profile edit, admin needs to re-verify the account
-            obj.verified = False
+            obj.is_verified = False
             obj.save()
 
             return redirect(self.success_url)

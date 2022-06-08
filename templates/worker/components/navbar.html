@@ -7,7 +7,7 @@
     <div class="tab" id="home-tab-div">
         <a href="{% url 'worker:homepage' %}" class="tab-item active sadsa">{% trans 'Dashboard' %}</a>
         <a href="{% url 'worker:profile' %}" class="tab-item">{% trans 'Profile' %}</a>
-        {% if user.worker.verified %}
+        {% if user.worker.is_verified %}
             <a href="{% url 'worker:contract' %}" class="tab-item">Contracts</a>
         {% endif %}
     </div>

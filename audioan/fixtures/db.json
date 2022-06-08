@@ -202,7 +202,7 @@
             "current_address": "Busan, Korea",
             "birth_date": "2018-06-01",
             "phone_number": "+1 (863) 877-9699",
-            "verified": true,
+            "is_verified": true,
             "organization_code": 1,
             "gender": "M",
             "nationality": "HK",

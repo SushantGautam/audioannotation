@@ -77,7 +77,7 @@ class SpeakerSubmission(models.Model):
     status = models.CharField(max_length=2, choices=STATUS_CHOICES, default='IS')
 
     def __str__(self):
-        return self.question.question_title
+        return self.question.question_title[:20] + ' - ' + self.speaker.user.username
 
     def filename(self):
         return os.path.basename(self.audio_file.name)
@@ -107,7 +107,7 @@ class ExamSetSubmission(models.Model):
     status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='INS')
 
     def __str__(self):
-        return self.exam_set.exam_name
+        return self.exam_set.exam_name + ' - ' + self.speaker.user.username
 
     def complete(self):
         return self.status == 'EC2'

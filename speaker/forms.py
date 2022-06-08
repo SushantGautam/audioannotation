@@ -12,7 +12,7 @@ class SpeakerSubmissionForm(ModelForm):
 class ProfileEditForm(ModelForm):
     class Meta:
         model = Speaker
-        exclude = ('organization_code', 'user', 'verified')
+        exclude = ('organization_code', 'user', 'is_verified')
 
         widgets = {
             'birth_date': DateTimeInput(

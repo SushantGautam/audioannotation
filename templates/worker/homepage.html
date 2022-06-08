@@ -13,12 +13,12 @@
             <!-- progressbar -->
             <ul id="progressbar">
                 <li class="active">{% trans 'Registered' %}</li>
-                <li class="{% if user.worker.verified %}active{% endif %}">{% trans 'Profile Verified' %}</li>
-                <li class="{% if user.worker.verified and user.worker.has_contract_submitted or user.worker.has_contract_approved  %}active{% endif %}">{% trans 'Contract Signed' %}</li>
-                <li class="{% if user.worker.verified and user.worker.has_contract_approved %}active{% endif %}">{% trans 'Contract Approved' %}</li>
+                <li class="{% if user.worker.is_verified %}active{% endif %}">{% trans 'Profile Verified' %}</li>
+                <li class="{% if user.worker.is_verified and user.worker.has_contract_submitted or user.worker.has_contract_approved  %}active{% endif %}">{% trans 'Contract Signed' %}</li>
+                <li class="{% if user.worker.is_verified and user.worker.has_contract_approved %}active{% endif %}">{% trans 'Contract Approved' %}</li>
             </ul>
             <!-- title -->
-            {% if not user.worker.verified %}
+            {% if not user.worker.is_verified %}
                 <div class="title mt-5">
                     <h2>Your Profile is not Verified</h2>
                 </div>
@@ -26,7 +26,7 @@
         </div>
     </section>
     <!-- End Multi step progress -->
-    {% if user.worker.verified %}
+    {% if user.worker.is_verified %}
         If the user is verified. Display data here.
     {% endif %}
 {% endblock %}
