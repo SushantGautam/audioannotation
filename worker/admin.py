@@ -6,7 +6,7 @@ from .models import Worker, EvaluationTitle, WorkerTask, WorkerSubmission
 
 
 class WorkerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'get_fullname', 'get_email', 'organization_code')
+    list_display = ('id', 'user', 'get_fullname', 'is_verified', 'get_email', 'organization_code')
     list_filter = ('organization_code',)
     search_fields = ('user',)
 

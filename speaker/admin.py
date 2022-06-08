@@ -2,9 +2,8 @@ from django.contrib import admin
 from .models import Speaker, SpeakerSubmission, ExamSetSubmission
 
 class SpeakerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'get_fullname', 'get_email', 'organization_code')
-    list_filter = ('level', 'organization_code', 'is_active', 'is_verified')
-    search_fields = ('user',)
+    list_display = ('id', 'user', 'get_fullname', 'level', 'is_verified', 'get_email', 'topik_score', 'organization_code')
+    list_filter = ('level', 'organization_code', 'is_verified')
     
     @admin.display(ordering='user__first_name', description='Full Name')
     def get_fullname(self, obj):
@@ -13,6 +12,15 @@ class SpeakerAdmin(admin.ModelAdmin):
     @admin.display(ordering='user__email', description='Email')
     def get_email(self, obj):
         return obj.user.email
-admin.site.register(Speaker)
-admin.site.register(SpeakerSubmission)
-admin.site.register(ExamSetSubmission)
+admin.site.register(Speaker, SpeakerAdmin)
+
+class SpeakerSubmissionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'speaker', 'question', 'exam_set', 'created_at' ,'status')
+    list_filter = ('speaker', 'exam_set', 'status')
+
+admin.site.register(SpeakerSubmission, SpeakerSubmissionAdmin)
+
+class ExamSetSubmissionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'speaker', 'exam_set', 'created_at' ,'status')
+    list_filter = ('speaker', 'exam_set', 'status')
+admin.site.register(ExamSetSubmission, ExamSetSubmissionAdmin)
