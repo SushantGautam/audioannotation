@@ -1,4 +1,7 @@
+import datetime
 from multiprocessing import context
+
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -21,11 +24,13 @@ def homepage(request):
     if verification_request:
         verification_request = verification_request.latest('id')
         profile_register_date = verification_request.created_at.strftime('%Y-%m-%d (%H:%M %p)')
-        profile_approved_date = verification_request.approved_at.strftime('%Y-%m-%d (%H:%M %p)') if verification_request.approved_at else ''
+        profile_approved_date = verification_request.approved_at.strftime(
+            '%Y-%m-%d (%H:%M %p)') if verification_request.approved_at else ''
     if contract_sign:
         contract_sign = contract_sign.latest('id')
         contract_sign_date = contract_sign.created_at.strftime('%Y-%m-%d (%H:%M %p)')
-        contract_approved_date = contract_sign.approved_at.strftime('%Y-%m-%d (%H:%M %p)') if contract_sign.approved_at else ''
+        contract_approved_date = contract_sign.approved_at.strftime(
+            '%Y-%m-%d (%H:%M %p)') if contract_sign.approved_at else ''
 
     context = {
         'profile_register_date': profile_register_date,
@@ -74,6 +79,7 @@ class ProfileEditView(FormView):
 
 class RequestVerification(FormView):
     success_url = reverse_lazy('speaker:profile')
+
     def post(self, request, *args, **kwargs):
         # Create Verification Request if no pending requests.
         if not self.request.user.speaker.is_pending_verification():
@@ -120,6 +126,16 @@ class QuestionSetList(ListView):
 class ExamSetList(ListView):
     template_name = 'speaker/exam_set_list.html'
     model = ExamSet
+
+    def get_queryset(self):
+        datetime_now = datetime.datetime.utcnow()
+        qs = super(ExamSetList, self).get_queryset().filter(
+            is_active=True, organization_code=self.request.user.speaker.organization_code,
+            difficulty_level__in=[0, self.request.user.speaker.level_mapping()]).filter(
+            Q(start_date__lte=datetime_now) | Q(start_date=None)).filter(
+            Q(end_date__gte=datetime_now) | Q(end_date=None))
+
+        return qs
 
 
 class ExamPopupView(FormView):
@@ -172,70 +188,3 @@ class ExamPopupView(FormView):
             'error': str(form.errors),
         }
         return JsonResponse(res_dict)
-
-class ProfileView(TemplateView):
-    template_name = "speaker/profile.html"
-
-class ProfileEditView(FormView):
-    # model = Speaker
-    form_class = ProfileEditForm
-    base_user_form_class = UserChangeForm
-    template_name = 'speaker/edit_profile.html'
-    success_url = reverse_lazy('speaker:profile')
-
-    def get(self, request, *args, **kwargs):
-        super(ProfileEditView, self).get(request, *args, **kwargs)
-        form = self.form_class(instance=self.request.user.speaker)
-        userForm = self.base_user_form_class(instance=self.request.user)
-        return self.render_to_response(self.get_context_data(form=form, userForm=userForm))
-
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST, instance=self.request.user.speaker)
-        userForm = self.base_user_form_class(request.POST, instance=self.request.user)
-
-        if form.is_valid() and userForm.is_valid():
-            obj = form.save(commit=False)
-            userForm.save()
-
-            # After profile edit, admin needs to re-verify the account
-            obj.is_verified = False
-            obj.save()
-
-            return redirect(self.success_url)
-        else:
-            return self.render_to_response(
-                self.get_context_data(form=form, form2=userForm))
-
-
-class RequestVerification(FormView):
-    success_url = reverse_lazy('speaker:profile')
-    def post(self, request, *args, **kwargs):
-        # Create Verification Request if no pending requests.
-        if not self.request.user.speaker.is_pending_verification():
-            VerificationRequest.objects.create(user=self.request.user)
-        return redirect(self.success_url)
-
-
-class ContractView(View):
-    def get(self, request, **kwargs):
-        context = {}
-        context['contract'] = Contract.objects.filter(user_type='SPE', is_active=True,
-                                                      created_by__organization_code=self.request.user.speaker.organization_code).first()
-        context['has_contract'] = request.user.speaker.has_contract()
-        context['has_contract_submitted'] = request.user.speaker.has_contract_submitted()
-        context['has_contract_approved'] = request.user.speaker.has_contract_approved()
-        return render(request, 'speaker/contract.html', context)
-
-    def post(self, request, **kwargs):
-        if ContractSign.objects.filter(user=self.request.user, contract_code__user_type='SPE', approved=False,
-                                       contract_code__created_by__organization_code=self.request.user.speaker.organization_code).exists():
-            contract = ContractSign.objects.get(user=self.request.user, contract_code__user_type='SPE', approved=False,
-                                                contract_code__created_by__organization_code=self.request.user.speaker.organization_code)
-        else:
-            contract = ContractSign()
-        contract.user = request.user
-        contract.upload_file = request.FILES['contract-file']
-        contract.approved = None
-        contract.contract_code_id = request.POST.get('contract-id')
-        contract.save()
-        return redirect('speaker:contract')

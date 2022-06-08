@@ -84,6 +84,10 @@ class QuestionSet(models.Model):
     def __str__(self):
         return self.unique_code
 
+    @property
+    def organization_code(self):
+        return self.questions.first().organization_code if self.questions.count() > 0 else None
+
 class ExamSet(models.Model):
     exam_name = models.CharField(max_length=256)
     description = models.TextField(null=True, blank=True)
@@ -106,3 +110,4 @@ class ExamSet(models.Model):
 
     def get_question_count(self):
         return self.question_sets.all().values_list('questions', flat=True).count()
+    
