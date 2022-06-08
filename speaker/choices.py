@@ -6,7 +6,7 @@ GENDER_CHOICES = (
     ("O", _("Other")),
 )
 PROFICIENCY_CHOICES = (
-    ("B", _("Begineer")),
+    ("B", _("Beginner")),
     ('I', _('Intermediate')),
     ("A", _("Advance")),
     ('F', _('Fluent')),
