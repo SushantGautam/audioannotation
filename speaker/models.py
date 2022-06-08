@@ -35,7 +35,7 @@ class Speaker(BaseUserModel):
         return self.user.username
     
     def has_request_verification(self):
-        return VerificationRequest.objects.filter(user=self.user).exists()
+        return VerificationRequest.objects.filter(user=self.user, approved=None).exists()
     
     def has_profile_rejected(self):
         return VerificationRequest.objects.filter(user=self.user, approved=False).exists()
