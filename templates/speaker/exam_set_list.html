@@ -15,7 +15,7 @@
                     <th>{% trans "Description" %}</th>
                     <th>{% trans "Start Date" %}</th>
                     <th>{% trans "End Date" %}</th>
-                    <th>{% trans "Question Set Count" %}</th>
+                    <th>{% trans "Question Count" %}</th>
                     <th>{% trans "Difficulty Level" %}</th>
                     <th>{% trans "Action" %}</th>
                 </tr>
@@ -28,7 +28,7 @@
                         <td>{{ object.description }}</td>
                         <td>{{ object.start_date|date:'Y-m-d h:i a' }}</td>
                         <td>{{ object.end_date|date:'Y-m-d h:i a' }}</td>
-                        <td>{{ object.get_questionset_count }}</td>
+                        <td>{{ object.get_question_count }}</td>
                         <td>{{ object.get_difficulty_level }}</td>
                         <td>
                             <a href="{% url 'speaker:question_set_list' %}?exam_set={{ object.pk }}">
