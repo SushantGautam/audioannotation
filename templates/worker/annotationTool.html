@@ -190,9 +190,11 @@
                                 data-bs-target="#infoModal">
                             <span class="bi bi-info-circle" aria-hidden="true"></span>
                         </button>
-                        <button title="Submit Task" class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#modal-task-submission-confirm">
-                            {% trans 'Submit' %}
-                        </button>
+                        {% if not workerSubmissionObj or not workerSubmissionObj.status %}
+                            <button title="Submit Task" class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#modal-task-submission-confirm">
+                                {% trans 'Submit' %}
+                            </button>
+                        {% endif %}
                     </div>
                 </div>
             </div>
