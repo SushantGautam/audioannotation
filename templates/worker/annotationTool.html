@@ -186,6 +186,9 @@
                                 data-bs-target="#infoModal">
                             <span class="bi bi-info-circle" aria-hidden="true"></span>
                         </button>
+                        <button title="Submit Task" class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#modal-task-submission-confirm">
+                            {% trans 'Submit' %}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -317,6 +320,7 @@
 
 </div>
 
+{% include 'worker/alerts/confirmTaskSubmission.html' %}
 <!-- <div class="footer">
     <div class="container" style="text-align:right;">
         <a target="_blank" rel="noreferrer" href="https://github.com/koniwa/hachiue">Hachiue</a>
@@ -347,6 +351,7 @@
         const AUDIO_FILE = "{{ audio_obj.audio_file.url }}";
         const key_annotation = "key_annotation_{{ audio_obj.id }}";
         const SAVE_ANNOTATION_URL = "{% url 'worker:save_annotation' task_id=worker_task.id speakersubmission_id=audio_obj.id %}";
+        const SUBMIT_ANNOTATION_URL = "{% url 'worker:submit_annotation' task_id=worker_task.id speakersubmission_id=audio_obj.id %}";
         var csrf_token = "{{ csrf_token }}";
         {% if annotated_data %}
             const ANNOTATED_DATA = {{ annotated_data|safe }}

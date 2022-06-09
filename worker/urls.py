@@ -30,4 +30,5 @@ urlpatterns += [
 urlpatterns += [
     path('task/<int:workertask_id>/', views.AnnotationPage.as_view(), name='annotation_page'),
     path('annotation/<int:task_id>/save/<int:speakersubmission_id>/', views.SaveAnnotation.as_view(), name='save_annotation'),
+    path('annotation/<int:task_id>/submit/<int:speakersubmission_id>/', views.WorkerTaskSubmit.as_view(), name='submit_annotation'),
 ]

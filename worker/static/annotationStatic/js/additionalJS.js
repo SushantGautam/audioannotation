@@ -95,4 +95,41 @@ $(document).ready(function () {
         mergeRegion(current_region, 1);
     });
 
+
+    $('#submit-task').on('click', (e) => {
+        localforage.getItem(key_annotation).then(function(value) {
+            // This code runs once the value has been loaded
+            // from the offline store.
+            Object.keys(value).map(function (idx) {
+                if (Object.keys(value[idx].data).length == 0) {
+                    var stt_data = STT_DATA.stt_predictions_annotations.filter(k => {
+                        if(k.id == value[idx].id) {
+                            return k;
+                        }
+                    });
+                    if (stt_data.length > 0) {
+                        value[idx].data = stt_data[0].data;
+                    }
+                }
+            });
+            $.ajax({
+                url: SUBMIT_ANNOTATION_URL,
+                type: 'POST',
+                data: {
+                    'csrfmiddlewaretoken': csrf_token,
+                    'annotated_data': JSON.stringify(value),
+                },
+                success: function (response) {
+                    // console.log(response)
+                    location.reload();
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        }).catch(function(err) {
+            // This code runs if there were any errors
+            console.log(err);
+        });
+    });
 });

@@ -187,6 +187,27 @@ class AnnotationPage(TemplateView):
         return context
 
 
+class WorkerTaskSubmit(View):
+    def post(self, *args, **kwargs):
+        if WorkerSubmission.objects.filter(speaker_submission__pk=kwargs.get('speakersubmission_id'),
+                                           worker_task__worker=self.request.user.worker,
+                                           worker_task_id=kwargs.get('task_id')).exists():
+            obj = WorkerSubmission.objects.get(speaker_submission__pk=kwargs.get('speakersubmission_id'),
+                                               worker_task__worker=self.request.user.worker,
+                                               worker_task_id=kwargs.get('task_id'))
+            obj.work_data = self.request.POST.get('annotated_data')
+            obj.status = True
+            obj.save()
+        else:
+            WorkerSubmission.objects.create(
+                worker_task_id=kwargs.get('task_id'),
+                speaker_submission_id=int(kwargs.get('speakersubmission_id')),
+                work_data=json.loads(self.request.POST.get('annotated_data')),
+                status=True
+            )
+        return JsonResponse({"message": "success"}, status=200)
+
+
 class SaveAnnotation(View):
     def post(self, *args, **kwargs):
         if self.request.is_ajax and self.request.method == "POST":
@@ -197,7 +218,7 @@ class SaveAnnotation(View):
                     obj = WorkerSubmission.objects.get(speaker_submission__pk=kwargs.get('speakersubmission_id'),
                                                        worker_task__worker=self.request.user.worker,
                                                        worker_task_id=kwargs.get('task_id'))
-                    obj.split_data = self.request.POST.get('annotated_data')
+                    obj.work_data = self.request.POST.get('annotated_data')
                     obj.save()
                 else:
                     WorkerSubmission.objects.create(

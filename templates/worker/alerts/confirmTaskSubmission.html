@@ -1,0 +1,23 @@
+{% load i18n %}
+
+<div class="modal fade" id="modal-task-submission-confirm" tabindex="-1" aria-labelledby="modal-success-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>{% trans 'Confirm Submission' %}</h5>
+                <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% trans 'Are you sure you want to submit this task?' %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="submit-task">{% trans 'Confirm' %}</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans 'Cancel' %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+</script>
