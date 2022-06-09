@@ -31,7 +31,7 @@
                         <td>{{ object.get_question_count }}</td>
                         <td>{{ object.get_difficulty_level }}</td>
                         <td>
-                            <a href="{% url 'speaker:question_set_list' %}?exam_set={{ object.pk }}">
+                            <a href="{% url 'speaker:question_set_list' exam_id=object.pk %}">
                                 <button type="button" class="btn btn-warning">
                                     {% trans 'Enter Exam' %}
                                 </button>

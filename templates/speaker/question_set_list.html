@@ -2,82 +2,116 @@
 {% load static %}
 {% load i18n %}
 
+{% block styles %}
+    <style>
+        #controls {
+            display: none;
+        }
+
+        #formats {
+            display: none;
+        }
+
+    </style>
+{% endblock %}
 {% block content %}
-<style>
-   #controls{
-        display: none;
-      }
-    #formats{
-        display: none;
-      }
-      
-</style>
+    <div class="bg-white pt-5">
+        <h1 class="page-heading">{% trans "Question Set Lists" %} </h1>
+        <a href="{% url 'speaker:question_set_list' exam_id=view.kwargs.exam_id %}?status=incomplete" class="btn btn-sm btn-dark">{% trans 'Unrecorded Question Sets' %}</a>
+        <a href="{% url 'speaker:question_set_list' exam_id=view.kwargs.exam_id %}" class="btn btn-sm btn-dark">{% trans 'All Question Sets' %}</a>
+        <div class="table-responsive questionset_table" id="questionset_table" style="border: none; overflow-x: unset">
+            <table class="table pt-2" cellspacing="0" id="questionset_list_table">
+                <thead class="">
+                <tr class="tableTitleRow">
+                    <th>{% trans "S. No." %}</th>
+                    <th>{% trans "Unique Code" %}</th>
+                    <th>{% trans "Question Count" %}</th>
+                    <th>{% trans "Difficulty Level" %}</th>
+                    <th>{% trans "Record Status" %}</th>
+                    <th>{% trans "Recording Time" %}</th>
+                    <th>{% trans "Action" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for q_set in object_list %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ q_set.unique_code }}</td>
+                        <td>{{ q_set.questions.count }}</td>
+                        <td>{{ q_set.get_difficulty_level }}</td>
+                        <td>{{ q_set.complete|yesno:'Complete,Incomplete' }}</td>
+                        <td>{{ q_set.record_time }}</td>
+                        <td>
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#test_modal"
+                                    data-qn_set_pk="{{ q_set.pk }}"
+                                    class="btn btn-warning start_test_button">{% trans 'Start' %}</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-  <div>
-    <h3>{% trans 'Question Sets: ' %}</h3>
-  </div>
-  {% for q_set in object_list %}
-    <div class="row mt-3">
-      <div class="col-10">{{ q_set }}</div>
-      <div class="col-2">
-        <button type="button" data-bs-toggle="modal" data-bs-target="#test_modal"
-                data-qn_set_pk="{{ q_set.pk }}"
-                class="btn btn-warning start_test_button">{% trans 'Start' %}</button>
-      </div>
     </div>
-  {% endfor %}
-  <div id="controls">
-    <button type="button" id="recordButton">Record</button>
-    <button type="button" id="pauseButton" disabled>Pause</button>
-    <button type="button" id="stopButton" disabled>Stop</button>
-  </div>
-  <div id="formats">Format: start recording to see sample rate</div>
 
-  <!-- Modal -->
-  <div class="modal fade" id="test_modal" data-bs-backdrop="static" data-bs-keyboard="false"
-       tabindex="-1" aria-labelledby="test_modal_label" aria-hidden="true">
-    <div class="modal-dialog modal-lg" >
-      <div class="modal-content" >
-        <div class="modal-header">
-          <h5 class="modal-title" id="test_modal_label">Exam Set</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" style="padding: 0" id="test_modal_body">
-        </div>
-        <!--
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Understood</button>
-        </div>
-        -->
-      </div>
+    <!-- Recorder Scripts -->
+    <div id="controls">
+        <button type="button" id="recordButton">Record</button>
+        <button type="button" id="pauseButton" disabled>Pause</button>
+        <button type="button" id="stopButton" disabled>Stop</button>
     </div>
-  </div>
+    <div id="formats">Format: start recording to see sample rate</div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="test_modal" data-bs-backdrop="static" data-bs-keyboard="false"
+         tabindex="-1" aria-labelledby="test_modal_label" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="test_modal_label">Exam Set</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="padding: 0" id="test_modal_body">
+                </div>
+                <!--
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Understood</button>
+                </div>
+                -->
+            </div>
+        </div>
+    </div>
+    <!-- -------------------------------------------------- -->
+{% endblock %}
 
 
-
-{% endblock content %}
 
 {% block scripts %}
-  <script src="{% static 'js/recorder/recorder.js' %}"></script>
-  <script src="{% static 'js/recorder/app.js' %}"></script>
-  <script>
-    $(".start_test_button").click(function(){
-      let qn_set_pk = $(this).attr('data-qn_set_pk');
-      $.ajax({
-        type: "GET",
-        url: `{% url 'speaker:exam_popup' %}?qn_set=${qn_set_pk}`,
-        success: function (response){
-           $("#test_modal_body").html(response);
-        },
-        error: function () {
-          console.log('Error');
-        },
-        complete: function () {
-          $(".loading-icon-ajax").fadeOut("fast");
-        }
-      });
-    });
-  </script>
+    <!-- Recorder Scripts -->
+    <script src="{% static 'js/recorder/recorder.js' %}"></script>
+    <script src="{% static 'js/recorder/app.js' %}"></script>
+    <script>
+        $(".start_test_button").click(function () {
+            let qn_set_pk = $(this).attr('data-qn_set_pk');
+            $.ajax({
+                type: "GET",
+                url: `{% url 'speaker:exam_popup' %}?qn_set=${qn_set_pk}`,
+                success: function (response) {
+                    $("#test_modal_body").html(response);
+                },
+                error: function () {
+                    console.log('Error');
+                },
+                complete: function () {
+                    $(".loading-icon-ajax").fadeOut("fast");
+                }
+            });
+        });
+    </script>
+    <!-- ------------------------------------------------------------ -->
 
+    <script>
+        $('.table').DataTable();
+    </script>
 {% endblock scripts %}

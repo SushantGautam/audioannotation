@@ -9,8 +9,8 @@ urlpatterns = [
     path('profile/<int:pk>/edit/', views.ProfileEditView.as_view(), name='edit_profile'),
     path('profile/verify/', views.RequestVerification.as_view(), name='verify_profile'),
 
-    path('exam_set/', views.ExamSetList.as_view(), name='exam_set_list'),
-    path('exam/question_set/', views.QuestionSetList.as_view(), name='question_set_list'),
+    path('exam/', views.ExamSetList.as_view(), name='exam_set_list'),
+    path('exam/<int:exam_id>/', views.QuestionSetList.as_view(), name='question_set_list'),
     path('exam_popup/', views.ExamPopupView.as_view(), name='exam_popup'),
 ]
 
