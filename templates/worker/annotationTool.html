@@ -96,7 +96,11 @@
             <div class="shadow-sm" id="demo">
                 <div class="row">
                     <div class="col d-flex justify-content-between">
-                        <h3>{{ audio_obj.question.question_title }} </h3>
+                        <h3>{{ audio_obj.question.question_title }}
+                            {% if workerSubmissionObj.status %}
+                                <span class="text-success"><i class="fa-solid fa-check-double"></i></span>
+                            {% endif %}
+                        </h3>
                         <p style="text-align:right;">
                             <span id="time-current">0.00</span> / <span id="time-total">0.00</span><br>
                             (<span id="time-current-hms">00:00:00</span> / <span id="time-total-hms">00:00:00</span>)

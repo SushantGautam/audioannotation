@@ -178,11 +178,14 @@ class AnnotationPage(TemplateView):
         context['audio_obj'] = speakerSubmissionObj
         context['stt_data'] = json.dumps(speakerSubmissionObj.stt_data)
         annotated_data = ""
+        workerSubmissionObj = None
         if WorkerSubmission.objects.filter(speaker_submission__pk=speakerSubmissionObj.id,
                                            worker_task__worker=self.request.user.worker).exists():
-            annotated_data = WorkerSubmission.objects.get(speaker_submission__pk=speakerSubmissionObj.id,
-                                                          worker_task__worker=self.request.user.worker).work_data
+            workerSubmissionObj = WorkerSubmission.objects.get(speaker_submission__pk=speakerSubmissionObj.id,
+                                                               worker_task__worker=self.request.user.worker)
+            annotated_data = workerSubmissionObj.work_data
         context['annotated_data'] = annotated_data
+        context['workerSubmissionObj'] = workerSubmissionObj
 
         return context
 
@@ -199,12 +202,22 @@ class WorkerTaskSubmit(View):
             obj.status = True
             obj.save()
         else:
-            WorkerSubmission.objects.create(
+            obj = WorkerSubmission.objects.create(
                 worker_task_id=kwargs.get('task_id'),
                 speaker_submission_id=int(kwargs.get('speakersubmission_id')),
                 work_data=json.loads(self.request.POST.get('annotated_data')),
                 status=True
             )
+
+        # If worker task submission count of exam set is same as number of questions in exam set, then worker task is completed
+        workerTask_complete = obj.worker_task.examset_submission.exam_set.get_question_count() == WorkerSubmission.objects.filter(
+            status=True, worker_task=obj.worker_task).count()
+        if workerTask_complete and not obj.worker_task.status:
+            obj.worker_task.status = True
+            examSet = obj.worker_task.examset_submission
+            examSet.status = obj.worker_task.examset_submission.next_status()[0]
+            examSet.save()
+            obj.worker_task.save()
         return JsonResponse({"message": "success"}, status=200)
 
 
