@@ -26,7 +26,6 @@
                     <th>{% trans "S. No." %}</th>
                     <th>{% trans "Unique Code" %}</th>
                     <th>{% trans "Question Count" %}</th>
-                    <th>{% trans "Difficulty Level" %}</th>
                     <th>{% trans "Record Status" %}</th>
                     <th>{% trans "Recording Time" %}</th>
                     <th>{% trans "Action" %}</th>
@@ -38,7 +37,6 @@
                         <td>{{ forloop.counter }}</td>
                         <td>{{ q_set.unique_code }}</td>
                         <td>{{ q_set.questions.count }}</td>
-                        <td>{{ q_set.get_difficulty_level }}</td>
                         <td>{{ q_set.complete|yesno:'Complete,Incomplete' }}</td>
                         <td>{{ q_set.record_time }}</td>
                         <td>
