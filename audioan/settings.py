@@ -21,7 +21,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '95.217.108.34']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '95.217.108.34', 'sa.nsdai.me']
 
 
 # Application definition
