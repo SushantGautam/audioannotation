@@ -9,95 +9,184 @@
 {% block content %}
     <div class="header-section w-60 py-3">
         <h2 class="page-heading">Profile Information</h2>
-        {% if not user.speaker.has_request_verification and not user.speaker.verified %}
-            <a href="{% url 'speaker:edit_profile' pk=user.speaker.id %}" title="Edit Profile"
-               class="btn btn-sm btn-secondary rounded-circle" id="edit-profile-btn"><i
-                    class="fa-solid fa-pen"></i></a>
-        {% endif %}
-    </div>
-    <section class="profile-section-container">
-        <section class="profile-section w-60">
-
-            <div class="details-parent shadow-sm">
-                <div class="text-center">
-                    <img src="{% static 'img/user.png' %}" class="rounded-circle" style="width: 10rem;height: 10rem;"
-                         alt="">
-                    <h4>FirstName Lastname</h4>
-                </div>
-                <div class="detail-row">
-                    <div class="detail">
-                        <div class="label"><i class="fa-solid fa-id-badge"></i>Speaker ID</div>
-                        <div class="value">9129274</div>
-                    </div>
-                    <div class="detail">
-                        <div class="label"><i class="fa-solid fa-calendar-days"></i>Date of Birth</div>
-                        <div class="value">1888-12-12</div>
-                    </div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail">
-                        <div class="label"><i class="fa-solid fa-passport"></i>Nationality</div>
-                        <div class="value">Nepalese</div>
-                    </div>
-                    <div class="detail">
-                        <div class="label"><i class="fa-solid fa-language"></i>Language</div>
-                        <div class="value">Nepali</div>
-                    </div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail">
-                        <div class="label"><i class="fa-solid fa-mars-and-venus"></i>Gender</div>
-                        <div class="value">Female</div>
-                    </div>
-                    <div class="detail">
-                        <div class="label"><i class="fa-solid fa-graduation-cap"></i>Education</div>
-                        <div class="value">Bachelors Degree</div>
-                    </div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail">
-                        <div class="label"><i class="fa-solid fa-layer-group"></i>Profeciency</div>
-                        <div class="value">Expert</div>
-                    </div>
-                    <div class="detail">
-                        <div class="label"><i class="fa-solid fa-star-half-stroke"></i>Topik Score</div>
-                        <div class="value">90</div>
-                    </div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail">
-                        <div class="label"><i class="fa-solid fa-hourglass"></i>Learning Period</div>
-                        <div class="value">5+ years</div>
-                    </div>
-                    <div class="detail">
-                        <div class="label"><i class="fa-solid fa-earth-asia"></i>Korea Residency</div>
-                        <div class="value">No</div>
-                    </div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail">
-                        <div class="label"><i class="fa-solid fa-clipboard-question"></i>Purpose</div>
-                        <div class="value">Hobby</div>
-                    </div>
-                    <div class="detail">
-                        <div class="label"><i class="fa-solid fa-chalkboard-user"></i>Learning Method</div>
-                        <div class="value">Online</div>
-                    </div>
-                </div>
-
-            </div>
+        <div class="d-flex gap-3">
             {% if not user.speaker.is_verified and user.speaker.bank_iban and not user.speaker.has_request_verification %}
                 <form action="{% url 'speaker:verify_profile' %}" method="post">
                     {% csrf_token %}
-                    <div>
-                        <button type="submit" class="btn btn-dark btn-sm">{% trans 'Request Verification' %} </button>
-                    </div>
+                    <button type="submit" class="btn btn-dark btn-sm">{% trans 'Request Verification' %} </button>
                 </form>
             {% elif user.speaker.has_request_verification %}
-                <div>
-                    {% trans 'Pending Verification' %}
-                </div>
+                {% trans 'Pending Verification' %}
             {% endif %}
+            {% if not user.speaker.has_request_verification and not user.speaker.verified %}
+                <a href="{% url 'speaker:edit_profile' pk=user.speaker.id %}" title="Edit Profile"
+                   class="btn btn-sm btn-secondary rounded-circle" id="edit-profile-btn"><i
+                        class="fa-solid fa-pen"></i></a>
+            {% endif %}
+        </div>
+    </div>
+    <section class="profile-section-container">
+    <section class="profile-section">
+
+
+        <section class="basic-section" id="basic-section">
+            <img src="/static/img/user.png" class="rounded-circle" style="width: 10rem;height: 10rem;" alt="">
+
+            <div class="basic-info-parent">
+                <div class="basic-info-row">
+                    <label for="id_usernamee"><i class="fa-solid fa-user"></i>{% trans 'Username' %} :</label>
+                    {{ user.username }}
+                </div>
+
+                <div class="basic-info-row">
+                    <label for="id_full_name"><i class="fa-solid fa-user"></i>{% trans 'Name' %} :</label>
+                    {{ user.get_full_name }}
+                </div>
+
+                <div class="basic-info-row">
+                    <label for="id_birth_date"><i class="fa-solid fa-calendar-days"></i>{% trans 'Birth date' %}
+                        :</label>
+                    {{ user.speaker.birth_date|date:'Y-m-d' }}
+                </div>
+
+                <div class="basic-info-row">
+                    <label for="id_gender"><i class="fa-solid fa-mars-and-venus"></i>{% trans 'Gender' %} :</label>
+                    {{ user.speaker.get_gender_display }}
+                </div>
+            </div>
+        </section>
+
+        <section class="contact-section">
+            <h4>{% trans 'Contact Information' %}</h4>
+            <div class="info-row">
+                <div class="info-detail">
+                    <label for="id_email"><i class="fa-solid fa-at"></i>{% trans 'Email address' %}:</label>
+                    {{ user.email }}
+                </div>
+                <div class="info-detail">
+                    <label for="id_phone_number"><i class="fa-solid fa-phone"></i>{% trans 'Phone number' %}:</label>
+                    {{ user.speaker.phone_number }}
+                </div>
+            </div>
+            <div class="info-row">
+                <div class="info-detail">
+                    <label for="id_permanent_address"><i
+                            class="fa-solid fa-location-dot"></i>{% trans 'Permanent address' %}:</label>
+                    {{ user.speaker.permanent_address }}
+                </div>
+                <div class="info-detail">
+                    <label for="id_current_address"><i class="fa-solid fa-house"></i>{% trans 'Current address' %}
+                        :</label>
+                    {{ user.speaker.current_address }}
+                </div>
+            </div>
+        </section>
+
+        <section class="bank-details-section">
+            <h4>{% trans 'Banking Details' %}</h4>
+            <div class="info-row">
+                <div class="info-detail">
+                    <label for="id_bank_name"><i class="fa-solid fa-building-columns"></i>{% trans 'Bank name' %}
+                        :</label>
+                    {{ user.speaker.bank_name }}
+                </div>
+                <div class="info-detail">
+                    <label for="id_bank_iban"><i class="fa-solid fa-barcode"></i>{% trans 'Bank IBAN' %} :</label>
+                    {{ user.speaker.bank_iban }}
+                </div>
+            </div>
+
+            <div class="info-row">
+
+                <div class="info-detail">
+                    <label for="id_bank_swift_code"><i class="fa-solid fa-dove"></i></i>{% trans 'Bank swift code' %} :</label>
+                    {{ user.speaker.bank_swift_code }}
+                </div>
+                <div class="info-detail">
+                    <label for="id_bank_account_name"><i
+                            class="fa-solid fa-money-check-dollar"></i>{% trans 'Bank account name' %} :</label>
+                    {{ user.speaker.bank_account_name }}
+                </div>
+            </div>
+
+            <div class="info-row">
+
+                <div class="info-detail">
+                    <label for="id_bank_address"><i class="fa-solid fa-dove"></i></i>{% trans 'Bank Address' %} :</label>
+                    {{ user.speaker.bank_address }}
+                </div>
+            </div>
+        </section>
+
+        <section class="language-section">
+            <h4>{% trans 'Language Information' %}</h4>
+            <div class="info-row">
+                <div class="info-detail">
+                    <label for="id_proficiency"><i class="fa-solid fa-user-ninja"></i> {% trans 'Proficiency:' %}
+                    </label>
+                    {{ user.speaker.get_proficiency_display }}
+                </div>
+                <div class="info-detail">
+                    <label for="id_topik_score"><i
+                            class="fa-solid fa-star-half-stroke"></i>{% trans 'Topik Score' %} :</label>
+                    {{ user.speaker.get_topik_score_display }}
+                </div>
+            </div>
+            <div class="info-row">
+                <div class="info-detail">
+                    <label for="id_level"><i class="fa-solid fa-arrow-turn-up"></i> {% trans 'Level' %}:</label>
+                    {{ user.speaker.get_level_display }}
+                </div>
+                <div class="info-detail">
+                    <label for="id_learning_period"><i
+                            class="fa-solid fa-hourglass-end"></i> {% trans 'Learning period' %}:</label>
+                    {{ user.speaker.learning_period }}
+                </div>
+            </div>
+
+            <div class="info-row">
+
+                <div class="info-detail">
+                    <label for="id_learning_method"><i
+                            class="fa-solid fa-signs-post"></i> {% trans 'Learning method' %}:</label>
+                    {{ user.speaker.learning_method }}
+                </div>
+                <div class="info-detail">
+                    <label for="id_study_purpose"><i
+                            class="fa-solid fa-file-circle-question"></i> {% trans 'Study purpose' %}:</label>
+                    {{ user.speaker.study_purpose }}
+                </div>
+            </div>
+        </section>
+
+        <section class="additional-section">
+            <h4>{% trans 'Additional Information' %}</h4>
+            <div class="info-row">
+                <div class="info-detail">
+                    <label for="id_nationality"><i
+                            class="fa-solid fa-earth-asia"></i> {% trans 'Nationality' %}: {{ form.fields.nationality.value }}
+                    </label>
+                    {{ user.speaker.get_nationality_display }}
+                </div>
+                <div class="info-detail">
+                    <label for="id_language"><i class="fa-solid fa-language"></i> {% trans 'Language' %}:</label>
+                    {{ user.speaker.get_language_display }}
+                </div>
+
+            </div>
+            <div class="info-row">
+
+                <div class="info-detail">
+                    <label for="id_education_level"><i
+                            class="fa-solid fa-graduation-cap"></i> {% trans 'Education level' %}:</label>
+                    {{ user.speaker.get_education_level_display }}
+                </div>
+                <div class="info-detail">
+                    <label for="id_korea_residency"><i
+                            class="fa-solid fa-house-chimney-user"></i> {% trans 'Korea residency' %}:</label>
+                    {{ user.speaker.korea_residency }}
+                </div>
+            </div>
         </section>
     </section>
 {% endblock %}
