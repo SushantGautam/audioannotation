@@ -16,10 +16,12 @@ class WhaleSpaceOAuth2Adapter(OAuth2Adapter):
     profile_url = "https://auth.whalespace.io/oauth2/v1/userinfo"
 
     def complete_login(self, request, app, token, **kwargs):
-        headers = {"Authorization": "Bearer {0}".format(token.token)}
+        headers = {'Authorization': 'Bearer {0}'.format(token.token),
+                   'Content-Type': 'application/x-www-form-urlencoded',
+                   'Host': 'api.whalespace.io'}
         resp = requests.get(self.profile_url, headers=headers)
         resp.raise_for_status()
-        extra_data = resp.json().get("response")
+        extra_data = resp.json()
         return self.get_provider().sociallogin_from_response(request, extra_data)
 
 

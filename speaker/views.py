@@ -116,10 +116,18 @@ class QuestionSetList(ListView):
     template_name = 'speaker/question_set_list.html'
     model = QuestionSet
 
+    def get_queryset(self):
+        qs = super(QuestionSetList, self).get_queryset().filter(examset=self.kwargs.get('exam_id'))
+        if self.request.GET.get('status') == 'incomplete':
+            qs = qs.filter(pk__in=[o.pk for o in qs if not o.is_complete(speaker=self.request.user.speaker)])
+        # elif self.request.GET.get('status') == 'recorded':
+        #     qs = qs.filter(pk__in=[o.pk for o in qs if o.is_complete(speaker=self.request.user.speaker)])
+        for x in qs:
+            x.complete = x.is_complete(speaker=self.request.user.speaker)
+        return qs
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        exam_set = ExamSet.objects.get(pk=self.request.GET['exam_set'])
-        context['object_list'] = exam_set.question_sets.all()
         return context
 
 
