@@ -1,10 +1,14 @@
+input{
+    accent-color: #212121;
+}
+
 .header-section{
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 .profile-section , .header-section{
-    width: 60%;
+    /* width: 60%; */
 }
 
 .details-parent{
@@ -41,3 +45,81 @@
     width: 2.5rem;
     text-align: center;
 }
+
+/* Profile Edit section styles */
+.profile-edit-section i{
+    width: 2rem;
+    text-align: center;
+}
+
+.profile-edit-section{
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    /* padding: 1rem; */
+}
+
+.basic-section{
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    justify-content: space-between;
+    box-shadow: 3px 2px 8px 1px rgba(0,0,0,.075)!important;
+
+}
+
+.basic-info-parent{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 50%;
+}
+
+.basic-info-row{
+    display: flex;
+    align-items: center;
+    /* gap: 0.5rem; */
+}
+
+
+.basic-info-row label:first-of-type{
+    width: 12rem;
+}
+
+.basic-info-row input[type="text"], .basic-info-row input[type="date"] {
+    width: 15rem;
+}
+
+.info-row{
+    display: flex;
+}
+
+.info-detail{
+    width: 50%;
+    display: flex;
+}
+
+.info-detail label{
+    width: 12rem;
+}
+
+.info-detail input , .info-detail select{
+    width: 15rem;
+}
+
+
+.contact-section , .bank-details-section , .language-section , .additional-section{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    box-shadow: 3px 2px 8px 1px rgba(0,0,0,.075)!important;
+
+}
+
+.button-section{
+    display: flex;
+    gap: 0.5rem;
+    padding: 1rem;
+}
+/* Profile Edit section styles */

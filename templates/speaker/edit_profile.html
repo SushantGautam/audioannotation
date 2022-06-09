@@ -12,118 +12,135 @@
             {% endfor %}
         {% endfor %}
     {% endif %}
-    <section class="profile-edit-section w-60">
+    <section class="profile-edit-section">
 
 
-        <section id="basic-section" class="d-flex">
-            <div class="text-center justify-content-start">
-                <img src="/static/img/user.png" class="rounded-circle" style="width: 10rem;height: 10rem;" alt="">
-            </div>
+        <section class="basic-section" id="basic-section" >
+            <img src="/static/img/user.png" class="rounded-circle" style="width: 10rem;height: 10rem;" alt="">
 
-            <div>
-                <label for="id_first_name">First name:</label>
-                <input type="text" name="first_name" value="{{ userForm.first_name.initial }}"
-                       maxlength="150" id="id_first_name">
-                <label for="id_last_name">Last name:</label>
-                <input type="text" name="last_name" value="{{ userForm.last_name.initial }}"
-                       maxlength="150" id="id_last_name">
-                <label for="id_gender_0">Gender:</label>
-                {% for value, display in form.fields.gender.choices %}
-                    <label for="id_gender_{{ value }}">
-                        <input type="radio" name="gender" value="{{ value }}" id="id_gender_{{ value }}"
-                               {% if form.gender.value == value %}checked{% endif %} required="">
-                        {{ display }}</label>
-                {% endfor %}
+            <div class="basic-info-parent">
+                <div class="basic-info-row">
+                    <label for="id_first_name"><i class="fa-solid fa-user"></i>{% trans 'First name' %} :</label>
+                    <input class="form-control form-control-sm" placeholder="{% trans 'Enter first name here...' %}" type="text" name="first_name" value="{{ userForm.first_name.initial }}"
+                           maxlength="150" id="id_first_name">
+                </div>
 
 
-                <label for="id_birth_date">Birth date:</label><input type="date" name="birth_date"
-                                                                     value="{{ form.birth_date.initial|date:'Y-m-d' }}"
-                                                                     class="form-control" placeholder="Select a date"
-                                                                     required="" id="id_birth_date">
+                <div class="basic-info-row">
+                    <label for="id_last_name"><i class="fa-solid fa-user"></i>{% trans 'Last name' %} :</label>
+                    <input class="form-control form-control-sm" placeholder="{% trans 'Enter last name here...' %}" type="text" name="last_name" value="{{ userForm.last_name.initial }}"
+                           maxlength="150" id="id_last_name">
+                </div>
+                
+                <div class="basic-info-row">
+                    <label for="id_birth_date"><i class="fa-solid fa-calendar-days"></i>{% trans 'Birth date' %} :</label>
+                    <input  type="date" name="birth_date"value="{{ form.birth_date.initial|date:'Y-m-d' }}"
+                            class="form-control form-control-sm" placeholder="Select a date" required="" id="id_birth_date">
+                </div>
+                
+                <div class="basic-info-row">
+                    <label for="id_gender_0"><i class="fa-solid fa-mars-and-venus"></i>{% trans 'Gender' %} :</label>
+                    {% for value, display in form.fields.gender.choices %}
+                        <label for="id_gender_{{ value }}">
+                            <input type="radio" name="gender" value="{{ value }}" id="id_gender_{{ value }}"
+                                   {% if form.gender.value == value %}checked{% endif %} required="">
+                            {{ display }}
+                        </label>
+                    {% endfor %}
+
+                </div>
+
+
+
             </div>
         </section>
 
-        <section>
-            <h3>Contact Information</h3>
-            <div class="detail-row">
-                <div class="detail">
-                    <label for="id_email">Email address:</label> <input type="email" name="email" maxlength="254"
-                                                                        value="{{ userForm.email.initial }}"
-                                                                        id="id_email">
+        <section class="contact-section">
+            <h4>Contact Information</h4>
+            <div class="info-row">
+                <div class="info-detail">
+                    <label for="id_email"><i class="fa-solid fa-at"></i>{% trans 'Email address' %}:</label> 
+                    <input class="form-control form-control-sm" placeholder="{% trans 'Enter email here...' %}" type="email" name="email" maxlength="254"
+                    value="{{ userForm.email.initial }}" id="id_email">
                 </div>
-                <div class="detail">
-                    <label for="id_phone_number">Phone number:</label> <input type="text" name="phone_number"
-                                                                              value="{{ form.phone_number.initial }}
+                <div class="info-detail">
+                    <label for="id_phone_number"><i class="fa-solid fa-phone"></i>{% trans 'Phone number' %}:</label>
+                    <input class="form-control form-control-sm" placeholder="{% trans 'Enter phone number here...' %}" type="text" name="phone_number"
+                                                                              value="{{ form.phone_number.initial }}"
                                                                               maxlength=" 256" id="id_phone_number">
                 </div>
-                <div class="detail">
-                    <label for="id_permanent_address">Permanent address:</label> <input type="text"
+            </div>
+            <div class="info-row">
+                <div class="info-detail">
+                    <label  for="id_permanent_address"><i class="fa-solid fa-location-dot"></i>{% trans 'Permanent address' %}:</label> 
+                    <input class="form-control form-control-sm" placeholder="{% trans 'Enter permanent address here...' %}" type="text"
                                                                                         name="permanent_address"
                                                                                         value="{{ form.permanent_address.initial }}"
                                                                                         maxlength="256"
                                                                                         required=""
                                                                                         id="id_permanent_address">
                 </div>
-                <div class="detail">
-                    <label for="id_current_address">Current address:</label> <input type="text" name="current_address"
+                <div class="info-detail">
+                    <label for="id_current_address"><i class="fa-solid fa-house"></i>{% trans 'Current address' %} :</label> 
+                    <input class="form-control form-control-sm" placeholder="{% trans 'Enter current address here...' %}" type="text" name="current_address"
                                                                                     value="{{ form.current_address.initial }}"
                                                                                     maxlength="256"
                                                                                     required="" id="id_current_address">
                 </div>
             </div>
+
+
+            
         </section>
 
-        <section>
-            <h3>Bank Information</h3>
-            <div class="detail-row">
-                <div class="detail">
-                    <label for="id_bank_name">Bank name:</label> <input type="text" name="bank_name"
+        <section class="bank-details-section">
+            <h4>{% trans 'Banking Details' %}</h4>
+            <div class="info-row">
+                <div class="info-detail">
+                    <label for="id_bank_name"><i class="fa-solid fa-building-columns"></i>{% trans 'Bank name' %} :</label> 
+                    <input class="form-control form-control-sm" placeholder="{% trans 'Enter bank name here...' %}" type="text" name="bank_name"
                                                                         value="{{ form.bank_name.initial }}"
                                                                         maxlength="256" required="" id="id_bank_name">
                 </div>
-                <div class="detail">
-                    <label for="id_bank_iban">Bank iban:</label> <input type="text" name="bank_iban"
+                <div class="info-detail">
+                    <label for="id_bank_iban"><i class="fa-solid fa-barcode"></i>{% trans 'Bank IBAN' %} :</label>
+                    <input class="form-control form-control-sm" placeholder="{% trans 'Enter bank iban code here...' %}" type="text" name="bank_iban"
                                                                         value="{{ form.bank_iban.initial }}"
                                                                         maxlength="256" required="" id="id_bank_iban">
                 </div>
-                <div class="detail">
-                    <label for="id_bank_swift_code">Bank swift code:</label> <input type="text" name="bank_swift_code"
-                                                                                    value="{{ form.bank_swift_code.initial }}"
-                                                                                    maxlength="256"
-                                                                                    required="" id="id_bank_swift_code">
+            </div>
+
+            <div class="info-row">
+
+                <div class="info-detail">
+                    <label for="id_bank_swift_code"><i class="fa-solid fa-dove"></i></i>{% trans 'Bank swift code' %} :</label>
+                    <input  class="form-control form-control-sm" placeholder="{% trans 'Enter bank swift code here...' %}" type="text" name="bank_swift_code" value="{{ form.bank_swift_code.initial }}" maxlength="256" required="" id="id_bank_swift_code">
                 </div>
-                <div class="detail">
-                    <label for="id_bank_account_name">Bank account name:</label> <input type="text"
-                                                                                        name="bank_account_name"
-                                                                                        value="{{ form.bank_account_name.initial }}"
-                                                                                        maxlength="256"
-                                                                                        required=""
-                                                                                        id="id_bank_account_name">
-                </div>
-                <div class="detail">
-                    <label for="id_bank_address">Bank address:</label> <input type="text" name="bank_address"
-                                                                              value="{{ form.bank_address.initial }}"
-                                                                              maxlength="256" required=""
-                                                                              id="id_bank_address">
+                <div class="info-detail">
+                    <label for="id_bank_account_name"><i class="fa-solid fa-money-check-dollar"></i>{% trans 'Bank account name' %} :</label>
+                    <input class="form-control form-control-sm" placeholder="{% trans 'Enter account holders name here...' %}" type="text"name="bank_account_name" value="{{ form.bank_account_name.initial }}" maxlength="256" required="" id="id_bank_account_name">
                 </div>
             </div>
+
         </section>
 
-        <section>
-            <h3>Language Information</h3>
-            <div class="detail-row">
-                <div class="detail">
-                    {% for value, display in form.fields.proficiency.choices %}
-                        <label for="id_proficiency_{{ value }}">
-                            <input type="radio" name="proficiency" value="{{ value }}" id="id_proficiency_{{ value }}"
-                                   {% if form.proficiency.value == value %}checked{% endif %} required="">
-                            {{ display }}</label>
-                    {% endfor %}
+        <section class="language-section">
+            <h4>{% trans 'Language Information ' %}</h3>
+            <div class="info-row">
+                <div class="info-detail">
+                    <label for="id_proficiency"><i class="fa-solid fa-user-ninja"></i> {% trans 'Proficiency:' %}</label>
+                    <select class="form-control form-control-sm" name="proficiency" id="id_profieciency">
+                        {% for value, display in form.fields.proficiency.choices %}
+                            <option value="{{ value }}"{% if form.proficiency.initial == value %}
+                                    selected{% endif %}>{{ display }}</option>
+                        {% endfor %}
+
+                    </select>
 
                 </div>
-                <div class="detail">
-                    <label for="id_topik_score">Topik score:</label>
-                    <select name="topik_score" id="id_topik_score">
+                <div class="info-detail">
+                    <label for="id_topik_score"><i class="fa-solid fa-star-half-stroke"></i>{% trans 'Topik Score' %} :</label>
+                    <select class="form-control form-control-sm" name="topik_score" id="id_topik_score">
                         {% for value, display in form.fields.topik_score.choices %}
                             <option value="{{ value }}"{% if form.topik_score.initial == value %}
                                     selected{% endif %}>{{ display }}</option>
@@ -131,57 +148,65 @@
 
                     </select>
                 </div>
-                <div class="detail">
-                    <label for="id_level">Level:</label> <select name="level" id="id_level">
+            </div>
+            <div class="info-row">
+                <div class="info-detail">
+                    <label for="id_level"><i class="fa-solid fa-arrow-turn-up"></i> {% trans 'Level' %}:</label>
+                    <select class="form-control form-control-sm"  name="level" id="id_level">
                     {% for value, display in form.fields.level.choices %}
                         <option value="{{ value }}"{% if form.level.initial == value %}
                                 selected{% endif %}>{{ display }}</option>
                     {% endfor %}
 
-                </select>
+                    </select>
                 </div>
-                <div class="detail">
-                    <label for="id_learning_period">Learning period:</label> <input type="number" name="learning_period"
-                                                                                    value="{{ form.learning_period.initial }}" required=""
-                                                                                    id="id_learning_period">
+                <div class="info-detail">
+                    <label for="id_learning_period"><i class="fa-solid fa-hourglass-end"></i> {% trans 'Learning period' %}:</label>
+                    <input class="form-control form-control-sm" placeholder="{% trans 'Enter learning period here...' %}" type="number" name="learning_period" value="{{ form.learning_period.initial }}" required="" id="id_learning_period">
                 </div>
-                <div class="detail">
-                    <label for="id_learning_method">Learning method:</label> <input type="text" name="learning_method"
-                                                                                    value="{{ form.learning_method.initial }}" maxlength="256"
-                                                                                    required="" id="id_learning_method">
+            </div>
+
+            <div class="info-row">
+
+                <div class="info-detail">
+                    <label for="id_learning_method"><i class="fa-solid fa-signs-post"></i> {% trans 'Learning method' %}:</label>
+                    <input class="form-control form-control-sm" placeholder="{% trans 'Enter learning method here...' %}" type="text" name="learning_method" value="{{ form.learning_method.initial }}" maxlength="256" required="" id="id_learning_method">
                 </div>
-                <div class="detail">
-                    <label for="id_study_purpose">Study purpose:</label> <input type="text" name="study_purpose"
-                                                                                value="{{ form.study_purpose.initial }}" maxlength="256" required=""
-                                                                                id="id_study_purpose">
+                <div class="info-detail">
+                    <label for="id_study_purpose"><i class="fa-solid fa-file-circle-question"></i> {% trans 'Study purpose' %}:</label>
+                    <input class="form-control form-control-sm" placeholder="{% trans 'Enter study purpose here...' %}" type="text" name="study_purpose" value="{{ form.study_purpose.initial }}" maxlength="256" required="" id="id_study_purpose">
                 </div>
             </div>
         </section>
 
-        <section>
-            <h3>Additional Information</h3>
-            <div class="detail-row">
-                <div class="detail">
-                    <label for="id_nationality">Nationality: {{ form.fields.nationality.value }}</label>
-                    <select name="nationality" id="id_nationality">
+        <section class="additional-section">
+            <h4>{% trans 'Additional Information' %}</h3>
+            <div class="info-row">
+                <div class="info-detail">
+                    <label for="id_nationality"><i class="fa-solid fa-earth-asia"></i> {% trans 'Nationality' %}: {{ form.fields.nationality.value }}</label>
+                    <select class="form-control form-control-sm" name="nationality" id="id_nationality">
                         {% for value, display in form.fields.nationality.choices %}
                             <option value="{{ value }}"{% if form.nationality.initial == value %}
                                     selected{% endif %}>{{ display }}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <div class="detail">
-                    <label for="id_language">Language:</label>
-                    <select name="language" id="id_language">
+                <div class="info-detail">
+                    <label for="id_language"><i class="fa-solid fa-language"></i> {% trans 'Language' %}:</label>
+                    <select class="form-control form-control-sm" name="language" id="id_language">
                         {% for value, display in form.fields.language.choices %}
                             <option value="{{ value }}"{% if form.language.initial == value %}
                                     selected{% endif %}>{{ display }}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <div class="detail">
-                    <label for="id_education_level">Education level:</label> <select name="education_level"
-                                                                                     id="id_education_level">
+
+            </div>
+            <div class="info-row">
+
+                <div class="info-detail">
+                    <label for="id_education_level"><i class="fa-solid fa-graduation-cap"></i> {% trans 'Education level' %}:</label>
+                    <select class="form-control form-control-sm" name="education_level" id="id_education_level">
                     {% for value, display in form.fields.education_level.choices %}
                         <option value="{{ value }}"{% if form.education_level.initial == value %}
                                 selected{% endif %}>{{ display }}</option>
@@ -189,15 +214,16 @@
 
                 </select>
                 </div>
-                <div class="detail">
-                    <label for="id_korea_residency">Korea residency:</label> <input type="number" name="korea_residency"
-                                                                                    value="{{ form.korea_residency.initial }}" required=""
-                                                                                    id="id_korea_residency">
+                <div class="info-detail">
+                    <label for="id_korea_residency"><i class="fa-solid fa-house-chimney-user"></i> {% trans 'Korea residency' %}:</label>
+                    <input class="form-control form-control-sm" placeholder="{% trans 'Enter Korea residency (in years)...' %}" type="number" name="korea_residency" value="{{ form.korea_residency.initial }}" required="" id="id_korea_residency">
                 </div>
             </div>
         </section>
-        <button type="submit" class="btn btn-dark">Save</button>
-        <button type="button" class="btn btn-dark" id="cancel-edit">Cancel</button>
+        <div class="button-section">            
+            <button type="submit" class="btn btn-sm  btn-dark" title="Save changes">{% trans 'Save  ' %}</button>
+            <button type="button" class="btn btn-sm btn-dark" title="Cancel changes" id="cancel-edit">{% trans 'Cancel  ' %}</button>
+        </div>
     </section>
 </form>
 
