@@ -69,6 +69,11 @@
     </section>
     <!-- End Multi step progress -->
     {% if user.speaker.is_verified and user.speaker.has_contract_approved %}
-        <!-- Dashboard area here -->
+        <div class="text-center">
+            <h2>{% trans 'Your account is verified. You can now take Exam' %}</h2>
+            <a href="{% url 'speaker:exam_set_list' %}"><button class="btn btn-outline-secondary">
+                {% trans 'Go to Exam page' %}
+            </button></a>
+        </div>
     {% endif %}
 {% endblock %}
