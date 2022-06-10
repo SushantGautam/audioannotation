@@ -7,9 +7,9 @@
 {% endblock %}
 
 {% block content %}
-    <div class="header-section w-60 py-3">
-        <h2 class="page-heading">Profile Information</h2>
-        <div class="d-flex gap-3">
+    <div class="header-section ">
+        <h2 class="page-heading">{% trans 'Profile Information' %}</h2>
+        <div class="d-flex gap-1">
             {% if not user.speaker.is_verified and user.speaker.bank_iban and not user.speaker.has_request_verification %}
                 <form action="{% url 'speaker:verify_profile' %}" method="post">
                     {% csrf_token %}
@@ -20,44 +20,46 @@
             {% endif %}
             {% if not user.speaker.has_request_verification and not user.speaker.verified %}
                 <a href="{% url 'speaker:edit_profile' pk=user.speaker.id %}" title="Edit Profile"
-                   class="btn btn-sm btn-secondary rounded-circle" id="edit-profile-btn"><i
-                        class="fa-solid fa-pen"></i></a>
+                   class="btn btn-sm btn-dark rounded-circle" id="edit-profile-btn">
+                   <i class="fa-solid fa-pen"></i></a>
             {% endif %}
         </div>
     </div>
-    <section class="profile-section-container">
+<section class="profile-section-container">
     <section class="profile-section">
 
 
         <section class="basic-section" id="basic-section">
-            <img src="/static/img/user.png" class="rounded-circle" style="width: 10rem;height: 10rem;" alt="">
-
+            <h4><i class="fa-solid fa-user-tag"></i>{% trans 'Basic Information' %}</h4>
+            
             <div class="basic-info-parent">
-                <div class="basic-info-row">
-                    <label for="id_usernamee"><i class="fa-solid fa-user"></i>{% trans 'Username' %} :</label>
-                    {{ user.username }}
-                </div>
+                
+                <img src="/static/img/user.png" class="rounded-circle" style="width: 10rem;height: 10rem;" alt="">
 
-                <div class="basic-info-row">
-                    <label for="id_full_name"><i class="fa-solid fa-user"></i>{% trans 'Name' %} :</label>
-                    {{ user.get_full_name }}
-                </div>
-
-                <div class="basic-info-row">
-                    <label for="id_birth_date"><i class="fa-solid fa-calendar-days"></i>{% trans 'Birth date' %}
-                        :</label>
-                    {{ user.speaker.birth_date|date:'Y-m-d' }}
-                </div>
-
-                <div class="basic-info-row">
-                    <label for="id_gender"><i class="fa-solid fa-mars-and-venus"></i>{% trans 'Gender' %} :</label>
-                    {{ user.speaker.get_gender_display }}
+                <div class="basic-info-wrapper">
+                    <div class="basic-info-row">
+                        <label for="id_usernamee"><i class="fa-solid fa-tag"></i>{% trans 'Username' %} :</label>
+                        {{ user.username }}
+                    </div>
+                    <div class="basic-info-row">
+                        <label for="id_full_name"><i class="fa-solid fa-user"></i>{% trans 'Full Name' %} :</label>
+                        {{ user.get_full_name }}
+                    </div>
+                    <div class="basic-info-row">
+                        <label for="id_birth_date"><i class="fa-solid fa-calendar-days"></i>{% trans 'Birth date' %}
+                            :</label>
+                        {{ user.speaker.birth_date|date:'Y-m-d' }}
+                    </div>
+                    <div class="basic-info-row">
+                        <label for="id_gender"><i class="fa-solid fa-mars-and-venus"></i>{% trans 'Gender' %} :</label>
+                        {{ user.speaker.get_gender_display }}
+                    </div>
                 </div>
             </div>
         </section>
 
         <section class="contact-section">
-            <h4>{% trans 'Contact Information' %}</h4>
+            <h4><i class="fa-solid fa-address-book"></i>{% trans 'Contact Information' %}</h4>
             <div class="info-row">
                 <div class="info-detail">
                     <label for="id_email"><i class="fa-solid fa-at"></i>{% trans 'Email address' %}:</label>
@@ -83,10 +85,10 @@
         </section>
 
         <section class="bank-details-section">
-            <h4>{% trans 'Banking Details' %}</h4>
+            <h4><i class="fa-solid fa-building-columns"></i>{% trans 'Banking Details' %}</h4>
             <div class="info-row">
                 <div class="info-detail">
-                    <label for="id_bank_name"><i class="fa-solid fa-building-columns"></i>{% trans 'Bank name' %}
+                    <label for="id_bank_name"><i class="fa-solid fa-building-flag"></i>{% trans 'Bank Name' %}
                         :</label>
                     {{ user.speaker.bank_name }}
                 </div>
@@ -99,12 +101,12 @@
             <div class="info-row">
 
                 <div class="info-detail">
-                    <label for="id_bank_swift_code"><i class="fa-solid fa-dove"></i></i>{% trans 'Bank swift code' %} :</label>
+                    <label for="id_bank_swift_code"><i class="fa-solid fa-dove"></i>{% trans 'Bank Swift Code' %} :</label>
                     {{ user.speaker.bank_swift_code }}
                 </div>
                 <div class="info-detail">
                     <label for="id_bank_account_name"><i
-                            class="fa-solid fa-money-check-dollar"></i>{% trans 'Bank account name' %} :</label>
+                            class="fa-solid fa-money-check-dollar"></i>{% trans 'Account Name' %} :</label>
                     {{ user.speaker.bank_account_name }}
                 </div>
             </div>
@@ -112,14 +114,14 @@
             <div class="info-row">
 
                 <div class="info-detail">
-                    <label for="id_bank_address"><i class="fa-solid fa-dove"></i></i>{% trans 'Bank Address' %} :</label>
+                    <label for="id_bank_address"><i class="fa-solid fa-location-crosshairs"></i>{% trans 'Bank Address' %} :</label>
                     {{ user.speaker.bank_address }}
                 </div>
             </div>
         </section>
 
         <section class="language-section">
-            <h4>{% trans 'Language Information' %}</h4>
+            <h4><i class="fa-solid fa-globe"></i>{% trans 'Language Information' %}</h4>
             <div class="info-row">
                 <div class="info-detail">
                     <label for="id_proficiency"><i class="fa-solid fa-user-ninja"></i> {% trans 'Proficiency:' %}
@@ -148,19 +150,18 @@
 
                 <div class="info-detail">
                     <label for="id_learning_method"><i
-                            class="fa-solid fa-signs-post"></i> {% trans 'Learning method' %}:</label>
+                            class="fa-solid fa-signs-post"></i>{% trans 'Learning method' %}:</label>
                     {{ user.speaker.learning_method }}
                 </div>
                 <div class="info-detail">
-                    <label for="id_study_purpose"><i
-                            class="fa-solid fa-file-circle-question"></i> {% trans 'Study purpose' %}:</label>
+                    <label for="id_study_purpose"><i class="fa-solid fa-clipboard-question"></i> {% trans 'Study Purpose' %}:</label>
                     {{ user.speaker.study_purpose }}
                 </div>
             </div>
         </section>
 
         <section class="additional-section">
-            <h4>{% trans 'Additional Information' %}</h4>
+            <h4><i class="fa-solid fa-circle-chevron-down"></i>{% trans 'Additional Information' %}</h4>
             <div class="info-row">
                 <div class="info-detail">
                     <label for="id_nationality"><i

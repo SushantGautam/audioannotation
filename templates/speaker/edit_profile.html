@@ -16,42 +16,42 @@
 
 
         <section class="basic-section" id="basic-section">
-            <img src="/static/img/user.png" class="rounded-circle" style="width: 10rem;height: 10rem;" alt="">
-
+            <h4><i class="fa-solid fa-user-tag"></i>{% trans 'Basic Information' %}</h4>
+            
             <div class="basic-info-parent">
-                <div class="basic-info-row">
-                    <label for="id_first_name"><i class="fa-solid fa-user"></i>{% trans 'First name' %} :</label>
-                    <input class="form-control form-control-sm" placeholder="{% trans 'Enter first name here...' %}"
-                           type="text" name="first_name" value="{{ userForm.first_name.initial }}"
-                           maxlength="150" id="id_first_name">
-                </div>
+                <img src="/static/img/user.png" class="rounded-circle" style="width: 10rem;height: 10rem;" alt="">
 
 
-                <div class="basic-info-row">
-                    <label for="id_last_name"><i class="fa-solid fa-user"></i>{% trans 'Last name' %} :</label>
-                    <input class="form-control form-control-sm" placeholder="{% trans 'Enter last name here...' %}"
-                           type="text" name="last_name" value="{{ userForm.last_name.initial }}"
-                           maxlength="150" id="id_last_name">
-                </div>
-
-                <div class="basic-info-row">
-                    <label for="id_birth_date"><i class="fa-solid fa-calendar-days"></i>{% trans 'Birth date' %}
-                        :</label>
-                    <input type="date" name="birth_date" value="{{ form.birth_date.initial|date:'Y-m-d' }}"
-                           class="form-control form-control-sm" placeholder="Select a date" required=""
-                           id="id_birth_date">
-                </div>
-
-                <div class="basic-info-row">
-                    <label for="id_gender_0"><i class="fa-solid fa-mars-and-venus"></i>{% trans 'Gender' %} :</label>
-                    {% for value, display in form.fields.gender.choices %}
-                        <label for="id_gender_{{ value }}">
-                            <input type="radio" name="gender" value="{{ value }}" id="id_gender_{{ value }}"
-                                   {% if form.gender.value == value %}checked{% endif %} required="">
-                            {{ display }}
-                        </label>
-                    {% endfor %}
-
+                <div class="basic-info-wrapper">
+                    <div class="basic-info-row">
+                        <label for="id_first_name"><i class="fa-solid fa-user"></i>{% trans 'First name' %} :</label>
+                        <input class="form-control form-control-sm" placeholder="{% trans 'Enter first name here...' %}"
+                               type="text" name="first_name" value="{{ userForm.first_name.initial }}"
+                               maxlength="150" id="id_first_name">
+                    </div>
+                    <div class="basic-info-row">
+                        <label for="id_last_name"><i class="fa-solid fa-user-tie"></i>{% trans 'Last name' %} :</label>
+                        <input class="form-control form-control-sm" placeholder="{% trans 'Enter last name here...' %}"
+                               type="text" name="last_name" value="{{ userForm.last_name.initial }}"
+                               maxlength="150" id="id_last_name">
+                    </div>
+                    <div class="basic-info-row">
+                        <label for="id_birth_date"><i class="fa-solid fa-calendar-days"></i>{% trans 'Birth date' %}
+                            :</label>
+                        <input type="date" name="birth_date" value="{{ form.birth_date.initial|date:'Y-m-d' }}"
+                               class="form-control form-control-sm" placeholder="Select a date" required=""
+                               id="id_birth_date">
+                    </div>
+                    <div class="basic-info-row">
+                        <label for="id_gender_0"><i class="fa-solid fa-mars-and-venus"></i>{% trans 'Gender' %} :</label>
+                        {% for value, display in form.fields.gender.choices %}
+                            <label class="gender-option" for="id_gender_{{ value }}">
+                                <input type="radio" name="gender" value="{{ value }}" id="id_gender_{{ value }}"
+                                       {% if form.gender.value == value %}checked{% endif %} required="">
+                                {{ display }}
+                            </label>
+                        {% endfor %}
+                    </div>
                 </div>
 
 
@@ -59,7 +59,7 @@
         </section>
 
         <section class="contact-section">
-            <h4>Contact Information</h4>
+            <h4><i class="fa-solid fa-address-book"></i>{% trans 'Contact Information' %} </h4>
             <div class="info-row">
                 <div class="info-detail">
                     <label for="id_email"><i class="fa-solid fa-at"></i>{% trans 'Email address' %}:</label>
@@ -102,10 +102,10 @@
         </section>
 
         <section class="bank-details-section">
-            <h4>{% trans 'Banking Details' %}</h4>
+            <h4><i class="fa-solid fa-building-columns"></i>{% trans 'Banking Details' %}</h4>
             <div class="info-row">
                 <div class="info-detail">
-                    <label for="id_bank_name"><i class="fa-solid fa-building-columns"></i>{% trans 'Bank name' %}
+                    <label for="id_bank_name"><i class="fa-solid fa-building-flag"></i>{% trans 'Bank Name' %}
                         :</label>
                     <input class="form-control form-control-sm" placeholder="{% trans 'Enter bank name here...' %}"
                            type="text" name="bank_name"
@@ -124,7 +124,7 @@
             <div class="info-row">
 
                 <div class="info-detail">
-                    <label for="id_bank_swift_code"><i class="fa-solid fa-dove"></i></i>{% trans 'Bank swift code' %} :</label>
+                    <label for="id_bank_swift_code"><i class="fa-solid fa-dove"></i></i>{% trans 'Bank Swift Code' %} :</label>
                     <input class="form-control form-control-sm"
                            placeholder="{% trans 'Enter bank swift code here...' %}" type="text" name="bank_swift_code"
                            value="{{ form.bank_swift_code.initial }}" maxlength="256" required=""
@@ -132,7 +132,7 @@
                 </div>
                 <div class="info-detail">
                     <label for="id_bank_account_name"><i
-                            class="fa-solid fa-money-check-dollar"></i>{% trans 'Bank account name' %} :</label>
+                            class="fa-solid fa-money-check-dollar"></i>{% trans 'Account name' %} :</label>
                     <input class="form-control form-control-sm"
                            placeholder="{% trans 'Enter account holders name here...' %}" type="text"
                            name="bank_account_name" value="{{ form.bank_account_name.initial }}" maxlength="256"
@@ -143,7 +143,7 @@
             <div class="info-row">
 
                 <div class="info-detail">
-                    <label for="id_bank_address"><i class="fa-solid fa-dove"></i></i>{% trans 'Bank Address' %}
+                    <label for="id_bank_address"><i class="fa-solid fa-location-crosshairs"></i>{% trans 'Bank Address' %}
                         :</label>
                     <input class="form-control form-control-sm" placeholder="{% trans 'Enter bank address here...' %}"
                            type="text" name="bank_address" value="{{ form.bank_address.initial }}" maxlength="256"
@@ -211,8 +211,7 @@
                                required="" id="id_learning_method">
                     </div>
                     <div class="info-detail">
-                        <label for="id_study_purpose"><i
-                                class="fa-solid fa-file-circle-question"></i> {% trans 'Study purpose' %}:</label>
+                        <label for="id_study_purpose"><i class="fa-solid fa-clipboard-question"></i>{% trans 'Study Purpose' %}:</label>
                         <input class="form-control form-control-sm"
                                placeholder="{% trans 'Enter study purpose here...' %}" type="text" name="study_purpose"
                                value="{{ form.study_purpose.initial }}" maxlength="256" required=""
