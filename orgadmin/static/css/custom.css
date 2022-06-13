@@ -194,8 +194,8 @@ html{
 .dropdown-menu{
   width: max-content;
 }
-.dropdown-menu svg{
-  width: 1.75rem;
+.dropdown-menu i{
+  width: 2rem;
   text-align: center;
 }
 
@@ -209,7 +209,7 @@ font-size: 1rem;
 .avatar-link{
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.5rem;
 }
 
 .animate__animated.animate__fadeInDown {
