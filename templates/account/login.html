@@ -16,8 +16,8 @@
 
   <form class="login" method="POST" action="{% url 'account_login' %}">
     {% csrf_token %}
-    <img class="mb-4" src="{% static 'img/logo.png' %}" alt="Logo" width="80" height="80">
-    <h1 class="h3 mb-3 fw-normal">{% trans "Audio Annotation Tool" %}</h1><br>
+    <img class="mb-3" src="{% static 'img/logo.png' %}" alt="Logo" width="80" height="80">
+    <h3 class="h3 mb-3">{% trans "Audio Annotation Tool" %}</h3><br>
     <h5>{% trans "Please Sign In" %}</h5>
 
     <div class="form-floating">
@@ -49,16 +49,16 @@
 
     <div class="socialaccount_ballot">
 
-      <ul class="socialaccount_providers">
+      <!-- <ul class="socialaccount_providers"> -->
         {% for provider in socialaccount_providers %}
             <a title="{{provider.name}}" class="socialaccount_provider {{provider.id}}" 
               href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
-                <button type="button" class="btn btn-lg btn-outline-success">
+                <button type="button" class="whalespace-login-button btn btn-block btn-outline-success">
                   <img src="{% static 'img/symbol__logo-whaleSpace.png' %}" alt="{% trans 'Naver Logo' %}" width="25" height="25">
                    {% trans 'Sign in with Whale Space' %}
               </button></a>
         {% endfor %}
-      </ul>
+      <!-- </ul> -->
     </div>
 
     {% include "socialaccount/snippets/login_extra.html" %}
