@@ -77,6 +77,8 @@ class WorkerTask(models.Model):
     def get_task_url(self):
         if self.task_type in ['S1', 'S2']:
             return reverse('worker:annotation_page', args=(self.pk, ))
+        elif self.task_type in ['E1', 'E2']:
+            return reverse('worker:evaluation_page', args=(self.pk, ))
 
 
 class WorkerSubmission(models.Model):
