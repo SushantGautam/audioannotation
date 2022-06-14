@@ -22,6 +22,16 @@
     <link rel="stylesheet" href="{% static 'annotationStatic/css/style.css' %}"/>
     <link rel="stylesheet" href="{% static 'annotationStatic/css/app.css' %}"/>
 
+    <style>
+        input[type=radio] {
+            visibility: hidden;
+        }
+
+        input[type=radio]:checked + label {
+            background-color: #f0f0f0;
+            padding: 0.5rem;
+        }
+    </style>
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/fontawesome.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/fontawesome.min.js"></script> -->
 </head>
@@ -145,47 +155,46 @@
                     </div>
                 </div>
             </div>
-            <table class="table">
-                <thead>
-                <th>Score</th>
-                {% for value, title in evaluation_types %}
-                    <th>{{ title }}</th>
-                {% endfor %}
-                </thead>
-                <tbody>
+            <form name="evaluation_form" method="post" id="evaluation_form"
+                  action="{% url 'worker:submit_evaluation' task_id=worker_task.id speakersubmission_id=audio_obj.id %}">
+                {% csrf_token %}
+                <table class="table">
+                    <thead>
+                    <th>Score</th>
+                    {% for value, title in evaluation_types %}
+                        <th>{{ title }}</th>
+                    {% endfor %}
+                    </thead>
+                    <tbody>
 
-                {% for i in '543210' %}
-                    <tr>
-                        <td>{{ i }}</td>
-                        {% for value, title in evaluation_types %}
-                            {% for x in evaluation_titles %}
-                                {% if x.evaluation_type == value and x.score == forloop.parentloop.parentloop.revcounter0 %}
-                                    <td>
-                                        <input type="radio" name="{{ value }}" id="{{ value }}_{{ x.score }}">
-                                        <label for="{{ value }}_{{ x.score }}">
-                                            {{ x }}
-                                        </label>
-                                    </td>
-                                {% endif %}
+                    {% for i in range %}
+                        <tr>
+                            <td>{{ i }}</td>
+                            {% for value, title in evaluation_types %}
+                                {% for x in evaluation_titles %}
+                                    {% if x.evaluation_type == value and x.score == i %}
+                                        <td>
+                                            <input type="radio" name="{{ value }}" id="{{ value }}_{{ x.score }}"
+                                                   value="{{ x.id }}"
+                                                    {% if x in workerSubmissionObj.evaluation_data.all %}
+                                                   checked {% endif %} required>
+                                            <label for="{{ value }}_{{ x.score }}">
+                                                {{ x }}
+                                            </label>
+                                        </td>
+                                    {% endif %}
+                                {% endfor %}
                             {% endfor %}
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-                {#                {% for value, title in evaluation_types %}#}
-                {#                    <span>{{ title }}</span>#}
-                {#                        {% for x in evaluation_titles %}#}
-                {#                            {% if x.evaluation_type == value %}#}
-                {#                            <p>{{ x.score }}. {{ x }}</p>#}
-                {#                                <td>{{ x.score }}</td>#}
-                {#                                <td>{{ x }}</td>#}
-                {#                            {% endif %}#}
-                {#                        {% endfor %}#}
-                {##}
-                {#               {% endfor %} #}
-                </tbody>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
 
-            </table>
-
+                </table>
+                <button type="button" title="Submit Task" class="btn btn-sm btn-dark" data-bs-toggle="modal"
+                        data-bs-target="#modal-task-submission-confirm">
+                    {% trans 'Submit' %}
+                </button>
+            </form>
         </section>
     </div>
 
@@ -233,11 +242,8 @@
         const USER_ID = "{{ user.id }}";
         const AUDIO_FILE = "{{ audio_obj.audio_file.url }}";
         const key_annotation = "key_annotation_{{ audio_obj.id }}";
-        const SAVE_ANNOTATION_URL = "{% url 'worker:save_annotation' task_id=worker_task.id speakersubmission_id=audio_obj.id %}";
-        const SUBMIT_ANNOTATION_URL = "{% url 'worker:submit_annotation' task_id=worker_task.id speakersubmission_id=audio_obj.id %}";
-        var csrf_token = "{{ csrf_token }}";
         const ANNOTATED_DATA = {{ annotated_data|safe }};
-
+        const csrf_token = "{{ csrf_token }}";
     </script>
 </footer>
 

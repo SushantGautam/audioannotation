@@ -2,7 +2,7 @@ import json
 import os
 
 from django.conf import settings
-from django.db.models import Q
+from django.db.models import Q, Max, Min
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -209,6 +209,11 @@ class EvaluationPage(TemplateView):
         self.speakerSubmissionObj = SpeakerSubmission.objects.get(speaker=self.workerTaskObj.examset_submission.speaker,
                                                                   question=self.question)
 
+        if WorkerSubmission.objects.filter(speaker_submission__pk=self.speakerSubmissionObj.id, worker_task=self.workerTaskObj,
+                                           worker_task__worker=self.request.user.worker).exists():
+            self.workerSubmissionObj = WorkerSubmission.objects.get(speaker_submission__pk=self.speakerSubmissionObj.id,
+                                                               worker_task__worker=self.request.user.worker,
+                                                               worker_task=self.workerTaskObj)
         return super(EvaluationPage, self).dispatch(request, *args, **kwargs)
 
     # Get Annotated data of Slicing Level 2
@@ -233,7 +238,11 @@ class EvaluationPage(TemplateView):
 
         context['evaluation_titles'] = EvaluationTitle.objects.filter(
             subcategory_code=self.speakerSubmissionObj.question.subcategory_code)
-        context['evaluation_types'] = list(set([(x.evaluation_type, x.get_evaluation_type_display()) for x in context['evaluation_titles']]))
+        agg_score = context['evaluation_titles'].aggregate(max_score=Max('score'), min_score=Min('score'))
+        max_score, min_score = agg_score['max_score'], agg_score['min_score']
+        context['range'] = reversed(range(min_score, max_score + 1))  # Range doesn't include end, therefore add 1
+        context['evaluation_types'] = list(
+            set([(x.evaluation_type, x.get_evaluation_type_display()) for x in context['evaluation_titles']]))
         return context
 
 
@@ -255,6 +264,40 @@ class WorkerTaskSubmit(View):
                 work_data=json.loads(self.request.POST.get('annotated_data')),
                 status=True
             )
+
+        # If worker task submission count of exam set is same as number of questions in exam set, then worker task is completed
+        workerTask_complete = obj.worker_task.examset_submission.exam_set.get_question_count() == WorkerSubmission.objects.filter(
+            status=True, worker_task=obj.worker_task).count()
+        if workerTask_complete and not obj.worker_task.status:
+            obj.worker_task.status = True
+            examSet = obj.worker_task.examset_submission
+            examSet.status = obj.worker_task.examset_submission.next_status()[0]
+            examSet.save()
+            obj.worker_task.save()
+        return JsonResponse({"message": "success"}, status=200)
+
+
+class EvaluationTaskSubmit(View):
+    def post(self, *args, **kwargs):
+        ids = json.loads(self.request.POST.get('ids'))
+        if WorkerSubmission.objects.filter(speaker_submission__pk=kwargs.get('speakersubmission_id'),
+                                           worker_task__worker=self.request.user.worker,
+                                           worker_task_id=kwargs.get('task_id')).exists():
+            obj = WorkerSubmission.objects.get(speaker_submission__pk=kwargs.get('speakersubmission_id'),
+                                               worker_task__worker=self
+                                               .request.user.worker,
+                                               worker_task_id=kwargs.get('task_id'))
+            obj.evaluation_data.set(EvaluationTitle.objects.filter(pk__in=ids).values_list('pk', flat=True))
+            obj.status = True
+            obj.save()
+        else:
+            obj = WorkerSubmission.objects.create(
+                worker_task_id=kwargs.get('task_id'),
+                speaker_submission_id=int(kwargs.get('speakersubmission_id')),
+                status=True
+            )
+            obj.evaluation_data.set(EvaluationTitle.objects.filter(pk__in=ids).values_list('pk', flat=True))
+            obj.save()
 
         # If worker task submission count of exam set is same as number of questions in exam set, then worker task is completed
         workerTask_complete = obj.worker_task.examset_submission.exam_set.get_question_count() == WorkerSubmission.objects.filter(
