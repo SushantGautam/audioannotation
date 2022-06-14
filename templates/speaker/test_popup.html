@@ -28,7 +28,6 @@
       <button type="button" class="{% if qn_num == forloop.counter0 %} active-question {% else %} inactive-question{% endif %}">
               {{ forloop.counter }}
       </button>
-      <!-- {% if not forloop.last %}&nbsp;&nbsp; > &nbsp;&nbsp;{% endif %} -->
 
     {% endfor %}
   </div>
@@ -140,7 +139,7 @@
 <!--Recorder-->
 
 <script>
-  $("#test_modal_label").html("{{ qn_set.name }}");
+  $("#test_modal_labelll").html("{{ qn_set.name }}");
   function prev_qn_btn_click(){
     let qn_set_pk = "{{ qn_set.pk }}";
     let qn_num = "{{ prev_qn }}"

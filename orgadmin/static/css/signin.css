@@ -11,6 +11,18 @@ body {
   background-color: #f5f5f5;
 }
 
+.whalespace-login-button{
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.socialaccount_provider{
+  text-decoration: none;
+} 
+
 .form-signin {
   width: 100%;
   max-width: 330px;
