@@ -40,7 +40,7 @@
 </section>
     
 <section class="mid-section">
-    <div class="question-parent question-wrapper blur-filter">
+    <div class="question-parent {% if not qn.upload_type == 'IMG' %}  no-attachment {% endif %} question-wrapper blur-filter">
       <h6 class=" question-title">
         <span class="" >{{ qn_num1 }}. </span><span> {{ qn.question_title }}</span>
       </h6>
@@ -61,7 +61,7 @@
       {% if qn.upload_type == "IMG" %}
         <img class="image-question" src="{{ qn.upload_file.url }}" alt="question image">
       {% endif %}
-      <p class="question-description">{{ qn.description }}</p>
+      <p class="question-description {% if qn.upload_type == 'NON' %} no-attachment {% endif %} ">{{ qn.description }}</p>
     </div>
 
     <audio id="myAudio">
@@ -139,7 +139,7 @@
 <!--Recorder-->
 
 <script>
-  $("#test_modal_labelll").html("{{ qn_set.name }}");
+  $("#test_modal_label").html("{{ qn_set.unique_code }}");
   function prev_qn_btn_click(){
     let qn_set_pk = "{{ qn_set.pk }}";
     let qn_num = "{{ prev_qn }}"

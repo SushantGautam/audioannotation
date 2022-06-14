@@ -26,14 +26,17 @@ path{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.5rem;
+    padding: 1rem;
+    background-color: #f0f0f0;
+    border-bottom: 1.5px solid lightgrey;
+
 }
 
 .inactive-question{
-    font-size: 0.9rem;
+    font-size: 1rem;
     color: #212121;
     background-color: white;
-    padding: 0 0.35rem;
+    padding: 0 0.45rem;
     border: 1.5px solid #212121;
     border-radius: 0.25rem;
     min-width: 1.5rem;
@@ -43,7 +46,7 @@ path{
 }
 
 .active-question{
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 500;
     color: #f0f0f0;
     background-color: #212121;
@@ -56,6 +59,13 @@ path{
 
 }
 
+.submitted-indicator{
+    background-color: lightgreen;
+    color: #f0f0f0;
+    border: none;
+
+}
+
 #record_player{
     display: none;
 }
@@ -64,6 +74,10 @@ path{
     gap: 0.25rem;
     background-color: #f3f3f3; 
     /* padding: 0.5rem; */
+}
+
+.mid-section{
+    margin-top: 1rem;
 }
 
 .question-parent{
@@ -100,14 +114,15 @@ path{
     overflow: hidden;
     transition: all 0.25s ease-in;
     opacity: 0.25;
+    transform: translateY(-50%);
 }
 
 .next_qn_btn {
-    right: 0.5rem;
+    right: 1rem;
 }
 
 .prev_qn_btn{
-    left: 0.5rem;
+    left: 1rem;
 }
 
 .next_qn_btn:hover{
@@ -130,6 +145,8 @@ path{
 .question-title{
     font-size: 1.1rem;
     margin-bottom: 0;
+    position: absolute;
+    top: 0;
     /* align-self: flex-start; */
 }
 
@@ -138,13 +155,19 @@ path{
     margin-bottom: 0.5rem;
 }
 
-/* .content{
-    height: 30rem;
-} */
+.question-description.no-attachment{
+    font-size: 2rem;
+    border: 2px solid grey;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+}
+
 
 .image-question {
     max-height: 25rem;
     max-width: 100%;
+    margin-top: 2rem;
 }
 
 .navigation-buttons{
@@ -164,16 +187,17 @@ path{
     display: flex;
     gap: 2rem;
     align-items: center;
-    background-color: white;
+    background-color: #f0f0f0;
     /* justify-content: center; */
-    padding: 0.5rem;
+    padding: 1rem;
+    border-top: 1.5px solid lightgrey;
+
 
 }
 
 .progress-buttons{
-    /* text-align: center; */
     display: flex;
-    gap: 0.5rem;
+    gap: 3rem;
     transform: translateX(50%);
 }
 
@@ -245,4 +269,8 @@ path{
 
 .slider{
     width:5rem;
+}
+
+.question-parent.no-attachment{
+    justify-content: center;
 }
