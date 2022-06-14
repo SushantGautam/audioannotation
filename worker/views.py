@@ -16,7 +16,7 @@ from professor.models import Question
 from speaker.models import SpeakerSubmission, ExamSetSubmission
 
 from worker.forms import ExamSetSubmissionFilterForm, ProfileEditForm
-from worker.models import WorkerSubmission, WorkerTask
+from worker.models import WorkerSubmission, WorkerTask, EvaluationTitle
 
 
 def homepage(request):
@@ -179,14 +179,61 @@ class AnnotationPage(TemplateView):
         context['stt_data'] = json.dumps(speakerSubmissionObj.stt_data)
         annotated_data = ""
         workerSubmissionObj = None
-        if WorkerSubmission.objects.filter(speaker_submission__pk=speakerSubmissionObj.id,
+        if WorkerSubmission.objects.filter(speaker_submission__pk=speakerSubmissionObj.id, worker_task=workerTaskObj,
                                            worker_task__worker=self.request.user.worker).exists():
             workerSubmissionObj = WorkerSubmission.objects.get(speaker_submission__pk=speakerSubmissionObj.id,
-                                                               worker_task__worker=self.request.user.worker)
+                                                               worker_task__worker=self.request.user.worker,
+                                                               worker_task=workerTaskObj)
             annotated_data = workerSubmissionObj.work_data
         context['annotated_data'] = annotated_data
         context['workerSubmissionObj'] = workerSubmissionObj
 
+        return context
+
+
+class EvaluationPage(TemplateView):
+    template_name = 'worker/evaluationTool.html'
+
+    workerTaskObj, question, speakerSubmissionObj = None, None, None
+
+    workerSubmissionObj = None
+
+    def dispatch(self, request, *args, **kwargs):
+        self.workerTaskObj = get_object_or_404(WorkerTask, pk=kwargs.get('workertask_id'))
+
+        if self.request.GET.get('question'):
+            self.question = Question.objects.get(pk=self.request.GET.get('question'))
+        else:
+            self.question = self.workerTaskObj.examset_submission.exam_set.question_sets.first().questions.first()
+
+        self.speakerSubmissionObj = SpeakerSubmission.objects.get(speaker=self.workerTaskObj.examset_submission.speaker,
+                                                                  question=self.question)
+
+        return super(EvaluationPage, self).dispatch(request, *args, **kwargs)
+
+    # Get Annotated data of Slicing Level 2
+    def get_annotation_data(self):
+        annotated_data = ""
+        if WorkerSubmission.objects.filter(speaker_submission__pk=self.speakerSubmissionObj.id,
+                                           worker_task__task_type="S2", status=True).exists():
+            annotated_data = self.speakerSubmissionObj.workersubmission_set.filter(
+                worker_task__task_type="S2", status=True).first().work_data
+        return annotated_data
+
+    def get_context_data(self, **kwargs):
+        context = super(EvaluationPage, self).get_context_data()
+
+        context['worker_task'] = self.workerTaskObj
+        context['exam_set'] = self.workerTaskObj.examset_submission.exam_set
+        context['question_sets'] = self.workerTaskObj.examset_submission.exam_set.question_sets.all()
+        context['audio_obj'] = self.speakerSubmissionObj
+        context['workerSubmissionObj'] = self.workerSubmissionObj
+
+        context['annotated_data'] = self.get_annotation_data()
+
+        context['evaluation_titles'] = EvaluationTitle.objects.filter(
+            subcategory_code=self.speakerSubmissionObj.question.subcategory_code)
+        context['evaluation_types'] = list(set([(x.evaluation_type, x.get_evaluation_type_display()) for x in context['evaluation_titles']]))
         return context
 
 

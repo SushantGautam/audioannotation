@@ -96,7 +96,7 @@
             <div class="shadow-sm" id="demo">
                 <div class="row">
                     <div class="col d-flex justify-content-between">
-                        <h3>{{ audio_obj.question.question_title }}
+                        <h3>{{ audio_obj.question.question_title }} {{ workerSubmissionObj }}
                             {% if workerSubmissionObj.status %}
                                 <span class="text-success"><i class="fa-solid fa-check-double"></i></span>
                             {% endif %}
@@ -123,20 +123,12 @@
                         </button>
                     </div>
                     <div class=" flex-center">
-                        <!-- <div style="text-align: right;">
-                            <div class="bi bi-zoom-out" style="float: left;"></div>
-                            <div class="bi bi-zoom-in"></div>
-                        </div> -->
                         <div class="bi bi-zoom-out"></div>
                         <input class="mx-1" id="slider" data-action="zoom" type="range" min="1" max="200" value="0">
                         <div class="bi bi-zoom-in"></div>
 
                     </div>
                     <div class=" flex-center">
-                        <!-- <div style="text-align: right;">
-                            <div class="bi bi-volume-off" style="float: left;" id="volume_zero"></div>
-                            <div class="bi bi-volume-up" id="volume_max"></div>
-                        </div> -->
                         <div class="bi bi-volume-off" id="volume_zero"></div>
                         <input class="mx-1" id="volume" type="range" min="0" max="1" value="1" step="0.1">
                         <div class="bi bi-volume-up" id="volume_max"></div>
@@ -151,156 +143,50 @@
                             <option value="2">2x</option>
                         </select>
                     </div>
-                    <div>
-                        <button class="btn btn-sm btn-outline-dark" id="split">
-                            <i class="fa-solid fa-scissors"> </i> {% trans 'Split' %}
-                        </button>
-                        <button class="btn btn-sm merge-button" id="merge-left" title="Merge Left"
-                                data-title="Merge Left">
-                            <!-- <i class="bi bi-chevron-double-left"></i><span class="bi bi-union"></span> -->
-                            <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg" style="transform:rotateY(180deg);">
-                                <path d="M7.586 8.00366L4 8.00366C3.44772 8.00366 3 7.55595 3 7.00366C3 6.45138 3.44772 6.00366 4 6.00366L8 6.00366C8.26509 6.00366 8.51933 6.10892 8.70685 6.2963L13.414 11H18.5845L15.2931 7.71103C14.9025 7.32065 14.9023 6.68748 15.2926 6.29681C15.683 5.90615 16.3162 5.90592 16.7068 6.2963L21.7068 11.2926C21.8945 11.4802 22 11.7346 22 11.9998C22 12.2651 21.8947 12.5195 21.7071 12.7071L16.7071 17.7071C16.3166 18.0976 15.6834 18.0976 15.2929 17.7071C14.9024 17.3166 14.9024 16.6834 15.2929 16.2929L18.5858 13H13.4142L8.70711 17.7071C8.51957 17.8947 8.26522 18 8 18H4C3.44772 18 3 17.5523 3 17C3 16.4477 3.44772 16 4 16H7.58579L11.5855 12.0003L7.586 8.00366Z"
-                                      fill="#212121"/>
-                            </svg>
-
-
-                        </button>
-                        <button class="btn btn-sm merge-button" id="merge-right" title="Merge Right"
-                                data-title="Merge Right">
-                            <!-- <span class="bi bi-union"></span><i class="bi bi-chevron-double-right"></i> -->
-                            <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path d="M7.586 8.00366L4 8.00366C3.44772 8.00366 3 7.55595 3 7.00366C3 6.45138 3.44772 6.00366 4 6.00366L8 6.00366C8.26509 6.00366 8.51933 6.10892 8.70685 6.2963L13.414 11H18.5845L15.2931 7.71103C14.9025 7.32065 14.9023 6.68748 15.2926 6.29681C15.683 5.90615 16.3162 5.90592 16.7068 6.2963L21.7068 11.2926C21.8945 11.4802 22 11.7346 22 11.9998C22 12.2651 21.8947 12.5195 21.7071 12.7071L16.7071 17.7071C16.3166 18.0976 15.6834 18.0976 15.2929 17.7071C14.9024 17.3166 14.9024 16.6834 15.2929 16.2929L18.5858 13H13.4142L8.70711 17.7071C8.51957 17.8947 8.26522 18 8 18H4C3.44772 18 3 17.5523 3 17C3 16.4477 3.44772 16 4 16H7.58579L11.5855 12.0003L7.586 8.00366Z"
-                                      fill="#212121"/>
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="">
-                        <button class="btn btn-sm btn-danger" id="reset">
-                            <span class="bi bi-trash"> {% trans 'Reset' %}</span>
-                        </button>
-                        <!--
-                            <button class="btn btn-light" id="download_button">
-                                <span class="bi bi-download" aria-hidden="true"></span>
-                            </button>
-                        -->
-                        <button type="button" class="btn btn-sm btn-secondary" id="save-btn">{% trans 'Save' %}</button>
-                        <button title="Shortcut keys" class="btn btn-sm btn-light" id="info" data-bs-toggle="modal"
-                                data-bs-target="#infoModal">
-                            <span class="bi bi-info-circle" aria-hidden="true"></span>
-                        </button>
-                        {% if not workerSubmissionObj or not workerSubmissionObj.status %}
-                            <button title="Submit Task" class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#modal-task-submission-confirm">
-                                {% trans 'Submit' %}
-                            </button>
-                        {% endif %}
-                    </div>
                 </div>
             </div>
+            <table class="table">
+                <thead>
+                <th>Score</th>
+                {% for value, title in evaluation_types %}
+                    <th>{{ title }}</th>
+                {% endfor %}
+                </thead>
+                <tbody>
 
+                {% for i in '543210' %}
+                    <tr>
+                        <td>{{ i }}</td>
+                        {% for value, title in evaluation_types %}
+                            {% for x in evaluation_titles %}
+                                {% if x.evaluation_type == value and x.score == forloop.parentloop.parentloop.revcounter0 %}
+                                    <td>
+                                        <input type="radio" name="{{ value }}" id="{{ value }}_{{ x.score }}">
+                                        <label for="{{ value }}_{{ x.score }}">
+                                            {{ x }}
+                                        </label>
+                                    </td>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                {#                {% for value, title in evaluation_types %}#}
+                {#                    <span>{{ title }}</span>#}
+                {#                        {% for x in evaluation_titles %}#}
+                {#                            {% if x.evaluation_type == value %}#}
+                {#                            <p>{{ x.score }}. {{ x }}</p>#}
+                {#                                <td>{{ x.score }}</td>#}
+                {#                                <td>{{ x }}</td>#}
+                {#                            {% endif %}#}
+                {#                        {% endfor %}#}
+                {##}
+                {#               {% endfor %} #}
+                </tbody>
 
-            <form role="form" name="edit"
-                  style="display:none; opacity: 0; transition: opacity 300ms linear; margin: 30px 0;">
-                <div class="form-group row">
-                    <div class="col">
-                        <div class="row">
-                            <div class="col-5">
-                                <label for="start">Start</label>
-                                <input class="form-control" id="start" name="start" type="number" step="0.01"/>
-                            </div>
-                            <div class="col-5">
-                                <label for="start-hms"></label>
-                                <input class="form-control" id="start-hms" name="start-hms" readonly/>
-                            </div>
-                            <div class="col-2">
-                                <label for="start-setnow"></label>
-                                <button class="btn btn-info w-100" id="start-setnow">
-                                    <span class="bi bi-chevron-bar-down" aria-hidden="true"></span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+            </table>
 
-                    <div class="col">
-                        <div class="row">
-                            <div class="col-5">
-                                <label for="end">End</label>
-                                <input class="form-control" id="end" name="end" type="number" step="0.01"/>
-                            </div>
-                            <div class="col-5">
-                                <label for="end-hms"></label>
-                                <input class="form-control" id="end-hms" name="end-hms" readonly/>
-                            </div>
-                            <div class="col-2">
-                                <label for="end-setnow"></label>
-                                <button class="btn btn-info w-100" id="end-setnow">
-                                    <span class="bi bi-chevron-bar-down" aria-hidden="true"></span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group" id="annotation_item_area">
-                </div>
-
-
-                <div class="form-group row">
-                    <div class="col">
-                    </div>
-                    <div class="col">
-                        <button type="submit" class="btn btn-success btn-block">Save</button>
-                    </div>
-                    <div class="col">
-                        <button type="button" class="btn btn-danger btn-block" data-action="delete-region">Delete
-                        </button>
-                    </div>
-                </div>
-            </form>
-
-            <!-- Result section starts here -->
-            <div class="result-section shadow-sm">
-
-                <div class="header-section flex-space">
-                    <h5 class="m-0">Results</h5>
-                    <!--
-                    <button class="btn btn-sm btn-dark" data-toggle="tooltip" data-placement="top" title="Delete all">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                    -->
-                </div>
-
-
-                <div class="result">
-                    <div class="audio-details">
-                        No Region Selected.
-                    </div>
-                    <div class="audio-data">
-
-                    </div>
-                </div>
-
-
-                <div class="annotation-form-section d-none">
-                    <form class="annotation-form" name="annotationForm">
-                            <textarea placeholder="Add annotation text here..." class="annotation-text">
-                            </textarea>
-                        <input type="hidden" value="" class="region-id">
-                        <div class="bottom-section">
-                            <button type="submit" title="Save" class="btn btn-sm btn-dark">
-                                <i class="fas fa-check"></i></button>
-                            <button type="cancel" title="Cancel" class="btn btn-sm btn-dark">
-                                <i class="fas fa-times"></i></button>
-                        </div>
-                    </form>
-                </div>
-
-            </div>
-            <!-- Result section ends here -->
         </section>
-
-
     </div>
 
 
@@ -322,18 +208,10 @@
             </div>
         </div>
     </div>
-
-
 </div>
 
 {% include 'worker/alerts/confirmTaskSubmission.html' %}
-<!-- <div class="footer">
-    <div class="container" style="text-align:right;">
-        <a target="_blank" rel="noreferrer" href="https://github.com/koniwa/hachiue">Hachiue</a>
-        by
-        <a target="_blank" rel="noreferrer" href="https://github.com/koniwa">Koniwa Project</a>
-    </div>
-</div> -->
+
 </body>
 
 <footer>
@@ -349,25 +227,16 @@
     <link href="{% static 'annotationStatic/3rd/jsoneditor/jsoneditor.min.css' %}" rel="stylesheet" type="text/css">
     <script src="{% static 'annotationStatic/3rd/jsoneditor/jsoneditor.min.js' %}"></script>
 
-    <script src="{% static 'annotationStatic/js/app.js' %}"></script>
-    <script src="{% static 'annotationStatic/js/slicing.js' %}"></script>
+    <script src="{% static 'annotationStatic/js/evaluation_app.js' %}"></script>
+    <script src="{% static 'annotationStatic/js/evalutation.js' %}"></script>
     <script>
         const USER_ID = "{{ user.id }}";
-        const STT_DATA = {{ stt_data|safe }};
         const AUDIO_FILE = "{{ audio_obj.audio_file.url }}";
         const key_annotation = "key_annotation_{{ audio_obj.id }}";
         const SAVE_ANNOTATION_URL = "{% url 'worker:save_annotation' task_id=worker_task.id speakersubmission_id=audio_obj.id %}";
         const SUBMIT_ANNOTATION_URL = "{% url 'worker:submit_annotation' task_id=worker_task.id speakersubmission_id=audio_obj.id %}";
         var csrf_token = "{{ csrf_token }}";
-        {% if annotated_data %}
-            const ANNOTATED_DATA = {{ annotated_data|safe }}
-        {% else %}
-            var temp = JSON.parse(JSON.stringify(STT_DATA.stt_predictions_annotations));
-            Object.keys(temp).map(function (idx) {
-                temp[idx].data = {};
-            });
-            const ANNOTATED_DATA = temp;
-        {% endif %}
+        const ANNOTATED_DATA = {{ annotated_data|safe }};
 
     </script>
 </footer>
