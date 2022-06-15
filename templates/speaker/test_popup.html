@@ -292,6 +292,7 @@
                 if (!(typeof prepInterval === 'undefined')) {
                     clearInterval(prepInterval);
                 }
+                $(".prev_qn_btn").attr("disabled", "disabled");
                 // When student takes test, prevent closing/interruption of the test
                 document.querySelector('.btn-close').style.display = "none";
 
