@@ -88,7 +88,7 @@
 
 
 <section class="bottom-section">
-  <div class="recorder_wave" style="width: 12rem; height: 3.5rem;">
+  <div class="recorder_wave" style="width: 11rem; height: 3.5rem;">
     <svg preserveAspectRatio="none" id="visualizer" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <defs>
 
@@ -132,6 +132,8 @@
 
 
   </div>
+
+  <button class="btn btn-sm btn-dark play-recorded-audio" title="Play recorded audio"><i class="fa-solid fa-play"></i> {% trans 'Play' %} </button>
 
 </section>
 
@@ -372,10 +374,15 @@
           $("#visualizer").hide();
           $(".prev_qn_btn").removeAttr("disabled");
           $(".next_qn_btn").removeAttr("disabled");
-          $('#recording_btn').removeClass('btn-info')
-          $('#recording_btn').addClass('btn-outline-info')
+          // $('#recording_btn').removeClass('btn-info')
+          // $('#recording_btn').addClass('btn-outline-info')
+
           // When recording stops, allow closing/interruption of the test
           document.querySelector('.btn-close').style.display = "block";
+          
+          // Show play button after the recording is stopped
+          document.querySelector(".play-recorded-audio").style.visibility = "visible";
+
 
         }
 

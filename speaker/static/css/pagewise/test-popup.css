@@ -52,7 +52,8 @@ path{
     background-color: #212121;
     padding: 0 0.45rem;
     border-radius: 0.25rem;
-    border: none;
+    border: 1.5px solid #212121;
+    box-shadow: 1px 2px 2px 1px rgb(0 0 0 / 50%);
     min-width: 1.5rem;
     text-align: center;
     transition: all 0.25s ease-in-out;
@@ -63,7 +64,11 @@ path{
     background-color: #65d265;
     color: white;
     border: none;
-
+}
+.active-question.submitted-indicator{
+    border: 2.25px solid rgb(34 139 34);
+    box-shadow: 1px 1px 2px 1px rgb(34 139 34 / 25%);
+    padding: 0 0.5rem;
 }
 
 #record_player{
@@ -185,20 +190,20 @@ path{
 
 .bottom-section {
     display: flex;
-    gap: 2rem;
+    gap: 0.5rem;
+    flex-wrap: wrap;
     align-items: center;
     background-color: #f0f0f0;
-    /* justify-content: center; */
+    justify-content: space-evenly;
     padding: 1rem;
     border-top: 1.5px solid lightgrey;
-
 
 }
 
 .progress-buttons{
     display: flex;
-    gap: 3rem;
-    transform: translateX(50%);
+    gap: 2rem;
+    /* transform: translateX(50%); */
 }
 
 .progress-buttons i{
@@ -273,4 +278,8 @@ path{
 
 .question-parent.no-attachment{
     justify-content: center;
+}
+
+.play-recorded-audio{
+    visibility: hidden;
 }
