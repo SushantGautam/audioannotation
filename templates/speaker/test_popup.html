@@ -88,7 +88,7 @@
 
 
 <section class="bottom-section">
-  <div class="recorder_wave" style="width: 15rem; height: 3rem;">
+  <div class="recorder_wave" style="width: 12rem; height: 3.5rem;">
     <svg preserveAspectRatio="none" id="visualizer" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <defs>
 
@@ -97,10 +97,10 @@
           </g>
         </mask>
         <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" style="stop-color:#ff0a0a;stop-opacity:1" />
-          <stop offset="20%" style="stop-color:#f1ff0a;stop-opacity:1" />
-          <stop offset="90%" style="stop-color:#d923b9;stop-opacity:1" />
-          <stop offset="100%" style="stop-color:#050d61;stop-opacity:1" />
+          <stop offset="0%" style="stop-color:#5c677d;stop-opacity:1" />
+          <stop offset="20%" style="stop-color:#33415c;stop-opacity:1" />
+          <stop offset="90%" style="stop-color:#001233;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#001845;stop-opacity:1" />
         </linearGradient>
       </defs>
       <rect x="0" y="0" width="100%" height="100%" fill="url(#gradient)" mask="url(#mask)"></rect>
@@ -138,7 +138,11 @@
 <!--Recorder-->
 
 <script>
-  $("#test_modal_label").html("{{ qn_set.unique_code }}");
+  // const questionCode = {{qn_set.unique_code}} + {{qn_set.subcategory_code}} ;
+  // console.log(questionCode);
+  // let unique_code = '{{ qn_set.unique_code}}'
+  // let subcategory_code = '{{ qn_set.subcategory_code }}'
+  $("#test_modal_label").html(`{{qn_set.subcategory_code}} ` +   `[ {{qn_set.unique_code}} ]` );  // set the modal label
   function prev_qn_btn_click(){
     let qn_set_pk = "{{ qn_set.pk }}";
     let qn_num = "{{ prev_qn }}"
