@@ -208,7 +208,16 @@
     document.querySelector('.question-parent').classList.remove('blur-filter');
     document.querySelector('.remove-blur-btn').style.display = "none";
 
-    startPreparationTimer();
+    // If Question type is audio, after clicking "Start" Play audio and after playback ends, start prepTimer
+    // If Question type is not audio, start prep timer.
+    {% if qn.upload_type == "AUD" %}
+        // Start Audio Player Timer
+        startAudioPlayerTimer();
+        // Play audio
+        $("#qn_audio").get(0).play();
+    {% else %}
+        startPreparationTimer();
+    {% endif %}
   }
 
     {% if qn.can_submit %}
@@ -386,22 +395,24 @@
 
       }
 
-      // startPreparationTimer();
       {% if qn.upload_type == "AUD" %}
         $("#qn_audio").prop("volume", 1.0);
-        audioTimeLimit = Math.ceil(document.getElementById("qn_audio").duration);
-        audioTimePassed = 0;
-        audioTimeLeft = audioTimeLimit;
+
 
         function startAudioPlayerTimer(){
+          audioTimeLimit = Math.ceil(document.getElementById("qn_audio").duration);
+          audioTimePassed = 0;
+          audioTimeLeft = audioTimeLimit;
           if (!(typeof audioInterval === 'undefined')){
             clearInterval(audioInterval);
           }
 
           audioInterval = setInterval(() => {
             audioTimePassed = audioTimePassed + 1;
-            audioTimeLeft = audioTimeLeft - audioTimePassed;
+            audioTimeLeft = audioTimeLeft - 1;
             if (audioTimeLeft <= 0) {
+              // When Audio Play ends, start preparation timer
+              startPreparationTimer();
               clearInterval(audioInterval);
 
               // startWave();
@@ -416,9 +427,6 @@
 
           }, 1000);
         }
-
-        startAudioPlayerTimer();
-        $("#qn_audio").get(0).play();
 
         $("#volume_slider_input").on( "input", function() {
           // use ui.value to get the current value

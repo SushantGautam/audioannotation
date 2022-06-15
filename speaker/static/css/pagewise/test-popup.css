@@ -238,7 +238,7 @@ path{
 }
 
 .blur-filter{
-    filter: blur(5px);
+    filter: blur(20px);
 }
 
 .remove-blur-btn{
