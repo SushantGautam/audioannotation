@@ -6,7 +6,7 @@
 {% endblock %}
 
 
-<form action="{% url 'speaker:exam_popup' %}"
+<form action="{% url 'speaker:exam_popup' exam_id=examObj.id %}"
       enctype="multipart/form-data"
       method="post" id="audio_form">
   {% csrf_token %}
@@ -23,9 +23,8 @@
 
 <section class="top-section">
   <div class="question-count-buttons">
-    {% for qn in qn_set.questions.all %}
-
-      <button type="button" class="{% if qn_num == forloop.counter0 %} active-question {% else %} inactive-question{% endif %}">
+    {% for qn in questions %}
+      <button type="button" class="{% if qn_num == forloop.counter0 %} active-question {% else %} inactive-question{% endif %} {% if not qn.can_submit %}submitted-indicator{% endif %}">
               {{ forloop.counter }}
       </button>
 
@@ -38,7 +37,7 @@
       </div>
   {% endif %}
 </section>
-    
+
 <section class="mid-section">
     <div class="question-parent {% if not qn.upload_type == 'IMG' %}  no-attachment {% endif %} question-wrapper blur-filter">
       <h6 class=" question-title">
@@ -72,7 +71,7 @@
 
   {% if prev_qn != None %}
     <button title="Previous question"  onclick="prev_qn_btn_click();" class="btn btn-sm btn-dark prev_qn_btn">
-      <i class="fa-solid fa-angles-right" style="transform: rotate(180deg);"></i> {% trans 'Previous' %} 
+      <i class="fa-solid fa-angles-right" style="transform: rotate(180deg);"></i> {% trans 'Previous' %}
     </button>
   {% endif %}
 
@@ -145,7 +144,7 @@
     let qn_num = "{{ prev_qn }}"
     $.ajax({
       type: "GET",
-      url: `{% url 'speaker:exam_popup' %}?qn_set=${qn_set_pk}&qn_num=${qn_num}`,
+      url: `{% url 'speaker:exam_popup' exam_id=examObj.id %}?qn_set=${qn_set_pk}&qn_num=${qn_num}`,
       success: function (response){
         $("#test_modal_body").html(response);
       },
@@ -163,7 +162,7 @@
     let qn_num = "{{ next_qn }}"
     $.ajax({
       type: "GET",
-      url: `{% url 'speaker:exam_popup' %}?qn_set=${qn_set_pk}&qn_num=${qn_num}`,
+      url: `{% url 'speaker:exam_popup' exam_id=examObj.id %}?qn_set=${qn_set_pk}&qn_num=${qn_num}`,
       success: function (response){
         $("#test_modal_body").html(response);
       },
@@ -215,7 +214,7 @@
     {% if qn.can_submit %}
 
 
-    
+
 
       prepTimeLimit = parseInt("{{ qn.ready_time }}");
       prepTimePassed = 0;
@@ -258,8 +257,8 @@
         // var audio = new Audio('orgadmin/static/audio/beep-07a.mp3');
         // audio.play();
 
-        var x = document.getElementById("myAudio"); 
-        x.play(); 
+        var x = document.getElementById("myAudio");
+        x.play();
       }
 
 
@@ -435,7 +434,7 @@
         document.querySelector('.question-parent').classList.remove('blur-filter');
         document.querySelector('.remove-blur-btn').style.display = "none";
 
-      
+
     {% endif %}
   });
 

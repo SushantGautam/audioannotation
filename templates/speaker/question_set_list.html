@@ -16,7 +16,7 @@
 {% endblock %}
 {% block content %}
     <div class="bg-white">
-        <h1 class="page-heading">{% trans "Question Set Lists" %} </h1>
+        <h1 class="page-heading">{% trans "Question Set Lists" %}</h1>
         <div class="filter-buttons py-3">
             <a href="{% url 'speaker:question_set_list' exam_id=view.kwargs.exam_id %}?status=incomplete" class="btn btn-sm btn-dark">{% trans 'Unrecorded Question Sets' %}</a>
             <a href="{% url 'speaker:question_set_list' exam_id=view.kwargs.exam_id %}" class="btn btn-sm btn-dark">{% trans 'All Question Sets' %}</a>
@@ -96,7 +96,7 @@
             let qn_set_pk = $(this).attr('data-qn_set_pk');
             $.ajax({
                 type: "GET",
-                url: `{% url 'speaker:exam_popup' %}?qn_set=${qn_set_pk}`,
+                url: `{% url 'speaker:exam_popup' examObj.id %}?qn_set=${qn_set_pk}`,
                 success: function (response) {
                     $("#test_modal_body").html(response);
                 },

@@ -3,7 +3,7 @@ from multiprocessing import context
 
 from django.db.models import Q
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, FormView, TemplateView, UpdateView
@@ -128,6 +128,7 @@ class QuestionSetList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['examObj'] = get_object_or_404(ExamSet, id=self.kwargs.get('exam_id'))
         return context
 
 
@@ -153,6 +154,7 @@ class ExamPopupView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
+
         qn_set = self.request.GET['qn_set']
         qn_num = int(self.request.GET.get('qn_num', self.qn_num))
         qn_set = QuestionSet.objects.get(pk=qn_set)
@@ -160,14 +162,21 @@ class ExamPopupView(FormView):
         speaker = Speaker.objects.get(user=self.request.user)
 
         context['qn'] = questions[qn_num]
-        exam_set = context['qn'].questionset_set.first().examset_set.first()
+        exam_set = get_object_or_404(ExamSet, id=self.kwargs.get('exam_id'))
         # que_set = context['qn'].questionset_set.first()
         context['qn'].can_submit = not SpeakerSubmission.objects.filter(question=context['qn'],
                                                                         speaker=speaker,
                                                                         exam_set=exam_set).exists()
-
+        print('exam_set', exam_set)
+        for ques in questions:
+            print(ques, speaker, exam_set, SpeakerSubmission.objects.filter(question=ques, speaker=speaker, exam_set=exam_set).exists())
+            ques.can_submit = not SpeakerSubmission.objects.filter(question=ques,
+                                                               speaker=speaker,
+                                                               exam_set=exam_set).exists()
+        context['examObj'] = exam_set
         context['speaker'] = speaker
         context['qn_set'] = qn_set
+        context['questions'] = questions
         context['qn_num'] = qn_num
         context['qn_num1'] = qn_num + 1
         context['prev_qn'] = None if qn_num == 0 else qn_num - 1
