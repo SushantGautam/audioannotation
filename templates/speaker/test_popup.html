@@ -124,13 +124,13 @@
         <div class="prep_button_div">
             <i class="fa-solid fa-stopwatch prep-icon status-active"></i>
             <span id='prep_btn' class="prep-label status-active">{% trans 'Preparation' %}</span>
-            <span class="prep-timer status-active"></span>
+            <span class="prep-timer status-active">{% if not qn.can_submit %}{{ qn.ready_time }}{% endif %}</span>
         </div>
 
         <div class="rec_button_div">
             <i class="fa-solid fa-microphone-lines rec-icon status-inactive"></i>
             <span id='recording_btn' class="rec-label status-inactive ">{% trans 'Recording' %}</span>
-            <span class="rec-timer status-inactive"></span>
+            <span class="rec-timer status-inactive">{% if not qn.can_submit %}{{ qn.speaking_time }}{% endif %}</span>
         </div>
 
 
@@ -142,7 +142,7 @@
             <source src="{{ speakerSubObj.audio_file.url }}" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
-        <div {% if not qn.upload_type == "AUD" and not qn.can_submit %}style="visibility: hidden" {% endif %}>
+        <div {% if qn.can_submit %}style="visibility: hidden" {% endif %}>
             <input id="dur" type="range" name="rng" min="0" step="0.25" value="0" onchange="mSet()" style="width: 7rem">
             <button onClick="togglePlay(this);"
                     class="btn btn-sm btn-dark play-recorded-audio"
@@ -271,10 +271,6 @@
         }
 
         {% if qn.can_submit %}
-
-
-
-
             prepTimeLimit = parseInt("{{ qn.ready_time }}");
             prepTimePassed = 0;
             prepTimeLeft = prepTimeLimit;
@@ -493,7 +489,8 @@
             document.querySelector('.question-parent').classList.remove('blur-filter');
             document.querySelector('.remove-blur-btn').style.display = "none";
 
-
+            $(".prep-timer").html(`${toHHMMSS('{{ qn.ready_time }}')}`);
+            $(".rec-timer").html(`${toHHMMSS('{{ qn.speaking_time }}')}`);
         {% endif %}
     });
 
