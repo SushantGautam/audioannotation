@@ -280,10 +280,3 @@ path{
     justify-content: center;
 }
 
-.play-recorded-audio{
-    visibility: hidden;
-}
-
-.visible {
-    visibility: visible;
-}
