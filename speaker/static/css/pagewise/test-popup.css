@@ -283,3 +283,7 @@ path{
 .play-recorded-audio{
     visibility: hidden;
 }
+
+.visible {
+    visibility: visible;
+}

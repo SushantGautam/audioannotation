@@ -181,6 +181,10 @@ class ExamPopupView(FormView):
             ques.can_submit = not SpeakerSubmission.objects.filter(question=ques,
                                                                    speaker=speaker,
                                                                    exam_set=exam_set).exists()
+            ques.answer = SpeakerSubmission.objects.filter(question=ques,
+                                                                   speaker=speaker,
+                                                                   exam_set=exam_set).first()
+
         context['examObj'] = exam_set
         context['speaker'] = speaker
         context['qn_set'] = qn_set
