@@ -167,9 +167,8 @@ class ExamPopupView(FormView):
         context['qn'].can_submit = not SpeakerSubmission.objects.filter(question=context['qn'],
                                                                         speaker=speaker,
                                                                         exam_set=exam_set).exists()
-        print('exam_set', exam_set)
+
         for ques in questions:
-            print(ques, speaker, exam_set, SpeakerSubmission.objects.filter(question=ques, speaker=speaker, exam_set=exam_set).exists())
             ques.can_submit = not SpeakerSubmission.objects.filter(question=ques,
                                                                speaker=speaker,
                                                                exam_set=exam_set).exists()
