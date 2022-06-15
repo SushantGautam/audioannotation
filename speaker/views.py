@@ -155,14 +155,23 @@ class ExamPopupView(FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
 
-        qn_set = self.request.GET['qn_set']
-        qn_num = int(self.request.GET.get('qn_num', self.qn_num))
-        qn_set = QuestionSet.objects.get(pk=qn_set)
-        questions = qn_set.questions.all()
-        speaker = Speaker.objects.get(user=self.request.user)
-
-        context['qn'] = questions[qn_num]
         exam_set = get_object_or_404(ExamSet, id=self.kwargs.get('exam_id'))
+        qn_set = self.request.GET['qn_set']
+
+        qn_set = QuestionSet.objects.get(pk=qn_set)
+
+        questions = qn_set.questions.all()
+        speaker = self.request.user.speaker
+        unanswered_list = qn_set.questions.exclude(
+            pk__in=SpeakerSubmission.objects.filter(speaker=speaker, exam_set=exam_set).values_list('question__pk',
+                                                                                                    flat=True))
+
+        self.qn_num = list(questions.values_list('id', flat=True)).index(
+            unanswered_list.first().id) if unanswered_list.count() > 0 else 0
+
+        qn_num = int(self.request.GET.get('qn_num', self.qn_num))
+        context['qn'] = questions[qn_num]
+
         # que_set = context['qn'].questionset_set.first()
         context['qn'].can_submit = not SpeakerSubmission.objects.filter(question=context['qn'],
                                                                         speaker=speaker,
@@ -170,8 +179,8 @@ class ExamPopupView(FormView):
 
         for ques in questions:
             ques.can_submit = not SpeakerSubmission.objects.filter(question=ques,
-                                                               speaker=speaker,
-                                                               exam_set=exam_set).exists()
+                                                                   speaker=speaker,
+                                                                   exam_set=exam_set).exists()
         context['examObj'] = exam_set
         context['speaker'] = speaker
         context['qn_set'] = qn_set
