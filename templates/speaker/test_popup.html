@@ -136,9 +136,51 @@
 
     </div>
 
-    <button class="btn btn-sm btn-dark play-recorded-audio {% if not qn.can_submit %}visible{% endif %}" title="Play recorded audio"><i
-            class="fa-solid fa-play"></i> {% trans 'Play' %} </button>
+    <audio class="submitted-audio" preload="metadata" onloadedmetadata="mDur()" ontimeupdate="mPlay(this)">
+        <source src="{{ speakerSubObj.audio_file.url }}" type="audio/ogg">
+        <source src="{{ speakerSubObj.audio_file.url }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <div {% if not qn.upload_type == "AUD" %}style="visibility: hidden" {% endif %}>
+        <input id="dur" type="range" name="rng" min="0" step="0.25" value="0" onchange="mSet()" style="width: 7rem">
+        <button onClick="togglePlay(this);"
+                class="btn btn-sm btn-dark play-recorded-audio {% if not qn.can_submit %}visible{% endif %}"
+                title="Play recorded audio"><i
+                class="fa-solid fa-play"></i> {% trans 'Play' %} </button>
+    </div>
 
+    <script>
+        var subAudio = document.querySelector(".submitted-audio");
+        var dur = document.getElementById('dur')
+
+        function mDur() {
+            dur.max = Math.floor(subAudio.duration)
+        }
+
+        function mPlay() {
+            dur.value = subAudio.currentTime
+        }
+
+        function mSet() {
+            subAudio.currentTime = dur.value
+        }
+
+        var isPlaying = false;
+
+        function togglePlay(elem) {
+            isPlaying ? subAudio.pause() : subAudio.play();
+        }
+
+        subAudio.onplaying = function (elem) {
+            document.querySelector('.play-recorded-audio').innerHTML = `<i class="fa-solid fa-pause"></i> {% trans 'Pause' %}`
+            isPlaying = true;
+        }
+        subAudio.onpause = function () {
+            document.querySelector('.play-recorded-audio').innerHTML = `<i class="fa-solid fa-play"></i> {% trans 'Play' %}`
+            isPlaying = false;
+        }
+
+    </script>
 </section>
 
 <!--Recorder-->
