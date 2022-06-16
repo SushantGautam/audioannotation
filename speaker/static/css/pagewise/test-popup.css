@@ -244,7 +244,7 @@ path{
 }
 
 .blur-filter{
-    filter: blur(20px);
+    filter: blur(10px);
 }
 
 .remove-blur-btn{
@@ -281,3 +281,13 @@ path{
     justify-content: center;
 }
 
+
+.audio-playback-controls{
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.audio-playback{
+    height: 0.4rem;
+    width:7rem
+}

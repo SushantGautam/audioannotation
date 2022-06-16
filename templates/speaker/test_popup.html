@@ -41,7 +41,7 @@
 </section>
 
 <section class="mid-section">
-    <div class="question-parent {% if not qn.upload_type == 'IMG' %}  no-attachment {% endif %} question-wrapper blur-filter">
+    <div class="question-parent {% if not qn.upload_type == 'IMG' %}  no-attachment {% endif %} question-wrapper">
         <h6 class=" question-title">
             <span class="">{{ qn_num1 }}. </span><span> {{ qn.question_title }}</span>
         </h6>
@@ -50,7 +50,7 @@
                 <source src="{{ qn.upload_file.url }}" type="audio/mpeg">
             </audio>
 
-            <div class="audio-progress-wrapper">
+            <div class="audio-progress-wrapper blur-filter">
                 <div class="progress" style="width: 50%; margin: auto;">
                     <div class="progress-bar bg-dark audio-progress" role="progressbar" aria-valuenow="0"
                          aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
@@ -60,9 +60,9 @@
             </div>
         {% endif %}
         {% if qn.upload_type == "IMG" %}
-            <img class="image-question" src="{{ qn.upload_file.url }}" alt="question image">
+            <img class="image-question blur-filter" src="{{ qn.upload_file.url }}" alt="question image">
         {% endif %}
-        <p class="question-description {% if qn.upload_type == 'NON' %} no-attachment {% endif %} ">{{ qn.description }}</p>
+        <p class="question-description {% if qn.upload_type == 'NON' %} no-attachment {% endif %} blur-filter ">{{ qn.description }}</p>
     </div>
 
     <audio id="myAudio">
@@ -114,12 +114,6 @@
     <!-- <h1>In <a href="https://codepen.io/zapplebee/full/gbNbZE/">Full Page view</a>, please allow the use of your microphone</h1> -->
 
     <div class="progress-buttons">
-        <!-- {#      <div class="col-12">#} -->
-        <!-- <div id="controls">
-          <button type="button" id="recordButton">Record</button>
-          <button type="button" id="pauseButton" disabled>Pause</button>
-          <button type="button" id="stopButton" disabled>Stop</button>
-        </div> -->
 
         <div class="prep_button_div">
             <i class="fa-solid fa-stopwatch prep-icon status-active"></i>
@@ -133,7 +127,6 @@
             <span class="rec-timer status-inactive">{% if not qn.can_submit %}{{ qn.speaking_time }}{% endif %}</span>
         </div>
 
-
     </div>
 
     <div {% if not speakerSubObj %}style="visibility: hidden"{% endif %}>
@@ -142,14 +135,17 @@
             <source src="{{ speakerSubObj.audio_file.url }}" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
-        <div {% if qn.can_submit %}style="visibility: hidden" {% endif %}>
-            <input id="dur" type="range" name="rng" min="0" step="0.25" value="0" onchange="mSet()" style="width: 7rem">
+
+        <div class="audio-playback-controls" {% if qn.can_submit %}style="visibility: hidden" {% endif %}>
+            <input class="audio-playback" id="dur" type="range" name="rng" min="0" step="0.25" value="0" onchange="mSet()" style="width: 7rem">
             <button onClick="togglePlay(this);"
                     class="btn btn-sm btn-dark play-recorded-audio"
                     title="Play recorded audio"><i
                     class="fa-solid fa-play"></i> {% trans 'Play' %} </button>
         </div>
+
     </div>
+
     <script>
         var subAudio = document.querySelector(".submitted-audio");
         var dur = document.getElementById('dur')
@@ -182,6 +178,7 @@
         }
 
     </script>
+
 </section>
 
 <!--Recorder-->
@@ -255,7 +252,15 @@
 
         // Remove background blur from the main question section on clicking the Start button
         function removeBlur() {
-            document.querySelector('.question-parent').classList.remove('blur-filter');
+            if(document.querySelector('.image-question') != null)
+                document.querySelector('.image-question').classList.remove('blur-filter');
+            
+            document.querySelector('.question-description').classList.remove('blur-filter');
+
+            if(document.querySelector('.audio-progress-wrapper') != null)
+                document.querySelector('.audio-progress-wrapper').classList.remove('blur-filter');
+
+
             document.querySelector('.remove-blur-btn').style.display = "none";
 
             // If Question type is audio, after clicking "Start" Play audio and after playback ends, start prepTimer
@@ -289,6 +294,7 @@
             // prepTimeout = setTimeout(startWave, 5000);
 
             function startPreparationTimer() {
+
                 if (!(typeof prepInterval === 'undefined')) {
                     clearInterval(prepInterval);
                 }
@@ -321,7 +327,7 @@
 
             function startWave() {
                 playBeepSound()
-                $('.question-wrapper').removeClass('blur-filter');
+                // $('.question-wrapper').removeClass('blur-filter');
                 $('.prep-label').removeClass('status-active');
                 $('.prep-label').addClass('status-inactive');
                 $('.prep-icon').removeClass('status-active');
@@ -487,7 +493,14 @@
         {% else %}
 
             // Remove blur-filter effect and Start button from the question if its already submitted
-            document.querySelector('.question-parent').classList.remove('blur-filter');
+            if(document.querySelector('.image-question') != null)
+                document.querySelector('.image-question').classList.remove('blur-filter');
+            
+            document.querySelector('.question-description').classList.remove('blur-filter');
+
+            if(document.querySelector('.audio-progress-wrapper') != null)
+                document.querySelector('.audio-progress-wrapper').classList.remove('blur-filter');
+                
             document.querySelector('.remove-blur-btn').style.display = "none";
 
             $(".prep-timer").html(`${toHHMMSS('{{ qn.ready_time }}')}`);

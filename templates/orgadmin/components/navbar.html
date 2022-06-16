@@ -2,27 +2,28 @@
 {% load i18n %}
 
 <div class="mytabs">
-  <input type="radio" id="home-tab" name="mytabs" checked>
+  <input type="radio" id="home-tab" name="mytabs"
+  {% if request.path == '/' or 'profile' in request.path %}checked{% endif %}>
   <label for="home-tab">Home</label>
   <div class="tab animate__animated animate__fadeInUp" id="home-tab-div">
-    <a href="{% url 'homepage' %}" class="tab-item active">Dashboard</a>
-    <a href="{% url 'profile' %}" class="tab-item">Profile</a>
-    <a href="{% url 'user_list' %}" class="tab-item">Users List</a>
+    <a href="{% url 'homepage' %}" class="tab-item {% if request.path == '/' %}active{% endif %}">Dashboard</a>
+    <a href="{% url 'profile' %}" class="tab-item {% if 'profile' in request.path %}active{% endif %}">Profile</a>
+    <!-- <a href="{% url 'user_list' %}" class="tab-item">Users List</a> -->
   </div>
 
-  <input type="radio" id="tasks-tab" name="mytabs">
+  <input type="radio" id="tasks-tab" name="mytabs" {% if 'tasks' in request.path %}checked{% endif %}>
   <label for="tasks-tab">Tasks</label>
   <div class="tab animate__animated animate__fadeInUp" id="tasks-tab-div">
-    <a href="{% url 'worker_list' %}" class="tab-item">Workers List</a>
+    <a href="{% url 'worker_list' %}" class="tab-item {% if 'tasks/workers' in request.path %}active{% endif %}">Workers List</a>
     <a href="" class="tab-item">Task Allocation</a>
     <a href="{% url 'worker_contract' %}" class="tab-item">Contracts</a>
   </div>
 
-  <input type="radio" id="records-tab" name="mytabs">
+  <input type="radio" id="records-tab" name="mytabs" {% if 'records' in request.path %}checked{% endif %}>
   <label for="records-tab">Records</label>
   <div class="tab animate__animated animate__fadeInUp" id="records-tab-div">
-    <a href="{% url 'speaker_list' %}" class="tab-item">Speakers List</a>
-    <a href="" class="tab-item">Recording Allocation</a>
+    <a href="{% url 'speaker_list' %}" class="tab-item {% if 'records/speakers' in request.path %}active{% endif %}">Speakers List</a>
+    <!-- <a href="" class="tab-item">Recording Allocation</a> -->
     <a href="{% url 'speaker_contract' %}" class="tab-item">Contracts</a>
   </div>
 
