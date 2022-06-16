@@ -154,7 +154,8 @@ LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "account_login"
 
 SITE_ID = 1
-
+SOCIALACCOUNT_LOGIN_ON_GET = True
+ACCOUNT_LOGOUT_ON_GET = True
 SOCIALACCOUNT_STORE_TOKENS = True
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 # SOCIALACCOUNT_PROVIDERS = {
@@ -163,6 +164,13 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 #         # 'AUTH_PARAMS': {'access_type': 'online'}
 #     }
 # }
+
+# Celery settings
+CELERY_BROKER_URL = env('REDIS_URL')
+result_backend = 'django-db'
+accept_content = ['application/json']
+result_serializer = 'json'
+timezone = 'UTC'
 
 # Google analytics
 GA_TRACKING_ID = env('GA_TRACKING_ID')
