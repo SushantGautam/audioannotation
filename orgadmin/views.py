@@ -8,7 +8,7 @@ from django.views.generic import TemplateView, ListView, FormView
 
 from orgadmin.models import User, ContractSign
 from speaker.models import Speaker
-from worker.models import Worker
+from worker.models import Worker, WorkerTask
 
 
 def homepage(request):
@@ -138,7 +138,7 @@ class WorkerVerification(FormView):
                 vr.approved_at = datetime.utcnow()
                 vr.save()
             worker.save()
-            return JsonResponse({'message': 'success', 'status': worker.is_verified,}, status=200)
+            return JsonResponse({'message': 'success', 'status': worker.is_verified, }, status=200)
         return JsonResponse({'message': 'Bad Request.'}, status=400)
 
 
@@ -162,4 +162,29 @@ class WorkerContractSignVerify(FormView):
 
             return JsonResponse(
                 {'message': 'success', 'status': contract.approved, 'approved_date': contract.approved_at}, status=200)
+        return JsonResponse({'message': 'Bad Request.'}, status=400)
+
+
+class WorkerTaskList(ListView):
+    model = WorkerTask
+    template_name = 'orgadmin/worker/task_list.html'
+
+    def get_queryset(self):
+        return super().get_queryset().filter(worker__organization_code=self.request.user.orgadmin.organization_code, )
+
+
+class WorkerTaskVerify(FormView):
+    def post(self, *args, **kwargs):
+        if self.request.is_ajax:
+            print('here')
+            task = get_object_or_404(WorkerTask, pk=kwargs.get('task_id'))
+            task.approved = True if self.request.POST.get('is_approved') == str(1) else False
+            task.approved_at = datetime.utcnow()
+            if not task.approved:
+                task.examset_submission.status = task.examset_submission.prev_status()[0]
+                task.examset_submission.save()
+            task.save()
+
+            return JsonResponse(
+                {'message': 'success', 'status': task.approved, 'approved_date': task.approved_at}, status=200)
         return JsonResponse({'message': 'Bad Request.'}, status=400)

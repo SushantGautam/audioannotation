@@ -81,7 +81,7 @@ class WorkerTask(models.Model):
         return '{} - {}'.format(self.examset_submission, self.task_type)
 
     def get_approved_display(self):
-        if not self.approved:
+        if self.approved == None:
             return "Pending"
         return "Approved" if self.approved else "Rejected"
 

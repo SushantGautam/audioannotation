@@ -15,7 +15,7 @@
   <label for="tasks-tab">Tasks</label>
   <div class="tab animate__animated animate__fadeInUp" id="tasks-tab-div">
     <a href="{% url 'worker_list' %}" class="tab-item {% if 'tasks/workers' in request.path %}active{% endif %}">Workers List</a>
-    <a href="" class="tab-item">Task Allocation</a>
+    <a href="{% url 'worker_task_list' %}" class="tab-item">Task Allocation</a>
     <a href="{% url 'worker_contract' %}" class="tab-item">Contracts</a>
   </div>
 

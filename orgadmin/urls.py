@@ -27,4 +27,8 @@ urlpatterns += [
     path('tasks/contracts/', views.WorkerContractSignList.as_view(), name='worker_contract'),
     path('tasks/contracts/<int:contract_id>/verify/', views.WorkerContractSignVerify.as_view(),
          name='worker_contract_verify'),
+
+    path('tasks/allocation/', views.WorkerTaskList.as_view(), name='worker_task_list'),
+    path('tasks/<int:task_id>/verify/', views.WorkerTaskVerify.as_view(),
+         name='task_verify'),
 ]
