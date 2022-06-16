@@ -1,0 +1,96 @@
+{% extends "orgadmin/base.html" %}
+{% load i18n %}
+
+
+{% block content %}
+    <main class="contract-list">
+        <h1 class="title">{% trans 'Contract List' %}</h1>
+
+        <section class="table-section">
+            <table class="table py-3" cellspacing="0" id="">
+
+                <thead class="">
+                <tr class="">
+                    <th>{% trans "S. No." %}</th>
+                    <th>{% trans "Username" %}</th>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Contract File" %}</th>
+                    <th>{% trans "Approved Status" %}</th>
+                    <th>{% trans "Approval Date" %}</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for contract in object_list %}
+                    <tr>
+                        <td> {{ forloop.counter }}</td>
+                        <td> {{ contract.user.username }}</td>
+                        <td> {{ contract.user.get_full_name }}</td>
+                        <td>
+                            <a href="{{ contract.upload_file.url }}" target="_blank">
+                                {{ contract.filename }}
+                            </a>
+                        </td>
+                        <td>
+                            <span class="active-status d-flex gap-1">
+                                {% if not contract.approved == None %}
+                                    {{ contract.approved|yesno:'Approved, Rejected' }}
+                                {% else %}
+                                    <form name="contract-verify-form" action="{% url 'speaker_contract_verify' contract_id=contract.id %}"
+                                          method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" value="1" name="is_approved">
+                                        <button class="btn btn-dark btn-sm block-btn">{% trans 'Approve' %}</button>
+                                    </form>
+                                    <form name="contract-verify-form" action="{% url 'speaker_contract_verify' contract_id=contract.id %}"
+                                          method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" value="0" name="is_approved">
+                                        <button class="btn btn-dark btn-sm block-btn">{% trans 'Reject' %}</button>
+                                    </form>
+                                {% endif %}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="approved-date">
+                                {% if not contract.approved == None %}
+                                    {{ contract.approved_at|date:'Y-m-d h:i a' }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </span>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </section>
+
+    </main>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('.table').DataTable();
+
+        $('form[name=contract-verify-form]').on('submit', function (e) {
+            e.preventDefault();
+            var $form = $(this);
+            var $tr = $form.closest('tr');
+            $.ajax({
+                type: $(this).attr('method'),
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function (response) {
+                    var isApproved = response.status;
+                    var date = new Date(response.approved_date).toLocaleString();
+                    var message = isApproved ? "Approved" : "Rejected";
+                    $tr.find('.active-status').text(message);
+                    $tr.find('.approved-date').html(date);
+                }
+            });
+        });
+    </script>
+{% endblock scripts %}

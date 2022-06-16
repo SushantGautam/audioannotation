@@ -26,6 +26,17 @@ class Worker(BaseUserModel):
     def has_contract_approved(self):
         return ContractSign.objects.filter(user=self.user, approved=True).exists()
 
+    def get_verification_status(self):
+        if VerificationRequest.objects.filter(user=self.user).exists():
+            latest = self.user.verificationrequest_set.latest('id')
+            print(latest)
+            if latest.approved == None:
+                return "Pending"
+            elif latest.approved:
+                return "Verified"
+            else:
+                return "Rejected"
+        return "Not Submitted"
 
 class EvaluationTitle(models.Model):
     EVALUATION_TYPE_CHOICES = (
