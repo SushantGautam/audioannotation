@@ -104,7 +104,7 @@ class SpeakerContractSignVerify(FormView):
     def post(self, *args, **kwargs):
         if self.request.is_ajax:
             contract = get_object_or_404(ContractSign, pk=kwargs.get('contract_id'))
-            contract.approved = True if self.request.POST.get('is_approved') == 1 else False
+            contract.approved = True if self.request.POST.get('is_approved') == str(1) else False
             contract.approved_at = datetime.utcnow()
             contract.save()
 
@@ -146,7 +146,7 @@ class WorkerContractSignVerify(FormView):
     def post(self, *args, **kwargs):
         if self.request.is_ajax:
             contract = get_object_or_404(ContractSign, pk=kwargs.get('contract_id'))
-            contract.approved = True if self.request.POST.get('is_approved') == 1 else False
+            contract.approved = True if self.request.POST.get('is_approved') == str(1) else False
             contract.approved_at = datetime.utcnow()
             contract.save()
 
