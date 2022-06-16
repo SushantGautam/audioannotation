@@ -14,6 +14,8 @@
                     <th>{% trans "S. No." %}</th>
                     <th>{% trans "Worker" %}</th>
                     <th>{% trans "ExamSet" %}</th>
+                    <th>{% trans "Type" %}</th>
+                    <th>{% trans "Created On" %}</th>
                     <th>{% trans "Status" %}</th>
                     <th>{% trans "Reviewed Date" %}</th>
                 </tr>
@@ -25,6 +27,8 @@
                         <td> {{ forloop.counter }}</td>
                         <td> {{ task.worker.user.username }}</td>
                         <td> {{ task.examset_submission.exam_set }}</td>
+                        <td> {{ task.get_task_type_display }}</td>
+                        <td> {{ task.created_at|date:'Y-m-d h:i a' }}</td>
 
                         <td>
                             <span class="active-status d-flex gap-1">
