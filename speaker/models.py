@@ -57,11 +57,10 @@ class Speaker(BaseUserModel):
     def get_verification_status(self):
         if VerificationRequest.objects.filter(user=self.user).exists():
             latest = self.user.verificationrequest_set.latest('id')
-            print(latest)
             if latest.approved == None:
                 return "Pending"
             elif latest.approved:
-                return "Approved"
+                return "Verified"
             else:
                 return "Rejected"
         return "Not Submitted"

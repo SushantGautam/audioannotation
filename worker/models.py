@@ -33,7 +33,7 @@ class Worker(BaseUserModel):
             if latest.approved == None:
                 return "Pending"
             elif latest.approved:
-                return "Approved"
+                return "Verified"
             else:
                 return "Rejected"
         return "Not Submitted"

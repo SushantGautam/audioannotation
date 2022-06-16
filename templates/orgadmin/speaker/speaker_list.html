@@ -17,7 +17,7 @@
                     <th>{% trans "Email" %}</th>
                     <th>{% trans "Account Status" %}</th>
                     <th>{% trans "Verification Status" %}</th>
-                    <th>{% trans "Action" %}</th>
+{#                    <th>{% trans "Action" %}</th>#}
 
                 </tr>
                 </thead>
@@ -54,6 +54,7 @@
                                 {% endif %}
                             </span>
                         </td>
+                        {% comment %}
                         <td>
                             {% if speaker.user.is_active %}
                                 <form name="block-form" action="{% url 'user_block' user_id=speaker.user.id %}" method="post">
@@ -67,6 +68,7 @@
                                 </form>
                             {% endif %}
                         </td>
+                        {% endcomment %}
                     </tr>
                 {% endfor %}
                 </tbody>
