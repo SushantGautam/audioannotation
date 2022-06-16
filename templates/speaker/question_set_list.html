@@ -119,13 +119,13 @@
                         return false;
                     });
                 } else if (result.state == 'denied') {
-                    alert('{trans "Please allow microphone access to continue" %}');
+                    alert('{% trans "Please allow microphone access to continue" %}');
                     return false;
                 }
                 result.onchange = function () {
                     console.log('Permission state changed to ' + result.state);
                     if(result.state == 'granted'){
-                        alert('{trans "Microphone permission granted you can now start exam" %}');
+                        alert('{% trans "Microphone permission granted you can now start exam" %}');
                         location.reload();
                     }
                 };

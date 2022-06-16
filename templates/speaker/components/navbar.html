@@ -4,7 +4,7 @@
 <div class="mytabs">
     <input type="radio" id="home-tab" name="mytabs" 
         {% if request.path == '/speaker/' or 'profile' in request.path or 'contract' in request.path %}checked{% endif %}>
-    <label for="home-tab">Home</label>
+    <label for="home-tab">{% trans "Home" %}</label>
     <div class="tab animate__animated animate__fadeInUp" id="home-tab-div">
         <a href="{% url 'speaker:homepage' %}" class="tab-item {% if request.path == '/speaker/' %}active{% endif %}">{% trans 'Dashboard' %}</a>
         <a href="{% url 'speaker:profile' %}" class="tab-item {% if 'profile' in request.path %}active{% endif %}">{% trans 'Profile' %}</a>
