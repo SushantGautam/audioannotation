@@ -92,7 +92,7 @@ class SpeakerVerification(FormView):
                 vr.save()
             speaker.save()
 
-            return JsonResponse({'message': 'success'}, status=200)
+            return JsonResponse({'message': 'success', 'status': speaker.is_verified}, status=200)
         return JsonResponse({'message': 'Bad Request.'}, status=400)
 
 
@@ -138,7 +138,7 @@ class WorkerVerification(FormView):
                 vr.approved_at = datetime.utcnow()
                 vr.save()
             worker.save()
-            return JsonResponse({'message': 'success'}, status=200)
+            return JsonResponse({'message': 'success', 'status': worker.is_verified,}, status=200)
         return JsonResponse({'message': 'Bad Request.'}, status=400)
 
 
