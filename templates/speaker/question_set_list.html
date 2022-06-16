@@ -42,8 +42,7 @@
                         <td>{{ q_set.complete|yesno:'Complete,Incomplete' }}</td>
                         <td>{{ q_set.record_time }}</td>
                         <td>
-                            <button type="button" data-bs-toggle="modal" data-bs-target="#test_modal"
-                                    data-qn_set_pk="{{ q_set.pk }}"
+                            <button type="button" data-qn_set_pk="{{ q_set.pk }}"                                    
                                     class="btn btn-warning start_test_button">{% trans 'Start' %}</button>
                         </td>
                     </tr>
@@ -92,20 +91,44 @@
     <script src="{% static 'js/recorder/recorder.js' %}"></script>
     <script src="{% static 'js/recorder/app.js' %}"></script>
     <script>
-        $(".start_test_button").click(function () {
+        $(".start_test_button").click(function (e) {
             let qn_set_pk = $(this).attr('data-qn_set_pk');
-            $.ajax({
-                type: "GET",
-                url: `{% url 'speaker:exam_popup' examObj.id %}?qn_set=${qn_set_pk}`,
-                success: function (response) {
-                    $("#test_modal_body").html(response);
-                },
-                error: function () {
-                    console.log('Error');
-                },
-                complete: function () {
-                    $(".loading-icon-ajax").fadeOut("fast");
+            navigator.permissions.query({name: 'microphone'}).then(function (result) {
+                if (result.state == 'granted') {
+                    $("#test_modal").modal('show');
+                    $.ajax({
+                        type: "GET",
+                        url: `{% url 'speaker:exam_popup' examObj.id %}?qn_set=${qn_set_pk}`,
+                        success: function (response) {
+                            $("#test_modal_body").html(response);
+                        },
+                        error: function () {
+                            console.log('Error');
+                        },
+                        complete: function () {
+                            $(".loading-icon-ajax").fadeOut("fast");
+                        }
+                    });
+                } else if (result.state == 'prompt') {
+                    // promt the user to allow microphone access
+                    navigator.mediaDevices.getUserMedia({audio: true}).then(function (stream) {
+                        console.log(stream);
+                        let mic_status = true;
+                    }).catch(function (err) {
+                        console.log(err);
+                        return false;
+                    });
+                } else if (result.state == 'denied') {
+                    alert('{trans "Please allow microphone access to continue" %}');
+                    return false;
                 }
+                result.onchange = function () {
+                    console.log('Permission state changed to ' + result.state);
+                    if(result.state == 'granted'){
+                        alert('{trans "Microphone permission granted you can now start exam" %}');
+                        location.reload();
+                    }
+                };
             });
         });
     </script>
