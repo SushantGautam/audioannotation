@@ -20,7 +20,7 @@ def homepage(request):
         return redirect('worker:homepage')
     else:
         return JsonResponse({'error': 'User not assigned to any role'})
-        
+
 
 # For development phase only
 def gitpull(request):
@@ -31,11 +31,13 @@ def gitpull(request):
     ret = subprocess.run(command, stdout=subprocess.PIPE, shell=True)
     return HttpResponse(ret.stdout.decode())
 
+
 def migratedb(request):
     import subprocess
     command = ". venv/bin/activate; python manage.py makemigrations; python manage.py migrate;"
     ret = subprocess.run(command, stdout=subprocess.PIPE, shell=True)
     return HttpResponse(ret.stdout.decode())
+
 
 def deployserver(request):
     import subprocess
@@ -43,8 +45,10 @@ def deployserver(request):
     ret = subprocess.run(command, stdout=subprocess.PIPE, shell=True)
     return HttpResponse(ret.stdout.decode())
 
+
 class ProfileView(TemplateView):
     template_name = "orgadmin/profile.html"
+
 
 class UserListView(ListView):
     template_name = "orgadmin/userList.html"
@@ -69,6 +73,9 @@ class SpeakerListView(ListView):
     template_name = "orgadmin/speaker/speaker_list.html"
     model = Speaker
 
+    def get_queryset(self):
+        return super().get_queryset().filter(organization_code=self.request.user.orgadmin.organization_code)
+
 
 class SpeakerVerification(FormView):
     def post(self, *args, **kwargs):
@@ -84,6 +91,9 @@ class SpeakerVerification(FormView):
 class WorkerListView(ListView):
     template_name = "orgadmin/worker/worker_list.html"
     model = Worker
+
+    def get_queryset(self):
+        return super().get_queryset().filter(organization_code=self.request.user.orgadmin.organization_code)
 
 
 class WorkerVerification(FormView):
