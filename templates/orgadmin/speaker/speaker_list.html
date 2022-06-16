@@ -35,17 +35,26 @@
                             </span>
                         </td>
                         <td>
-                            <span class="verification-status">
-                                {{ speaker.is_verified|yesno:'Verified, Unverified' }}
+                            <span class="verification-status d-flex gap-2">
+                                {% if speaker.is_verified %}
+                                    {% trans 'Verified' %}
+                                {% elif speaker.get_verification_status == "Pending" %}
+                                    <form name="verify-form" action="{% url 'speaker_verify' user_id=speaker.id %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" value="1" name="is_approved">
+                                        <button class="btn btn-dark btn-sm verify-btn">{% trans 'Verify' %}</button>
+                                    </form>
+                                    <form name="verify-form" action="{% url 'speaker_verify' user_id=speaker.id %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" value="0" name="is_approved">
+                                        <button class="btn btn-dark btn-sm verify-btn">{% trans 'Reject' %}</button>
+                                    </form>
+                                {% else %}
+                                    {{ speaker.get_verification_status }}
+                                {% endif %}
                             </span>
                         </td>
                         <td>
-                            {% if not speaker.is_verified %}
-                                <form name="verify-form" action="{% url 'speaker_verify' user_id=speaker.id %}" method="post">
-                                    {% csrf_token %}
-                                    <button class="btn btn-dark btn-sm verify-btn">{% trans 'Verify' %}</button>
-                                </form>
-                            {% endif %}
                             {% if speaker.user.is_active %}
                                 <form name="block-form" action="{% url 'user_block' user_id=speaker.user.id %}" method="post">
                                     {% csrf_token %}

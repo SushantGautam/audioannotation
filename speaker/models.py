@@ -54,6 +54,18 @@ class Speaker(BaseUserModel):
     def level_mapping(self):
         return 1 if self.level == 'B' else 2
 
+    def get_verification_status(self):
+        if VerificationRequest.objects.filter(user=self.user).exists():
+            latest = self.user.verificationrequest_set.latest('id')
+            print(latest)
+            if latest.approved == None:
+                return "Pending"
+            elif latest.approved:
+                return "Approved"
+            else:
+                return "Rejected"
+        return "Not Submitted"
+
 def audio_filename(instance, filename):
     return 'speaker/audio/{0}/{1}'.format(instance.speaker, str(instance.id) + filename)
 

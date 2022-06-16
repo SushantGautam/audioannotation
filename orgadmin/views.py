@@ -83,7 +83,13 @@ class SpeakerVerification(FormView):
     def post(self, *args, **kwargs):
         if self.request.is_ajax:
             speaker = get_object_or_404(Speaker, pk=kwargs.get('user_id'))
-            speaker.is_verified = True
+            speaker.is_verified = True if self.request.POST.get('is_approved') == str(1) else False
+
+            if speaker.user.verificationrequest_set.filter(approved=None).exists():
+                vr = speaker.user.verificationrequest_set.filter(approved=None).last()
+                vr.approved = True if self.request.POST.get('is_approved') == str(1) else False
+                vr.approved_at = datetime.utcnow()
+                vr.save()
             speaker.save()
 
             return JsonResponse({'message': 'success'}, status=200)
@@ -125,9 +131,13 @@ class WorkerVerification(FormView):
     def post(self, *args, **kwargs):
         if self.request.is_ajax:
             worker = get_object_or_404(Worker, pk=kwargs.get('user_id'))
-            worker.is_verified = True
+            worker.is_verified = True if self.request.POST.get('is_approved') == str(1) else False
+            if worker.user.verificationrequest_set.filter(approved=None).exists():
+                vr = worker.user.verificationrequest_set.filter(approved=None).last()
+                vr.approved = True if self.request.POST.get('is_approved') == str(1) else False
+                vr.approved_at = datetime.utcnow()
+                vr.save()
             worker.save()
-
             return JsonResponse({'message': 'success'}, status=200)
         return JsonResponse({'message': 'Bad Request.'}, status=400)
 
