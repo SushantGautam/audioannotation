@@ -41,7 +41,7 @@
                         </td>
                         <td>
                             {% if not speaker.is_verified %}
-                                <form name="verify-form" action="{% url 'user_verify' user_id=speaker.id %}" method="post">
+                                <form name="verify-form" action="{% url 'speaker_verify' user_id=speaker.id %}" method="post">
                                     {% csrf_token %}
                                     <button class="btn btn-dark btn-sm verify-btn">{% trans 'Verify' %}</button>
                                 </form>
@@ -75,7 +75,7 @@
 
         $('form[name=verify-form]').on('submit', function (e) {
             e.preventDefault();
-            var $form = $(this);
+            var $form = $(this)1;
             $.ajax({
                 type: $(this).attr('method'),
                 url: $(this).attr('action'),

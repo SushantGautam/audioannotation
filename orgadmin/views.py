@@ -6,6 +6,7 @@ from django.views.generic import TemplateView, ListView, FormView
 
 from orgadmin.models import User
 from speaker.models import Speaker
+from worker.models import Worker
 
 
 def homepage(request):
@@ -49,21 +50,6 @@ class UserListView(ListView):
     template_name = "orgadmin/userList.html"
     model = User
 
-class SpeakerListView(ListView):
-    template_name = "orgadmin/speaker/speaker_list.html"
-    model = Speaker
-
-
-class UserVerification(FormView):
-    def post(self, *args, **kwargs):
-        if self.request.is_ajax:
-            speaker = get_object_or_404(Speaker, pk=kwargs.get('user_id'))
-            speaker.is_verified = True
-            speaker.save()
-
-            return JsonResponse({'message': 'success'}, status=200)
-        return JsonResponse({'message': 'Bad Request.'}, status=400)
-
 
 class UserChangeBlock(FormView):
     def post(self, *args, **kwargs):
@@ -74,6 +60,38 @@ class UserChangeBlock(FormView):
             else:
                 user.is_active = True
             user.save()
+
+            return JsonResponse({'message': 'success'}, status=200)
+        return JsonResponse({'message': 'Bad Request.'}, status=400)
+
+
+class SpeakerListView(ListView):
+    template_name = "orgadmin/speaker/speaker_list.html"
+    model = Speaker
+
+
+class SpeakerVerification(FormView):
+    def post(self, *args, **kwargs):
+        if self.request.is_ajax:
+            speaker = get_object_or_404(Speaker, pk=kwargs.get('user_id'))
+            speaker.is_verified = True
+            speaker.save()
+
+            return JsonResponse({'message': 'success'}, status=200)
+        return JsonResponse({'message': 'Bad Request.'}, status=400)
+
+
+class WorkerListView(ListView):
+    template_name = "orgadmin/worker/worker_list.html"
+    model = Worker
+
+
+class WorkerVerification(FormView):
+    def post(self, *args, **kwargs):
+        if self.request.is_ajax:
+            worker = get_object_or_404(Worker, pk=kwargs.get('user_id'))
+            worker.is_verified = True
+            worker.save()
 
             return JsonResponse({'message': 'success'}, status=200)
         return JsonResponse({'message': 'Bad Request.'}, status=400)
