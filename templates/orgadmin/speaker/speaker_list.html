@@ -1,0 +1,118 @@
+{% extends "orgadmin/base.html" %}
+{% load i18n %}
+
+
+{% block content %}
+    <main class="users-list">
+        <h1 class="title">{% trans 'Speaker List' %}</h1>
+
+        <section class="table-section">
+            <table class="table py-3" cellspacing="0" id="">
+
+                <thead class="">
+                <tr class="">
+                    <th>{% trans "S. No." %}</th>
+                    <th>{% trans "Username" %}</th>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Email" %}</th>
+                    <th>{% trans "Account Status" %}</th>
+                    <th>{% trans "Verification Status" %}</th>
+                    <th>{% trans "Action" %}</th>
+
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for speaker in object_list %}
+                    <tr>
+                        <td> {{ forloop.counter }}</td>
+                        <td> {{ speaker.user.username }}</td>
+                        <td> {{ speaker.user.get_full_name }}</td>
+                        <td> {{ speaker.user.email }}</td>
+                        <td>
+                            <span class="active-status">
+                                {{ speaker.user.is_active|yesno:'Active, Inactive' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="verification-status">
+                                {{ speaker.is_verified|yesno:'Verified, Unverified' }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if not speaker.is_verified %}
+                                <form name="verify-form" action="{% url 'user_verify' user_id=speaker.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="btn btn-dark btn-sm verify-btn">{% trans 'Verify' %}</button>
+                                </form>
+                            {% endif %}
+                            {% if speaker.user.is_active %}
+                                <form name="block-form" action="{% url 'user_block' user_id=speaker.user.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="btn btn-dark btn-sm block-btn">{% trans 'Block' %}</button>
+                                </form>
+                            {% else %}
+                                <form name="unblock-form" action="{% url 'user_unblock' user_id=speaker.user.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="btn btn-dark btn-sm unblock-btn">{% trans 'Unblock' %}</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </section>
+
+    </main>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('.table').DataTable();
+
+        $('form[name=verify-form]').on('submit', function (e) {
+            e.preventDefault();
+            var $form = $(this);
+            $.ajax({
+                type: $(this).attr('method'),
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function (response) {
+                    $form.closest('tr').find('.verification-status').text("{% trans 'Verified' %}");
+                    $form.remove();
+                }
+            });
+        });
+
+        $('form[name=block-form]').on('submit', function (e) {
+            e.preventDefault();
+            var $form = $(this);
+            $.ajax({
+                type: $(this).attr('method'),
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function (response) {
+                    $form.closest('tr').find('.active-status').text("{% trans 'Inactive' %}");
+                    $form.find('button').text('{% trans 'Unblock' %}')
+                }
+            });
+        });
+
+        $('form[name=unblock-form]').on('submit', function (e) {
+            e.preventDefault();
+            var $form = $(this);
+            $.ajax({
+                type: $(this).attr('method'),
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function (response) {
+                    $form.closest('tr').find('.active-status').text("{% trans 'Active' %}");
+                    $form.find('button').text('{% trans 'Block' %}')
+                }
+            });
+        });
+    </script>
+{% endblock scripts %}
