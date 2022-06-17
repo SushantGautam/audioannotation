@@ -43,13 +43,15 @@
                     </div>
                     <div class="basic-info-row">
                         <label for="id_gender_0"><i class="fa-solid fa-mars-and-venus"></i>{% trans 'Gender' %}* </label>
-                        {% for value, display in form.fields.gender.choices %}
-                            <label class="gender-option" for="id_gender_{{ value }}">
-                                <input type="radio" name="gender" value="{{ value }}" id="id_gender_{{ value }}"
-                                       {% if form.gender.value == value %}checked{% endif %} required="">
-                                {{ display }}
-                            </label>
-                        {% endfor %}
+
+
+                        <select class="form-control form-control-sm" name="gender" id="id_gender">
+                            {% for value, display in form.fields.gender.choices %}
+                                <option value="{{ value }}"{% if form.gender.initial == value %}
+                                        selected{% endif %}>{{ display }}</option>
+                            {% endfor %}
+
+                        </select>
                     </div>
                 </div>
 

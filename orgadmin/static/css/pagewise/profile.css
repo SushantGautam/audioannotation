@@ -101,7 +101,7 @@ input{
     width: 12rem;
 }
 
-.basic-info-row input[type="text"], .basic-info-row input[type="date"] {
+.basic-info-row input[type="text"], .basic-info-row input[type="date"] , .basic-info-row select {
     width: 15rem;
 }
 
