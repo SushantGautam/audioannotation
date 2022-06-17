@@ -113,9 +113,28 @@ class SpeakerContractSignList(ListView):
     template_name = 'orgadmin/speaker/contract_list.html'
 
     def get_queryset(self):
-        return super().get_queryset().filter(
+        qs = super().get_queryset().filter(
             user__speaker__organization_code=self.request.user.orgadmin.organization_code,
             contract_code__user_type="SPE")
+        query_param = self.request.GET.get('status', None)
+        if query_param and query_param.lower() == 'pending':
+            qs = qs.filter(approved=None)
+        elif query_param and query_param.lower() == 'verified':
+            qs = qs.filter(approved=True)
+        elif query_param and query_param.lower() == 'rejected':
+            qs = qs.filter(approved=False)
+        return qs
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(SpeakerContractSignList, self).get_context_data(*args, **kwargs)
+        qs = super().get_queryset().filter(
+            user__speaker__organization_code=self.request.user.orgadmin.organization_code,
+            contract_code__user_type="SPE")
+        context['total'] = qs.count()
+        context['pending'] = qs.filter(approved=None).count()
+        context['verified'] = qs.filter(approved=True).count()
+        context['rejected'] = qs.filter(approved=False).count()
+        return context
 
 
 class SpeakerContractSignVerify(FormView):
@@ -170,9 +189,28 @@ class WorkerContractSignList(ListView):
     template_name = 'orgadmin/worker/contract_list.html'
 
     def get_queryset(self):
-        return super().get_queryset().filter(
+        qs = super().get_queryset().filter(
             user__speaker__organization_code=self.request.user.orgadmin.organization_code,
             contract_code__user_type="WOR")
+        query_param = self.request.GET.get('status', None)
+        if query_param and query_param.lower() == 'pending':
+            qs = qs.filter(approved=None)
+        elif query_param and query_param.lower() == 'verified':
+            qs = qs.filter(approved=True)
+        elif query_param and query_param.lower() == 'rejected':
+            qs = qs.filter(approved=False)
+        return qs
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(WorkerContractSignList, self).get_context_data(*args, **kwargs)
+        qs = super().get_queryset().filter(
+            user__speaker__organization_code=self.request.user.orgadmin.organization_code,
+            contract_code__user_type="WOR")
+        context['total'] = qs.count()
+        context['pending'] = qs.filter(approved=None).count()
+        context['verified'] = qs.filter(approved=True).count()
+        context['rejected'] = qs.filter(approved=False).count()
+        return context
 
 
 class WorkerContractSignVerify(FormView):
