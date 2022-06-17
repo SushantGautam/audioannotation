@@ -33,11 +33,10 @@
     {% block header %}
     <div class="main-wrapper navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
       <nav class="navbar-profile container">
-        <div class="nav-wrapper">
+        <div class="nav-wrapper" style="width: 100%;">
           <div class="logo-section">
             <a href="{% url 'homepage' %}" class="brand-name">{% trans 'Audio Annotation' %}</a>
             <img class="logo" src="{% static 'img/waveform.png' %}" alt="">
-
           </div>
             {% block navbar %}{% endblock %}
           </div>
