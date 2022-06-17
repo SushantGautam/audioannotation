@@ -98,6 +98,7 @@ class SpeakerSubmission(models.Model):
 class ExamSetSubmission(models.Model):
     STATUS_CHOICES = (
         ('INS', _('Initial State')),
+        ('STI', _('STT Initiated')),
         ('STC', _('STT Completed')),
         ('SA1', _('Slicing Assigned level 1')),
         ('SC1', _('Slicing Completed level 1')),
@@ -136,4 +137,13 @@ class ExamSetSubmission(models.Model):
         if self.STATUS_CHOICES.index(current) != 0:
             return self.STATUS_CHOICES[self.STATUS_CHOICES.index(current)-1]
         return None
+
+    # # when data is save run the celery task in background
+    # def save(self, *args, **kwargs):
+    #     super(ExamSetSubmission, self).save(*args, **kwargs)
+    #     if self.status == 'INS':
+    #         self.status = 'STI'
+    #         # run the celery task in background
+    #         run_STTClova.delay(self)
+
 
