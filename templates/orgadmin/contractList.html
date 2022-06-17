@@ -1,0 +1,84 @@
+{% extends "orgadmin/base.html" %}
+{% load i18n %}
+
+{% block styles %}
+
+{% endblock %}
+
+{% block content %}
+    <main class="users-list">
+        {% if can_create %}
+            <button class="btn btn-dark create-btn" data-bs-toggle="modal" data-bs-target="#modal-create-contract"><i
+                    class="fa fa-plus-circle"></i> {% trans 'Create' %}</button>
+        {% endif %}
+        <section class="table-section">
+            <table class="table py-3" cellspacing="0" id="">
+
+                <thead class="">
+                <tr class="">
+                    <th>{% trans "S. No." %}</th>
+                    <th>{% trans "Title" %}</th>
+                    <th>{% trans "Type" %}</th>
+                    <th>{% trans "Description" %}</th>
+                    <th>{% trans "File" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Created By" %}</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for contract in object_list %}
+                    <tr>
+                        <td> {{ forloop.counter }}</td>
+                        <td> {{ contract.title }}</td>
+                        <td> {{ contract.get_user_type_display }}</td>
+                        <td> {{ contract.description }}</td>
+                        <td> {{ contract.get_upload_file_name }}</td>
+                        <td>
+                            <span class="active-status">
+                                {{ contract.is_active|yesno:'Active, Inactive' }}
+                            </span>
+                        </td>
+                        <td>
+                            {{ contract.created_by }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </section>
+    </main>
+
+    <div class="modal fade" id="modal-create-contract" tabindex="-1" aria-labelledby="modal-success-label"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>{% trans 'Create Contract' %}</h5>
+                    <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('.table').DataTable();
+
+        $('.create-btn').on('click', function () {
+            $.ajax({
+                url: "{% url 'contract_create' %}",
+                type: 'GET',
+                success: function (response) {
+                    $('#modal-create-contract .modal-body').empty();
+                    $('#modal-create-contract .modal-body').append(response);
+                }
+            });
+        });
+    </script>
+{% endblock scripts %}
