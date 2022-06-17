@@ -199,7 +199,7 @@ class ExamPopupView(FormView):
         if form.is_valid():
             print("File saved")
             obj = form.save(commit=False)
-            obj.exam_set = obj.question.questionset_set.first().examset_set.first()
+            obj.exam_set = get_object_or_404(ExamSet, id=self.kwargs.get('exam_id'))
             obj.save()
         else:
             print("form invalid: ", form.errors)
