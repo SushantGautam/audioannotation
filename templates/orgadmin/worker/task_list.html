@@ -1,0 +1,95 @@
+{% extends "orgadmin/base.html" %}
+{% load i18n %}
+
+
+{% block content %}
+    <main class="task-list">
+        <h1 class="title">{% trans 'Task List' %}</h1>
+
+        <section class="table-section">
+            <table class="table py-3" cellspacing="0" id="">
+
+                <thead class="">
+                <tr class="">
+                    <th>{% trans "S. No." %}</th>
+                    <th>{% trans "Worker" %}</th>
+                    <th>{% trans "ExamSet" %}</th>
+                    <th>{% trans "Type" %}</th>
+                    <th>{% trans "Created On" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Reviewed Date" %}</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for task in object_list %}
+                    <tr>
+                        <td> {{ forloop.counter }}</td>
+                        <td> {{ task.worker.user.username }}</td>
+                        <td> {{ task.examset_submission.exam_set }}</td>
+                        <td> {{ task.get_task_type_display }}</td>
+                        <td> {{ task.created_at|date:'Y-m-d h:i a' }}</td>
+
+                        <td>
+                            <span class="active-status d-flex gap-1">
+                                {% if not task.approved == None %}
+                                    {{ task.approved|yesno:'Approved, Rejected' }}
+                                {% else %}
+                                    <form name="task-verify-form" action="{% url 'task_verify' task_id=task.id %}"
+                                          method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" value="1" name="is_approved">
+                                        <button class="btn btn-dark btn-sm block-btn">{% trans 'Approve' %}</button>
+                                    </form>
+                                    <form name="task-verify-form" action="{% url 'task_verify' task_id=task.id %}"
+                                          method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" value="0" name="is_approved">
+                                        <button class="btn btn-dark btn-sm block-btn">{% trans 'Reject' %}</button>
+                                    </form>
+                                {% endif %}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="approved-date">
+                                {% if not task.approved == None %}
+                                    {{ task.approved_at|date:'Y-m-d h:i a' }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </span>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </section>
+
+    </main>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('.table').DataTable();
+
+        $('form[name=task-verify-form]').on('submit', function (e) {
+            e.preventDefault();
+            var $form = $(this);
+            var $tr = $form.closest('tr');
+            $.ajax({
+                type: $(this).attr('method'),
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function (response) {
+                    var isApproved = response.status;
+                    var date = new Date(response.approved_date).toLocaleString();
+                    var message = isApproved ? "Approved" : "Rejected";
+                    $tr.find('.active-status').text(message);
+                    $tr.find('.approved-date').html(date);
+                }
+            });
+        });
+    </script>
+{% endblock scripts %}

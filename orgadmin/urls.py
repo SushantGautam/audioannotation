@@ -9,13 +9,26 @@ urlpatterns = [
     path('user/<int:user_id>/unblock/', views.UserChangeBlock.as_view(), name='user_unblock'),
 ]
 
+# Speaker page URLS
 urlpatterns += [
     path('records/speakers/', views.SpeakerListView.as_view(), name='speaker_list'),
     path('speaker/<int:user_id>/verify/', views.SpeakerVerification.as_view(), name='speaker_verify'),
 
+    path('records/contracts/', views.SpeakerContractSignList.as_view(), name='speaker_contract'),
+    path('records/contracts/<int:contract_id>/verify/', views.SpeakerContractSignVerify.as_view(),
+         name='speaker_contract_verify'),
 ]
 
+# Worker page URLS
 urlpatterns += [
     path('tasks/workers/', views.WorkerListView.as_view(), name='worker_list'),
     path('worker/<int:user_id>/verify/', views.WorkerVerification.as_view(), name='worker_verify'),
+
+    path('tasks/contracts/', views.WorkerContractSignList.as_view(), name='worker_contract'),
+    path('tasks/contracts/<int:contract_id>/verify/', views.WorkerContractSignVerify.as_view(),
+         name='worker_contract_verify'),
+
+    path('tasks/allocation/', views.WorkerTaskList.as_view(), name='worker_task_list'),
+    path('tasks/<int:task_id>/verify/', views.WorkerTaskVerify.as_view(),
+         name='task_verify'),
 ]

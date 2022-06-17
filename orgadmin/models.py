@@ -80,6 +80,10 @@ class ContractSign(models.Model):
     def __str__(self):
         return self.contract_code.title
 
+    def filename(self):
+        return os.path.basename(self.upload_file.name)
+
+
 class VerificationRequest(models.Model):
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     feedback = models.TextField(null=True, blank=True)
