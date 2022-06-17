@@ -17,7 +17,7 @@ class WhaleSpaceProvider(OAuth2Provider):
     account_class = WhaleSpaceAccount
 
     def extract_uid(self, data):
-        return str(data['customer']['uid'])
+        return str(data['sid'])
 
     def extract_common_fields(self, data):
         return dict(username=data['primaryEmail'].replace('@', '_'),
