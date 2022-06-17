@@ -90,6 +90,18 @@ class SpeakerListView(ListView):
             qs = qs.filter(user__is_active=False)
         return qs
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(SpeakerListView, self).get_context_data(*args, **kwargs)
+        qs = super().get_queryset().filter(organization_code=self.request.user.orgadmin.organization_code)
+        context['total'] = qs.count()
+        listOfIds = [x.id for x in qs if x.get_verification_status().lower() == 'pending']
+        context['pending'] = qs.filter(pk__in=listOfIds).count()
+        context['verified'] = qs.filter(is_verified=True).count()
+        listOfIds = [x.id for x in qs if x.get_verification_status().lower() == 'rejected']
+        context['rejected'] = qs.filter(pk__in=listOfIds).count()
+        context['inactive'] = qs.filter(user__is_active=False).count()
+        return context
+
 
 class SpeakerVerification(FormView):
     def post(self, *args, **kwargs):
@@ -168,6 +180,19 @@ class WorkerListView(ListView):
         elif query_param and query_param.lower() == 'inactive':
             qs = qs.filter(user__is_active=False)
         return qs
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(WorkerListView, self).get_context_data(*args, **kwargs)
+        qs = super().get_queryset().filter(organization_code=self.request.user.orgadmin.organization_code)
+        context['total'] = qs.count()
+        listOfIds = [x.id for x in qs if x.get_verification_status().lower() == 'pending']
+        context['pending'] = qs.filter(pk__in=listOfIds).count()
+        context['verified'] = qs.filter(is_verified=True).count()
+        listOfIds = [x.id for x in qs if x.get_verification_status().lower() == 'rejected']
+        context['rejected'] = qs.filter(pk__in=listOfIds).count()
+        context['inactive'] = qs.filter(user__is_active=False).count()
+        return context
+
 
 class WorkerVerification(FormView):
     def post(self, *args, **kwargs):
