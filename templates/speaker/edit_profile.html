@@ -112,7 +112,7 @@
                            maxlength="256"  id="id_bank_name">
                 </div>
                 <div class="info-detail">
-                    <label for="id_bank_iban"><i class="fa-solid fa-barcode"></i>{% trans 'Bank IBAN' %}* </label>
+                    <label for="id_bank_iban"><i class="fa-solid fa-barcode"></i>{% trans 'Bank IBAN' %} </label>
                     <input class="form-control form-control-sm" placeholder="{% trans 'Enter bank iban code here...' %}"
                            type="text" name="bank_iban"
                            value="{{ form.bank_iban.initial }}"
@@ -123,7 +123,7 @@
             <div class="info-row">
 
                 <div class="info-detail">
-                    <label for="id_bank_swift_code"><i class="fa-solid fa-dove"></i></i>{% trans 'Bank Swift Code' %}* </label>
+                    <label for="id_bank_swift_code"><i class="fa-solid fa-dove"></i></i>{% trans 'Bank Swift Code' %} </label>
                     <input class="form-control form-control-sm"
                            placeholder="{% trans 'Enter bank swift code here...' %}" type="text" name="bank_swift_code"
                            value="{{ form.bank_swift_code.initial }}" maxlength="256" 
@@ -142,7 +142,7 @@
             <div class="info-row">
 
                 <div class="info-detail">
-                    <label for="id_bank_address"><i class="fa-solid fa-location-crosshairs"></i>{% trans 'Bank Address' %}* </label>
+                    <label for="id_bank_address"><i class="fa-solid fa-location-crosshairs"></i>{% trans 'Bank Address' %} </label>
                     <input class="form-control form-control-sm" placeholder="{% trans 'Enter bank address here...' %}"
                            type="text" name="bank_address" value="{{ form.bank_address.initial }}" maxlength="256"
                             id="id_bank_address">
