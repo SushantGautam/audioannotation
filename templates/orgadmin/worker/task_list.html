@@ -1,11 +1,27 @@
 {% extends "orgadmin/base.html" %}
 {% load i18n %}
 
+{% block styles %}
+    <style>
+        .task-type a.active {
+            background-color: #444444;
+            color: #f0f0f0;
+            box-shadow: 1px 1px 10px 2px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+{% endblock %}
 
 {% block content %}
     <main class="task-list">
         <h1 class="title">{% trans 'Task List' %}</h1>
+        <div class="task-type">
+            <a href="{% url 'worker_task_list' %}" class="btn btn-sm btn-dark {% if not request.GET.type %}active{% endif %}">{% trans 'All' %}</a>
+            <a href="{% url 'worker_task_list' %}?type=slicing" class="btn btn-sm btn-dark {% if request.GET.type|lower == 'slicing' %}active{% endif %}">{% trans 'Slicing' %}</a>
+            <a href="{% url 'worker_task_list' %}?type=tagging" class="btn btn-sm btn-dark {% if request.GET.type|lower == 'tagging' %}active{% endif %}">{% trans 'Tagging' %}</a>
+            <a href="{% url 'worker_task_list' %}?type=evaluation"
+               class="btn btn-sm btn-dark {% if request.GET.type|lower == 'evaluation' %}active{% endif %}">{% trans 'Evaluation' %}</a>
 
+        </div>
         <section class="table-section">
             <table class="table py-3" cellspacing="0" id="">
 
