@@ -76,7 +76,19 @@ class SpeakerListView(ListView):
     model = Speaker
 
     def get_queryset(self):
-        return super().get_queryset().filter(organization_code=self.request.user.orgadmin.organization_code)
+        qs = super().get_queryset().filter(organization_code=self.request.user.orgadmin.organization_code)
+        query_param = self.request.GET.get('status', None)
+        if query_param and query_param.lower() == 'pending':
+            listOfIds = [x.id for x in qs if x.get_verification_status().lower() == query_param]
+            qs = qs.filter(pk__in=listOfIds)
+        elif query_param and query_param.lower() == 'verified':
+            qs = qs.filter(is_verified=True)
+        elif query_param and query_param.lower() == 'rejected':
+            listOfIds = [x.id for x in qs if x.get_verification_status().lower() == query_param]
+            qs = qs.filter(pk__in=listOfIds)
+        elif query_param and query_param.lower() == 'inactive':
+            qs = qs.filter(user__is_active=False)
+        return qs
 
 
 class SpeakerVerification(FormView):
@@ -124,8 +136,19 @@ class WorkerListView(ListView):
     model = Worker
 
     def get_queryset(self):
-        return super().get_queryset().filter(organization_code=self.request.user.orgadmin.organization_code)
-
+        qs = super().get_queryset().filter(organization_code=self.request.user.orgadmin.organization_code)
+        query_param = self.request.GET.get('status', None)
+        if query_param and query_param.lower() == 'pending':
+            listOfIds = [x.id for x in qs if x.get_verification_status().lower() == query_param]
+            qs = qs.filter(pk__in=listOfIds)
+        elif query_param and query_param.lower() == 'verified':
+            qs = qs.filter(is_verified=True)
+        elif query_param and query_param.lower() == 'rejected':
+            listOfIds = [x.id for x in qs if x.get_verification_status().lower() == query_param]
+            qs = qs.filter(pk__in=listOfIds)
+        elif query_param and query_param.lower() == 'inactive':
+            qs = qs.filter(user__is_active=False)
+        return qs
 
 class WorkerVerification(FormView):
     def post(self, *args, **kwargs):
