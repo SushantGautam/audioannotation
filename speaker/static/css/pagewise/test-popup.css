@@ -294,11 +294,11 @@ path{
 }
 
 .is-submitted{
-    color: white;
-    padding: 0.2rem 0.35rem;
-    border-radius: 0.25rem;
-    background-color: grey;
-    font-size: 0.9rem;
+    /* color: white; */
+    /* padding: 0.2rem 0.35rem; */
+    /* border-radius: 0.25rem; */
+    /* background-color: grey; */
+    font-size: 1.75rem;
 }
 
 .is-submitted-indicator{

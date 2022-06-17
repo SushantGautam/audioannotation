@@ -129,7 +129,7 @@
 
     </div>
 
-    <span hidden class="is-submitted"> <i class="fa-solid fa-circle-check"></i>  Submitted</span>
+    <span title="Answer submitted" class="is-submitted" hidden> <i class="fa-solid fa-circle-check"></i></span>
 
     <div {% if not speakerSubObj %}style="visibility: hidden"{% endif %}>
         <audio class="submitted-audio" preload="metadata" onloadedmetadata="mDur()" ontimeupdate="mPlay(this)">
@@ -139,7 +139,8 @@
         </audio>
 
         <div class="audio-playback-controls" {% if qn.can_submit %}style="visibility: hidden" {% endif %}>
-            <input class="submitted-audio-playback" id="dur" type="range" name="rng" min="0" step="0.25" value="0" onchange="mSet()" style="width: 7rem">
+            <label for="dur">Recorded audio</label>
+            <input title="Seek recorded audio" class="submitted-audio-playback" id="dur" type="range" name="rng" min="0" step="0.25" value="0" onchange="mSet()" style="width: 7rem">
             <button onClick="togglePlay(this);"
                     class="btn btn-sm btn-dark play-recorded-audio"
                     title="Play recorded audio"><i
@@ -424,6 +425,7 @@
                     $(".prev_qn_btn").removeAttr("disabled");
                     $(".next_qn_btn").removeAttr("disabled");
 
+                    // Test to see if the next button can be made visible and expanded
                     // if(document.querySelector('.next_qn_btn') != null){
                         // $(".next_qn_btn")removeAttribute("hidden")
                         // $(".next_qn_btn").style.width= "4.5rem";
