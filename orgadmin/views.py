@@ -193,7 +193,15 @@ class WorkerTaskList(ListView):
     template_name = 'orgadmin/worker/task_list.html'
 
     def get_queryset(self):
-        return super().get_queryset().filter(worker__organization_code=self.request.user.orgadmin.organization_code, )
+        qs = super().get_queryset().filter(worker__organization_code=self.request.user.orgadmin.organization_code, )
+        query_param = self.request.GET.get('type', None)
+        if query_param and query_param.lower() == 'slicing':
+            qs = qs.filter(task_type__in=['S1', 'S2'])
+        if query_param and query_param.lower() == 'tagging':
+            qs = qs.filter(task_type__in=['T1', 'T2'])
+        if query_param and query_param.lower() == 'evaluation':
+            qs = qs.filter(task_type__in=['E1', 'E2'])
+        return qs
 
 
 class WorkerTaskVerify(FormView):
