@@ -20,11 +20,11 @@ class Speaker(BaseUserModel):
     korea_residency = models.IntegerField(help_text=_('In years'), null=True)
     study_purpose = models.CharField(max_length=256)
     learning_method = models.CharField(max_length=256)
-    bank_name = models.CharField(max_length=256)
-    bank_iban = models.CharField(max_length=256)
-    bank_swift_code = models.CharField(max_length=256)
-    bank_account_name = models.CharField(max_length=256)
-    bank_address = models.CharField(max_length=256)
+    bank_name = models.CharField(max_length=256, blank=True, null=True)
+    bank_iban = models.CharField(max_length=256, blank=True, null=True)
+    bank_swift_code = models.CharField(max_length=256, blank=True, null=True)
+    bank_account_name = models.CharField(max_length=256, blank=True, null=True)
+    bank_address = models.CharField(max_length=256, blank=True, null=True)
     
     class Meta:
         verbose_name = _('Speaker')
