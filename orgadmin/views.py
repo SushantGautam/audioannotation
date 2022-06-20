@@ -232,6 +232,14 @@ class WorkerListView(ListView):
         context['inactive'] = qs.filter(user__is_active=False).count()
         return context
 
+class WorkerDetailView(DetailView):
+    template_name = "orgadmin/worker/worker_detail.html"
+    model = Worker
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(WorkerDetailView, self).get_context_data(*args, **kwargs)
+        return context
+
 
 class WorkerVerification(FormView):
     def post(self, *args, **kwargs):

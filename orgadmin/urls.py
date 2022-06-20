@@ -28,6 +28,7 @@ urlpatterns += [
 # Worker page URLS
 urlpatterns += [
     path('tasks/workers/', views.WorkerListView.as_view(), name='worker_list'),
+    path('tasks/workers/<int:pk>/', views.WorkerDetailView.as_view(), name='worker_detail'),
     path('worker/<int:user_id>/verify/', views.WorkerVerification.as_view(), name='worker_verify'),
 
     path('tasks/contracts/', views.WorkerContractSignList.as_view(), name='worker_contract'),
