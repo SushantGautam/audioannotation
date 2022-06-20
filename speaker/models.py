@@ -1,5 +1,6 @@
 import os
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from orgadmin.models import BaseUserModel, Contract, ContractSign, VerificationRequest
@@ -32,7 +33,10 @@ class Speaker(BaseUserModel):
 
     def __str__(self):
         return self.user.username
-    
+
+    def get_absolute_url(self):
+        return reverse('speaker_detail', args=(self.pk, ))
+
     def has_request_verification(self):
         return VerificationRequest.objects.filter(user=self.user, approved=None).exists()
     

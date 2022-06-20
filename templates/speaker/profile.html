@@ -10,7 +10,7 @@
     <div class="header-section ">
         <h2 class="page-heading">{% trans 'Profile Information' %}</h2>
         <div class="d-flex gap-1">
-            {% if not user.speaker.is_verified and user.speaker.bank_iban and not user.speaker.has_request_verification %}
+            {% if not user.speaker.is_verified and user.speaker.gender and not user.speaker.has_request_verification %}
                 <form action="{% url 'speaker:verify_profile' %}" method="post">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-dark btn-sm">{% trans 'Request Verification' %} </button>

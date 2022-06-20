@@ -14,6 +14,9 @@ class Worker(BaseUserModel):
         verbose_name = _('Worker')
         verbose_name_plural = _('Workers')
 
+    def get_absolute_url(self):
+        return reverse('worker_detail', args=(self.pk, ))
+
     def has_request_verification(self):
         return VerificationRequest.objects.filter(user=self.user).exists()
 

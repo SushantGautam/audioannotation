@@ -71,6 +71,18 @@
             font-weight: 600;
             font-size: 1.5rem;
         }
+
+        td a {
+            all: unset;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        td a:hover {
+            all: unset;
+            cursor: pointer;
+            font-weight: bold;
+        }
     </style>
 {% endblock %}
 
@@ -170,7 +182,11 @@
                 {% for worker in object_list %}
                     <tr>
                         <td> {{ forloop.counter }}</td>
-                        <td> {{ worker.user.username }}</td>
+                        <td>
+                            <a href="{{ worker.get_absolute_url }}">
+                                {{ worker.user.username }}
+                            </a>
+                        </td>
                         <td> {{ worker.user.get_full_name }}</td>
                         <td> {{ worker.user.email }}</td>
                         <td>

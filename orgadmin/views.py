@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.shortcuts import HttpResponse, render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, ListView, FormView, CreateView
+from django.views.generic import TemplateView, ListView, FormView, CreateView, DetailView
 
 from orgadmin.forms import ContractForm
 from orgadmin.models import User, ContractSign, Contract
@@ -133,6 +133,15 @@ class SpeakerListView(ListView):
         return context
 
 
+class SpeakerDetailView(DetailView):
+    template_name = "orgadmin/speaker/speaker_detail.html"
+    model = Speaker
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(SpeakerDetailView, self).get_context_data(*args, **kwargs)
+        return context
+
+
 class SpeakerVerification(FormView):
     def post(self, *args, **kwargs):
         if self.request.is_ajax:
@@ -221,6 +230,14 @@ class WorkerListView(ListView):
         listOfIds = [x.id for x in qs if x.get_verification_status().lower() == 'rejected']
         context['rejected'] = qs.filter(pk__in=listOfIds).count()
         context['inactive'] = qs.filter(user__is_active=False).count()
+        return context
+
+class WorkerDetailView(DetailView):
+    template_name = "orgadmin/worker/worker_detail.html"
+    model = Worker
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(WorkerDetailView, self).get_context_data(*args, **kwargs)
         return context
 
 
