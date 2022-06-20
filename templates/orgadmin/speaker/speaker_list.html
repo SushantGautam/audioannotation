@@ -71,6 +71,18 @@
             font-weight: 600;
             font-size: 1.5rem;
         }
+
+
+        td a {
+            all: unset;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        td a:hover {
+            all: unset;
+            cursor: pointer;
+            font-weight: bold;
+        }
     </style>
 {% endblock %}
 
@@ -170,7 +182,11 @@
                 {% for speaker in object_list %}
                     <tr>
                         <td> {{ forloop.counter }}</td>
-                        <td> {{ speaker.user.username }}</td>
+                        <td>
+                            <a href="{{ speaker.get_absolute_url }}">
+                                {{ speaker.user.username }}
+                            </a>
+                        </td>
                         <td> {{ speaker.user.get_full_name }}</td>
                         <td> {{ speaker.user.email }}</td>
                         <td>
