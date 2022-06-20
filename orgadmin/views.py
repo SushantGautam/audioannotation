@@ -3,10 +3,12 @@ from datetime import datetime
 import requests
 from django.http import JsonResponse
 from django.shortcuts import HttpResponse, render, redirect, get_object_or_404
+from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, ListView, FormView
+from django.views.generic import TemplateView, ListView, FormView, CreateView
 
-from orgadmin.models import User, ContractSign
+from orgadmin.forms import ContractForm
+from orgadmin.models import User, ContractSign, Contract
 from speaker.models import Speaker
 from worker.models import Worker, WorkerTask
 
@@ -56,6 +58,34 @@ class UserListView(ListView):
     template_name = "orgadmin/userList.html"
     model = User
 
+class ContractListView(ListView):
+    template_name = "orgadmin/contractList.html"
+    model = Contract
+
+    def get_context_data(self, **kwargs):
+        context = super(ContractListView, self).get_context_data(**kwargs)
+        existing_choices = Contract.objects.all().values_list('user_type', flat=True)
+        choices = list(Contract.USER_TYPE_CHOICES)
+        new_choices = []
+        for value, display in choices:
+            if value not in existing_choices:
+                new_choices.append((value, display))
+        context['can_create'] = True if len(new_choices) > 0 else False
+        return context
+
+
+class ContractCreateView(CreateView):
+    model = Contract
+    form_class = ContractForm
+    template_name = 'orgadmin/contractForm.html'
+    success_url = reverse_lazy('contract_list')
+
+    def form_valid(self, form):
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.created_by = self.request.user.orgadmin
+            obj.save()
+        return super().form_valid(form)
 
 class UserChangeBlock(FormView):
     def post(self, *args, **kwargs):
@@ -90,6 +120,18 @@ class SpeakerListView(ListView):
             qs = qs.filter(user__is_active=False)
         return qs
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(SpeakerListView, self).get_context_data(*args, **kwargs)
+        qs = super().get_queryset().filter(organization_code=self.request.user.orgadmin.organization_code)
+        context['total'] = qs.count()
+        listOfIds = [x.id for x in qs if x.get_verification_status().lower() == 'pending']
+        context['pending'] = qs.filter(pk__in=listOfIds).count()
+        context['verified'] = qs.filter(is_verified=True).count()
+        listOfIds = [x.id for x in qs if x.get_verification_status().lower() == 'rejected']
+        context['rejected'] = qs.filter(pk__in=listOfIds).count()
+        context['inactive'] = qs.filter(user__is_active=False).count()
+        return context
+
 
 class SpeakerVerification(FormView):
     def post(self, *args, **kwargs):
@@ -113,9 +155,28 @@ class SpeakerContractSignList(ListView):
     template_name = 'orgadmin/speaker/contract_list.html'
 
     def get_queryset(self):
-        return super().get_queryset().filter(
+        qs = super().get_queryset().filter(
             user__speaker__organization_code=self.request.user.orgadmin.organization_code,
             contract_code__user_type="SPE")
+        query_param = self.request.GET.get('status', None)
+        if query_param and query_param.lower() == 'pending':
+            qs = qs.filter(approved=None)
+        elif query_param and query_param.lower() == 'verified':
+            qs = qs.filter(approved=True)
+        elif query_param and query_param.lower() == 'rejected':
+            qs = qs.filter(approved=False)
+        return qs
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(SpeakerContractSignList, self).get_context_data(*args, **kwargs)
+        qs = super().get_queryset().filter(
+            user__speaker__organization_code=self.request.user.orgadmin.organization_code,
+            contract_code__user_type="SPE")
+        context['total'] = qs.count()
+        context['pending'] = qs.filter(approved=None).count()
+        context['verified'] = qs.filter(approved=True).count()
+        context['rejected'] = qs.filter(approved=False).count()
+        return context
 
 
 class SpeakerContractSignVerify(FormView):
@@ -150,6 +211,19 @@ class WorkerListView(ListView):
             qs = qs.filter(user__is_active=False)
         return qs
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(WorkerListView, self).get_context_data(*args, **kwargs)
+        qs = super().get_queryset().filter(organization_code=self.request.user.orgadmin.organization_code)
+        context['total'] = qs.count()
+        listOfIds = [x.id for x in qs if x.get_verification_status().lower() == 'pending']
+        context['pending'] = qs.filter(pk__in=listOfIds).count()
+        context['verified'] = qs.filter(is_verified=True).count()
+        listOfIds = [x.id for x in qs if x.get_verification_status().lower() == 'rejected']
+        context['rejected'] = qs.filter(pk__in=listOfIds).count()
+        context['inactive'] = qs.filter(user__is_active=False).count()
+        return context
+
+
 class WorkerVerification(FormView):
     def post(self, *args, **kwargs):
         if self.request.is_ajax:
@@ -170,9 +244,28 @@ class WorkerContractSignList(ListView):
     template_name = 'orgadmin/worker/contract_list.html'
 
     def get_queryset(self):
-        return super().get_queryset().filter(
+        qs = super().get_queryset().filter(
             user__speaker__organization_code=self.request.user.orgadmin.organization_code,
             contract_code__user_type="WOR")
+        query_param = self.request.GET.get('status', None)
+        if query_param and query_param.lower() == 'pending':
+            qs = qs.filter(approved=None)
+        elif query_param and query_param.lower() == 'verified':
+            qs = qs.filter(approved=True)
+        elif query_param and query_param.lower() == 'rejected':
+            qs = qs.filter(approved=False)
+        return qs
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(WorkerContractSignList, self).get_context_data(*args, **kwargs)
+        qs = super().get_queryset().filter(
+            user__speaker__organization_code=self.request.user.orgadmin.organization_code,
+            contract_code__user_type="WOR")
+        context['total'] = qs.count()
+        context['pending'] = qs.filter(approved=None).count()
+        context['verified'] = qs.filter(approved=True).count()
+        context['rejected'] = qs.filter(approved=False).count()
+        return context
 
 
 class WorkerContractSignVerify(FormView):
@@ -207,7 +300,6 @@ class WorkerTaskList(ListView):
 class WorkerTaskVerify(FormView):
     def post(self, *args, **kwargs):
         if self.request.is_ajax:
-            print('here')
             task = get_object_or_404(WorkerTask, pk=kwargs.get('task_id'))
             task.approved = True if self.request.POST.get('is_approved') == str(1) else False
             task.approved_at = datetime.utcnow()

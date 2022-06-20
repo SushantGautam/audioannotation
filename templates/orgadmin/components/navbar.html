@@ -9,6 +9,7 @@
     <a href="{% url 'homepage' %}" class="tab-item {% if request.path == '/' %}active{% endif %}">Dashboard</a>
     <a href="{% url 'profile' %}" class="tab-item {% if 'profile' in request.path %}active{% endif %}">Profile</a>
     <!-- <a href="{% url 'user_list' %}" class="tab-item">Users List</a> -->
+    <a href="{% url 'contract_list' %}" class="tab-item">{% trans 'Contracts' %}</a>
   </div>
 
   <input type="radio" id="tasks-tab" name="mytabs" {% if 'tasks' in request.path %}checked{% endif %}>

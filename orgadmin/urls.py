@@ -9,6 +9,11 @@ urlpatterns = [
     path('user/<int:user_id>/unblock/', views.UserChangeBlock.as_view(), name='user_unblock'),
 ]
 
+urlpatterns += [
+    path('contracts/', views.ContractListView.as_view(), name='contract_list'),
+    path('contracts/create/', views.ContractCreateView.as_view(), name='contract_create'),
+]
+
 # Speaker page URLS
 urlpatterns += [
     path('records/speakers/', views.SpeakerListView.as_view(), name='speaker_list'),

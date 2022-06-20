@@ -1,0 +1,7 @@
+{% load i18n %}
+
+<form method="post" action="{% url 'contract_create' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-sm btn-dark">{% trans 'Submit' %}</button>
+</form>
