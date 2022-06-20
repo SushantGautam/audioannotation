@@ -1,0 +1,266 @@
+{% extends 'orgadmin/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block styles %}
+    <link href="{% static 'css/pagewise/profile.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="header-section ">
+        <h2 class="page-heading">{% trans 'Profile Information' %}</h2>
+        <div class="d-flex gap-3">
+            {% if object.is_verified %}
+                {% trans 'Verified' %}
+            {% elif speaker.get_verification_status == "Pending" %}
+                <form name="verify-form" action="{% url 'speaker_verify' user_id=speaker.id %}"
+                      method="post">
+                    {% csrf_token %}
+                    <input type="hidden" value="1" name="is_approved">
+                    <button class="btn btn-dark btn-sm verify-btn">{% trans 'Verify' %}</button>
+                </form>
+                <form name="verify-form" action="{% url 'speaker_verify' user_id=speaker.id %}"
+                      method="post">
+                    {% csrf_token %}
+                    <input type="hidden" value="0" name="is_approved">
+                    <button class="btn btn-dark btn-sm verify-btn">{% trans 'Reject' %}</button>
+                </form>
+            {% else %}
+                {{ speaker.get_verification_status }}
+            {% endif %}
+
+            {% if speaker.user.is_active %}
+                <form name="block-form" action="{% url 'user_block' user_id=speaker.user.id %}" method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-dark btn-sm block-btn">{% trans 'Block' %}</button>
+                </form>
+            {% else %}
+                <form name="unblock-form" action="{% url 'user_unblock' user_id=speaker.user.id %}" method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-dark btn-sm unblock-btn">{% trans 'Unblock' %}</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+    <section class="profile-section-container">
+        <section class="profile-section">
+
+
+            <section class="basic-section" id="basic-section">
+                <h4><i class="fa-solid fa-user-tag"></i>{% trans 'Basic Information' %}</h4>
+
+                <div class="basic-info-parent">
+
+                    <img src="/static/img/user.png" class="rounded-circle" style="width: 10rem;height: 10rem;" alt="">
+
+                    <div class="basic-info-wrapper">
+                        <div class="basic-info-row">
+                            <label for="id_username"><i class="fa-solid fa-tag"></i>{% trans 'Username' %} :</label>
+                            {{ object.user.username }}
+                        </div>
+                        <div class="basic-info-row">
+                            <label for="id_full_name"><i class="fa-solid fa-user"></i>{% trans 'Full Name' %} :</label>
+                            {{ object.user.get_full_name }}
+                        </div>
+                        <div class="basic-info-row">
+                            <label for="id_birth_date"><i class="fa-solid fa-calendar-days"></i>{% trans 'Birth date' %}
+                                :</label>
+                            {{ object.birth_date|date:'Y-m-d' }}
+                        </div>
+                        <div class="basic-info-row">
+                            <label for="id_gender"><i class="fa-solid fa-mars-and-venus"></i>{% trans 'Gender' %}
+                                :</label>
+                            {{ object.get_gender_display }}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="contact-section">
+                <h4><i class="fa-solid fa-address-book"></i>{% trans 'Contact Information' %}</h4>
+                <div class="info-row">
+                    <div class="info-detail">
+                        <label for="id_email"><i class="fa-solid fa-at"></i>{% trans 'Email address' %}:</label>
+                        {{ object.user.email }}
+                    </div>
+                    <div class="info-detail">
+                        <label for="id_phone_number"><i
+                                class="fa-solid fa-phone"></i>{% trans 'Phone number' %}:</label>
+                        {{ object.phone_number }}
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-detail">
+                        <label for="id_permanent_address"><i
+                                class="fa-solid fa-location-dot"></i>{% trans 'Permanent address' %}:</label>
+                        {{ object.permanent_address }}
+                    </div>
+                    <div class="info-detail">
+                        <label for="id_current_address"><i class="fa-solid fa-house"></i>{% trans 'Current address' %}
+                            :</label>
+                        {{ object.current_address }}
+                    </div>
+                </div>
+            </section>
+
+            {% comment %}
+        <section class="bank-details-section">
+            <h4><i class="fa-solid fa-building-columns"></i>{% trans 'Banking Details' %}</h4>
+            <div class="info-row">
+                <div class="info-detail">
+                    <label for="id_bank_name"><i class="fa-solid fa-building-flag"></i>{% trans 'Bank Name' %}
+                        :</label>
+                    {{ object.bank_name }}
+                </div>
+                <div class="info-detail">
+                    <label for="id_bank_iban"><i class="fa-solid fa-barcode"></i>{% trans 'Bank IBAN' %} :</label>
+                    {{ object.bank_iban }}
+                </div>
+            </div>
+
+            <div class="info-row">
+
+                <div class="info-detail">
+                    <label for="id_bank_swift_code"><i class="fa-solid fa-dove"></i>{% trans 'Bank Swift Code' %} :</label>
+                    {{ object.bank_swift_code }}
+                </div>
+                <div class="info-detail">
+                    <label for="id_bank_account_name"><i
+                            class="fa-solid fa-money-check-dollar"></i>{% trans 'Account Name' %} :</label>
+                    {{ object.bank_account_name }}
+                </div>
+            </div>
+
+            <div class="info-row">
+
+                <div class="info-detail">
+                    <label for="id_bank_address"><i class="fa-solid fa-location-crosshairs"></i>{% trans 'Bank Address' %} :</label>
+                    {{ object.bank_address }}
+                </div>
+            </div>
+        </section>
+        {% endcomment %}
+
+            <section class="language-section">
+                <h4><i class="fa-solid fa-globe"></i>{% trans 'Language Information' %}</h4>
+                <div class="info-row">
+                    <div class="info-detail">
+                        <label for="id_proficiency"><i class="fa-solid fa-user-ninja"></i> {% trans 'Proficiency:' %}
+                        </label>
+                        {{ object.get_proficiency_display }}
+                    </div>
+                    <div class="info-detail">
+                        <label for="id_topik_score"><i
+                                class="fa-solid fa-star-half-stroke"></i>{% trans 'Topik Score' %} :</label>
+                        {{ object.get_topik_score_display }}
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-detail">
+                        <label for="id_level"><i class="fa-solid fa-arrow-turn-up"></i> {% trans 'Level' %}:</label>
+                        {{ object.get_level_display }}
+                    </div>
+                    <div class="info-detail">
+                        <label for="id_learning_period"><i
+                                class="fa-solid fa-hourglass-end"></i> {% trans 'Learning period' %}:</label>
+                        {{ object.learning_period }}
+                    </div>
+                </div>
+
+                <div class="info-row">
+
+                    <div class="info-detail">
+                        <label for="id_learning_method"><i
+                                class="fa-solid fa-signs-post"></i>{% trans 'Learning method' %}:</label>
+                        {{ object.learning_method }}
+                    </div>
+                    <div class="info-detail">
+                        <label for="id_study_purpose"><i
+                                class="fa-solid fa-clipboard-question"></i> {% trans 'Study Purpose' %}:</label>
+                        {{ object.study_purpose }}
+                    </div>
+                </div>
+            </section>
+
+            <section class="additional-section">
+                <h4><i class="fa-solid fa-circle-chevron-down"></i>{% trans 'Additional Information' %}</h4>
+                <div class="info-row">
+                    <div class="info-detail">
+                        <label for="id_nationality"><i
+                                class="fa-solid fa-earth-asia"></i> {% trans 'Nationality' %}: {{ form.fields.nationality.value }}
+                        </label>
+                        {{ object.get_nationality_display }}
+                    </div>
+                    <div class="info-detail">
+                        <label for="id_language"><i class="fa-solid fa-language"></i> {% trans 'Language' %}:</label>
+                        {{ object.get_language_display }}
+                    </div>
+
+                </div>
+                <div class="info-row">
+
+                    <div class="info-detail">
+                        <label for="id_education_level"><i
+                                class="fa-solid fa-graduation-cap"></i> {% trans 'Education level' %}:</label>
+                        {{ object.get_education_level_display }}
+                    </div>
+                    <div class="info-detail">
+                        <label for="id_korea_residency"><i
+                                class="fa-solid fa-house-chimney-user"></i> {% trans 'Korea residency' %}:</label>
+                        {{ object.korea_residency }}
+                    </div>
+                </div>
+            </section>
+        </section>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('.table').DataTable();
+
+        $('form[name=verify-form]').on('submit', function (e) {
+            e.preventDefault();
+            var $form = $(this);
+            $.ajax({
+                type: $(this).attr('method'),
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function (response) {
+                    $form.closest('tr').find('.verification-status').text("{% trans 'Verified' %}");
+                    $form.remove();
+                }
+            });
+        });
+
+        var form_submit = false;
+        $('form[name=block-form]').on('submit', function (e) {
+            if (form_submit) return false;
+            e.preventDefault();
+            var $form = $(this);
+            $.ajax({
+                type: $(this).attr('method'),
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function (response) {
+                    // $form.find('button').text('{% trans 'Unblock' %}');
+                    location.reload();
+                }
+            });
+        });
+
+        $('form[name=unblock-form]').on('submit', function (e) {
+            e.preventDefault();
+            var $form = $(this);
+            $.ajax({
+                type: $(this).attr('method'),
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function (response) {
+                    // $form.find('button').text('{% trans 'Block' %}')
+                    location.reload();
+                }
+            });
+        });
+    </script>
+{% endblock scripts %}
