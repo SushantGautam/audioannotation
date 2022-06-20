@@ -10,25 +10,28 @@
     <div class="header-section ">
         <h2 class="page-heading">{% trans 'Profile Information' %}</h2>
         <div class="d-flex gap-3">
-            {% if object.is_verified %}
-                {% trans 'Verified' %}
-            {% elif speaker.get_verification_status == "Pending" %}
-                <form name="verify-form" action="{% url 'speaker_verify' user_id=speaker.id %}"
-                      method="post">
-                    {% csrf_token %}
-                    <input type="hidden" value="1" name="is_approved">
-                    <button class="btn btn-dark btn-sm verify-btn">{% trans 'Verify' %}</button>
-                </form>
-                <form name="verify-form" action="{% url 'speaker_verify' user_id=speaker.id %}"
-                      method="post">
-                    {% csrf_token %}
-                    <input type="hidden" value="0" name="is_approved">
-                    <button class="btn btn-dark btn-sm verify-btn">{% trans 'Reject' %}</button>
-                </form>
-            {% else %}
-                {{ speaker.get_verification_status }}
-            {% endif %}
-
+            <div class="d-flex gap-2">
+                {% trans 'Verification Status' %}:
+                {% if object.is_verified %}
+                    {% trans 'Verified' %}
+                {% elif speaker.get_verification_status == "Pending" %}
+                    <form name="verify-form" action="{% url 'speaker_verify' user_id=speaker.id %}"
+                          method="post">
+                        {% csrf_token %}
+                        <input type="hidden" value="1" name="is_approved">
+                        <button class="btn btn-dark btn-sm verify-btn">{% trans 'Verify' %}</button>
+                    </form>
+                    <form name="verify-form" action="{% url 'speaker_verify' user_id=speaker.id %}"
+                          method="post">
+                        {% csrf_token %}
+                        <input type="hidden" value="0" name="is_approved">
+                        <button class="btn btn-dark btn-sm verify-btn">{% trans 'Reject' %}</button>
+                    </form>
+                {% else %}
+                    {{ speaker.get_verification_status }}
+                {% endif %}
+            </div>
+            |
             {% if speaker.user.is_active %}
                 <form name="block-form" action="{% url 'user_block' user_id=speaker.user.id %}" method="post">
                     {% csrf_token %}
@@ -222,29 +225,41 @@
         $('form[name=verify-form]').on('submit', function (e) {
             e.preventDefault();
             var $form = $(this);
+            $btn = $form.find('button');
             $.ajax({
                 type: $(this).attr('method'),
                 url: $(this).attr('action'),
                 data: $(this).serialize(),
+                beforeSend: function () {
+                    $($btn).attr('disabled', 'disabled');
+                },
                 success: function (response) {
-                    $form.closest('tr').find('.verification-status').text("{% trans 'Verified' %}");
-                    $form.remove();
+                    // $form.remove();
+                    location.reload();
+                },
+                complete: function () {
+                    $($btn).removeAttr('disabled');
                 }
             });
         });
 
-        var form_submit = false;
         $('form[name=block-form]').on('submit', function (e) {
-            if (form_submit) return false;
             e.preventDefault();
             var $form = $(this);
+            $btn = $form.find('button');
             $.ajax({
                 type: $(this).attr('method'),
                 url: $(this).attr('action'),
                 data: $(this).serialize(),
+                beforeSend: function () {
+                    $($btn).attr('disabled', 'disabled')
+                },
                 success: function (response) {
                     // $form.find('button').text('{% trans 'Unblock' %}');
                     location.reload();
+                },
+                complete: function () {
+                    $($btn).removeAttr('disabled');
                 }
             });
         });
@@ -252,13 +267,20 @@
         $('form[name=unblock-form]').on('submit', function (e) {
             e.preventDefault();
             var $form = $(this);
+            $btn = $form.find('button');
             $.ajax({
                 type: $(this).attr('method'),
                 url: $(this).attr('action'),
                 data: $(this).serialize(),
+                beforeSend: function () {
+                    $($btn).attr('disabled', 'disabled')
+                },
                 success: function (response) {
                     // $form.find('button').text('{% trans 'Block' %}')
                     location.reload();
+                },
+                complete: function () {
+                    $($btn).removeAttr('disabled');
                 }
             });
         });

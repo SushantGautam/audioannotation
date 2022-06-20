@@ -17,6 +17,7 @@ urlpatterns += [
 # Speaker page URLS
 urlpatterns += [
     path('records/speakers/', views.SpeakerListView.as_view(), name='speaker_list'),
+    path('records/speakers/<int:pk>/', views.SpeakerDetailView.as_view(), name='speaker_detail'),
     path('speaker/<int:user_id>/verify/', views.SpeakerVerification.as_view(), name='speaker_verify'),
 
     path('records/contracts/', views.SpeakerContractSignList.as_view(), name='speaker_contract'),
