@@ -101,12 +101,12 @@
 
         </section>
 
-        <section class="bank-details-section">
+        <!-- <section class="bank-details-section">
             <h4><i class="fa-solid fa-building-columns"></i>{% trans 'Banking Details' %} </h4>
             <div class="info-row">
                 <div class="info-detail">
-                    <label for="id_bank_name"><i class="fa-solid fa-building-flag"></i>{% trans 'Bank Name' %}* </label>
-                    <input required class="form-control form-control-sm" placeholder="{% trans 'Enter bank name here...' %}"
+                    <label for="id_bank_name"><i class="fa-solid fa-building-flag"></i>{% trans 'Bank Name' %} </label>
+                    <input class="form-control form-control-sm" placeholder="{% trans 'Enter bank name here...' %}"
                            type="text" name="bank_name"
                            value="{{ form.bank_name.initial }}"
                            maxlength="256"  id="id_bank_name">
@@ -131,11 +131,11 @@
                 </div>
                 <div class="info-detail">
                     <label for="id_bank_account_name"><i
-                            class="fa-solid fa-money-check-dollar"></i>{% trans 'Account name' %}* </label>
-                    <input required class="form-control form-control-sm"
+                            class="fa-solid fa-money-check-dollar"></i>{% trans 'Account name' %} </label>
+                    <input class="form-control form-control-sm"
                            placeholder="{% trans 'Enter account holders name here...' %}" type="text"
                            name="bank_account_name" value="{{ form.bank_account_name.initial }}" maxlength="256"
-                           required="" id="id_bank_account_name">
+                            id="id_bank_account_name">
                 </div>
             </div>
 
@@ -148,7 +148,7 @@
                             id="id_bank_address">
                 </div>
             </div>
-        </section>
+        </section> -->
 
         <section class="language-section">
             <h4>{% trans 'Language Information ' %}</h3>
