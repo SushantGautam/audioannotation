@@ -150,16 +150,16 @@ path{
 
 .question-title{
     font-size: 1.1rem;
-    /* margin-bottom: 0; */
     position: absolute;
     top: 1rem;
-    padding-bottom: 1rem;
+    padding-inline: 1rem;
     /* align-self: flex-start; */
 }
 
 .question-description{
     margin-top: 0;
     margin-bottom: 0.5rem;
+    padding-inline: 1rem;
 }
 
 .question-description.no-attachment{
@@ -204,8 +204,8 @@ path{
 
 .progress-buttons{
     display: flex;
-    gap: 2rem;
-    /* transform: translateX(50%); */
+    gap: 1rem;
+    align-items: flex-start;
 }
 
 .progress-buttons i{
@@ -221,7 +221,7 @@ path{
     gap: 0.25rem;
 }
 
-.prep-label.status-active , .rec-label.status-active  {
+.prep-label.status-active , .rec-label.status-active , .complete-label.status-active  {
     font-weight: 600;
 }
 
@@ -293,12 +293,17 @@ path{
     width:7rem
 }
 
+.audio-playback-label{
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
 .is-submitted{
     /* color: white; */
     /* padding: 0.2rem 0.35rem; */
     /* border-radius: 0.25rem; */
     /* background-color: grey; */
-    font-size: 1.75rem;
+    /* font-size: 1rem; */
 }
 
 .is-submitted-indicator{
