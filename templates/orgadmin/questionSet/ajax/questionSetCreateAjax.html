@@ -69,7 +69,7 @@
 
 </style>
 <form id="QuestionRegistrationForm"
-      action="{% if object %} {% url 'professor:question_set_update' object.id %} {% else %} {% url 'professor:question_set_create' %} {% endif %}"
+      action="{% if object %} {% url 'question_set_update' object.id %} {% else %} {% url 'question_set_create' %} {% endif %}"
       method="POST">
   {% csrf_token %}
 

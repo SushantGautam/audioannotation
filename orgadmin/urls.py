@@ -55,4 +55,11 @@ urlpatterns += [
     path('questions/delete_multiple_question/', views.MultipleQuestionDeleteView,
          name='delete_multiple_question'),
 
+    # Question Sets
+    path('question_set', views.QuestionSetListView.as_view(), name='question_set_list'),
+    path('question_set/create/', views.QuestionSetCreateView.as_view(), name='question_set_create'),
+    path('question_set/<int:pk>/edit/', views.QuestionsSetUpdateView.as_view(), name='question_set_update'),
+    path('question_set/<int:pk>/delete/', views.QuestionSetDeleteView, name='questionset_delete'),
+    path('question_set/delete_multiple/', views.MultipleQuestionSetDeleteView,
+         name='delete_multiple_questionset'),
 ]
