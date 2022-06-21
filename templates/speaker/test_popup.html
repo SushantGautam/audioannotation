@@ -452,8 +452,11 @@
                     document.querySelector(".is-submitted").classList.remove("status-inactive")
                     document.querySelector(".is-submitted").classList.add("status-active")
                     document.querySelector(".complete-label").classList.add("status-active")
-
                     // Remove Recording section styles and show Complete message when recording ends and question gets submitted
+
+                    // Show audio-playback-controls when recording ends and question gets submitted
+                    document.querySelector(".audio-playback-controls").style.visibility = "visible";
+
                 }
 
                 function startRecordTimer() {
@@ -529,6 +532,25 @@
                 document.querySelector('.audio-progress-wrapper').classList.remove('blur-filter');
                 
             document.querySelector('.remove-blur-btn').style.display = "none";
+            // Remove blur-filter effect and Start button from the question if its already submitted
+
+
+            // Remove status-active class from preparation indicator elements if the question is already submitted
+            document.querySelector('.prep-icon').classList.remove('status-active');
+            document.querySelector('.prep-icon').classList.add('status-inactive');
+            document.querySelector('.prep-label').classList.remove('status-active');
+            document.querySelector('.prep-label').classList.add('status-inactive');
+            document.querySelector('.prep-timer').classList.remove('status-active');
+            document.querySelector('.prep-timer').classList.add('status-inactive');
+            // Remove status-active class from preparation indicator elements if the question is already submitted
+
+            // Add active-status class to Complete indicator if the question is already submitted
+            document.querySelector('.is-submitted').classList.remove('status-inactive');
+            document.querySelector('.is-submitted').classList.add('status-active');
+            // Add active-status class to Complete indicator if the question is already submitted
+
+
+
 
             $(".prep-timer").html(`${toHHMMSS('{{ qn.ready_time }}')}`);
             $(".rec-timer").html(`${toHHMMSS('{{ qn.speaking_time }}')}`);
