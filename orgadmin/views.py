@@ -9,6 +9,7 @@ from django.views.generic import TemplateView, ListView, FormView, CreateView, D
 
 from orgadmin.forms import ContractForm
 from orgadmin.models import User, ContractSign, Contract
+from professor.models import SubCategory, Category
 from speaker.models import Speaker
 from worker.models import Worker, WorkerTask
 
@@ -343,3 +344,13 @@ class WorkerTaskVerify(FormView):
             return JsonResponse(
                 {'message': 'success', 'status': task.approved, 'approved_date': task.approved_at}, status=200)
         return JsonResponse({'message': 'Bad Request.'}, status=400)
+
+
+class CategoryManagementListView(ListView):
+    model = SubCategory
+    template_name = 'orgadmin/categoryManagement/categoryManagement.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(CategoryManagementListView, self).get_context_data(*args, **kwargs)
+        context['categories'] = Category.objects.filter().distinct()
+        return context

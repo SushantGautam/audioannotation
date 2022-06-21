@@ -1,0 +1,69 @@
+{% load static %}
+{% load i18n %}
+
+<style>
+    .dataTables_filter svg {
+        z-index: 100;
+        transform: translateX(-5px);
+    }
+
+    .dataTables_filter input {
+        transform: translateX(20px);
+
+    }
+</style>
+
+
+<div class="bg-white pt-3">
+    <h1 class="page-heading">{% trans "Category Management" %}</h1>
+    <div class="row mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h4>{% trans 'Categories' %}</h4>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tbody>
+                    {% for object in categories %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ object.name }}</td>
+                            <td>{{ object.description }}</td>
+                            <td>{{ object.created_at }}</td>
+                            <td> {% if  object.is_active %} {% trans 'Active' %}  {% else %}
+                                {% trans 'Inactive' %} {% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="card">
+            <div class="card-header">
+                <h4>{% trans 'SubCategories' %}</h4>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tbody>
+                    {% for object in object_list %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ object.name }}</td>
+                            <td>{{ object.description }}</td>
+                            <td>{{ object.created_at }}</td>
+                            <td> {% if  object.is_active %} {% trans 'Active' %}  {% else %}
+                                {% trans 'Inactive' %} {% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+

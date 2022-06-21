@@ -41,3 +41,7 @@ urlpatterns += [
     path('tasks/<int:task_id>/verify/', views.WorkerTaskVerify.as_view(),
          name='task_verify'),
 ]
+
+urlpatterns += [
+    path('category-management', views.CategoryManagementListView.as_view(), name='category_management_page'),
+]
