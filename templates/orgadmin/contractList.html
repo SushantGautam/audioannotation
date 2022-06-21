@@ -33,7 +33,7 @@
                         <td> {{ forloop.counter }}</td>
                         <td> {{ contract.title }}</td>
                         <td> {{ contract.get_user_type_display }}</td>
-                        <td> {{ contract.description }}</td>
+                        <td> {{ contract.description | safe | truncatechars:120 }}</td>
                         <td> {{ contract.get_upload_file_name }}</td>
                         <td>
                             <span class="active-status">

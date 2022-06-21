@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.forms import ModelForm
+from django_summernote.widgets import SummernoteWidget
 
 from orgadmin.models import Contract
 
@@ -22,6 +23,9 @@ class ContractForm(ModelForm):
     class Meta:
         model = Contract
         fields = ('title', 'user_type', 'description', 'upload_file')
+        widgets = {
+            'description': SummernoteWidget(),
+        }
 
     def __init__(self, *args, **kwargs):
         super(ContractForm, self).__init__(*args, **kwargs)

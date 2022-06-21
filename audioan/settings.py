@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rosetta',
     'import_export',
     'fontawesomefree',
+    'django_summernote',
 ]
 
 MIDDLEWARE = [
@@ -158,6 +159,8 @@ SOCIALACCOUNT_LOGIN_ON_GET = True
 ACCOUNT_LOGOUT_ON_GET = True
 SOCIALACCOUNT_STORE_TOKENS = True
 ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 # SOCIALACCOUNT_PROVIDERS = {
 #     'whalespace': {
 #         'SCOPE': ['profile', 'email'],
