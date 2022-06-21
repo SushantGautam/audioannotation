@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import requests
+from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import HttpResponse, render, redirect, get_object_or_404
 from django.urls import reverse_lazy
@@ -8,8 +9,9 @@ from django.views import View
 from django.views.generic import TemplateView, ListView, FormView, CreateView, DetailView, UpdateView, DeleteView
 
 from orgadmin.forms import ContractForm
-from orgadmin.models import User, ContractSign, Contract
-from professor.models import SubCategory, Category
+from orgadmin.models import User, ContractSign, Contract, Organization
+from professor.forms import QuestionForm
+from professor.models import SubCategory, Category, Question
 from speaker.models import Speaker
 from worker.models import Worker, WorkerTask
 
@@ -59,6 +61,7 @@ class UserListView(ListView):
     template_name = "orgadmin/userList.html"
     model = User
 
+
 class ContractListView(ListView):
     template_name = "orgadmin/contractList.html"
     model = Contract
@@ -97,6 +100,7 @@ class ContractEditView(UpdateView):
 
     def form_valid(self, form):
         return super().form_valid(form)
+
 
 class ContractDeleteView(DeleteView):
     model = Contract
@@ -248,6 +252,7 @@ class WorkerListView(ListView):
         context['inactive'] = qs.filter(user__is_active=False).count()
         return context
 
+
 class WorkerDetailView(DetailView):
     template_name = "orgadmin/worker/worker_detail.html"
     model = Worker
@@ -354,3 +359,80 @@ class CategoryManagementListView(ListView):
         context = super(CategoryManagementListView, self).get_context_data(*args, **kwargs)
         context['categories'] = Category.objects.filter().distinct()
         return context
+
+
+class QuestionListPage(ListView):
+    template_name = 'orgadmin/question/questionListPage.html'
+    model = Question
+
+    def get_queryset(self):
+        return super(QuestionListPage, self).get_queryset().filter(
+            organization_code=self.request.user.orgadmin.organization_code)
+
+
+class QuestionsCreateView(CreateView):
+    model = Question
+    form_class = QuestionForm
+    template_name = 'orgadmin/question/ajax/questionsCreateAjax.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['subcat'] = SubCategory.objects.all()
+        return context
+
+    def form_valid(self, form):
+        if form.is_valid():
+            self.object = form.save(commit=False)
+            self.object.organization_code = self.request.user.orgadmin.organization_code
+            self.object.save()
+        return redirect('question_list')
+
+    def form_invalid(self, form):
+        print('form_error', form.errors)
+
+    # def get_form_kwargs(self, *args, **kwargs):
+    #     kwargs =  super().get_form_kwargs(*args, **kwargs)
+    #     kwargs['request'] = self.request
+    #     return kwargs
+
+
+class QuestionsUpdateView(UpdateView):
+    model = Question
+    form_class = QuestionForm
+    template_name = 'orgadmin/question/ajax/questionsCreateAjax.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['subcat'] = SubCategory.objects.all()
+        context['organization_codes'] = Organization.objects.all()
+        return context
+
+    def form_valid(self, form):
+        if form.is_valid():
+            self.object = form.save(commit=False)
+            self.object.save()
+        return redirect('question_list')
+
+
+class QuestionDetailView(DetailView):
+    model = Question
+    template_name = 'orgadmin/question/questionsDetailPage.html'
+
+
+def MultipleQuestionDeleteView(request):
+    if request.method == 'POST':
+        try:
+            Obj = Question.objects.filter(pk__in=request.POST.getlist('question_ids[]'))
+            Obj.delete()
+            return redirect('question_list')
+
+        except:
+            messages.error(request,
+                           "Cannot delete Questions")
+            return JsonResponse({}, status=500)
+
+
+def QuestionDeleteView(request, pk):
+    if request.method == "POST":
+        Question.objects.filter(pk=pk).delete()
+        return redirect("question_list")

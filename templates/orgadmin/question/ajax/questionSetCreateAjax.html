@@ -1,0 +1,520 @@
+{% load static %}
+{% load i18n %}
+<link href="{% static 'css/custom.css' %}" rel="stylesheet">
+<style>
+  .previous_questions_div {
+        border: 1px solid lightgray;
+    background: white;
+    padding: 15px 10px 15px 10px;
+    flex: 0 0 45%;
+    max-width: 45%;
+    height: 400px;
+    /* height: fit-content; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+  .question_choose_arrow_div {
+    justify-content: center;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 10%;
+    max-width: 10%;
+}
+  .selected_questions_div {
+    border: 1px solid lightgray;
+    background: white;
+    padding: 15px 10px 15px 10px;
+    flex: 0 0 45%;
+    max-width: 45%;
+    /* height: fit-content; */
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+  .btn-block{
+      width: 100%;
+  }
+  .question_selection_boxes_row{
+    height: 400px;
+    margin-bottom: 25px
+  }
+
+  .search-parent {
+    position: relative;
+}
+.search-icon {
+    position: absolute;
+    right: 0.5rem;
+    top: 0.5rem;
+    color: gray;
+}
+
+.qn_list_only_div>div>label>input {
+    position: relative !important;
+    display: none;
+}
+
+.qn_list_only_div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    overflow-y: auto;
+    /* height: 200px; */
+    height: 250px;
+    padding: 0.5rem 0;
+}
+
+</style>
+<form id="QuestionRegistrationForm"
+      action="{% if object %} {% url 'professor:question_set_update' object.id %} {% else %} {% url 'professor:question_set_create' %} {% endif %}"
+      method="POST">
+  {% csrf_token %}
+
+
+  <div class="parent-container row">
+
+
+    <div class="question_selection_div">
+      <div class="question_selection_title_div">
+        <!-- <div class="col-12 ml-n1 mt-n2"> -->
+          <h4 class="m-0">{% trans 'Question Selection' %}</h4>
+        <!-- </div> -->
+      </div>
+      <div class="row py-3 question_selection_boxes_row">
+        <div class="col-5 previous_questions_div">
+          <div class="question_selection_box_side">
+            <!-- <div class="ml-2 mb-3 survey_question_selection_subtitle_div"> -->
+              <h5>{% trans 'Available Questions' %}</h5>
+            <!-- </div> -->
+            <div class="search-parent">
+              <input title="Search available questions from the list" type="text" placeholder="{% trans 'Search...' %}"
+                     class="form-control form-control-sm qn_search_ip">
+              <span class="fa fa-search search-icon"></span>
+            </div>
+
+            <div class="qn_list_only_div">
+              <div class="btn-group-toggle question_choose_qn_head_row" data-toggle="buttons">
+                <label class="btn btn-sm btn-block btn-outline-secondary">
+                  <input type="checkbox" autocomplete="off"> Question 1
+                </label>
+              </div>
+            </div>
+
+          </div>
+          <div class="question_selection_box_side_btn">
+            <button type="button" class="btn btn-dark btn-sm btn-block">
+              <span>{% trans 'Select All' %}</span>
+              <i class="fa fa-arrow-circle-right ml-2" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="col-2 question_choose_arrow_div">
+          <div>
+            <button type="button" class="btn btn-sm btn-outline-dark rounded-circle mb-2 qn_to_left_btn">
+              <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div>
+            <button type="button" class="btn btn-sm btn-outline-dark rounded-circle mt-2 qn_to_right_btn">
+              <i class="fa fa-arrow-right" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+        <div class="col-5 selected_questions_div">
+          <div class="question_selection_box_side">
+            <!-- <div class="ml-2 mb-3 survey_question_selection_subtitle_div"> -->
+              <h5>{% trans 'Selected Questions' %}</h5>
+            <!-- </div> -->
+            <div class="search-parent">
+              <input title="Search selected questions from the list" type="text" placeholder="{% trans 'Search...' %}"
+                     class="form-control form-control-sm qn_search_ip">
+              <span class="fa fa-search search-icon"></span>
+            </div>
+            <div class="qn_list_only_div">
+              <div class="btn-group-toggle question_choose_qn_head_row" data-toggle="buttons">
+                <label class="btn btn-sm btn-block btn-outline-secondary">
+                  <input type="checkbox" autocomplete="off">
+                  <span class="badge badge-outline-secondary">1</span>
+                  Question 1
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="question_selection_box_side_btn">
+            <button type="button" class="btn btn-dark btn-sm btn-block">
+              <i class="fa fa-arrow-circle-left mr-2" aria-hidden="true"></i>
+              <span>{% trans 'Clear All' %}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="question_error question_form_error_div text-lg-center">
+        {% trans 'Select Atleast 1 Questions To Create QuestionSet' %}
+      </div>
+    </div>
+
+
+
+
+  </div>
+
+  <div class="parent row question_form_table_row">
+    <div class="title col-4 question_form_table_th">{% trans 'Unique Code' %} *</div>
+    <div class="value col-8 question_form_table_td">
+
+      <input placeholder="{% trans 'Enter unique code here...' %}" type="text" required name="unique_code"
+             maxlength="10"
+             id="id_unique_code" class="form-control"
+        {% if object %} value="{{ object.unique_code }}"{% endif %}>
+
+
+      <div class="question_form_unique_code_error question_form_error_div">
+        {% trans 'Unique Code is required' %}
+      </div>
+    </div>
+  </div>
+
+
+  <div class="parent row">
+    <div class="title col-4">{% trans 'SubCategory' %} *</div>
+    <div class="value col-8 question_form_table_td">
+      <select name="subcategory_code" id="id_subcategory_code" class="form-control">
+        {% if not object %}
+          <option value="" selected="">---------</option>
+        {% endif %}
+        {% for category in subcat %}
+          <option value="{{ category.pk }}"
+            {% if object.subcategory_code.pk == category.pk %}
+                  selected
+
+            {% endif %}>
+            {% trans category.name %}
+          </option>
+        {% endfor %}
+      </select>
+      <div class="question_form_category_error question_form_error_div">
+        {% trans 'SubCategory is required' %}
+      </div>
+    </div>
+  </div>
+
+
+  <div class="parent row ">
+    <div class="title col-4">{% trans 'Description' %}</div>
+    <div class="value col-8 description">
+        <textarea placeholder="{% trans 'Enter description here...' %}" name="description" id="id_description"
+                  cols="40" rows="3"
+                  class="form-control">{% if object %}{{ object.description }}{% endif %}</textarea>
+    </div>
+  </div>
+
+  <div class="parent row question_form_table_row">
+    <div class="title col-4 question_form_table_th">{% trans 'Difficulty Level' %} *</div>
+    <div class="value col-8 question_form_table_td">
+      <input placeholder="{% trans 'Enter Difficulty level here...(0: both, 1: beginner, 2: advanced)' %}" type="number"
+             required name="difficulty_level"
+             maxlength="1" min="0" max="2" id="id_level" class="form-control"
+        {% if object %} value="{{ object.difficulty_level }}"{% endif %}>
+      <div class="question_form_level_error question_form_error_div ">
+        {% trans 'Difficulty Level is required' %}
+      </div>
+    </div>
+  </div>
+
+
+  <div class="parent row  question_form_table_row">
+    <div class="title col-4 ">{% trans 'Option' %}</div>
+    <div class="value col-8 question_form_table_td option_fields">
+      <div id="div_id_Use_Flag" class=" question_create_options_div mr-2">
+        <input type="checkbox" name="is_active" class="checkboxinput " id="id_is_active"
+          {% if object and object.is_active %} checked {% elif object %} {% else %} checked {% endif %}>
+        <label for="id_is_active" class=" survey-add-label">
+          <span class="question_form_checkbox_label_text">{% trans 'Active' %}</span>
+        </label>
+      </div>
+
+    </div>
+  </div>
+
+  <input type="hidden" name="selected_questions" id="selected_questions_pk">
+  <!-- <div class="row"> -->
+    <div class="col-12 text-center">
+      <button title="{% trans 'Submit created survey' %}" class="btn btn-secondary" id="question_submit_btn"
+              type="button">
+        {% if object %}
+          {% trans 'Update' %}
+        {% else %}
+          {% trans 'Submit' %}
+        {% endif %}
+      </button>
+    </div>
+  <!-- </div> -->
+
+</form>
+
+
+<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+
+<script>
+
+let qn_list = {
+    {% for qn in qn_list %}
+        qn_{{ qn.pk }}: {
+        qn_pk: {{ qn.pk }},
+        qn_title: "{{ qn.question_title }}",
+        qn_selected: {% if qn.pk in sel_qn_list %}true{% else %}false{% endif %},
+        qn_show: true,
+        qn_order: {% if qn.pk in sel_qn_list %}{{ qn.pk }}{% else %}0{% endif %},
+      },
+    {% endfor %}
+  }
+
+console.log('qn_list', qn_list)
+
+
+
+
+$(document).ready(function () {
+
+   render_questions(qn_list);
+
+  $("#question_submit_btn").click(function () {
+    if (!validate_form()) {
+      return false;
+    }
+
+    $("#QuestionRegistrationForm").submit();
+
+  })
+
+});
+
+
+
+    $(".qn_to_right_btn").click(function (){
+
+    $(this).closest(".question_selection_boxes_row").find(
+      ".previous_questions_div .question_choose_qn_head_row input:checked").each(function (){
+
+      qn_list[`qn_${$(this).attr("data-qn_pk")}`].qn_selected = true;
+      let sel_row_num = Math.max.apply(Math, Object.values(qn_list).map(function(o) {
+        return o.qn_order; }))
+      sel_row_num ++;
+      qn_list[`qn_${$(this).attr("data-qn_pk")}`].qn_order = sel_row_num;
+    });
+    render_questions(qn_list);
+  });
+
+
+
+    $(".previous_questions_div .question_selection_box_side_btn").click(function (){
+
+    $(this).closest(".previous_questions_div").find(".question_choose_qn_head_row input").each(function (){
+      qn_list[`qn_${$(this).attr("data-qn_pk")}`].qn_selected = true;
+      let sel_row_num = Math.max.apply(Math, Object.values(qn_list).map(function(o) {
+        return o.qn_order; }))
+      sel_row_num ++;
+      qn_list[`qn_${$(this).attr("data-qn_pk")}`].qn_order = sel_row_num;
+    });
+    render_questions(qn_list);
+  })
+ $(".qn_to_left_btn").click(function (){
+    /* get selected question */
+    // console.log("closest box:", $(this).closest(".survey_choose_question_box"));
+
+    $(this).closest(".question_selection_boxes_row").find(
+      ".selected_questions_div .question_choose_qn_head_row input:checked").each(function (){
+      qn_list[`qn_${$(this).attr("data-qn_pk")}`].qn_selected = false;
+      qn_list[`qn_${$(this).attr("data-qn_pk")}`].qn_order = 0;
+    });
+    render_questions(qn_list);
+  });
+$(".selected_questions_div .question_selection_box_side_btn").click(function (){
+
+    $(this).closest(".selected_questions_div").find(".question_choose_qn_head_row input").each(function (){
+      qn_list[`qn_${$(this).attr("data-qn_pk")}`].qn_selected = false;
+      qn_list[`qn_${$(this).attr("data-qn_pk")}`].qn_order = 0;
+    });
+    render_questions(qn_list);
+  })
+
+  $(".previous_questions_div .qn_search_ip").on('input', function(){
+    not_chosen_search(this);
+  });
+
+  $(".selected_questions_div .qn_search_ip").on('input', function(){
+    chosen_search(this);
+  });
+
+  function not_chosen_dbl_click(el){
+    // console.log("dbl click", $(el).find("input"));
+
+
+    qn_list[`qn_${$(el).find("input").attr("data-qn_pk")}`].qn_selected = true;
+    let sel_row_num = Math.max.apply(Math, Object.values(qn_list).map(function(o) {
+      return o.qn_order; }))
+    sel_row_num ++;
+    qn_list[`qn_${$(el).find("input").attr("data-qn_pk")}`].qn_order = sel_row_num;
+    render_questions(qn_list);
+  }
+
+  function chosen_dbl_click(el){
+    // console.log("dbl click", $(el).find("input"));
+
+
+    qn_list[`qn_${$(el).find("input").attr("data-qn_pk")}`].qn_selected = false;
+    qn_list[`qn_${$(el).find("input").attr("data-qn_pk")}`].qn_order = 0;
+    render_questions(qn_list);
+  }
+
+  function not_chosen_search(el){
+
+
+
+    let text_ip = $(el).val().toLowerCase();
+    for (let key of Object.keys(qn_list)) {
+      let qn_obj = qn_list[key];
+      if (!qn_obj.qn_selected) {
+        if (!text_ip && text_ip === "") {
+          qn_obj.qn_show = true;
+        } else if (qn_obj.qn_title.toLowerCase().includes(text_ip)) {
+          qn_obj.qn_show = true;
+        } else {
+          qn_obj.qn_show = false;
+        }
+      }
+    }
+    render_questions(qn_list);
+  }
+
+  function chosen_search(el){
+
+
+
+    let text_ip = $(el).val().toLowerCase();
+    for (let key of Object.keys(qn_list)) {
+      let qn_obj = qn_list[key];
+      if (qn_obj.qn_selected) {
+        if (!text_ip && text_ip === "") {
+          qn_obj.qn_show = true;
+        } else if (qn_obj.qn_title.toLowerCase().includes(text_ip)) {
+          qn_obj.qn_show = true;
+        } else {
+          qn_obj.qn_show = false;
+        }
+      }
+    }
+    render_questions(qn_list);
+  }
+
+   function render_questions(qn_list){
+    // console.log("qn_list: ", qn_list);
+    $(`.question_selection_div .question_choose_qn_head_row`).remove();
+    let chosen_qn_list = []
+    for (let key of Object.keys(qn_list)) {
+      let qn_obj = qn_list[key];
+      if (!qn_obj.qn_show) continue;
+      if (qn_obj.qn_selected) {
+        chosen_qn_list.push(qn_obj);
+      } else {
+        $(`.question_selection_div .previous_questions_div .qn_list_only_div`).append(`
+          <div class="btn-group-toggle question_choose_qn_head_row" data-toggle="buttons">
+            <label class="btn btn-outline-secondary" ondblclick="not_chosen_dbl_click(this)">
+              <input type="checkbox" data-qn_pk="${qn_obj.qn_pk}" onfocus="focus_no_scroll()"
+                     autocomplete="off"> ${qn_obj.qn_title}
+            </label>
+          </div>
+        `)
+      }
+    }
+
+    chosen_qn_list.sort((a, b) => parseFloat(a.qn_order) - parseFloat(b.qn_order));
+    chosen_qn_list.forEach(function(qn_obj, o_idx){
+      let sel_row_num = $(`.question_selection_div .selected_questions_div .question_choose_qn_head_row`).length
+      sel_row_num ++;
+      qn_obj.qn_order = o_idx + 1
+      $(`.question_selection_div .selected_questions_div .qn_list_only_div`).append(`
+        <div class="btn-group-toggle question_choose_qn_head_row" data-toggle="buttons">
+          <label class="btn btn-outline-secondary" ondblclick="chosen_dbl_click(this)">
+            <input type="checkbox" data-qn_pk="${qn_obj.qn_pk}" onfocus="focus_no_scroll()"
+                   autocomplete="off">
+            <span class="badge badge-outline-secondary">${qn_obj.qn_order}</span>
+            ${qn_obj.qn_title}
+          </label>
+        </div>
+      `)
+    })
+
+  }
+</script>
+
+<script>
+
+
+
+  function animate_and_focus(el_id) {
+    $('html, body').animate({
+      scrollTop: $(el_id).offset().top - 100
+    }, 500, function () {
+      $(el_id).focus();
+    });
+  }
+
+
+  function validate_form() {
+
+    $("#QuestionRegistrationForm .is-invalid").removeClass("is-invalid");
+    $(".question_form_error_div").hide();
+
+    if ($("#id_unique_code").val().replaceAll(" ", "") === "") {
+      $("#id_unique_code").addClass('is-invalid');
+      $(".question_form_unique_code_error").show();
+      animate_and_focus("#id_unique_code")
+      return false;
+    }
+
+    if ($("#id_subcategory_code").val() === "") {
+      $("#id_subcategory_code").addClass('is-invalid');
+      $(".question_form_category_error").show();
+      animate_and_focus("#id_subcategory_code")
+      return false;
+    }
+
+    if ($("#id_level").val() === "") {
+      $("#id_level").addClass('is-invalid');
+      $(".question_form_level_error").show();
+      animate_and_focus("#id_level")
+      return false;
+    }
+
+    if($('.selected_questions_div .qn_list_only_div .question_choose_qn_head_row').find('input').length < 1){
+       $(".question_error").show();
+       animate_and_focus(".question_selection_boxes_row")
+       return false;
+    }else{
+
+      selected_questions = []
+
+      $('.selected_questions_div .qn_list_only_div .question_choose_qn_head_row').find('input').each(function (){
+
+          selected_questions.push($(this).attr('data-qn_pk'))
+      })
+
+      $('#selected_questions_pk').val(selected_questions);
+    }
+
+
+
+
+    return true;
+  }
+
+
+
+
+
+</script>

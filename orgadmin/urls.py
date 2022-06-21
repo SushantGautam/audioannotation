@@ -42,6 +42,17 @@ urlpatterns += [
          name='task_verify'),
 ]
 
+# Management URLS
 urlpatterns += [
-    path('category-management', views.CategoryManagementListView.as_view(), name='category_management_page'),
+    path('category-management', views.CategoryManagementListView.as_view(), name='category_management'),
+
+    # Questions
+    path('questions/', views.QuestionListPage.as_view(), name='question_list'),
+    path('questions/create/', views.QuestionsCreateView.as_view(), name='question_create_ajax'),
+    path('questions/<int:pk>/edit/', views.QuestionsUpdateView.as_view(), name='question_update'),
+    path('questions/<int:pk>/', views.QuestionDetailView.as_view(), name='question_detail'),
+    path('questions/<int:pk>/delete/', views.QuestionDeleteView, name='question_delete'),
+    path('questions/delete_multiple_question/', views.MultipleQuestionDeleteView,
+         name='delete_multiple_question'),
+
 ]
