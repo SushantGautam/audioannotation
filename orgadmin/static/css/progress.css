@@ -433,6 +433,7 @@
     display: inline-block;
     border-radius: 50%;
     color: #ffffff;
+    text-align: center;
 }
 .don_icon {
   height: 36px;
