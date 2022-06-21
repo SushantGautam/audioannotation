@@ -43,12 +43,18 @@
                         <td>
                             {{ contract.created_by }}
                         </td>
-                        <td>
+                        <td class="d-flex gap-1">
                             <button class="btn btn-dark btn-sm edit-btn"
                                     data-edit-url="{% url 'contract_edit' contract.pk %}" data-bs-toggle="modal"
                                     data-bs-target="#modal-create-contract">
                                 <i class="fa fa-edit"></i>
                             </button>
+                            <form method="post" action="{% url 'contract_delete' contract.pk %}" onsubmit="return confirm('Are you sure you want to delete?')">
+                                {% csrf_token %}
+                                <button class="btn btn-dark btn-sm delete-btn">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 {% endfor %}
@@ -90,7 +96,6 @@
         });
 
         $('.edit-btn').on('click', function () {
-            console.log('hhere')
             $.ajax({
                 url: $(this).attr('data-edit-url'),
                 type: 'GET',
