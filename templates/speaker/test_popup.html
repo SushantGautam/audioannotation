@@ -90,7 +90,7 @@
 
 
 <section class="bottom-section">
-    <div class="recorder_wave" style="width: 11rem; height: 3.5rem;">
+    <div class="recorder_wave" style="width: 8rem; height: 3.5rem;">
         <svg preserveAspectRatio="none" id="visualizer" version="1.1" xmlns="http://www.w3.org/2000/svg"
              xmlns:xlink="http://www.w3.org/1999/xlink">
             <defs>
@@ -127,9 +127,12 @@
             <span class="rec-timer status-inactive">{% if not qn.can_submit %}{{ qn.speaking_time }}{% endif %}</span>
         </div>
 
+        <div title="Answer submitted" class="is-submitted status-inactive">
+            <i class="fa-solid fa-circle-check"></i>
+            <span class="complete-label ">Complete</span>
+        </div>
     </div>
 
-    <span title="Answer submitted" class="is-submitted" hidden> <i class="fa-solid fa-circle-check"></i></span>
 
     <div {% if not speakerSubObj %}style="visibility: hidden"{% endif %}>
         <audio class="submitted-audio" preload="metadata" onloadedmetadata="mDur()" ontimeupdate="mPlay(this)">
@@ -139,12 +142,16 @@
         </audio>
 
         <div class="audio-playback-controls" {% if qn.can_submit %}style="visibility: hidden" {% endif %}>
-            <label for="dur">Recorded audio</label>
+            <label class="audio-playback-label" for="dur">Recorded audio</label>
             <input title="Seek recorded audio" class="submitted-audio-playback" id="dur" type="range" name="rng" min="0" step="0.25" value="0" onchange="mSet()" style="width: 7rem">
-            <button onClick="togglePlay(this);"
-                    class="btn btn-sm btn-dark play-recorded-audio"
-                    title="Play recorded audio"><i
-                    class="fa-solid fa-play"></i> {% trans 'Play' %} </button>
+            <!-- <div> -->
+                <button onClick="togglePlay(this);" class="btn btn-sm btn-dark play-recorded-audio" title="Play recorded audio">
+                    <i class="fa-solid fa-play"></i> {% trans 'Play' %}
+                </button>
+                <!-- <button class="btn btn-sm btn-dark re-record" title="Start recording again">
+                    <i class="fa-solid fa-rotate"></i> {% trans 'Re-record' %}
+                </button> -->
+            <!-- </div> -->
         </div>
 
     </div>
@@ -434,11 +441,19 @@
                     // When recording stops, allow closing/interruption of the test
                     document.querySelector('.btn-close').style.display = "block";// Show play button after the recording is stopped
 
-                    // Show Submitted mwssage when recording ends and question gets submitted
-                    document.querySelector(".is-submitted").removeAttribute("hidden")
+                    // Remove Recording section styles and show Complete message when recording ends and question gets submitted
+                    $('.rec-label').removeClass('status-active');
+                    $('.rec-label').addClass('status-inactive');
+                    $('.rec-icon').removeClass('status-active');
+                    $('.rec-icon').addClass('status-inactive');
+                    $('.rec-timer').removeClass('status-active');
+                    $('.rec-timer').addClass('status-inactive');
 
+                    document.querySelector(".is-submitted").classList.remove("status-inactive")
+                    document.querySelector(".is-submitted").classList.add("status-active")
+                    document.querySelector(".complete-label").classList.add("status-active")
 
-
+                    // Remove Recording section styles and show Complete message when recording ends and question gets submitted
                 }
 
                 function startRecordTimer() {

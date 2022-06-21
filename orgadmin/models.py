@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 class Organization(models.Model):
     name = models.CharField(max_length=256)
+    org_unit = models.CharField(max_length=256, blank=True, null=True)
     address = models.CharField(max_length=256, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
