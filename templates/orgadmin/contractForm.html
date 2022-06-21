@@ -1,6 +1,8 @@
 {% load i18n %}
 
-<form method="post" action="{% url 'contract_create' %}" enctype="multipart/form-data">
+<form method="post" action="
+        {% if '/edit' in request.path %}{% url 'contract_edit' object.pk %}{% else %}{% url 'contract_create' %}{% endif %}"
+      enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn btn-sm btn-dark">{% trans 'Submit' %}</button>

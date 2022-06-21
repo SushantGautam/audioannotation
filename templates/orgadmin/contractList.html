@@ -23,6 +23,7 @@
                     <th>{% trans "File" %}</th>
                     <th>{% trans "Status" %}</th>
                     <th>{% trans "Created By" %}</th>
+                    <th>{% trans "Action" %}</th>
                 </tr>
                 </thead>
 
@@ -41,6 +42,13 @@
                         </td>
                         <td>
                             {{ contract.created_by }}
+                        </td>
+                        <td>
+                            <button class="btn btn-dark btn-sm edit-btn"
+                                    data-edit-url="{% url 'contract_edit' contract.pk %}" data-bs-toggle="modal"
+                                    data-bs-target="#modal-create-contract">
+                                <i class="fa fa-edit"></i>
+                            </button>
                         </td>
                     </tr>
                 {% endfor %}
@@ -73,6 +81,18 @@
         $('.create-btn').on('click', function () {
             $.ajax({
                 url: "{% url 'contract_create' %}",
+                type: 'GET',
+                success: function (response) {
+                    $('#modal-create-contract .modal-body').empty();
+                    $('#modal-create-contract .modal-body').append(response);
+                }
+            });
+        });
+
+        $('.edit-btn').on('click', function () {
+            console.log('hhere')
+            $.ajax({
+                url: $(this).attr('data-edit-url'),
                 type: 'GET',
                 success: function (response) {
                     $('#modal-create-contract .modal-body').empty();

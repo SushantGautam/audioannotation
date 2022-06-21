@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.shortcuts import HttpResponse, render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, ListView, FormView, CreateView, DetailView
+from django.views.generic import TemplateView, ListView, FormView, CreateView, DetailView, UpdateView
 
 from orgadmin.forms import ContractForm
 from orgadmin.models import User, ContractSign, Contract
@@ -86,6 +86,17 @@ class ContractCreateView(CreateView):
             obj.created_by = self.request.user.orgadmin
             obj.save()
         return super().form_valid(form)
+
+
+class ContractEditView(UpdateView):
+    model = Contract
+    form_class = ContractForm
+    template_name = 'orgadmin/contractForm.html'
+    success_url = reverse_lazy('contract_list')
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
 
 class UserChangeBlock(FormView):
     def post(self, *args, **kwargs):

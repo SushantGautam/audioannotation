@@ -28,7 +28,10 @@ class ContractForm(ModelForm):
         existing_choices = Contract.objects.all().values_list('user_type', flat=True)
         choices = list(Contract.USER_TYPE_CHOICES)
         new_choices = []
+
         for value, display in choices:
             if value not in existing_choices:
+                new_choices.append((value, display))
+            if self.instance.pk and self.instance.user_type == value:
                 new_choices.append((value, display))
         self.fields['user_type'].choices = tuple(new_choices)
