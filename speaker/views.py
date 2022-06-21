@@ -98,17 +98,23 @@ class ContractView(View):
         return render(request, 'speaker/contract.html', context)
 
     def post(self, request, **kwargs):
-        if ContractSign.objects.filter(user=self.request.user, contract_code__user_type='SPE', approved=False,
-                                       contract_code__created_by__organization_code=self.request.user.speaker.organization_code).exists():
-            contract = ContractSign.objects.get(user=self.request.user, contract_code__user_type='SPE', approved=False,
-                                                contract_code__created_by__organization_code=self.request.user.speaker.organization_code)
-        else:
-            contract = ContractSign()
-        contract.user = request.user
-        contract.upload_file = request.FILES['contract-file']
-        contract.approved = None
-        contract.contract_code_id = request.POST.get('contract-id')
-        contract.save()
+        contract_code_id = request.POST.get('contract-id')
+        contract_type = request.POST.get('contract-type')
+        if contract_code_id and contract_type:
+            if ContractSign.objects.filter(user=self.request.user, contract_code__user_type='SPE', approved=False,
+                                          contract_code__id=contract_code_id).exists():
+                contract = ContractSign.objects.get(user=self.request.user, contract_code__user_type='SPE', approved=False,
+                                          contract_code__id=contract_code_id)
+            else:
+                contract = ContractSign()
+            contract.user = request.user
+            contract.contract_code_id = contract_code_id
+            if contract_type == 'file':
+                contract.upload_file = request.FILES['contract-file']
+                contract.approved = None
+            elif contract_type == 'text':
+                contract.approved = True
+            contract.save()
         return redirect('speaker:contract')
 
 

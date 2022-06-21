@@ -63,11 +63,14 @@
                                   <div class="input-group"> 
                                       <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="file-upload-input" name="contract-file" required>
-                                        <label class="custom-file-label" for="file-upload-input"><i class="fa-solid fa-upload"></i>Choose file</label>
+                                        <label class="custom-file-label" for="file-upload-input">
+                                          <i class="fa-solid fa-upload"></i>{% trans 'Choose file' %}
+                                        </label>
                                         <div class="file-select-name mt-2">{% trans 'No file chosen' %}...</div>
                                       </div>
                                     </div>
                                   <input type="hidden" name="contract-id" value="{{ contract.id }}">
+                                  <input type="hidden" name="contract-type" value="file">
                               </div>
                               <div class="row">
                                 <div class="mb-4 h5 col-6">
@@ -75,7 +78,7 @@
                                   <label for="agree-terms">{% trans 'I agree to all terms and conditions' %}</label>
                                 </div>
                                 <div class="col-6">
-                                  <button type="submit" class="btn accept-button" disabled id="submit-btn">{% trans 'Accept' %}</button>
+                                  <button type="submit" class="btn accept-button" disabled id="submit-file-btn">{% trans 'Accept' %}</button>
                                 </div>
                               </div>
                           </form>
@@ -92,15 +95,20 @@
                     <div class="container__content">
                         {{ contract.description | safe }}
                     </div>
-                    <div class="container__nav row">
-                      <div class="mb-4 text-start col-8">
-                        <input type="checkbox" id="agree-terms" onchange="toggleDisabledFormButton(this)">
-                        <label for="agree-terms">{% trans "By clicking 'Accept' you are agreeing to our terms and conditions" %}</label>
+                    <form name="contract-submission" method="post" enctype="multipart/form-data">
+                      <div class="container__nav row">
+                        {% csrf_token %}
+                        <input type="hidden" name="contract-id" value="{{ contract.id }}">
+                        <input type="hidden" name="contract-type" value="text">
+                        <div class="mb-4 text-start col-8">
+                          <input type="checkbox" id="agree-terms" onchange="toggleDisabledFormButton(this)">
+                          <label for="agree-terms">{% trans "By clicking 'Accept' you are agreeing to our terms and conditions" %}</label>
+                        </div>
+                        <div class="col-4">
+                          <button type="submit" class="btn accept-button" disabled id="submit-btn">{% trans 'Accept' %}</button>
+                        </div>
                       </div>
-                      <div class="col-4">
-                        <button type="submit" class="btn accept-button" disabled id="submit-btn">{% trans 'Accept' %}</button>
-                      </div>
-                    </div>
+                    </form>
                   </section>
                 </div>
               {% endif %}
@@ -117,7 +125,7 @@
 
 <script>
     function toggleDisabledFormButton(elem) {
-        var btnelement = document.getElementById('submit-btn');
+        var btnelement = document.getElementsByClassName('accept-button')[0];
         btnelement.disabled = !btnelement.disabled;
     }
 
@@ -129,7 +137,7 @@
     }
 
     // when submit button is clicked, check if file is uploaded
-    document.getElementById("submit-btn").addEventListener("click", function(event) {
+    document.getElementById("submit-file-btn").addEventListener("click", function(event) {
         if (fileInput.files.length == 0) {
             event.preventDefault();
             alert("{% trans 'Please upload signed contract file' %}");
