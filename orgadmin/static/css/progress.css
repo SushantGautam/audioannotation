@@ -205,32 +205,27 @@
   list-style-type: none;
   color: #99a2a8;
   font-size: 9px;
-  width: calc(100%/4);
   float: left;
   position: relative;
   font: 500 13px/1 "Roboto", sans-serif;
 }
 .multi_step_progress #msprogress #progressbar li:nth-child(1):before {
   font: var(--fa-font-solid);
-  content: "\2b";
   line-height: 50px;
   font-size: 1.2em;
 }
 .multi_step_progress #msprogress #progressbar li:nth-child(2):before {
   font: var(--fa-font-solid);
-  content: "\f2c2";
   line-height: 50px;
   font-size: 1.2em;
 }
 .multi_step_progress #msprogress #progressbar li:nth-child(3):before {
   font: var(--fa-font-solid);
-  content: "\f573";
   line-height: 50px;
   font-size: 1.2em;
 }
 .multi_step_progress #msprogress #progressbar li:nth-child(4):before {
   font: var(--fa-font-solid);
-  content: "\f5bf";
   line-height: 50px;
   font-size: 1.2em;
 }
@@ -268,4 +263,35 @@
 .multi_step_progress #msprogress #progressbar li.inactive:before, .multi_step_progress #msprogress #progressbar li.inactive:after {
   background: #ba4d4d;
   color: white;
+}
+
+/* three step progress */
+.three-step #msprogress #progressbar li{
+    width: calc(100%/3);
+}
+.three-step #msprogress #progressbar li:nth-child(1):before {
+  content: "\f15c";
+}
+.three-step #msprogress #progressbar li:nth-child(2):before {
+  content: "\f573";
+}
+.three-step #msprogress #progressbar li:nth-child(3):before {
+  content: "\f5bf";
+}
+
+/* four step progress */
+.four-step #msprogress #progressbar li{
+    width: calc(100%/4);
+}
+.four-step #msprogress #progressbar li:nth-child(1):before {
+  content: "\2b";
+}
+.four-step #msprogress #progressbar li:nth-child(2):before {
+  content: "\f2c2";
+}
+.four-step #msprogress #progressbar li:nth-child(3):before {
+  content: "\f573";
+}
+.four-step #msprogress #progressbar li:nth-child(4):before {
+  content: "\f5bf";
 }
