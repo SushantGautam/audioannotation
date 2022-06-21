@@ -42,6 +42,24 @@ urlpatterns += [
          name='task_verify'),
 ]
 
+# Management URLS
 urlpatterns += [
-    path('category-management', views.CategoryManagementListView.as_view(), name='category_management_page'),
+    path('category-management', views.CategoryManagementListView.as_view(), name='category_management'),
+
+    # Questions
+    path('questions/', views.QuestionListPage.as_view(), name='question_list'),
+    path('questions/create/', views.QuestionsCreateView.as_view(), name='question_create_ajax'),
+    path('questions/<int:pk>/edit/', views.QuestionsUpdateView.as_view(), name='question_update'),
+    path('questions/<int:pk>/', views.QuestionDetailView.as_view(), name='question_detail'),
+    path('questions/<int:pk>/delete/', views.QuestionDeleteView, name='question_delete'),
+    path('questions/delete_multiple_question/', views.MultipleQuestionDeleteView,
+         name='delete_multiple_question'),
+
+    # Question Sets
+    path('question_set', views.QuestionSetListView.as_view(), name='question_set_list'),
+    path('question_set/create/', views.QuestionSetCreateView.as_view(), name='question_set_create'),
+    path('question_set/<int:pk>/edit/', views.QuestionsSetUpdateView.as_view(), name='question_set_update'),
+    path('question_set/<int:pk>/delete/', views.QuestionSetDeleteView, name='questionset_delete'),
+    path('question_set/delete_multiple/', views.MultipleQuestionSetDeleteView,
+         name='delete_multiple_questionset'),
 ]

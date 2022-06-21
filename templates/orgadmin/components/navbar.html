@@ -31,9 +31,9 @@
   <input type="radio" id="questions-tab" name="mytabs">
   <label for="questions-tab">Questions</label>
   <div class="tab animate__animated animate__fadeInUp" id="questions-tab-div">
-    <a href="{% url 'category_management_page' %}" class="tab-item">Category Management</a>
-    <a href="" class="tab-item">Questions List</a>
-    <a href="" class="tab-item">Question Registration</a>
+    <a href="{% url 'category_management' %}" class="tab-item">Category Management</a>
+    <a href="{% url 'question_list' %}" class="tab-item">Questions List</a>
+    <a href="{% url 'question_set_list' %}" class="tab-item">Question Set</a>
     <a href="" class="tab-item">Question Set Creation</a>
   </div>
 
