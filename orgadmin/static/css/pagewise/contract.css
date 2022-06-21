@@ -12,13 +12,13 @@
     box-sizing: border-box;
     padding: 1rem 1rem 0 1rem;
     background-color: #fff;
-    width: 768px;
+    width: 70%;
     height: 100%;
     border-radius: 0.25rem;
     box-shadow: 0rem 1rem 2rem -0.25rem rgba(0, 0, 0, 0.25);
 }
 .wrap .container__heading {
-    /* padding: 1rem 0; */
+    padding: 0.2rem 0;
     border-bottom: 1px solid #ccc;
     text-align: center;
 }
@@ -35,7 +35,7 @@
     border-top: 1px solid #ccc;
     text-align: right;
     /* padding: 2rem 0 1rem; */
-    padding-top: 0.4em;
+    padding-top: 0.5em;
 }
 .accept-button {
     background-color: #444499;

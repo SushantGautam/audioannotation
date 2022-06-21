@@ -28,7 +28,7 @@
                 <h2>{% trans 'Your contract is waiting for approval. Please be patient.' %}</h2>
             {% elif not has_contract_submitted and not has_contract_approved %}
             
-              {% if not contract.upload_file %}
+              {% if contract.upload_file %}
                 <fieldset>
                   <h2>
                       <span class="don_icon_number h5"><i class="fa-solid fa-1"></i></span>
@@ -69,11 +69,15 @@
                                     </div>
                                   <input type="hidden" name="contract-id" value="{{ contract.id }}">
                               </div>
-                              <div class="mb-4 h5">
+                              <div class="row">
+                                <div class="mb-4 h5 col-6">
                                   <input type="checkbox" id="agree-terms" onchange="toggleDisabledFormButton(this)">
                                   <label for="agree-terms">{% trans 'I agree to all terms and conditions' %}</label>
+                                </div>
+                                <div class="col-6">
+                                  <button type="submit" class="btn accept-button" disabled id="submit-btn">{% trans 'Accept' %}</button>
+                                </div>
                               </div>
-                              <button type="submit" class="btn accept-button" disabled id="submit-btn">{% trans 'Accept' %}</button>
                           </form>
                       </div>
           
