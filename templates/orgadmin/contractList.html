@@ -28,9 +28,8 @@
                 <tr class="">
                     <th>{% trans "S. No." %}</th>
                     <th>{% trans "Title" %}</th>
-                    <th>{% trans "Type" %}</th>
-                    <th>{% trans "Description" %}</th>
-                    <th>{% trans "File" %}</th>
+                    <th>{% trans "User Type" %}</th>
+                    <th>{% trans "Contract Type" %}</th>
                     <th>{% trans "Status" %}</th>
                     <th>{% trans "Created By" %}</th>
                     <th>{% trans "Action" %}</th>
@@ -43,8 +42,7 @@
                         <td> {{ forloop.counter }}</td>
                         <td> {{ contract.title }}</td>
                         <td> {{ contract.get_user_type_display }}</td>
-                        <td> {{ contract.description | safe | truncatechars:120 }}</td>
-                        <td> {{ contract.get_upload_file_name }}</td>
+                        <td> {{ contract.get_contract_type_display }}</td>
                         <td>
                             <span class="active-status">
                                 {{ contract.is_active|yesno:'Active, Inactive' }}

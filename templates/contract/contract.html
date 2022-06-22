@@ -28,7 +28,7 @@
                 <h2>{% trans 'Your contract is waiting for approval. Please be patient.' %}</h2>
             {% elif not has_contract_submitted and not has_contract_approved %}
             
-              {% if contract.upload_file %}
+              {% if contract.contract_type == 'F' %}
                 <fieldset>
                   <h2>
                       <span class="don_icon_number h5"><i class="fa-solid fa-1"></i></span>
@@ -71,7 +71,7 @@
                                       </div>
                                     </div>
                                   <input type="hidden" name="contract-id" value="{{ contract.id }}">
-                                  <input type="hidden" name="contract-type" value="file">
+                                  <!-- <input type="hidden" name="contract-type" value="file"> -->
                               </div>
                               <div class="row">
                                 <div class="mb-4 h5 col-6">
@@ -100,7 +100,7 @@
                       <div class="container__nav row">
                         {% csrf_token %}
                         <input type="hidden" name="contract-id" value="{{ contract.id }}">
-                        <input type="hidden" name="contract-type" value="text">
+                        <!-- <input type="hidden" name="contract-type" value="text"> -->
                         <div class="mb-4 text-start col-8">
                           <input type="checkbox" id="agree-terms" onchange="toggleDisabledFormButton(this)">
                           <label for="agree-terms">{% trans "By clicking 'Accept' you are agreeing to our terms and conditions" %}</label>

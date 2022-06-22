@@ -99,21 +99,23 @@ class ContractView(View):
 
     def post(self, request, **kwargs):
         contract_code_id = request.POST.get('contract-id')
-        contract_type = request.POST.get('contract-type')
-        if contract_code_id and contract_type:
+        if contract_code_id:
+            contract_code = Contract.objects.filter(id=int(contract_code_id)).first()
+            contract_type = contract_code.contract_type
             if ContractSign.objects.filter(user=self.request.user, contract_code__user_type='SPE', approved=False,
-                                          contract_code__id=contract_code_id).exists():
+                                          contract_code=contract_code).exists():
                 contract = ContractSign.objects.get(user=self.request.user, contract_code__user_type='SPE', approved=False,
-                                          contract_code__id=contract_code_id)
+                                          contract_code=contract_code)
             else:
                 contract = ContractSign()
             contract.user = request.user
             contract.contract_code_id = contract_code_id
-            if contract_type == 'file':
+            if contract_type == 'F':
                 contract.upload_file = request.FILES['contract-file']
                 contract.approved = None
-            elif contract_type == 'text':
+            elif contract_type == 'T':
                 contract.approved = True
+                contract.approved_at = datetime.datetime.now()
             contract.save()
         return redirect('speaker:contract')
 
