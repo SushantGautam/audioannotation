@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django_summernote.admin import SummernoteModelAdmin
+
 from .models import OrgAdmin, Organization, Contract, ContractSign, VerificationRequest
 
 class OrgAdminAdmin(admin.ModelAdmin):
@@ -19,7 +21,8 @@ class OrgAdminAdmin(admin.ModelAdmin):
         return obj.user.email
 admin.site.register(OrgAdmin, OrgAdminAdmin)
 
-class ContractAdmin(admin.ModelAdmin):
+class ContractAdmin(SummernoteModelAdmin):
+    summernote_fields = '__all__'
     list_display = ('id', 'title', 'user_type', 'created_at', 'created_by', 'upload_file')
     list_filter = ('user_type', 'is_active')
 admin.site.register(Contract, ContractAdmin)

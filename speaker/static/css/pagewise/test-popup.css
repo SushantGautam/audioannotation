@@ -248,6 +248,10 @@ path{
     filter: blur(10px);
 }
 
+.image-question.blur-filter{
+    pointer-events: none;
+}
+
 .remove-blur-btn{
     position: absolute;
     top: 50%;
