@@ -115,6 +115,7 @@ class ContractView(View):
                 contract.approved = None
             elif contract_type == 'T':
                 contract.approved = True
+                contract.approved_at = datetime.datetime.now()
             contract.save()
         return redirect('speaker:contract')
 
