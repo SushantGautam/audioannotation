@@ -32,21 +32,22 @@
                 <fieldset>
                   <h2>
                       <span class="don_icon_number h5"><i class="fa-solid fa-1"></i></span>
-                      {% trans 'Please Download and fill the contract below.' %}
+                      {% trans 'Please Fill the contract below and Download' %}
                   </h2>
                   <div class="contract-container mt-4">
-                      <div><span style="font-weight:bold">{% trans 'Title' %}:</span>  {{ contract.title }}</div>
-                      {% if contract.description %}
+                      <div class="h5"><span style="font-weight:bold">{% trans 'Title' %}:</span>  {{ contract.title }}</div>
+                      <!-- {% if contract.description %}
                           <div><span style="font-weight:bold">{% trans 'Description' %}:</span>  {{ contract.description | safe }}</div>
-                      {% endif %}
+                      {% endif %} -->
                       <div class="mt-2">
                           {% if contract.upload_file.url %}
                               <p>
-                                  <i class="fa-solid fa-paperclip"></i>
-                                  {{ contract.get_upload_file_name }}
-                                  <a href="{{ contract.upload_file.url }}" class="btn btn-info ms-4" target="_blank">
+                                  <!-- <i class="fa-solid fa-paperclip"></i> -->
+                                  <!-- {{ contract.get_upload_file_name }} -->
+                                  <embed src="{{ contract.upload_file.url }}" width="1000px" height="800px" />
+                                  <!-- <a href="{{ contract.upload_file.url }}" class="btn btn-info ms-4" target="_blank">
                                       <i class="fa-solid fa-cloud-arrow-down"></i> {% trans 'Download Contract' %}
-                                  </a>
+                                  </a> -->
                               </p>
                           {% else %}
                               {% trans 'No Attachment Available' %}
