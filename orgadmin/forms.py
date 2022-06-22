@@ -1,15 +1,16 @@
 from django.contrib.auth.models import User
-from django.forms import ModelForm
+from django import forms
 from django_summernote.widgets import SummernoteWidget
 
 from orgadmin.models import Contract
 
 
-class UserChangeForm(ModelForm):
+class UserChangeForm(forms.ModelForm):
     """A form for updating users. Includes all the fields on
     the user, but replaces the password field with admin's
     disabled password hash display field.
     """
+
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'email')
@@ -19,10 +20,14 @@ class UserChangeForm(ModelForm):
         self.fields['email'].required = False
 
 
-class ContractForm(ModelForm):
+class ContractForm(forms.ModelForm):
+    contract_type = forms.ChoiceField(choices=(('T', 'Text'),
+                                               ('F', 'File Upload'),
+                                               ))
+
     class Meta:
         model = Contract
-        fields = ('title', 'user_type', 'description', 'upload_file')
+        fields = ('title', 'user_type', 'contract_type', 'description', 'upload_file')
         widgets = {
             'description': SummernoteWidget(),
         }
@@ -39,3 +44,6 @@ class ContractForm(ModelForm):
             if self.instance.pk and self.instance.user_type == value:
                 new_choices.append((value, display))
         self.fields['user_type'].choices = tuple(new_choices)
+
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'

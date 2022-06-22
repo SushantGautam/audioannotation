@@ -1,9 +1,46 @@
 {% load i18n %}
 
-<form method="post" action="
-        {% if '/edit' in request.path %}{% url 'contract_edit' object.pk %}{% else %}{% url 'contract_create' %}{% endif %}"
+<form method="post" name="contract-form" action="
+    {% if '/edit' in request.path %}{% url 'contract_edit' object.pk %}{% else %}{% url 'contract_create' %}{% endif %}"
       enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
+    {% for field in form %}
+        <div class="element-container">
+            {{ field.label_tag }} {{ field }}
+        </div>
+    {% endfor %}
     <button type="submit" class="btn btn-sm btn-dark">{% trans 'Submit' %}</button>
 </form>
+
+<script>
+    $('form[name=contract-form]').on('submit', function (e) {
+        if (value.toLowerCase() == 't') {
+            if ($('.summernote-div').find('iframe').contents().find('.note-editable').text().trim().length <= 0) {
+                e.preventDefault();
+                alert('Description cannot be empty.');
+                return false;
+            }
+        }
+    });
+
+    $(document).ready(function () {
+        $('#id_contract_type').on('change', function () {
+            contractTypeChangeFunc();
+        });
+
+        contractTypeChangeFunc();
+    });
+
+    function contractTypeChangeFunc() {
+        value = $('#id_contract_type').val();
+        if (value.toLowerCase() == 't') {
+            $('#id_upload_file').closest('.element-container').addClass('d-none');
+            $('.summernote-div').closest('.element-container').removeClass('d-none');
+            $('#id_upload_file').removeAttr('required');
+        } else {
+            $('#id_upload_file').closest('.element-container').removeClass('d-none');
+            $('.summernote-div').closest('.element-container').addClass('d-none');
+            $('#id_upload_file').attr('required', 'required');
+        }
+    }
+</script>

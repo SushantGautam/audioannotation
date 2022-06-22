@@ -2,15 +2,25 @@
 {% load i18n %}
 
 {% block styles %}
+    <style>
+        .question_dt_right_btn {
+            float: right;
+        }
 
+        .dataTables_filter svg {
+            z-index: 100;
+            transform: translateX(-5px);
+        }
+
+        .dataTables_filter input {
+            transform: translateX(20px);
+
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
     <main class="users-list">
-        {% if can_create %}
-            <button class="btn btn-dark create-btn" data-bs-toggle="modal" data-bs-target="#modal-create-contract"><i
-                    class="fa fa-plus-circle"></i> {% trans 'Create' %}</button>
-        {% endif %}
         <section class="table-section">
             <table class="table py-3" cellspacing="0" id="">
 
@@ -49,7 +59,8 @@
                                     data-bs-target="#modal-create-contract">
                                 <i class="fa fa-edit"></i>
                             </button>
-                            <form method="post" action="{% url 'contract_delete' contract.pk %}" onsubmit="return confirm('Are you sure you want to delete?')">
+                            <form method="post" action="{% url 'contract_delete' contract.pk %}"
+                                  onsubmit="return confirm('Are you sure you want to delete?')">
                                 {% csrf_token %}
                                 <button class="btn btn-dark btn-sm delete-btn">
                                     <i class="fa fa-trash"></i>
@@ -66,7 +77,7 @@
 
     <div class="modal fade" id="modal-create-contract" tabindex="-1" aria-labelledby="modal-success-label"
          aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5>{% trans 'Create Contract' %}</h5>
@@ -82,17 +93,59 @@
 
 {% block scripts %}
     <script>
-        $('.table').DataTable();
-
-        $('.create-btn').on('click', function () {
-            $.ajax({
-                url: "{% url 'contract_create' %}",
-                type: 'GET',
-                success: function (response) {
-                    $('#modal-create-contract .modal-body').empty();
-                    $('#modal-create-contract .modal-body').append(response);
+        $('.table').DataTable({
+            dom: 'lfBtp',
+            responsive: true,
+            pagingType: "full_numbers",
+            language: {
+                search: '_INPUT_',
+                searchPlaceholder: "{% trans 'Search' %}...",
+                lengthMenu: "&nbsp; _MENU_"
+            },
+            buttons: [
+                {
+                    text: "<i class='fa fa-plus mr-2'></i> {% trans 'Register' %}",
+                    className: "question_dt_right_btn btn-chinju-orange active btn btn-sm register_btn",
+                    action: function () {
+                        $.ajax({
+                            url: "{% url 'contract_create' %}",
+                            type: 'GET',
+                            success: function (response) {
+                                $('#modal-create-contract .modal-body').empty();
+                                $('#modal-create-contract .modal-body').append(response);
+                            }
+                        });
+                    }
+                },
+            ],
+            oLanguage: {
+                oPaginate: {
+                    sFirst: '<i class="fas fa-angle-double-left"></i>',
+                    sNext: '<i class="fas fa-angle-right"></i>',
+                    sPrevious: '<i class="fas fa-angle-left"></i>',
+                    sLast: '<i class="fas fa-angle-double-right"></i>',
                 }
-            });
+
+            },
+            initComplete: function () {
+                $('.dataTables_filter').addClass('question_dt_right_btn');
+                $('.dataTables_length').addClass('question_dt_right_btn');
+                //  $('.dataTables_filter input').removeClass('form-control-sm');
+                $('.dataTables_filter input').after(`<span class="fa fa-search search-input-icon pr-5"></span>`);
+                $('.dataTables_length select').removeClass('custom-select-sm');
+                $('.dt-buttons button').addClass('btn-gray text-white');
+                $('.dt-buttons').removeClass('btn-group');
+                $('.question_dt_right_btn').css('margin-left', '10px');
+
+                $('.register_btn').css('margin-right', '-22px');
+                $('.register_btn').attr("data-bs-toggle", "modal");
+                $('.register_btn').attr("data-bs-target", "#modal-create-contract");
+
+                {% if not can_create %}
+                    $('.register_btn').remove();
+                {% endif %}
+                $('.dataTables_paginate').addClass('my-4');
+            },
         });
 
         $('.edit-btn').on('click', function () {
@@ -105,5 +158,8 @@
                 }
             });
         });
+
+
+
     </script>
 {% endblock scripts %}
