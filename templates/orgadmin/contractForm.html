@@ -37,10 +37,13 @@
             $('#id_upload_file').closest('.element-container').addClass('d-none');
             $('.summernote-div').closest('.element-container').removeClass('d-none');
             $('#id_upload_file').removeAttr('required');
-        } else {
+        } else if (value.toLowerCase() == 'f') {
             $('#id_upload_file').closest('.element-container').removeClass('d-none');
             $('.summernote-div').closest('.element-container').addClass('d-none');
             $('#id_upload_file').attr('required', 'required');
+        } else {
+            $('#id_upload_file').closest('.element-container').addClass('d-none');
+            $('.summernote-div').closest('.element-container').addClass('d-none');
         }
     }
 </script>

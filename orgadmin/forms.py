@@ -21,10 +21,6 @@ class UserChangeForm(forms.ModelForm):
 
 
 class ContractForm(forms.ModelForm):
-    contract_type = forms.ChoiceField(choices=(('T', 'Text'),
-                                               ('F', 'File Upload'),
-                                               ))
-
     class Meta:
         model = Contract
         fields = ('title', 'user_type', 'contract_type', 'description', 'upload_file')
