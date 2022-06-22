@@ -47,6 +47,10 @@ def contract_file_name(instance, filename):
     return 'contract/{0}_contract/{1}'.format(instance.created_by.organization_code, filename)
 
 class Contract(models.Model):
+    CONTRACT_TYPE_CHOICES = (
+        ('F', 'File Contract'),
+        ('T', 'Text Contract'),
+    )
     USER_TYPE_CHOICES = (
         ('PRF', 'Professor'),
         ('WOR', 'Worker'),
@@ -54,6 +58,7 @@ class Contract(models.Model):
     )
     title = models.CharField(max_length=256)
     user_type = models.CharField(choices=USER_TYPE_CHOICES, max_length=3)
+    contract_type = models.CharField(choices=CONTRACT_TYPE_CHOICES, max_length=1)
     description = models.TextField(null=True, blank=True)
     upload_file = models.FileField(upload_to=contract_file_name, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
