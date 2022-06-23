@@ -132,8 +132,6 @@ class QuestionSetCreateView(CreateView):
                 selected_questions = self.request.POST.get("selected_questions").split(',')
                 print('type sel', type(selected_questions))
                 print('selected_questions', selected_questions)
-
-                self.object.organization_code = self.request.user.professor.organization_code
                 self.object.save()
                 for q in selected_questions:
                     self.object.questions.add(Question.objects.get(pk=int(q)))
@@ -172,7 +170,6 @@ class QuestionsSetUpdateView(UpdateView):
                 return redirect('professor:question_set_page')
             except:
                 print('except')
-                self.object.delete()
                 return redirect('professor:question_set_page')
 
 
