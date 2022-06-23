@@ -63,7 +63,7 @@ class UserListView(ListView):
 
 
 class ContractListView(ListView):
-    template_name = "orgadmin/contractList.html"
+    template_name = "orgadmin/contract/contractList.html"
     model = Contract
 
     def get_context_data(self, **kwargs):
@@ -81,7 +81,7 @@ class ContractListView(ListView):
 class ContractCreateView(CreateView):
     model = Contract
     form_class = ContractForm
-    template_name = 'orgadmin/contractForm.html'
+    template_name = 'orgadmin/contract/contractForm.html'
     success_url = reverse_lazy('contract_list')
 
     def form_valid(self, form):
@@ -95,7 +95,7 @@ class ContractCreateView(CreateView):
 class ContractEditView(UpdateView):
     model = Contract
     form_class = ContractForm
-    template_name = 'orgadmin/contractForm.html'
+    template_name = 'orgadmin/contract/contractForm.html'
     success_url = reverse_lazy('contract_list')
 
     def form_valid(self, form):
@@ -105,6 +105,11 @@ class ContractEditView(UpdateView):
 class ContractDeleteView(DeleteView):
     model = Contract
     success_url = reverse_lazy('contract_list')
+
+
+class ContractDetailView(DetailView):
+    model = Contract
+    template_name = 'orgadmin/contract/contractDetail.html'
 
 
 class UserChangeBlock(FormView):

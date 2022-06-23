@@ -2,6 +2,7 @@ import os
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 class Organization(models.Model):
@@ -71,6 +72,9 @@ class Contract(models.Model):
 
     def get_upload_file_name(self):
         return os.path.basename(self.upload_file.name)
+
+    def get_absolute_url(self):
+        return reverse('contract_detail', args=(self.pk, ))
 
 def contract_sign_file_name(instance, filename):
     return 'contract/contract_sign/{0}/{1}'.format(instance.user, filename)

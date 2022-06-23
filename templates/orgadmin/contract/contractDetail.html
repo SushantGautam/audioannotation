@@ -1,0 +1,47 @@
+{% extends "orgadmin/base.html" %}
+{% load i18n %}
+
+{% block styles %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="header-section ">
+        <h2 class="page-heading">{% trans 'Contract Information' %}</h2>
+        <div class="d-flex gap-3">
+
+        </div>
+    </div>
+
+    <section class="">
+        <div class="basic-info-parent">
+            <div class="basic-info-wrapper">
+                <div class="basic-info-row">
+                    <label for="">{% trans 'Contract Title' %} :</label>
+                    {{ object.title }}
+                </div>
+                <div class="basic-info-row">
+                    <label for="">{% trans 'User Type' %} :</label>
+                    {{ object.get_user_type_display }}
+                </div>
+                <div class="basic-info-row">
+                    <label for="">{% trans 'Contract Type' %}
+                        :</label>
+                    {{ object.get_contract_type_display }}
+                </div>
+                <div class="basic-info-row">
+                    <label for=""><i class="fa-solid fa-user"></i>{% trans 'Created By' %}:</label>
+                    {{ object.created_by }}
+                </div>
+                <div class="basic-info-row">
+                    {% if object.contract_type == 'F' %}
+                        <a href="{{ object.upload_file.url }}" target="_blank"><i class="fa fa-download"></i></a>
+                        {{ object.get_upload_file_name }}
+                    {% else %}
+                        {{ object.description|safe }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

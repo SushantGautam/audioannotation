@@ -16,6 +16,17 @@
             transform: translateX(20px);
 
         }
+
+        td a {
+            all: unset;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        td a:hover {
+            all: unset;
+            cursor: pointer;
+            font-weight: bold;
+        }
     </style>
 {% endblock %}
 
@@ -40,7 +51,11 @@
                 {% for contract in object_list %}
                     <tr>
                         <td> {{ forloop.counter }}</td>
-                        <td> {{ contract.title }}</td>
+                        <td>
+                            <a href="{{ contract.get_absolute_url }}">
+                                {{ contract.title }}
+                            </a>
+                        </td>
                         <td> {{ contract.get_user_type_display }}</td>
                         <td> {{ contract.get_contract_type_display }}</td>
                         <td>
