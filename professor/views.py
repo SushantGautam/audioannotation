@@ -215,9 +215,47 @@ class ExamSetCreateView(CreateView):
                     self.object.question_sets.add(QuestionSet.objects.get(pk=int(q)))
                 return redirect('professor:exam_set_list_page')
             except:
-                print('except qset')
+                print('except from examset create')
                 self.object.delete()
                 return redirect('professor:exam_set_list_page')
+
+
+
+
+
+
+
+
+
+class ExamSetUpdateView(UpdateView):
+    model = ExamSet
+    form_class = ExamSetForm
+    template_name = 'professor/exam/ajax/ExamSetCreateAjax.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['qn_set_list'] = QuestionSet.objects.filter(questions__organization_code=self.request.user.professor.organization_code)
+        sel_qn_list = self.object.question_sets.values_list("id", flat=True)
+        context['sel_qn_list'] = sel_qn_list
+        return context
+
+    def form_valid(self, form):
+        if form.is_valid():
+            self.object = form.save(commit=False)
+            try:
+                selected_questionset = self.request.POST.get("selected_questionset").split(',')
+                print('type sel', type(selected_questionset))
+                print('selected_questionset', selected_questionset)
+                self.object.organization_code = self.request.user.orgadmin.organization_code
+                self.object.save()
+                for q in selected_questionset:
+                    self.object.question_sets.add(QuestionSet.objects.get(pk=int(q)))
+                return redirect('professor:exam_set_list_page')
+            except:
+                print('except from ExamSet Update')
+                return redirect('professor:exam_set_list_page')
+
+
 
 
 

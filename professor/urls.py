@@ -23,6 +23,7 @@ urlpatterns = [
     path('professor_question/delete_multiple_exam_set', views.MultipleExamSetDeleteView,
          name='delete_multiple_exam_set'),
 
-    path('professor_exam_set_create', views.ExamSetCreateView.as_view(), name='exam_set_create')
+    path('professor_exam_set_create', views.ExamSetCreateView.as_view(), name='exam_set_create'),
+    path('professor_exam_set/<int:pk>/update', views.ExamSetUpdateView.as_view(), name='exam_set_update')
 
 ]

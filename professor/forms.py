@@ -29,3 +29,13 @@ class ExamSetForm(forms.ModelForm):
     class Meta:
         model = ExamSet
         exclude = ['question_sets', 'organization_code']
+
+    # start_date = forms.DateTimeField(
+    #     widget=forms.DateTimeInput(format='%m/%d/%Y', attrs={'class': 'datepicker'}),
+    #     input_formats=('%m/%d/%Y',)
+    # )
+    #
+    # end_date = forms.DateTimeField(
+    #     widget=forms.DateTimeInput(format='%m/%d/%Y', attrs={'class': 'datepicker'}),
+    #     input_formats=('%m/%d/%Y',)
+    # )

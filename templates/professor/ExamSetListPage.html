@@ -3,7 +3,7 @@
 {% load i18n %}
 {% block styles %}
   <style>
-  .question_dt_right_btn{
+    .question_dt_right_btn{
             float: right;
         }
   .dataTables_filter svg{
@@ -19,8 +19,9 @@
       text-decoration: none;
   }
 
-
   </style>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/daterangepicker/daterangepicker.css' %}" />
+
 {% endblock styles %}
 {% block content %}
 
@@ -117,7 +118,8 @@
 
 
 {% block scripts %}
-
+<script type="text/javascript" src="{% static 'js/moment/moment.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/daterangepicker/daterangepicker.min.js' %}"></script>
   <script>
 
     $(document).ready(function () {
@@ -128,9 +130,10 @@
         $('.question_set_form_div').append('<div class="se-pre-con-ajax"></div>');
         $.ajax({
           type: "GET",
-          url: "{% url 'professor:question_set_update' pk='000123' %}".replace('000123', object_id),  // URL to your view that serves new info
+          url: "{% url 'professor:exam_set_update' pk='000123' %}".replace('000123', object_id),  // URL to your view that serves new info
           success: function (data) {
             $(".question_set_form_div").html(data);
+
           },
           complete: function () {
             $(".se-pre-con-ajax").fadeOut("fast");
