@@ -11,14 +11,25 @@ from django.views.generic import TemplateView, ListView, FormView, CreateView, D
 from orgadmin.forms import ContractForm
 from orgadmin.models import User, ContractSign, Contract, Organization
 from professor.forms import QuestionForm, QuestionSetForm
-from professor.models import SubCategory, Category, Question, QuestionSet
+from professor.models import SubCategory, Category, Question, QuestionSet, Professor
 from speaker.models import Speaker
 from worker.models import Worker, WorkerTask, EvaluationTitle
 
 
 def homepage(request):
     if hasattr(request.user, 'orgadmin'):
-        return render(request, 'orgadmin/homepage.html')
+        all_task = WorkerTask.objects.all()
+        context = {
+            'user_count': User.objects.all().count(),
+            'speaker_count': Speaker.objects.all().count(),
+            'worker_count': Worker.objects.all().count(),
+            'professor_count': Professor.objects.all().count(),
+            'latest_tasks': all_task.order_by('-pk')[:5],
+            'pending_task': all_task.filter(status=False).count(),
+            'completed_task': all_task.filter(status=True).count(),
+        }
+
+        return render(request, 'orgadmin/homepage.html', context=context)
     elif hasattr(request.user, 'speaker'):
         return redirect('speaker:homepage')
     elif hasattr(request.user, 'professor'):
