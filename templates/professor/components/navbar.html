@@ -12,7 +12,7 @@
   <input type="radio" id="questions-tab" name="mytabs" {% if 'professor_question' or 'category_management' in request.path %} checked {% endif %}>
   <label for="questions-tab">Questions</label>
   <div class="tab" id="questions-tab-div">
-    <a href="#" class="tab-item">Exam Set</a>
+    <a href="{% url 'professor:exam_set_list_page' %}" class="tab-item {% if 'exam-sets' in request.path %}active{% endif %}">Exam Set</a>
     <a href="{% url 'professor:question_set_page' %}" class="tab-item {% if 'professor_question_set' in request.path %}active{% endif %}">QuestionSet List</a>
     <a href="{% url 'professor:question_list_page' %}" class="tab-item {% if 'professor_question_list' in request.path %}active{% endif %}">Questions List</a>
     <a href="{% url  'professor:category_management_page' %}" class="tab-item {% if 'category_management' in request.path %}active{% endif %}">Category Management</a>

@@ -18,4 +18,11 @@ urlpatterns = [
     path('professor_question/delete_multiple_question_set', views.MultipleQuestionSetDeleteView, name='delete_multiple_questionset'),
     path('professor_question_set', views.QuestionSetListView.as_view(), name='question_set_page'),
     path('category_management', views.CategoryManagementListView.as_view(), name='category_management_page'),
+    path('exam-sets', views.ExamSetListView.as_view(), name='exam_set_list_page'),
+    path('professor_question/<int:pk>/delete/exam_set', views.ExamSetDeleteView, name='examset_delete'),
+    path('professor_question/delete_multiple_exam_set', views.MultipleExamSetDeleteView,
+         name='delete_multiple_exam_set'),
+
+    path('professor_exam_set_create', views.ExamSetCreateView.as_view(), name='exam_set_create')
+
 ]

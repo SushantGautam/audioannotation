@@ -6,8 +6,8 @@ from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 
 from orgadmin.models import Organization
-from professor.forms import QuestionForm, QuestionSetForm
-from professor.models import Question, QuestionSet, SubCategory, Category
+from professor.forms import QuestionForm, QuestionSetForm, ExamSetForm
+from professor.models import Question, QuestionSet, SubCategory, Category, ExamSet
 
 
 def homepage(request):
@@ -22,11 +22,6 @@ class CategoryManagementListView(ListView):
         context = super(CategoryManagementListView, self).get_context_data(*args, **kwargs)
         context['categories'] = Category.objects.filter().distinct()
         return context
-
-
-
-
-
 
 
 class QuestionListPage(ListView):
@@ -142,7 +137,6 @@ class QuestionSetCreateView(CreateView):
                 return redirect('professor:question_set_page')
 
 
-
 class QuestionsSetUpdateView(UpdateView):
     model = QuestionSet
     form_class = QuestionSetForm
@@ -190,6 +184,63 @@ def QuestionSetDeleteView(request, pk):
     if request.method == "POST":
         QuestionSet.objects.filter(pk=pk).delete()
         return redirect("professor:question_set_page")
+
+
+class ExamSetListView(ListView):
+    model = ExamSet
+    template_name = 'professor/ExamSetListPage.html'
+
+
+
+class ExamSetCreateView(CreateView):
+    model = ExamSet
+    form_class = ExamSetForm
+    template_name = 'professor/exam/ajax/ExamSetCreateAjax.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['qn_set_list'] = QuestionSet.objects.filter(questions__organization_code=self.request.user.professor.organization_code)
+        return context
+
+    def form_valid(self, form):
+        if form.is_valid():
+            self.object = form.save(commit=False)
+            try:
+                selected_questionset = self.request.POST.get("selected_questionset").split(',')
+                print('type sel', type(selected_questionset))
+                print('selected_questionset', selected_questionset)
+                self.object.organization_code = self.request.user.orgadmin.organization_code
+                self.object.save()
+                for q in selected_questionset:
+                    self.object.question_sets.add(QuestionSet.objects.get(pk=int(q)))
+                return redirect('professor:exam_set_list_page')
+            except:
+                print('except qset')
+                self.object.delete()
+                return redirect('professor:exam_set_list_page')
+
+
+
+def MultipleExamSetDeleteView(request):
+    if request.method == 'POST':
+        try:
+            Obj = ExamSet.objects.filter(pk__in=request.POST.getlist('examset_ids[]'))
+            Obj.delete()
+            return redirect('professor:exam_set_list_page')
+
+        except:
+            messages.error(request,
+                           "Cannot delete ExamSet")
+            return JsonResponse({}, status=500)
+
+
+def ExamSetDeleteView(request, pk):
+    if request.method == "POST":
+        ExamSet.objects.filter(pk=pk).delete()
+        return redirect("professor:exam_set_list_page")
+
+
+
 
 
 class ProfileView(TemplateView):
