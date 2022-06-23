@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
 
-from .models import OrgAdmin, Organization, Contract, ContractSign, VerificationRequest
+from .models import OrgAdmin, Organization, Aggrement, Contract, ContractSign, VerificationRequest
 
 class OrgAdminAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'address', 'created_at', 'is_active')
@@ -20,6 +20,13 @@ class OrgAdminAdmin(admin.ModelAdmin):
     def get_email(self, obj):
         return obj.user.email
 admin.site.register(OrgAdmin, OrgAdminAdmin)
+
+class AggrementAdmin(SummernoteModelAdmin):
+    summernote_fields = '__all__'
+    list_display = ('id', 'title', 'organization_code', 'created_at', 'updated_at')
+    list_filter = ('organization_code',)
+    search_fields = ('title',)
+admin.site.register(Aggrement, AggrementAdmin)
 
 class ContractAdmin(SummernoteModelAdmin):
     summernote_fields = '__all__'

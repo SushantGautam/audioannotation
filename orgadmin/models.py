@@ -47,6 +47,14 @@ class OrgAdmin(BaseUserModel):
 def contract_file_name(instance, filename):
     return 'contract/{0}_contract/{1}'.format(instance.created_by.organization_code, filename)
 
+
+class Aggrement(models.Model):
+    title = models.CharField(max_length=256)
+    description = models.TextField()
+    organization_code = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
 class Contract(models.Model):
     CONTRACT_TYPE_CHOICES = (
         ('F', 'File Contract'),
@@ -62,6 +70,7 @@ class Contract(models.Model):
     contract_type = models.CharField(choices=CONTRACT_TYPE_CHOICES, max_length=1)
     description = models.TextField(null=True, blank=True)
     upload_file = models.FileField(upload_to=contract_file_name, null=True, blank=True)
+    aggrements = models.ManyToManyField(Aggrement)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)

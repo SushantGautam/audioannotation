@@ -1,176 +1,78 @@
 {% load i18n %}
 {% load static %}
 
-{% block styles %}
-    <link rel="stylesheet" href="{% static 'css/progress.css' %}">
-    <link rel="stylesheet" href="{% static 'css/pagewise/contract.css' %}">
-{% endblock %}
 
-<!-- Multi step progress -->
-<section class="multi_step_progress three-step">
-    <div id="msprogress" style="padding-top: 1px;">
-        <!-- <ul id="progressbar">
-            <li class="{% if has_contract %}active{% endif %}">
-                <div class="h6">{% trans 'Contract Available' %}</div>
-            </li>
-            <li class="{% if has_contract_submitted or has_contract_approved %}active{% endif %}">
-                <div class="h6">{% trans 'Contract Signed' %}</div>
-            </li>
-            <li class="{% if has_contract_approved %}active{% endif %}">
-                <div class="h6">{% trans 'Contract Approved' %}</div>
-            </li>
-        </ul> -->
-
-        <div class="title mt-5 text-start">
-            {% if not has_contract %}
-                <h2>{% trans 'Contract is not available. Please contact Admin' %}</h2>
-            {% elif has_contract_submitted and not has_contract_approved %}
-                <h2>{% trans 'Your contract is waiting for approval. Please be patient.' %}</h2>
-            {% elif not has_contract_submitted and not has_contract_approved %}
-              {% if contract.contract_type == 'F' %}
-                <fieldset style="padding:0;">
-                  <h2>
-                      <span class="don_icon_number h5"><i class="fa-solid fa-1"></i></span>
-                      {% trans 'Please Fill the contract below and Download' %}
-                  </h2>
-                  <div class="contract-container mt-4">
-                      <div class="h5"><span style="font-weight:bold">{% trans 'Title' %}:</span>  {{ contract.title }}</div>
-                      <!-- {% if contract.description %}
-                          <div><span style="font-weight:bold">{% trans 'Description' %}:</span>  {{ contract.description | safe }}</div>
-                      {% endif %} -->
-                      <div class="mt-2">
-                          {% if contract.upload_file.url %}
-                              <p>
-                                  <!-- <i class="fa-solid fa-paperclip"></i> -->
-                                  <!-- {{ contract.get_upload_file_name }} -->
-                                  <embed src="{{ contract.upload_file.url }}" width="1000px" height="800px" />
-                                  <!-- <a href="{{ contract.upload_file.url }}" class="btn btn-info ms-4" target="_blank">
-                                      <i class="fa-solid fa-cloud-arrow-down"></i> {% trans 'Download Contract' %}
-                                  </a> -->
-                              </p>
-                          {% else %}
-                              {% trans 'No Attachment Available' %}
-                          {% endif %}
-                      </div>
-                      <h2 class="mt-5">
-                          <span class="don_icon_number h5"><i class="fa-solid fa-2"></i></span>
-                          {% trans 'Please Upload the signed Contract and accept the terms' %}
-                      </h2>
-                      <div class="form-container mt-2">
-                          <form name="contract-submission" method="post" enctype="multipart/form-data">
-                              {% csrf_token %}
-                              <div>
-                                  <div class="input-group"> 
-                                      <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="file-upload-input" name="contract-file" required>
-                                        <label class="custom-file-label" for="file-upload-input">
-                                          <i class="fa-solid fa-upload"></i>{% trans 'Choose file' %}
-                                        </label>
-                                        <div class="file-select-name mt-2">{% trans 'No file chosen' %}...</div>
-                                      </div>
-                                    </div>
-                                  <input type="hidden" name="contract-id" value="{{ contract.id }}">
-                                  <!-- <input type="hidden" name="contract-type" value="file"> -->
-                              </div>
-                              <div class="row">
-                                <div class="mb-4 h5 col-6">
-                                  <input type="checkbox" id="agree-terms" onchange="toggleDisabledFormButton(this)">
-                                  <label for="agree-terms">{% trans 'I agree to all terms and conditions' %}</label>
-                                </div>
-                                <div class="col-6">
-                                  <button type="submit" class="btn accept-button" disabled id="submit-file-btn">{% trans 'Accept' %}</button>
-                                </div>
-                              </div>
-                          </form>
-                      </div>
-          
-                  </div>
-                </fieldset>  
-              {% else %}
-                <div class="wrap">
-                  <section class="container">
-                    <div class="container__heading">
-                      <h2>{{ contract.title }}</h2>
-                    </div>
-                    <div class="container__content">
-                        {{ contract.description | safe }}
-                    </div>
-                    <form name="contract-submission" method="post" enctype="multipart/form-data">
-                      <div class="container__nav row">
-                        {% csrf_token %}
-                        <input type="hidden" name="contract-id" value="{{ contract.id }}">
-                        <!-- <input type="hidden" name="contract-type" value="text"> -->
-                        <div class="mb-4 text-start col-8">
-                          <input type="checkbox" id="agree-terms" onchange="toggleDisabledFormButton(this)">
-                          <label for="agree-terms">{% trans "By clicking 'Accept' you are agreeing to our terms and conditions" %}</label>
-                        </div>
-                        <div class="col-4">
-                          <button type="submit" class="btn accept-button" disabled id="submit-btn">{% trans 'Accept' %}</button>
-                        </div>
-                      </div>
-                    </form>
-                  </section>
-                </div>
-              {% endif %}
-            {% elif has_contract_approved %}
-                <h2 class="mt-5 text-center">
-                    {% trans 'Thank you for joining this project. Your agreement has been submitted and approved.' %}
-                    <span class="don_icon"><i class="fa-solid fa-check"></i></span>
-                </h2>
-                {% if contract.contract_type == 'T' %}
-                  <div class="wrap">
-                    <section class="container">
-                      <div class="container__heading">
-                        <h2>{{ contract.title }}</h2>
-                      </div>
-                      <div class="container__content">
-                          {{ contract.description | safe }}
-                      </div>
-                        <div class="container__nav row">
-                          <div class="mb-4 text-start col-8">
-                            <input type="checkbox" checked disabled>
-                            <label for="agree-terms">{% trans "By clicking 'Accept' you are agreeing to our terms and conditions" %}</label>
-                          </div>
-                          <div class="col-4">
-                            <button class="btn accept-button" disabled>{% trans 'Accepted' %}</button>
-                          </div>
-                        </div>
-                    </section>
-                  </div>
-                {% else %}
-                  <div class="text-center">
-                    {% if approved_contract_file %}
-                      <embed src="{{ approved_contract_file }}" width="1000px" height="800px" />
-                    {% else %}
-                      {% trans "Approved contract file doesn't exist. Contact Admin" %}
-                    {% endif %}
-                  </div>  
-                {% endif %}
-            {% endif %}
+<div style="margin-top: 120px;">
+  {% if not has_contract %}
+      <h2>{% trans 'Contract is not available. Please contact Admin' %}</h2>
+  {#  {% elif has_contract_submitted and not has_contract_approved %}  #}
+  {#    <h2>{% trans 'Your contract is waiting for approval. Please be patient.' %}</h2> #}
+  {% elif has_contract_approved %}
+      <h3>{% trans 'Thank you for joining this project. Your agreement has been submitted and approved.' %}
+      <span class="don_icon"><i class="fa-solid fa-check"></i></span></h3>
+  {% endif %}
+  <br><br>
+  <h2>{{ contract.title }}</h2>
+</div>
+  <div class="accordion mt-4" id="accordionExample">
+    {% for aggrement in contract.aggrements.all %}
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="true" aria-controls="collapse{{ forloop.counter }}">
+          <span class="me-2 text-success" id="checked{{ forloop.counter }}">
+            {% if has_contract_approved %} <i class="fas fa-2x fa-check"></i> {% endif %}
+          </span> {{ aggrement.title }}
+        </button>
+      </h2>
+      <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <p>{{ aggrement.description|safe }}</p>
+          <!-- checkbox -->
+          <div class="form-check d-flex justify-content-center">
+            <input class="form-check-input" type="checkbox" value="" id="defaultCheck{{ forloop.counter }}"
+               onclick="checkedBoxClicked(this.checked, {{ forloop.counter }})" {% if has_contract_approved %}checked disabled{% endif %}>
+            <label class="form-check-label ms-2" for="defaultCheck{{ forloop.counter }}">
+              {{ _('I agree on above condition') }}
+            </label>
+          </div>
         </div>
+      </div>
     </div>
-</section>
-<!-- End Multi step progress -->
+    {% endfor %}
+  </div>
 
-<script>
-    function toggleDisabledFormButton(elem) {
-        var btnelement = document.getElementsByClassName('accept-button')[0];
-        btnelement.disabled = !btnelement.disabled;
-    }
+  <div class="text-center">
+    {% if has_contract and not has_contract_approved %}
+      <form name="contract-submission" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="contract-id" value="{{ contract.id }}">
+        <button class="btn btn-success btn-lg btn-block mt-4" type="submit" disabled>
+            {{ _('Submit') }}
+        </button>
+      </form>
+    {% endif %}
+    {% if has_contract_approved %}
+      <button class="btn btn-success btn-lg btn-block mt-4" type="submit" disabled>
+        {{ _('Submitted') }}
+      </button>
+    {% endif %}
+  </div>
+  
 
-    let fileInput = document.getElementById("file-upload-input");
-    fileInput.onchange = function() {
-        let filename = fileInput.files[0].name;
-        let selectName = document.getElementsByClassName("file-select-name")[0];
-        selectName.innerText = filename;
-    }
-
-    // when submit button is clicked, check if file is uploaded
-    document.getElementById("submit-file-btn").addEventListener("click", function(event) {
-        if (fileInput.files.length == 0) {
-            event.preventDefault();
-            alert("{% trans 'Please upload signed contract file' %}");
+  {% if not has_contract_approved %}
+    <script>
+      // if all checkbox are checked, enable submit button
+      function checkedBoxClicked(checked, id) {
+        if (checked) {
+          document.getElementById('checked' + id).innerHTML = '<i class="fas fa-2x fa-check"></i>';
+        } else {
+          document.getElementById('checked' + id).innerHTML = '';
         }
-    });
-
-</script>
+        if ($('.form-check-input:checked').length == $('.form-check-input').length) {
+          $('.btn-success').removeAttr('disabled');
+        } else {
+          $('.btn-success').attr('disabled', 'disabled');
+        }
+      }
+    </script>
+  {% endif %}
