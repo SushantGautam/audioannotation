@@ -13,7 +13,7 @@ from orgadmin.models import User, ContractSign, Contract, Organization
 from professor.forms import QuestionForm, QuestionSetForm
 from professor.models import SubCategory, Category, Question, QuestionSet
 from speaker.models import Speaker
-from worker.models import Worker, WorkerTask
+from worker.models import Worker, WorkerTask, EvaluationTitle
 
 
 def homepage(request):
@@ -363,6 +363,15 @@ class CategoryManagementListView(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super(CategoryManagementListView, self).get_context_data(*args, **kwargs)
         context['categories'] = Category.objects.filter().distinct()
+        return context
+
+
+class EvaluationManagementListView(ListView):
+    model = EvaluationTitle
+    template_name = 'orgadmin/evaluation/evaluationList.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(EvaluationManagementListView, self).get_context_data(*args, **kwargs)
         return context
 
 
