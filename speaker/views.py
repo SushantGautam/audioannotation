@@ -95,6 +95,12 @@ class ContractView(View):
         context['has_contract'] = request.user.speaker.has_contract()
         context['has_contract_submitted'] = request.user.speaker.has_contract_submitted()
         context['has_contract_approved'] = request.user.speaker.has_contract_approved()
+        context['approved_contract_file'] = ''
+        if context['has_contract_approved']:
+            upload_file = ContractSign.objects.filter(user=self.request.user,
+             contract_code=context['contract'], approved=True).first().upload_file
+            if upload_file:
+                context['approved_contract_file'] = upload_file.url   
         return render(request, 'speaker/contract.html', context)
 
     def post(self, request, **kwargs):

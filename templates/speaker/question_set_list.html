@@ -28,8 +28,8 @@
                     <th>{% trans "S. No." %}</th>
                     <th>{% trans "Unique Code" %}</th>
                     <th>{% trans "Question Count" %}</th>
-                    <th>{% trans "Record Status" %}</th>
-                    <th>{% trans "Recording Time" %}</th>
+                    <th>{% trans "Submission Status" %}</th>
+                    <th>{% trans "Recorded Duration" %}</th>
                     <th>{% trans "Action" %}</th>
                 </tr>
                 </thead>
@@ -42,8 +42,8 @@
                         <td>{{ q_set.complete|yesno:'Complete,Incomplete' }}</td>
                         <td>{{ q_set.record_time }}</td>
                         <td>
-                            <button type="button" data-qn_set_pk="{{ q_set.pk }}"                                    
-                                    class="btn btn-warning start_test_button">{% trans 'Start' %}</button>
+                            <button title="{% trans 'Start test' %}" type="button" data-qn_set_pk="{{ q_set.pk }}"                                    
+                                    class="btn btn-sm btn-dark start_test_button">{% trans 'Start' %}</button>
                         </td>
                     </tr>
                 {% endfor %}
