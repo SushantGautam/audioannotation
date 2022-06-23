@@ -47,6 +47,7 @@ urlpatterns += [
 # Management URLS
 urlpatterns += [
     path('category-management', views.CategoryManagementListView.as_view(), name='category_management'),
+    path('evaluation-management', views.EvaluationManagementListView.as_view(), name='evaluation_management'),
 
     # Questions
     path('questions/', views.QuestionListPage.as_view(), name='question_list'),

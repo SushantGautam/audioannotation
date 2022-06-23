@@ -1,0 +1,65 @@
+{% extends "orgadmin/base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block styles %}
+    <style>
+        .dataTables_filter svg {
+            z-index: 100;
+            transform: translateX(-5px);
+        }
+
+        .dataTables_filter input {
+            transform: translateX(20px);
+
+        }
+    </style>
+{% endblock styles %}
+
+{% block content %}
+    <div class="bg-white pt-3">
+        <h1 class="page-heading">{% trans "Evaluation Title" %}</h1>
+        <div class="row mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>{% trans 'S. No.' %}</th>
+                            <th>{% trans 'Title' %}</th>
+                            <th>{% trans 'Score' %}</th>
+                            <th>{% trans 'Code' %}</th>
+                            <th>{% trans 'Type' %}</th>
+                            <th>{% trans 'Subcategory Code' %}</th>
+                            <th>{% trans 'Active' %}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for object in object_list %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ object.title }}</td>
+                                <td>{{ object.score }}</td>
+                                <td>{{ object.evaluation_code }}</td>
+                                <td>{{ object.get_evaluation_type_display }}</td>
+                                <td>{{ object.subcategory_code }} </td>
+                                <td> {% if  object.is_active %} {% trans 'Active' %}  {% else %}
+                                    {% trans 'Inactive' %} {% endif %} </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('.table').DataTable();
+    </script>
+{% endblock scripts %}
