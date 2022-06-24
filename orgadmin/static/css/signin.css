@@ -24,10 +24,19 @@ body {
 } 
 
 .form-signin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
   width: 100%;
   max-width: 330px;
-  padding: 15px;
+  padding: 1rem;
   margin: auto;
+}
+
+.partners{
+  display: flex;
+  gap: 1rem;
 }
 
 .form-signin .checkbox {

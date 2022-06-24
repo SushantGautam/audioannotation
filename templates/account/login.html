@@ -14,10 +14,16 @@
 {% block content %}
 <div class="form-signin text-center">
 
+  <!-- Manual login disabled, use Whalespace account for login -->
+
   <form class="login" method="POST" action="{% url 'account_login' %}">
     {% csrf_token %}
-    <img class="mb-3" src="{% static 'img/logo.png' %}" alt="Logo" width="80" height="80">
-    <h3 class="h3 mb-3">{% trans "Audio Annotation Tool" %}</h3><br>
+    <div>
+      <img src="{% static 'img/nsdaiLogo.png' %}" alt="Logo" width="100" height="100">
+      <h3 class="h3 my-3">{% trans "Audio Annotation Tool" %}</h3>
+    </div>
+    <!-- <img class="mb-3" src="{% static 'img/logo.png' %}" alt="Logo" width="80" height="80">
+    <h3 class="h3 mb-3">{% trans "Audio Annotation Tool" %}</h3><br> -->
     <h5>{% trans "Please Sign In" %}</h5>
 
     <div class="form-floating">
@@ -43,11 +49,20 @@
 
   </form>
 
+
+
   {% get_providers as socialaccount_providers %}
   {% if socialaccount_providers %}
-    <p class="h6 login-or mt-2">{% trans 'OR' %}</p>
+    <!-- <p class="h6 login-or mt-2">{% trans 'OR' %}</p> -->
 
-    <div class="socialaccount_ballot">
+
+    <!-- <div>
+      <img src="{% static 'img/nsdaiLogo.png' %}" alt="Logo" width="100" height="100">
+      <h3 class="h3 my-3">{% trans "Audio Annotation Tool" %}</h3>
+    </div> -->
+
+
+    <div class="socialaccount_ballot my-5">
 
       <!-- <ul class="socialaccount_providers"> -->
         {% for provider in socialaccount_providers %}
@@ -67,6 +82,12 @@
     <p>{% blocktrans %}If you have not created an account yet, then please
     <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
   {% endif %}
+
+  <div class="partners">
+    <img src="{% static 'img/nsdevilLogo.png' %}" alt="Logo" height="50">
+        <img src="{% static 'img/whaleLogo.png' %}" alt="Logo" height="50">
+
+  </div>
 
 
   <p class="mt-5 mb-3 text-muted">&copy; {% now "Y" %} NSDevil Co. Ltd.</p>
