@@ -1,6 +1,7 @@
 {% extends "professor/base.html" %}
 {% load static %}
 {% load i18n %}
+{% load tz %}
 {% block styles %}
   <style>
     .question_dt_right_btn{
@@ -59,8 +60,8 @@
                         <td> {{ forloop.counter }}</td>
                         <td> {{ object.exam_name }}</td>
                         <td> {{ object.description|truncatechars:40 }}</td>
-                        <td>{{ object.start_date }}</td>
-                        <td>{{ object.end_date }}</td>
+                        <td class="start_date"> {{ object.start_date|date:'Y-m-d h:i:A' }} </td>
+                        <td class="end_date">{{ object.end_date|date:'Y-m-d h:i:A' }}</td>
                         <td>{{ object.question_sets.count }}</td>
 
                         {%  if object.is_active  %}
@@ -124,6 +125,24 @@
 
     $(document).ready(function () {
 
+      $(".start_date").each(function (index) {
+                    let period_date = $(this).html();
+                    let s = period_date.concat(' UTC')
+                    start = new Date(s)
+                    start = moment(start).format('YYYY.MM.DD hh:mm A')
+                    $(this).html(start );
+         });
+
+      $(".end_date").each(function (index) {
+                    let period_date = $(this).html();
+                    let e = period_date.concat(' UTC')
+                    end = new Date(e)
+                    end = moment(end).format('YYYY.MM.DD hh:mm A')
+                    $(this).html(end );
+         });
+
+
+
       $(".editQuestionset").click(function () {
         let object_id = $(this).attr('id').split("_")[1]
         console.log("object_ID", object_id)
@@ -153,6 +172,9 @@
 
 
       })
+
+
+
 
 
     })
