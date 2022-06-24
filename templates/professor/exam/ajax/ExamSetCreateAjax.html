@@ -191,7 +191,7 @@
       <input placeholder="{% trans 'Enter Start Date here...' %}" type="text" required name="start_date"
 
              id="id_start_date" class="form-control "
-        {% if object %} value=" {{ object.start_date|date:"m/d/Y" }} "{% endif %}>
+        {% if object %} value=" {{ object.start_date|date:"m/d/Y h:i:A" }} "{% endif %}>
 
 
       <div class="question_form_start_date_error question_form_error_div">
@@ -212,7 +212,7 @@
       <input placeholder="{% trans 'Enter End Date here...' %}" type="text" required name="end_date"
 
              id="id_end_date" class="form-control"
-        {% if object %} value="{{ object.end_date|date:'m/d/Y' }}"{% endif %}>
+        {% if object %} value="{{ object.end_date|date:'m/d/Y h:i:A' }}"{% endif %}>
 
 
       <div class="question_form_end_date_error question_form_error_div">
@@ -301,25 +301,44 @@ console.log('qn_list', qn_list)
 
 $(document).ready(function () {
 
-
-     $("#id_start_date").daterangepicker({
-                timePicker: true,
-                singleDatePicker: true,
-                 locale: {
-                format: 'MM/DD/YYYY hh:mm A'
-              }
-            })
-
-    $("#id_end_date").daterangepicker({
-        timePicker: true,
-        singleDatePicker: true,
-        locale: {
-        format: 'MM/DD/YYYY hh:mm A'
-      }
-
-    })
+  var s_date = '{{ object.start_date|date:"Y-m-d h:i:A" }}'
+  var e_date = '{{ object.end_date|date:"Y-m-d h:i:A" }}'
+  let s = s_date.concat(' UTC')
+  let e = e_date.concat(' UTC')
+  var start = new Date(s)
+ // start = moment(start).format('MM/DD/YYYY hh:mm A')
+  var end = new Date(e)
+//  end = moment(end).format('MM/DD/YYYY hh:mm A')
 
 
+  $("#id_start_date").daterangepicker({
+    timePicker: true,
+    singleDatePicker: true,
+    {% if object %}
+      startDate: start,
+      endDate: start,
+    {% endif %}
+    locale: {
+      format: 'MM/DD/YYYY hh:mm A'
+    }
+  })
+
+  $("#id_end_date").daterangepicker({
+    timePicker: true,
+    singleDatePicker: true,
+    {% if object %}
+      startDate: end,
+      endDate: end,
+    {% endif %}
+    locale: {
+      format: 'MM/DD/YYYY hh:mm A'
+    }
+
+  })
+
+  $('.btn-close').click(function(){
+    window.location.reload()
+  })
 
 
    render_questions(qn_list);
