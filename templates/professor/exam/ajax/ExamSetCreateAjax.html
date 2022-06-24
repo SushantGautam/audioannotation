@@ -328,12 +328,9 @@ $(document).ready(function () {
     if (!validate_form()) {
       return false;
     }
-    sd = $('#id_start_date').val()
-    ed = $('#id_end_date').val()
-    var s_date = new Date(sd).toISOString()
-    var e_date = new Date(ed).toISOString()
-    console.log('s_date', s_date)
-    console.log('e_date', e_date)
+
+    var s_date = new Date($('#id_start_date').val()).toISOString()
+    var e_date = new Date($('#id_end_date').val()).toISOString()
     $('#id_start_date').val(s_date)
     $('#id_end_date').val(e_date)
    // return false
