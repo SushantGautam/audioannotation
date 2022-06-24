@@ -62,15 +62,20 @@
 }
 
 .logo-section{
-  display: flex;
-  flex-direction: column;
+  /* display: flex; */
+  /* flex-direction: column; */
   cursor: pointer;
 }
 
-.logo-section .logo{
+.logo-section svg{
+  height: 4rem;
+  width: 5rem;
+}
+
+/* .logo-section .logo{
   width: 10rem;
   height: 2.25rem;
-}
+} */
 
 a.brand-name{
   all: unset;
