@@ -221,7 +221,9 @@ class ExamSetCreateView(CreateView):
 
 
 
-
+    def form_invalid(self, form):
+        print('form_error_createExam', form.errors)
+        return redirect('professor:exam_set_list_page')
 
 
 
