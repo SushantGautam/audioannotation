@@ -143,15 +143,15 @@
 
         <div class="audio-playback-controls" {% if qn.can_submit %}style="visibility: hidden" {% endif %}>
             <label class="audio-playback-label" for="dur">Recorded audio</label>
-            <input title="Seek recorded audio" class="submitted-audio-playback" id="dur" type="range" name="rng" min="0" step="0.25" value="0" onchange="mSet()" style="width: 7rem">
-            <!-- <div> -->
+            <input title="Seek recorded audio" class="submitted-audio-playback" id="dur" type="range" name="rng" min="0" step="0.25" value="0" onchange="mSet()">
+            <div class="utility-buttons">
                 <button onClick="togglePlay(this);" class="btn btn-sm btn-dark play-recorded-audio" title="Play recorded audio">
                     <i class="fa-solid fa-play"></i> {% trans 'Play' %}
                 </button>
-                <!-- <button class="btn btn-sm btn-dark re-record" title="Start recording again">
-                    <i class="fa-solid fa-rotate"></i> {% trans 'Re-record' %}
-                </button> -->
-            <!-- </div> -->
+                <button class="btn btn-sm btn-dark re-record" title="Start recording again">
+                    <i class="fa-solid fa-rotate"></i> {% trans 'Retry' %}
+                </button>
+            </div>
         </div>
 
     </div>
