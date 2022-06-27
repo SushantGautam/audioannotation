@@ -9,9 +9,11 @@
   <link href="{% static 'css/signin.css' %}" rel="stylesheet">
 {% endblock %}
   
-{% block header %}{% endblock %}
+{% block header %}
+{% endblock %}
 
 {% block content %}
+
 <div class="form-signin text-center">
 
   <!-- Manual login disabled, use Whalespace account for login -->
@@ -109,6 +111,10 @@
     <button class="w-100 btn btn-success mb-2" type="submit">{% trans "Log In" %}</button>
 
   </form>
+    <p class="h6 login-or mt-2">{% trans 'OR' %}</p>
+
+     <a class="w-100 btn btn-sm btn-secondary mb-2" href="{% url 'register_user' %}">{% trans 'Sign Up' %}</a>
+
 
 
 
