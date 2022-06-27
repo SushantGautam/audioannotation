@@ -138,6 +138,10 @@ function send_to_backend(blob){
 	var formData = new FormData($("#audio_form")[0]);
 	var recording = new Blob([blob], { type: "audio/wav" });
 	formData.append("audio_file", recording, new Date().getTime()+".mp3");
+	if (submission_id) {
+		formData.append("id", submission_id);
+	}
+
 	// for (var key of formData.entries()) {
   //       console.log(key[0] + ', ' + key[1]);
   //   }
@@ -147,7 +151,17 @@ function send_to_backend(blob){
 		data: formData,
 		cache: false,
 		contentType: false,
-		processData: false
+		processData: false,
+		success: function (resp) {
+			submission_id = resp.pk;
+			$('.audio_playback_div, .audio-playback-controls').css('visibility', 'visible');
+			var audio = document.querySelector('.audio_playback_div audio');
+			var source = document.querySelector('.audio_playback_div audio source');
+			source.src = '/media/' + resp.fields.audio_file;
+
+			audio.load(); //call this to just preload the audio without playing
+		  // audio.play(); //call this to play the song right away
+		}
 	});
 }
 
