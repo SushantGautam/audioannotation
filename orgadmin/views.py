@@ -2,13 +2,14 @@ from datetime import datetime
 
 import requests
 from django.contrib import messages
+from django.contrib.auth import login
 from django.http import JsonResponse
 from django.shortcuts import HttpResponse, render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView, ListView, FormView, CreateView, DetailView, UpdateView, DeleteView
 
-from orgadmin.forms import ContractForm
+from orgadmin.forms import ContractForm,UserRegistrationForm
 from orgadmin.models import User, ContractSign, Contract, Organization
 from professor.forms import QuestionForm, QuestionSetForm
 from professor.models import SubCategory, Category, Question, QuestionSet, Professor
@@ -38,6 +39,19 @@ def homepage(request):
         return redirect('worker:homepage')
     else:
         return JsonResponse({'error': 'User not assigned to any role'})
+
+
+def user_register(request):
+    if request.method == "POST":
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, "Registration successful.")
+            return redirect("account_login")
+        messages.error(request, "Unsuccessful registration. Invalid information.")
+    form = UserRegistrationForm()
+    return render(request=request, template_name="account/register.html", context={"register_form": form})
 
 
 # For development phase only
@@ -504,7 +518,6 @@ class QuestionSetCreateView(CreateView):
                 print(e)
                 self.object.delete()
                 return redirect('question_set_list')
-
 
 
 class QuestionsSetUpdateView(UpdateView):

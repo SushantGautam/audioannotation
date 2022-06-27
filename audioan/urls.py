@@ -5,13 +5,14 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.urls import path, include
 
+from orgadmin import views
 from orgadmin.views import homepage, gitpull, migratedb, deployserver
 from .permissions import authorize
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('allauth.urls')),
-
+    path('register', views.user_register, name='register_user'),
     path('', login_required(homepage), name='homepage'),
     path('', decorator_include([login_required, authorize(lambda u: hasattr(u, 'orgadmin'))], 'orgadmin.urls')),
     path('professor/', decorator_include([login_required, authorize(lambda u: hasattr(u, 'professor'))], 'professor.urls')),
