@@ -155,9 +155,11 @@
 
         <div class="audio-playback-controls" {% if qn.can_submit %}style="visibility: hidden" {% endif %}>
             <label class="audio-playback-label" for="dur">Recorded audio</label>
-            <input title="Seek recorded audio" class="submitted-audio-playback" id="dur" type="range" name="rng" min="0" step="0.25" value="0" onchange="mSet()">
+            <input title="Seek recorded audio" class="submitted-audio-playback" id="dur" type="range" name="rng" min="0"
+                   step="0.25" value="0" onchange="mSet()">
             <div class="utility-buttons">
-                <button onClick="togglePlay(this);" class="btn btn-sm btn-dark play-recorded-audio" title="Play recorded audio">
+                <button onClick="togglePlay(this);" class="btn btn-sm btn-dark play-recorded-audio"
+                        title="Play recorded audio">
                     <i class="fa-solid fa-play"></i> {% trans 'Play' %}
                 </button>
                 <button class="btn btn-sm btn-dark re-record" title="Start recording again">
@@ -267,20 +269,32 @@
 <!--Recorder testing from here-->
 <script>
     var submission_id;
+    {% if speakerSubObj %} submission_id = {{ speakerSubObj.pk }} {% endif %}
     $(document).ready(function () {
 
         $(".remove-blur-btn").click(function () {
             removeBlur();
         });
 
+        $('.re-record').on('click', function () {
+            prepTimeLimit = parseInt("{{ qn.ready_time }}");
+            prepTimePassed = 0;
+            prepTimeLeft = prepTimeLimit;
+            recTimeLimit = parseInt("{{ qn.speaking_time }}");
+            recTimeLeft = recTimeLimit;
+            recTimePassed = 0;
+            $(".prep-timer").html(`${toHHMMSS(prepTimeLeft)}`);
+            startPreparationTimer()
+        });
+
         // Remove background blur from the main question section on clicking the Start button
         function removeBlur() {
-            if(document.querySelector('.image-question') != null)
+            if (document.querySelector('.image-question') != null)
                 document.querySelector('.image-question').classList.remove('blur-filter');
-            
+
             document.querySelector('.question-description').classList.remove('blur-filter');
 
-            if(document.querySelector('.audio-progress-wrapper') != null)
+            if (document.querySelector('.audio-progress-wrapper') != null)
                 document.querySelector('.audio-progress-wrapper').classList.remove('blur-filter');
 
 
@@ -298,252 +312,247 @@
             {% endif %}
         }
 
+        prepTimeLimit = parseInt("{{ qn.ready_time }}");
+        prepTimePassed = 0;
+        prepTimeLeft = prepTimeLimit;
+        recTimeLimit = parseInt("{{ qn.speaking_time }}");
+        recTimePassed = 0;
+        recTimeLeft = recTimeLimit;
+
+        function startPreparationTimer() {
+            console.log('hello')
+            if (!(typeof prepInterval === 'undefined')) {
+                clearInterval(prepInterval);
+            }
+            $(".prev_qn_btn").attr("disabled", "disabled");
+            // When student takes test, prevent closing/interruption of the test
+            document.querySelector('.btn-close').style.display = "none";
+
+            prepInterval = setInterval(() => {
+                prepTimePassed = prepTimePassed + 1;
+                prepTimeLeft = prepTimeLimit - prepTimePassed;
+                if (prepTimeLeft <= 0) {
+                    clearInterval(prepInterval);
+                    startWave();
+                }
+                $(".prep-timer").html(`${toHHMMSS(prepTimeLeft)}`);
+                // debugger;
+
+            }, 1000);
+        }
+
+        function playBeepSound() {
+            // var audio = new Audio('orgadmin/static/audio/beep-07a.mp3');
+            // audio.play();
+
+            var x = document.getElementById("myAudio");
+            x.play();
+        }
+
+        function startWave() {
+            playBeepSound()
+            // $('.question-wrapper').removeClass('blur-filter');
+            $('.prep-label').removeClass('status-active');
+            $('.prep-label').addClass('status-inactive');
+            $('.prep-icon').removeClass('status-active');
+            $('.prep-icon').addClass('status-inactive');
+            $('.rec-label').removeClass('status-inactive');
+            $('.rec-label').addClass('status-active');
+            $('.rec-icon').removeClass('status-inactive');
+            $('.rec-icon').addClass('status-active');
+            $('.prep-timer').removeClass('status-active');
+            $('.prep-timer').addClass('status-inactive');
+            $('.rec-timer').removeClass('status-inactive');
+            $('.rec-timer').addClass('status-active');
+            // var paths = document.getElementsByTagName('path');
+            // var visualizer = document.getElementById('visualizer');
+            // var mask = visualizer.getElementById('mask');
+            // var h = document.getElementsByTagName('h1')[0];
+            // var path;
+            // var report = 0;
+
+            paths = document.getElementsByTagName('path');
+            visualizer = document.getElementById('visualizer');
+            mask = visualizer.getElementById('mask');
+            h = document.getElementsByTagName('h1')[0];
+            // path;
+            report = 0;
+            record_state = true;
+            soundAllowed = function (stream) {
+                //Audio stops listening in FF without // window.persistAudioStream = stream;
+                //https://bugzilla.mozilla.org/show_bug.cgi?id=965483
+                //https://support.mozilla.org/en-US/questions/984179
+                window.persistAudioStream = stream;
+                // h.innerHTML = "Thanks";
+                h.setAttribute('style', 'opacity: 0;');
+                var audioContent = new AudioContext();
+                var audioStream = audioContent.createMediaStreamSource(stream);
+                var analyser = audioContent.createAnalyser();
+                audioStream.connect(analyser);
+                analyser.fftSize = 1024;
+
+                var frequencyArray = new Uint8Array(analyser.frequencyBinCount);
+                visualizer.setAttribute('viewBox', '0 0 255 255');
+
+                //Through the frequencyArray has a length longer than 255, there seems to be no
+                //significant data after this point. Not worth visualizing.
+                for (var i = 0; i < 255; i++) {
+                    path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    path.setAttribute('stroke-dasharray', '4,1');
+                    mask.appendChild(path);
+                }
+                var doDraw = function () {
+                    if (record_state) {
+                        requestAnimationFrame(doDraw);
+                    }
+                    analyser.getByteFrequencyData(frequencyArray);
+                    var adjustedLength;
+                    for (var i = 0; i < 255; i++) {
+                        adjustedLength = Math.floor(frequencyArray[i]) - (Math.floor(frequencyArray[i]) % 5);
+                        paths[i].setAttribute('d', 'M ' + (i) + ',255 l 0,-' + adjustedLength);
+                    }
+
+                }
+                doDraw();
+            }
+
+            soundNotAllowed = function (error) {
+                h.innerHTML = "{% trans 'No mic' %}";
+                console.log(error);
+            }
+
+            /*window.navigator = window.navigator || {};
+            /*navigator.getUserMedia =  navigator.getUserMedia       ||
+                                      navigator.webkitGetUserMedia ||
+                                      navigator.mozGetUserMedia    ||
+                                      null;*/
+
+            start_wave = function () {
+                navigator.getUserMedia({audio: true}, soundAllowed, soundNotAllowed);
+            }
+            start_wave();
+            startRecording();
+            // rec.record();
+            //setTimeout(stopWave, 7000)
+
+            startRecordTimer();
+
+            function stopWave() {
+                record_state = false;
+                start_wave();
+                stopRecording();
+                on_form_submit();
+                $("#visualizer").hide();
+                $(".prev_qn_btn").removeAttr("disabled");
+                $(".next_qn_btn").removeAttr("disabled");
+
+                // Test to see if the next button can be made visible and expanded
+                // if(document.querySelector('.next_qn_btn') != null){
+                // $(".next_qn_btn")removeAttribute("hidden")
+                // $(".next_qn_btn").style.width= "4.5rem";
+                // }
+
+                // When recording stops, allow closing/interruption of the test
+                document.querySelector('.btn-close').style.display = "block";// Show play button after the recording is stopped
+
+                // Remove Recording section styles and show Complete message when recording ends and question gets submitted
+                $('.rec-label').removeClass('status-active');
+                $('.rec-label').addClass('status-inactive');
+                $('.rec-icon').removeClass('status-active');
+                $('.rec-icon').addClass('status-inactive');
+                $('.rec-timer').removeClass('status-active');
+                $('.rec-timer').addClass('status-inactive');
+
+                document.querySelector(".is-submitted").classList.remove("status-inactive")
+                document.querySelector(".is-submitted").classList.add("status-active")
+                document.querySelector(".complete-label").classList.add("status-active")
+                // Remove Recording section styles and show Complete message when recording ends and question gets submitted
+
+                // Show audio-playback-controls when recording ends and question gets submitted
+                document.querySelector(".audio-playback-controls").style.visibility = "visible";
+
+            }
+
+            function startRecordTimer() {
+                if (!(typeof recInterval === 'undefined')) {
+                    clearInterval(recInterval);
+                }
+
+                recInterval = setInterval(() => {
+                    recTimePassed = recTimePassed + 1;
+                    recTimeLeft = recTimeLimit - recTimePassed;
+                    if (recTimeLeft <= 0) {
+                        clearInterval(recInterval);
+                        stopWave();
+                    }
+                    $(".rec-timer").html(`${toHHMMSS(recTimeLeft)}`);
+                    // debugger;
+
+                }, 1000);
+            }
+
+        }
+
+        {% if qn.upload_type == "AUD" %}
+            $("#qn_audio").prop("volume", 1.0);
+
+
+            function startAudioPlayerTimer() {
+                audioTimeLimit = Math.ceil(document.getElementById("qn_audio").duration);
+                audioTimePassed = 0;
+                audioTimeLeft = audioTimeLimit;
+                if (!(typeof audioInterval === 'undefined')) {
+                    clearInterval(audioInterval);
+                }
+
+                audioInterval = setInterval(() => {
+                    audioTimePassed = audioTimePassed + 1;
+                    audioTimeLeft = audioTimeLeft - 1;
+                    if (audioTimeLeft <= 0) {
+                        // When Audio Play ends, start preparation timer
+                        startPreparationTimer();
+                        clearInterval(audioInterval);
+
+                        // startWave();
+                    }
+                    // $(".prep-timer").html(`${toHHMMSS(prepTimeLeft)}`);
+                    audioTimeLimit = Math.ceil(document.getElementById("qn_audio").duration);
+                    audioPercent = parseInt(audioTimePassed * 100 / audioTimeLimit);
+                    $(".audio-progress").attr("aria-valuenow", String(audioPercent));
+                    $(".audio-progress").css("width", String(audioPercent) + "%");
+
+                    // debugger;
+
+                }, 1000);
+            }
+
+            $("#volume_slider_input").on("input", function () {
+                // use ui.value to get the current value
+                let volume = parseFloat($(this).val()) / 100.0;
+                $("#qn_audio").prop("volume", volume);
+            });
+
+        {% endif %}
+
         {% if qn.can_submit %}
-            prepTimeLimit = parseInt("{{ qn.ready_time }}");
-            prepTimePassed = 0;
-            prepTimeLeft = prepTimeLimit;
-            recTimeLimit = parseInt("{{ qn.speaking_time }}");
-            recTimePassed = 0;
-            recTimeLeft = recTimeLimit;
             $(".prep-timer").html(`${toHHMMSS(prepTimeLeft)}`);
-            $(".rec-timer").html(`${toHHMMSS(recTimeLeft)}`);
-
-
             // $(".prev_qn_btn").attr("disabled", "disabled");
             $(".next_qn_btn").attr("disabled", "disabled");
             // $(".recorder_wave h1").html("{% trans 'Preparation' %}...");
             // $('#prep_btn').removeClass('btn-outline-info');
             // $('#prep_btn').addClass('btn-info');
             // prepTimeout = setTimeout(startWave, 5000);
-
-            function startPreparationTimer() {
-
-                if (!(typeof prepInterval === 'undefined')) {
-                    clearInterval(prepInterval);
-                }
-                $(".prev_qn_btn").attr("disabled", "disabled");
-                // When student takes test, prevent closing/interruption of the test
-                document.querySelector('.btn-close').style.display = "none";
-
-                prepInterval = setInterval(() => {
-                    prepTimePassed = prepTimePassed + 1;
-                    prepTimeLeft = prepTimeLimit - prepTimePassed;
-                    if (prepTimeLeft <= 0) {
-                        clearInterval(prepInterval);
-                        startWave();
-                    }
-                    $(".prep-timer").html(`${toHHMMSS(prepTimeLeft)}`);
-                    // debugger;
-
-                }, 1000);
-            }
-
-            function playBeepSound() {
-                // var audio = new Audio('orgadmin/static/audio/beep-07a.mp3');
-                // audio.play();
-
-                var x = document.getElementById("myAudio");
-                x.play();
-            }
-
-
-
-            function startWave() {
-                playBeepSound()
-                // $('.question-wrapper').removeClass('blur-filter');
-                $('.prep-label').removeClass('status-active');
-                $('.prep-label').addClass('status-inactive');
-                $('.prep-icon').removeClass('status-active');
-                $('.prep-icon').addClass('status-inactive');
-                $('.rec-label').removeClass('status-inactive');
-                $('.rec-label').addClass('status-active');
-                $('.rec-icon').removeClass('status-inactive');
-                $('.rec-icon').addClass('status-active');
-                $('.prep-timer').removeClass('status-active');
-                $('.prep-timer').addClass('status-inactive');
-                $('.rec-timer').removeClass('status-inactive');
-                $('.rec-timer').addClass('status-active');
-                // var paths = document.getElementsByTagName('path');
-                // var visualizer = document.getElementById('visualizer');
-                // var mask = visualizer.getElementById('mask');
-                // var h = document.getElementsByTagName('h1')[0];
-                // var path;
-                // var report = 0;
-
-                paths = document.getElementsByTagName('path');
-                visualizer = document.getElementById('visualizer');
-                mask = visualizer.getElementById('mask');
-                h = document.getElementsByTagName('h1')[0];
-                // path;
-                report = 0;
-                record_state = true;
-                soundAllowed = function (stream) {
-                    //Audio stops listening in FF without // window.persistAudioStream = stream;
-                    //https://bugzilla.mozilla.org/show_bug.cgi?id=965483
-                    //https://support.mozilla.org/en-US/questions/984179
-                    window.persistAudioStream = stream;
-                    // h.innerHTML = "Thanks";
-                    h.setAttribute('style', 'opacity: 0;');
-                    var audioContent = new AudioContext();
-                    var audioStream = audioContent.createMediaStreamSource(stream);
-                    var analyser = audioContent.createAnalyser();
-                    audioStream.connect(analyser);
-                    analyser.fftSize = 1024;
-
-                    var frequencyArray = new Uint8Array(analyser.frequencyBinCount);
-                    visualizer.setAttribute('viewBox', '0 0 255 255');
-
-                    //Through the frequencyArray has a length longer than 255, there seems to be no
-                    //significant data after this point. Not worth visualizing.
-                    for (var i = 0; i < 255; i++) {
-                        path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                        path.setAttribute('stroke-dasharray', '4,1');
-                        mask.appendChild(path);
-                    }
-                    var doDraw = function () {
-                        if (record_state) {
-                            requestAnimationFrame(doDraw);
-                        }
-                        analyser.getByteFrequencyData(frequencyArray);
-                        var adjustedLength;
-                        for (var i = 0; i < 255; i++) {
-                            adjustedLength = Math.floor(frequencyArray[i]) - (Math.floor(frequencyArray[i]) % 5);
-                            paths[i].setAttribute('d', 'M ' + (i) + ',255 l 0,-' + adjustedLength);
-                        }
-
-                    }
-                    doDraw();
-                }
-
-                soundNotAllowed = function (error) {
-                    h.innerHTML = "{% trans 'No mic' %}";
-                    console.log(error);
-                }
-
-                /*window.navigator = window.navigator || {};
-                /*navigator.getUserMedia =  navigator.getUserMedia       ||
-                                          navigator.webkitGetUserMedia ||
-                                          navigator.mozGetUserMedia    ||
-                                          null;*/
-
-                start_wave = function () {
-                    navigator.getUserMedia({audio: true}, soundAllowed, soundNotAllowed);
-                }
-                start_wave();
-                startRecording();
-                // rec.record();
-                //setTimeout(stopWave, 7000)
-
-                startRecordTimer();
-
-                function stopWave() {
-                    record_state = false;
-                    start_wave();
-                    stopRecording();
-                    on_form_submit();
-                    $("#visualizer").hide();
-                    $(".prev_qn_btn").removeAttr("disabled");
-                    $(".next_qn_btn").removeAttr("disabled");
-
-                    // Test to see if the next button can be made visible and expanded
-                    // if(document.querySelector('.next_qn_btn') != null){
-                        // $(".next_qn_btn")removeAttribute("hidden")
-                        // $(".next_qn_btn").style.width= "4.5rem";
-                    // }
-
-                    // When recording stops, allow closing/interruption of the test
-                    document.querySelector('.btn-close').style.display = "block";// Show play button after the recording is stopped
-
-                    // Remove Recording section styles and show Complete message when recording ends and question gets submitted
-                    $('.rec-label').removeClass('status-active');
-                    $('.rec-label').addClass('status-inactive');
-                    $('.rec-icon').removeClass('status-active');
-                    $('.rec-icon').addClass('status-inactive');
-                    $('.rec-timer').removeClass('status-active');
-                    $('.rec-timer').addClass('status-inactive');
-
-                    document.querySelector(".is-submitted").classList.remove("status-inactive")
-                    document.querySelector(".is-submitted").classList.add("status-active")
-                    document.querySelector(".complete-label").classList.add("status-active")
-                    // Remove Recording section styles and show Complete message when recording ends and question gets submitted
-
-                    // Show audio-playback-controls when recording ends and question gets submitted
-                    document.querySelector(".audio-playback-controls").style.visibility = "visible";
-
-                }
-
-                function startRecordTimer() {
-                    if (!(typeof recInterval === 'undefined')) {
-                        clearInterval(recInterval);
-                    }
-
-                    recInterval = setInterval(() => {
-                        recTimePassed = recTimePassed + 1;
-                        recTimeLeft = recTimeLimit - recTimePassed;
-                        if (recTimeLeft <= 0) {
-                            clearInterval(recInterval);
-                            stopWave();
-                        }
-                        $(".rec-timer").html(`${toHHMMSS(recTimeLeft)}`);
-                        // debugger;
-
-                    }, 1000);
-                }
-
-            }
-
-            {% if qn.upload_type == "AUD" %}
-                $("#qn_audio").prop("volume", 1.0);
-
-
-                function startAudioPlayerTimer() {
-                    audioTimeLimit = Math.ceil(document.getElementById("qn_audio").duration);
-                    audioTimePassed = 0;
-                    audioTimeLeft = audioTimeLimit;
-                    if (!(typeof audioInterval === 'undefined')) {
-                        clearInterval(audioInterval);
-                    }
-
-                    audioInterval = setInterval(() => {
-                        audioTimePassed = audioTimePassed + 1;
-                        audioTimeLeft = audioTimeLeft - 1;
-                        if (audioTimeLeft <= 0) {
-                            // When Audio Play ends, start preparation timer
-                            startPreparationTimer();
-                            clearInterval(audioInterval);
-
-                            // startWave();
-                        }
-                        // $(".prep-timer").html(`${toHHMMSS(prepTimeLeft)}`);
-                        audioTimeLimit = Math.ceil(document.getElementById("qn_audio").duration);
-                        audioPercent = parseInt(audioTimePassed * 100 / audioTimeLimit);
-                        $(".audio-progress").attr("aria-valuenow", String(audioPercent));
-                        $(".audio-progress").css("width", String(audioPercent) + "%");
-
-                        // debugger;
-
-                    }, 1000);
-                }
-
-                $("#volume_slider_input").on("input", function () {
-                    // use ui.value to get the current value
-                    let volume = parseFloat($(this).val()) / 100.0;
-                    $("#qn_audio").prop("volume", volume);
-                });
-
-            {% endif %}
-
         {% else %}
 
             // Remove blur-filter effect and Start button from the question if its already submitted
-            if(document.querySelector('.image-question') != null)
+            if (document.querySelector('.image-question') != null)
                 document.querySelector('.image-question').classList.remove('blur-filter');
-            
+
             document.querySelector('.question-description').classList.remove('blur-filter');
 
-            if(document.querySelector('.audio-progress-wrapper') != null)
+            if (document.querySelector('.audio-progress-wrapper') != null)
                 document.querySelector('.audio-progress-wrapper').classList.remove('blur-filter');
-                
+
             document.querySelector('.remove-blur-btn').style.display = "none";
             // Remove blur-filter effect and Start button from the question if its already submitted
 

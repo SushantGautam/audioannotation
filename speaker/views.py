@@ -224,12 +224,13 @@ class ExamPopupView(FormView):
         context['next_qn'] = None if questions.count() == (qn_num + 1) else qn_num + 1
         return context
 
-    def post(self, request, *args, **kwargs):
-        print(request.POST.get('id'))
-        if 'id' in request.POST:
-            self.form_class = self.form_class(request.POST,
-                                              instance=SpeakerSubmission.objects.get(pk=request.POST.get('id')))
-        return super(ExamPopupView, self).post(request, *args, **kwargs)
+    def get_form(self, form_class=None):
+        if 'id' in self.request.POST:
+            form_class = self.form_class(self.request.POST, self.request.FILES,
+                                              instance=SpeakerSubmission.objects.get(pk=self.request.POST.get('id')))
+        else:
+            form_class = self.form_class(self.request.POST, self.request.FILES)
+        return form_class
 
     def form_valid(self, form):
         res_dict = {}
