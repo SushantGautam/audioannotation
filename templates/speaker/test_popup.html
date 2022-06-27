@@ -466,7 +466,7 @@
                 document.querySelector(".is-submitted").classList.add("status-active")
                 document.querySelector(".complete-label").classList.add("status-active")
                 // Remove Recording section styles and show Complete message when recording ends and question gets submitted
-
+                document.querySelector(".record-controls").classList.add('d-none')
                 // Show audio-playback-controls when recording ends and question gets submitted
                 document.querySelector(".audio_playback_div").removeAttribute('style');
                 document.querySelector(".audio-playback-controls").removeAttribute('style');
