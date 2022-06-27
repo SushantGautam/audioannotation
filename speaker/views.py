@@ -1,10 +1,12 @@
 import datetime
 import base64
+import json
 from multiprocessing import context
 from random import randint
 
 from django.core.files.base import ContentFile
 from django.db.models import Q
+from django.core import serializers
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
@@ -102,9 +104,10 @@ class ContractView(View):
         context['approved_contract_file'] = ''
         if context['has_contract_approved']:
             upload_file = ContractSign.objects.filter(user=self.request.user,
-             contract_code=context['contract'], approved=True).first().upload_file
+                                                      contract_code=context['contract'],
+                                                      approved=True).first().upload_file
             if upload_file:
-                context['approved_contract_file'] = upload_file.url   
+                context['approved_contract_file'] = upload_file.url
         return render(request, 'speaker/contract.html', context)
 
     def post(self, request, **kwargs):
@@ -113,9 +116,10 @@ class ContractView(View):
             contract_code = Contract.objects.filter(id=int(contract_code_id)).first()
             # contract_type = contract_code.contract_type
             if ContractSign.objects.filter(user=self.request.user, contract_code__user_type='SPE', approved=False,
-                                          contract_code=contract_code).exists():
-                contract = ContractSign.objects.get(user=self.request.user, contract_code__user_type='SPE', approved=False,
-                                          contract_code=contract_code)
+                                           contract_code=contract_code).exists():
+                contract = ContractSign.objects.get(user=self.request.user, contract_code__user_type='SPE',
+                                                    approved=False,
+                                                    contract_code=contract_code)
             else:
                 contract = ContractSign()
             contract.user = request.user
@@ -123,8 +127,8 @@ class ContractView(View):
             contract.approved = True
             contract.approved_at = timezone.now()
             upload_file = request.POST.get('contract-file')
-            format, imgstr = upload_file.split(';base64,') 
-            ext = format.split('/')[-1] 
+            format, imgstr = upload_file.split(';base64,')
+            ext = format.split('/')[-1]
             data = ContentFile(base64.b64decode(imgstr), name=str(randint(1, 100)) + 'contract-sign' + '.' + ext)
             contract.upload_file = data
             # if contract_type == 'F':
@@ -208,8 +212,8 @@ class ExamPopupView(FormView):
                                                                    exam_set=exam_set).exists()
 
         context['speakerSubObj'] = SpeakerSubmission.objects.filter(question=context['qn'],
-                                                                   speaker=speaker,
-                                                                   exam_set=exam_set).first()
+                                                                    speaker=speaker,
+                                                                    exam_set=exam_set).first()
         context['examObj'] = exam_set
         context['speaker'] = speaker
         context['qn_set'] = qn_set
@@ -220,19 +224,29 @@ class ExamPopupView(FormView):
         context['next_qn'] = None if questions.count() == (qn_num + 1) else qn_num + 1
         return context
 
+    def post(self, request, *args, **kwargs):
+        print(request.POST.get('id'))
+        if 'id' in request.POST:
+            self.form_class = self.form_class(request.POST,
+                                              instance=SpeakerSubmission.objects.get(pk=request.POST.get('id')))
+        return super(ExamPopupView, self).post(request, *args, **kwargs)
+
     def form_valid(self, form):
+        res_dict = {}
         if form.is_valid():
             print("File saved")
             obj = form.save(commit=False)
             obj.exam_set = get_object_or_404(ExamSet, id=self.kwargs.get('exam_id'))
             obj.save()
+            res_dict = {
+                'success': 'true',
+            }
+            res_dict.update(json.loads(serializers.serialize('json', [obj, ]))[0])
         else:
             print("form invalid: ", form.errors)
-
-        res_dict = {
-            'success': 'true'
-        }
-
+            res_dict = {
+                'success': 'false',
+            }
         return JsonResponse(res_dict)
 
     def form_invalid(self, form):

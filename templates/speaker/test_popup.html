@@ -134,10 +134,10 @@
     </div>
 
 
-    <div {% if not speakerSubObj %}style="visibility: hidden"{% endif %}>
+    <div {% if not speakerSubObj %}style="visibility: hidden"{% endif %} class="audio_playback_div">
         <audio class="submitted-audio" preload="metadata" onloadedmetadata="mDur()" ontimeupdate="mPlay(this)">
-            <source src="{{ speakerSubObj.audio_file.url }}" type="audio/ogg">
             <source src="{{ speakerSubObj.audio_file.url }}" type="audio/mpeg">
+            <source src="{{ speakerSubObj.audio_file.url }}" type="audio/ogg">
             Your browser does not support the audio element.
         </audio>
 
@@ -254,6 +254,7 @@
 </script>
 <!--Recorder testing from here-->
 <script>
+    var submission_id;
     $(document).ready(function () {
 
         $(".remove-blur-btn").click(function () {
