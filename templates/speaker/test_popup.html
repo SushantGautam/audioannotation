@@ -320,7 +320,6 @@
         recTimeLeft = recTimeLimit;
 
         function startPreparationTimer() {
-            console.log('hello')
             if (!(typeof prepInterval === 'undefined')) {
                 clearInterval(prepInterval);
             }
@@ -469,7 +468,8 @@
                 // Remove Recording section styles and show Complete message when recording ends and question gets submitted
 
                 // Show audio-playback-controls when recording ends and question gets submitted
-                document.querySelector(".audio-playback-controls").style.visibility = "visible";
+                document.querySelector(".audio_playback_div").removeAttribute('style');
+                document.querySelector(".audio-playback-controls").removeAttribute('style');
 
             }
 
