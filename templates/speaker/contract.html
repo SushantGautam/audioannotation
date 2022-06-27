@@ -4,7 +4,40 @@
 {% load static %}
 
 {% block content %}
-
     {% include 'contract/contract.html' %}
+{% endblock %}
 
+
+{% block scripts %}
+    {% if not has_contract_approved %}
+        <script src="{% static 'js/signature_pad.umd.js' %}"></script>
+        <script src="{% static 'js/signature_pad.js' %}"></script>
+        <script>
+        // if all checkbox are checked, enable submit button
+        function checkedBoxClicked(checked, id) {
+            if (checked) {
+            document.getElementById('checked' + id).innerHTML = '<i class="fas fa-2x fa-check"></i>';
+            } else {
+            document.getElementById('checked' + id).innerHTML = '';
+            }
+            if ($('.form-check-input:checked').length == $('.form-check-input').length) {
+            $('.btn-success').removeAttr('disabled');
+            } else {
+            $('.btn-success').attr('disabled', 'disabled');
+            }
+        }
+
+        // form submit
+        $('form[name="contract-submission"]').submit(function(e) {
+            // if sign is empty prevent submission
+            if (signaturePad.isEmpty()) {
+                e.preventDefault();
+                alert('{%trans "Please provide signature" %}');
+            } else {
+                const dataURL = signaturePad.toDataURL();
+                $('input[name="contract-file"]').val(dataURL);
+            }
+        });
+    </script>
+  {% endif %}
 {% endblock %}

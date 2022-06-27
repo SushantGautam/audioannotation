@@ -46,33 +46,54 @@
       <form name="contract-submission" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="hidden" name="contract-id" value="{{ contract.id }}">
-        <button class="btn btn-success btn-lg btn-block mt-4" type="submit" disabled>
+        <button class="btn btn-success btn-lg btn-block mt-4" type="button" disabled data-bs-toggle="modal" data-bs-target="#exampleModal">
             {{ _('Submit') }}
         </button>
       </form>
     {% endif %}
     {% if has_contract_approved %}
-      <button class="btn btn-success btn-lg btn-block mt-4" type="submit" disabled>
+      <button class="btn btn-success btn-lg btn-block mt-4" type="button" disabled>
         {{ _('Submitted') }}
       </button>
     {% endif %}
   </div>
-  
 
-  {% if not has_contract_approved %}
-    <script>
-      // if all checkbox are checked, enable submit button
-      function checkedBoxClicked(checked, id) {
-        if (checked) {
-          document.getElementById('checked' + id).innerHTML = '<i class="fas fa-2x fa-check"></i>';
-        } else {
-          document.getElementById('checked' + id).innerHTML = '';
-        }
-        if ($('.form-check-input:checked').length == $('.form-check-input').length) {
-          $('.btn-success').removeAttr('disabled');
-        } else {
-          $('.btn-success').attr('disabled', 'disabled');
-        }
-      }
-    </script>
-  {% endif %}
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <form name="contract-submission" method="post" enctype="multipart/form-data">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          {{ _('Submit Contract') }}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {% csrf_token %}
+        <input type="hidden" name="contract-id" value="{{ contract.id }}">
+        <input type="hidden" name="contract-file">
+        <p>
+          {{ _('Are you sure about sending this agreement?') }}
+          {{ _('After sending the agreement, It will immediately effect for utilizing your data') }}
+        </p>
+        <div id="signature-pad" class="signature-pad">
+          <div class="signature-pad--body">
+            <canvas style="border: 1px solid black;"></canvas>
+          </div>
+          <div class="signature-pad--footer">
+            <div class="description">{% trans 'Sign in the box' %}</div>
+            <div class="signature-pad--actions">
+              <div><button type="button" class="button clear" data-action="clear">{% trans 'Clear' %}</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success">{% trans 'Confirm' %}</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans 'Cancel' %}</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>

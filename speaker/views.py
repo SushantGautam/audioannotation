@@ -1,6 +1,9 @@
 import datetime
+import base64
 from multiprocessing import context
+from random import randint
 
+from django.core.files.base import ContentFile
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -119,6 +122,11 @@ class ContractView(View):
             contract.contract_code = contract_code
             contract.approved = True
             contract.approved_at = timezone.now()
+            upload_file = request.POST.get('contract-file')
+            format, imgstr = upload_file.split(';base64,') 
+            ext = format.split('/')[-1] 
+            data = ContentFile(base64.b64decode(imgstr), name=str(randint(1, 100)) + 'contract-sign' + '.' + ext)
+            contract.upload_file = data
             # if contract_type == 'F':
             #     contract.upload_file = request.FILES['contract-file']
             #     contract.approved = None
