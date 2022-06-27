@@ -133,8 +133,20 @@
         </div>
     </div>
 
+    <!-- Start and Stop buttons to control audio recording, start and end recording when needed -->
+    <div class="record-controls" {% if speakerSubObj %}style="display :  none"{% endif %} >
+        <button class="btn btn-sm btn-dark" title="{% trans 'Start Recording' %}">
+            <i class="fa-solid fa-forward"> </i> {% trans 'Start Rec.' %}
+        </button>
 
-    <div {% if not speakerSubObj %}style="visibility: hidden"{% endif %} class="audio_playback_div">
+        <button class="btn btn-sm btn-dark" title="{% trans 'Stop Recording' %}">
+            <i class="fa-solid fa-stop"> </i> {% trans 'Stop Rec.' %}
+        </button>
+    </div>
+    <!-- Start and Stop buttons to control audio recording, start and end recording when needed -->
+
+
+    <div {% if not speakerSubObj %}style="display: none"{% endif %} class="audio_playback_div">
         <audio class="submitted-audio" preload="metadata" onloadedmetadata="mDur()" ontimeupdate="mPlay(this)">
             <source src="{{ speakerSubObj.audio_file.url }}" type="audio/mpeg">
             <source src="{{ speakerSubObj.audio_file.url }}" type="audio/ogg">

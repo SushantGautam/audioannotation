@@ -330,3 +330,8 @@ path{
     font-weight: 500;
     filter: contrast(0.8) grayscale(30%);
 }
+
+
+.record-controls button{
+    font-size: 0.8rem;
+}
