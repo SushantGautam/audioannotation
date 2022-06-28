@@ -277,6 +277,7 @@
         });
 
         $('.re-record').on('click', function () {
+            toggleControlButtons(false);
             prepTimeLimit = parseInt("{{ qn.ready_time }}");
             prepTimePassed = 0;
             prepTimeLeft = prepTimeLimit;
@@ -284,7 +285,14 @@
             recTimeLeft = recTimeLimit;
             recTimePassed = 0;
             $(".prep-timer").html(`${toHHMMSS(prepTimeLeft)}`);
-            startPreparationTimer()
+            {% if qn.upload_type == "AUD" %}
+                // Start Audio Player Timer
+                startAudioPlayerTimer();
+                // Play audio
+                $("#qn_audio").get(0).play();
+            {% else %}
+                startPreparationTimer();
+            {% endif %}
         });
 
         // Remove background blur from the main question section on clicking the Start button
@@ -323,6 +331,14 @@
             if (!(typeof prepInterval === 'undefined')) {
                 clearInterval(prepInterval);
             }
+            // Prep Timer CSS
+            document.querySelector('.prep-icon').classList.add('status-active');
+            document.querySelector('.prep-icon').classList.remove('status-inactive');
+            document.querySelector('.prep-label').classList.add('status-active');
+            document.querySelector('.prep-label').classList.remove('status-inactive');
+            document.querySelector('.prep-timer').classList.add('status-active');
+            document.querySelector('.prep-timer').classList.remove('status-inactive');
+
             $(".prev_qn_btn").attr("disabled", "disabled");
             // When student takes test, prevent closing/interruption of the test
             document.querySelector('.btn-close').style.display = "none";
@@ -346,6 +362,16 @@
 
             var x = document.getElementById("myAudio");
             x.play();
+        }
+
+        function toggleControlButtons(status) {
+            if (status) {
+                $('.play-recorded-audio').removeAttr('disabled');
+                $('.re-record').removeAttr('disabled');
+            } else {
+                $('.play-recorded-audio').attr('disabled', 'disabled');
+                $('.re-record').attr('disabled', 'disabled');
+            }
         }
 
         function startWave() {
@@ -471,6 +497,8 @@
                 document.querySelector(".audio_playback_div").removeAttribute('style');
                 document.querySelector(".audio-playback-controls").removeAttribute('style');
 
+                // Retry Button Enabled
+                toggleControlButtons(true);
             }
 
             function startRecordTimer() {
@@ -498,6 +526,8 @@
 
 
             function startAudioPlayerTimer() {
+                $(".audio-progress").attr("aria-valuenow", String(0));
+                $(".audio-progress").css("width", String(0) + "%");
                 audioTimeLimit = Math.ceil(document.getElementById("qn_audio").duration);
                 audioTimePassed = 0;
                 audioTimeLeft = audioTimeLimit;
