@@ -266,7 +266,7 @@
 <!--Recorder testing from here-->
 <script>
     var submission_id;
-    {% if speakerSubObj %} submission_id = {{ speakerSubObj.pk }} {% endif %}
+    {% if speakerSubObj %} submission_id = {{ speakerSubObj.pk }} {% else %} submission_id = undefined {% endif %}
 
     function togglePreparationTimerUI(status) {
         if (status) {
@@ -579,6 +579,7 @@
 
     {% if qn.can_submit %}
         $(".prep-timer").html(`${toHHMMSS(prepTimeLeft)}`);
+        $(".rec-timer").html(`${toHHMMSS('{{ qn.speaking_time }}')}`);
         // $(".prev_qn_btn").attr("disabled", "disabled");
         $(".next_qn_btn").attr("disabled", "disabled");
         // $(".recorder_wave h1").html("{% trans 'Preparation' %}...");
