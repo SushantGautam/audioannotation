@@ -24,19 +24,19 @@
 
                 <div class="basic-info-wrapper">
                     <div class="basic-info-row">
-                        <label for="id_first_name"><i class="fa-solid fa-user"></i>{% trans 'First name' %}* </label>
+                        <label for="id_first_name"><i class="fa-solid fa-user"></i>{% trans 'First Name' %}* </label>
                         <input required class="form-control form-control-sm" placeholder="{% trans 'Enter first name here...' %}"
                                type="text" name="first_name" value="{{ userForm.first_name.initial }}"
                                maxlength="150" id="id_first_name">
                     </div>
                     <div class="basic-info-row">
-                        <label for="id_last_name"><i class="fa-solid fa-user-tie"></i>{% trans 'Last name' %}* </label>
+                        <label for="id_last_name"><i class="fa-solid fa-user-tie"></i>{% trans 'Last Name' %}* </label>
                         <input required class="form-control form-control-sm" placeholder="{% trans 'Enter last name here...' %}"
                                type="text" name="last_name" value="{{ userForm.last_name.initial }}"
                                maxlength="150" id="id_last_name">
                     </div>
                     <div class="basic-info-row">
-                        <label for="id_birth_date"><i class="fa-solid fa-calendar-days"></i>{% trans 'Birth date' %}* </label>
+                        <label for="id_birth_date"><i class="fa-solid fa-calendar-days"></i>{% trans 'Birth Date' %}* </label>
                         <input required type="date" name="birth_date" value="{{ form.birth_date.initial|date:'Y-m-d' }}"
                                class="form-control form-control-sm" placeholder="Select a date" required=""
                                id="id_birth_date">
@@ -63,13 +63,13 @@
             <h4><i class="fa-solid fa-address-book"></i>{% trans 'Contact Information' %} </h4>
             <div class="info-row">
                 <div class="info-detail">
-                    <label for="id_email"><i class="fa-solid fa-at"></i>{% trans 'Email address' %}* </label>
+                    <label for="id_email"><i class="fa-solid fa-at"></i>{% trans 'Email Address' %}* </label>
                     <input required class="form-control form-control-sm" placeholder="{% trans 'Enter email here...' %}"
                            type="email" name="email" maxlength="254"
                            value="{{ userForm.email.initial }}" id="id_email">
                 </div>
                 <div class="info-detail">
-                    <label for="id_phone_number"><i class="fa-solid fa-phone"></i>{% trans 'Phone number' %}* </label>
+                    <label for="id_phone_number"><i class="fa-solid fa-phone"></i>{% trans 'Phone Number' %}* </label>
                     <input required class="form-control form-control-sm" placeholder="{% trans 'Enter phone number here...' %}"
                            type="text" name="phone_number"
                            value="{{ form.phone_number.initial }}"
@@ -79,9 +79,9 @@
             <div class="info-row">
                 <div class="info-detail">
                     <label for="id_permanent_address"><i
-                            class="fa-solid fa-location-dot"></i>{% trans 'Permanent address' %}* </label>
+                            class="fa-solid fa-location-dot"></i>{% trans 'City' %}* </label>
                     <input required class="form-control form-control-sm"
-                           placeholder="{% trans 'Enter permanent address here...' %}" type="text"
+                           placeholder="{% trans 'Enter your city here...' %}" type="text"
                            name="permanent_address"
                            value="{{ form.permanent_address.initial }}"
                            maxlength="256"
@@ -89,9 +89,9 @@
                            id="id_permanent_address">
                 </div>
                 <div class="info-detail">
-                    <label for="id_current_address"><i class="fa-solid fa-house"></i>{% trans 'Current address' %}*</label>
+                    <label for="id_current_address"><i class="fa-solid fa-house"></i>{% trans 'Country' %}*</label>
                     <input required class="form-control form-control-sm"
-                           placeholder="{% trans 'Enter current address here...' %}" type="text" name="current_address"
+                           placeholder="{% trans 'Enter country here...' %}" type="text" name="current_address"
                            value="{{ form.current_address.initial }}"
                            maxlength="256"
                            required="" id="id_current_address">
@@ -178,7 +178,7 @@
                 </div>
                 <div class="info-row">
                     <div class="info-detail">
-                        <label for="id_level"><i class="fa-solid fa-arrow-turn-up"></i> {% trans 'Level' %}* </label>
+                        <label for="id_level"><i class="fa-solid fa-arrow-turn-up"></i> {% trans 'Desired Exam Level' %}* </label>
                         <select required class="form-control form-control-sm" name="level" id="id_level">
                             {% for value, display in form.fields.level.choices %}
                                 <option value="{{ value }}"{% if form.level.initial == value %}
@@ -188,8 +188,8 @@
                         </select>
                     </div>
                     <div class="info-detail">
-                        <label for="id_learning_period"><i
-                                class="fa-solid fa-hourglass-end"></i> {% trans 'Learning period' %}*</label>
+                        <label title="{% trans 'Learning period in years' %}" for="id_learning_period"><i
+                                class="fa-solid fa-hourglass-end"></i>{% trans 'Learning Period(years)' %}*</label>
                         <input required class="form-control form-control-sm"
                                placeholder="{% trans 'Enter learning period (in years)' %}" type="number"
                                name="learning_period" value="{{ form.learning_period.initial }}" required=""
@@ -201,7 +201,7 @@
 
                     <div class="info-detail">
                         <label for="id_learning_method"><i
-                                class="fa-solid fa-signs-post"></i> {% trans 'Learning method' %}*</label>
+                                class="fa-solid fa-signs-post"></i> {% trans 'Learning Method' %}*</label>
                         <input required class="form-control form-control-sm"
                                placeholder="{% trans 'Enter learning method here...' %}" type="text"
                                name="learning_method" value="{{ form.learning_method.initial }}" maxlength="256"
@@ -232,7 +232,7 @@
                         </select>
                     </div>
                     <div class="info-detail">
-                        <label for="id_language"><i class="fa-solid fa-language"></i> {% trans 'Language' %}*</label>
+                        <label for="id_language"><i class="fa-solid fa-language"></i> {% trans 'Native Language' %}*</label>
                         <select required class="form-control form-control-sm" name="language" id="id_language">
                             {% for value, display in form.fields.language.choices %}
                                 <option value="{{ value }}"{% if form.language.initial == value %}
@@ -246,7 +246,7 @@
 
                     <div class="info-detail">
                         <label for="id_education_level"><i
-                                class="fa-solid fa-graduation-cap"></i> {% trans 'Education level' %}*</label>
+                                class="fa-solid fa-graduation-cap"></i> {% trans 'Education Level' %}*</label>
                         <select required class="form-control form-control-sm" name="education_level" id="id_education_level">
                             {% for value, display in form.fields.education_level.choices %}
                                 <option value="{{ value }}"{% if form.education_level.initial == value %}
@@ -256,8 +256,8 @@
                         </select>
                     </div>
                     <div class="info-detail">
-                        <label for="id_korea_residency"><i
-                                class="fa-solid fa-house-chimney-user"></i> {% trans 'Korea residency' %}*</label>
+                        <label title="{% trans 'Korea Residency in years' %}" for="id_korea_residency"><i
+                                class="fa-solid fa-house-chimney-user"></i> {% trans 'Korea Residency(years)' %}*</label>
                         <input required class="form-control form-control-sm"
                                placeholder="{% trans 'Enter Korea residency (in years)...' %}" type="number"
                                name="korea_residency" value="{{ form.korea_residency.initial }}" required=""
