@@ -3,9 +3,137 @@
 
 <form method="post" action="{% url 'worker:edit_profile' pk=user.worker.id %}" method="post">
     {% csrf_token %}
-    <section class="profile-edit-section w-60">
+    <section class="profile-edit-section">
 
-        <div class="details-parent shadow-sm">
+            <section class="basic-section" id="basic-section">
+                <h4><i class="fa-solid fa-user-tag"></i>{% trans 'Basic Information' %}</h4>
+                
+                <div class="basic-info-parent">
+                    
+                    <img src="/static/img/user.png" class="rounded-circle" style="width: 10rem;height: 10rem;" alt="">
+
+                <div class="basic-info-wrapper">
+                    <div class="basic-info-row">
+                        <label for="id_first_name"><i class="fa-solid fa-user"></i>{% trans 'First name' %}* </label>
+                        <input required class="form-control form-control-sm" placeholder="{% trans 'Enter first name here...' %}"
+                               type="text" name="first_name" value="{{ userForm.first_name.initial }}"
+                               maxlength="150" id="id_first_name">
+                    </div>
+                    <div class="basic-info-row">
+                        <label for="id_last_name"><i class="fa-solid fa-user-tie"></i>{% trans 'Last name' %}* </label>
+                        <input required class="form-control form-control-sm" placeholder="{% trans 'Enter last name here...' %}"
+                               type="text" name="last_name" value="{{ userForm.last_name.initial }}"
+                               maxlength="150" id="id_last_name">
+                    </div>
+                    <div class="basic-info-row">
+                        <label for="id_birth_date"><i class="fa-solid fa-calendar-days"></i>{% trans 'Birth date' %}* </label>
+                        <input type="date" name="birth_date" class="form-control form-control-sm" placeholder="Select a date" required="" id="id_birth_date">
+                    </div>
+                    <div class="basic-info-row">
+                        <label for="id_gender_0"><i class="fa-solid fa-mars-and-venus"></i>{% trans 'Gender' %}* </label>
+
+
+                        <select required class="form-control form-control-sm" name="gender" id="id_gender">
+                                <option value="">-- Choose gender --</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                </div>
+            </section>
+
+            <section class="contact-section">
+                <h4><i class="fa-solid fa-address-book"></i>{% trans 'Contact Information' %}</h4>
+                <div class="info-row">
+                    <div class="info-detail">
+                        <label for="id_email"><i class="fa-solid fa-at"></i>{% trans 'Email address' %}*</label>
+                        <input required class="form-control form-control-sm" placeholder="{% trans 'Enter whalespace address here...' %}" type="email" name="email" value="askdkjagdkkkaj@gmail.com" maxlength="254" id="id_email">
+                    </div>
+                    <div class="info-detail">
+                        <label for="id_phone_number"><i class="fa-solid fa-phone"></i>{% trans 'Phone number' %}*</label>
+                        <input required class="form-control form-control-sm" placeholder="{% trans 'Enter phone number here...' %}" type="tel" name="phone-number" value="9898989898" maxlength="254" id="id_email">
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-detail">
+                        <label for="id_permanent_address"><i class="fa-solid fa-location-dot"></i>{% trans 'Permanent address' %}</label>
+                        <input class="form-control form-control-sm" placeholder="{% trans 'Enter permanent address here...' %}"  type="text" name="permanent_address" 
+                           value="{{ form.permanent_address.initial }}" maxlength="256" id="id_permanent_address">
+                    </div>
+                    <!-- <div class="info-detail">
+                        <label for="id_current_address"><i class="fa-solid fa-house"></i>{% trans 'Current address' %}
+                            :</label>
+                        {{ user.worker.current_address }}
+                    </div> -->
+                </div>
+            </section>
+
+            <section class="additional-section">
+                <h4><i class="fa-solid fa-people-roof"></i>{% trans 'Organization Information' %}</h4>
+                <div class="info-row">
+                    <div class="info-detail">
+                        <label for="id_organization_name"><i class="fa-solid fa-people-group"></i> {% trans 'Organization Name' %}*</label>
+                        <input required class="form-control form-control-sm" placeholder="Enter organization name here..." type="text" name="organization_name" value="1" maxlength="256" id="id_organization_name">
+                    </div>
+                    <div class="info-detail">
+                        <label for="id_department"><i class="fa-solid fa-building-user"></i> {% trans 'Department' %}*</label>
+                        <input required class="form-control form-control-sm" placeholder="Enter department here..." type="text" name="department" value="1" maxlength="256" id="id_department">
+
+                    </div>
+
+                </div>
+                <div class="info-row">
+
+                    <div class="info-detail">
+                        <label for="id_position"><i class="fa-solid fa-person-circle-question"></i> {% trans 'Position' %}</label>
+                        <select class="form-control form-control-sm" name="pets" id="pet-select">
+                            <option value="">-- Choose position --</option>
+                            <option value="dog">Dog</option>
+                            <option value="cat">Cat</option>
+                            <option value="hamster">Hamster</option>
+                            <option value="parrot">Parrot</option>
+                        </select>
+                    </div>
+                    <div class="info-detail">
+                        <label for="id_qualification"><i class="fa-solid fa-clipboard-user"></i> {% trans 'Qualification' %}</label>
+                        <select class="form-control form-control-sm" name="pets" id="pet-select">
+                            <option value="">-- Choose qualification --</option>
+                            <option value="dog">Dog</option>
+                            <option value="cat">Cat</option>
+                            <option value="hamster">Hamster</option>
+                            <option value="parrot">Parrot</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bank-details-section">
+                <h4><i class="fa-solid fa-building-columns"></i>{% trans 'Banking Details' %}</h4>
+
+                <div class="info-row">
+                    <div class="info-detail">
+                        <label title="{% trans 'Account Holder`s Name' %}" for="id_bank_account_name"><i class="fa-solid fa-money-check-dollar"></i>{% trans 'Account Name' %}*</label>
+                        <input required class="form-control form-control-sm" placeholder="Enter account holder`s name here..." type="text" name="bank_account_name" value="NorthStar Devil" maxlength="150" id="id_bank_account_name">
+                    </div>
+                    
+                    <div class="info-detail">
+                        <label for="id_bank_name"><i class="fa-solid fa-building-flag"></i>{% trans 'Bank Name' %}*</label>
+                        <input required class="form-control form-control-sm" placeholder="Enter bank name here..." type="text" name="bank_name" value="Standard Chartered" maxlength="150" id="id_bank_name">
+                    </div> 
+                </div>
+
+                <div class="info-row">
+                    <div class="info-detail">
+                        <label for="id_bank_account_number"><i class="fa-solid fa-hashtag"></i>{% trans 'Account Number' %}*</label>
+                        <input required class="form-control form-control-sm" placeholder="Enter account number here..." type="text" name="bank_account_number" value="12379530297539234" maxlength="150" id="id_bank_account_number">
+                    </div>
+                </div>
+
+            </section>
+
+        <!-- <div class="details-parent shadow-sm">
             <div class="text-center">
                 <img src="{% static 'img/user.png' %}" class="rounded-circle" style="width: 10rem;height: 10rem;"
                      alt="">
@@ -37,22 +165,25 @@
                     <div class="value">{{ form.education_field }}</div>
                 </div>
             </div>
-        </div>
-        <div class="detail-row">
-            <div class="detail">
-                <div class="label"><i class="fa-solid fa-clipboard-question"></i>{{ form.bank_name.label_tag }}
+            <div class="detail-row">
+                <div class="detail">
+                    <div class="label"><i class="fa-solid fa-clipboard-question"></i>{{ form.bank_name.label_tag }}
+                    </div>
+                    <div class="value">{{ form.bank_name }}</div>
                 </div>
-                <div class="value">{{ form.bank_name }}</div>
+                <div class="detail">
+                    <div class="label"><i
+                            class="fa-solid fa-chalkboard-user"></i>{{ form.bank_account_number.label_tag }}</div>
+                    <div class="value">{{ form.bank_account_number }}</div>
+                </div>
             </div>
-            <div class="detail">
-                <div class="label"><i
-                        class="fa-solid fa-chalkboard-user"></i>{{ form.bank_account_number.label_tag }}</div>
-                <div class="value">{{ form.bank_account_number }}</div>
-            </div>
-        </div>
+        </div> -->
        
-        <button type="submit">Submit</button>
-        <button type="button" id="cancel-edit">Cancel</button>
+
+        <div class="button-section">
+            <button class="btn btn-sm btn-dark" title="{% trans 'Submit changes' %}" type="submit">{% trans 'Submit' %}</button>
+            <button class="btn btn-sm btn-dark" title="{% trans 'Cancel changes' %}" type="button" id="cancel-edit">{% trans 'Cancel' %}</button>
+        </div>
     </section>
 </form>
 

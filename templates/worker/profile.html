@@ -9,188 +9,7 @@
 {% block content %}
     <div class="header-section py-3">
         <h2 class="page-heading">{% trans 'Profile Information' %} </h2>
-        <a href="{% url 'worker:edit_profile' pk=user.worker.id %}" title="Edit Profile"
-           class="btn btn-sm btn-secondary rounded-circle" id="edit-profile-btn"><i
-                class="fa-solid fa-pen"></i></a>
-    </div>
-    <section class="profile-section-container">
-        <section class="profile-section">
-                    <section class="basic-section" id="basic-section">
-            <h4><i class="fa-solid fa-user-tag"></i>{% trans 'Basic Information' %}</h4>
-            
-            <div class="basic-info-parent">
-                
-                <img src="/static/img/user.png" class="rounded-circle" style="width: 10rem;height: 10rem;" alt="">
-
-                <div class="basic-info-wrapper">
-                    <div class="basic-info-row">
-                        <label for="id_usernamee"><i class="fa-solid fa-tag"></i>{% trans 'Username' %} :</label>
-                        {{ user.username }}
-                    </div>
-                    <div class="basic-info-row">
-                        <label for="id_full_name"><i class="fa-solid fa-user"></i>{% trans 'Full Name' %} :</label>
-                        {{ user.get_full_name }}
-                    </div>
-                    <div class="basic-info-row">
-                        <label for="id_birth_date"><i class="fa-solid fa-calendar-days"></i>{% trans 'Birth date' %}
-                            :</label>
-                        {{ user.worker.birth_date|date:'Y-m-d' }}
-                    </div>
-                    <div class="basic-info-row">
-                        <label for="id_gender"><i class="fa-solid fa-mars-and-venus"></i>{% trans 'Gender' %} :</label>
-                        {{ user.worker.get_gender_display }}
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="contact-section">
-            <h4><i class="fa-solid fa-address-book"></i>{% trans 'Contact Information' %}</h4>
-            <div class="info-row">
-                <div class="info-detail">
-                    <label for="id_email"><i class="fa-solid fa-at"></i>{% trans 'Email address' %}:</label>
-                    {{ user.email }}
-                </div>
-                <div class="info-detail">
-                    <label for="id_phone_number"><i class="fa-solid fa-phone"></i>{% trans 'Phone number' %}:</label>
-                    {{ user.worker.phone_number }}
-                </div>
-            </div>
-            <div class="info-row">
-                <div class="info-detail">
-                    <label for="id_permanent_address"><i
-                            class="fa-solid fa-location-dot"></i>{% trans 'Permanent address' %}:</label>
-                    {{ user.worker.permanent_address }}
-                </div>
-                <!-- <div class="info-detail">
-                    <label for="id_current_address"><i class="fa-solid fa-house"></i>{% trans 'Current address' %}
-                        :</label>
-                    {{ user.worker.current_address }}
-                </div> -->
-            </div>
-        </section>
-
-        <section class="additional-section">
-            <h4><i class="fa-solid fa-people-roof"></i>{% trans 'Organization Information' %}</h4>
-            <div class="info-row">
-                <div class="info-detail">
-                    <label for="id_organization_name"><i class="fa-solid fa-people-group"></i> {% trans 'Organization Name' %}:
-                    </label>
-                    Organization name here
-                </div>
-                <div class="info-detail">
-                    <label for="id_department"><i class="fa-solid fa-building-user"></i> {% trans 'Department' %}:</label>
-                    Department here
-                </div>
-
-            </div>
-            <div class="info-row">
-
-                <div class="info-detail">
-                    <label for="id_position"><i class="fa-solid fa-person-circle-question"></i> {% trans 'Position' %}:</label>
-                    Position here
-                </div>
-                <div class="info-detail">
-                    <label for="id_qualification"><i class="fa-solid fa-clipboard-user"></i> {% trans 'Qualification' %}:</label>
-                    Qualification here
-                </div>
-            </div>
-        </section>
-
-        <section class="bank-details-section">
-            <h4><i class="fa-solid fa-building-columns"></i>{% trans 'Banking Details' %}</h4>
-
-            <div class="info-row">
-                <div class="info-detail">
-                    <label title="{% trans 'Account Holder`s Name' %}" for="id_bank_account_name"><i
-                            class="fa-solid fa-money-check-dollar"></i>{% trans 'Account Name' %} :</label>
-                    {{ user.worker.bank_account_name }}
-                </div>
-                
-                <div class="info-detail">
-                    <label for="id_bank_name"><i class="fa-solid fa-building-flag"></i>{% trans 'Bank Name' %}
-                        :</label>
-                        {{ user.worker.bank_name }}
-                </div> 
-            </div>
-
-            <div class="info-row">
-                <div class="info-detail">
-                    <label for="id_bank_account_number"><i class="fa-solid fa-hashtag"></i>{% trans 'Account Number' %} :</label>
-                    {{ user.worker.bank_account_number }}
-                </div>
-            </div>
-
-        </section>
-
-        <!-- <div class="details-parent shadow-sm">
-            <div class="text-center">
-                <img src="{% static 'img/user.png' %}" class="rounded-circle" style="width: 10rem;height: 10rem;"
-                        alt="">
-                <h4>{{ request.user.get_full_name }}</h4>
-            </div>
-            <div class="detail-row">
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-id-badge"></i>{% trans 'Worker ID' %}  </div>
-                    <div class="value">{{ request.user.pk }}</div>
-                </div>
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-calendar-days"></i>{% trans 'Date of Birth' %} </div>
-                    <div class="value">{{ request.user.worker.birth_date }}</div>
-                </div>
-            </div>
-            <div class="detail-row">
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-signature"></i>Name</div>
-                    <div class="value">{{ request.user.get_full_name }}</div>
-                </div>
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-arrow-down-1-9"></i></i>Resident Reg. Num</div>
-                    <div class="value">7851351263</div>
-                </div>
-            </div>
-            <div class="detail-row">
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-location-dot"></i></i>{% trans 'Address' %}</div>
-                    <div class="value">{{ request.user.worker.permanent_address }}</div>
-                </div>
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-graduation-cap"></i>Education</div>
-                    <div class="value">Bachelors Degree</div>
-                </div>
-            </div>
-            <div class="detail-row">
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-phone"></i>{% trans 'Phone Number' %}</div>
-                    <div class="value">{{ request.user.worker.phone_number }}</div>
-                </div>
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-envelope"></i></i>{% trans 'Whale Address' %}</div>
-                    <div class="value">{{ request.user.email }}</div>
-                </div>
-            </div>
-            <div class="detail-row">
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-building-columns"></i></i>{% trans 'Bank Name' %}</div>
-                    <div class="value">{{ request.user.worker.bank_name }}</div>
-                </div>
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-hashtag"></i>{% trans 'Account Number' %}</div>
-                    <div class="value">{{ request.user.worker.bank_account_number }}</div>
-                </div>
-            </div>
-            <div class="detail-row">
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-graduation-cap"></i>{% trans 'Education' %}</div>
-                    <div class="value">{{ request.user.worker.education_level }}</div>
-                </div>
-                <div class="detail">
-                    <div class="label"><i class="fa-solid fa-book-bookmark"></i>{% trans 'Major' %}</div>
-                    <div class="value">{{ request.user.worker.education_field }}</div>
-                </div>
-            </div>
-
-        </div> -->
+        <div class="d-flex gap-1">
 
             {% if not user.worker.is_verified and not user.worker.has_request_verification %}
                 <form action="{% url 'worker:verify_profile' %}" method="post">
@@ -204,6 +23,193 @@
                     {% trans 'Pending Verification' %}
                 </div>
             {% endif %}
+            <a href="{% url 'worker:edit_profile' pk=user.worker.id %}" title="Edit Profile"
+               class="btn btn-sm btn-dark rounded-circle" id="edit-profile-btn">
+               <i class="fa-solid fa-pen"></i>
+            </a>
+        </div>      
+        
+    </div>
+    <section class="profile-section-container">
+        <section class="profile-section">
+            <section class="basic-section" id="basic-section">
+                <h4><i class="fa-solid fa-user-tag"></i>{% trans 'Basic Information' %}</h4>
+                
+                <div class="basic-info-parent">
+                    
+                    <img src="/static/img/user.png" class="rounded-circle" style="width: 10rem;height: 10rem;" alt="">
+
+                    <div class="basic-info-wrapper">
+                        <div class="basic-info-row">
+                            <label for="id_usernamee"><i class="fa-solid fa-tag"></i>{% trans 'Username' %} :</label>
+                            {{ user.username }}
+                        </div>
+                        <div class="basic-info-row">
+                            <label for="id_full_name"><i class="fa-solid fa-user"></i>{% trans 'Full Name' %} :</label>
+                            {{ user.get_full_name }}
+                        </div>
+                        <div class="basic-info-row">
+                            <label for="id_birth_date"><i class="fa-solid fa-calendar-days"></i>{% trans 'Birth date' %}
+                                :</label>
+                            {{ user.worker.birth_date|date:'Y-m-d' }}
+                        </div>
+                        <div class="basic-info-row">
+                            <label for="id_gender"><i class="fa-solid fa-mars-and-venus"></i>{% trans 'Gender' %} :</label>
+                            {{ user.worker.get_gender_display }}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="contact-section">
+                <h4><i class="fa-solid fa-address-book"></i>{% trans 'Contact Information' %}</h4>
+                <div class="info-row">
+                    <div class="info-detail">
+                        <label for="id_email"><i class="fa-solid fa-at"></i>{% trans 'Email address' %}:</label>
+                        {{ user.email }}
+                    </div>
+                    <div class="info-detail">
+                        <label for="id_phone_number"><i class="fa-solid fa-phone"></i>{% trans 'Phone number' %}:</label>
+                        {{ user.worker.phone_number }}
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-detail">
+                        <label for="id_permanent_address"><i
+                                class="fa-solid fa-location-dot"></i>{% trans 'Permanent address' %}:</label>
+                        {{ user.worker.permanent_address }}
+                    </div>
+                    <!-- <div class="info-detail">
+                        <label for="id_current_address"><i class="fa-solid fa-house"></i>{% trans 'Current address' %}
+                            :</label>
+                        {{ user.worker.current_address }}
+                    </div> -->
+                </div>
+            </section>
+
+            <section class="additional-section">
+                <h4><i class="fa-solid fa-people-roof"></i>{% trans 'Organization Information' %}</h4>
+                <div class="info-row">
+                    <div class="info-detail">
+                        <label for="id_organization_name"><i class="fa-solid fa-people-group"></i> {% trans 'Organization Name' %}:
+                        </label>
+                        Organization name here
+                    </div>
+                    <div class="info-detail">
+                        <label for="id_department"><i class="fa-solid fa-building-user"></i> {% trans 'Department' %}:</label>
+                        Department here
+                    </div>
+
+                </div>
+                <div class="info-row">
+
+                    <div class="info-detail">
+                        <label for="id_position"><i class="fa-solid fa-person-circle-question"></i> {% trans 'Position' %}:</label>
+                        Position here
+                    </div>
+                    <div class="info-detail">
+                        <label for="id_qualification"><i class="fa-solid fa-clipboard-user"></i> {% trans 'Qualification' %}:</label>
+                        Qualification here
+                    </div>
+                </div>
+            </section>
+
+            <section class="bank-details-section">
+                <h4><i class="fa-solid fa-building-columns"></i>{% trans 'Banking Details' %}</h4>
+
+                <div class="info-row">
+                    <div class="info-detail">
+                        <label title="{% trans 'Account Holder`s Name' %}" for="id_bank_account_name"><i
+                                class="fa-solid fa-money-check-dollar"></i>{% trans 'Account Name' %} :</label>
+                        {{ user.worker.bank_account_name }}
+                    </div>
+                    
+                    <div class="info-detail">
+                        <label for="id_bank_name"><i class="fa-solid fa-building-flag"></i>{% trans 'Bank Name' %}
+                            :</label>
+                            {{ user.worker.bank_name }}
+                    </div> 
+                </div>
+
+                <div class="info-row">
+                    <div class="info-detail">
+                        <label for="id_bank_account_number"><i class="fa-solid fa-hashtag"></i>{% trans 'Account Number' %} :</label>
+                        {{ user.worker.bank_account_number }}
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- <div class="details-parent shadow-sm">
+                <div class="text-center">
+                    <img src="{% static 'img/user.png' %}" class="rounded-circle" style="width: 10rem;height: 10rem;"
+                            alt="">
+                    <h4>{{ request.user.get_full_name }}</h4>
+                </div>
+                <div class="detail-row">
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-id-badge"></i>{% trans 'Worker ID' %}  </div>
+                        <div class="value">{{ request.user.pk }}</div>
+                    </div>
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-calendar-days"></i>{% trans 'Date of Birth' %} </div>
+                        <div class="value">{{ request.user.worker.birth_date }}</div>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-signature"></i>Name</div>
+                        <div class="value">{{ request.user.get_full_name }}</div>
+                    </div>
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-arrow-down-1-9"></i></i>Resident Reg. Num</div>
+                        <div class="value">7851351263</div>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-location-dot"></i></i>{% trans 'Address' %}</div>
+                        <div class="value">{{ request.user.worker.permanent_address }}</div>
+                    </div>
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-graduation-cap"></i>Education</div>
+                        <div class="value">Bachelors Degree</div>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-phone"></i>{% trans 'Phone Number' %}</div>
+                        <div class="value">{{ request.user.worker.phone_number }}</div>
+                    </div>
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-envelope"></i></i>{% trans 'Whale Address' %}</div>
+                        <div class="value">{{ request.user.email }}</div>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-building-columns"></i></i>{% trans 'Bank Name' %}</div>
+                        <div class="value">{{ request.user.worker.bank_name }}</div>
+                    </div>
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-hashtag"></i>{% trans 'Account Number' %}</div>
+                        <div class="value">{{ request.user.worker.bank_account_number }}</div>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-graduation-cap"></i>{% trans 'Education' %}</div>
+                        <div class="value">{{ request.user.worker.education_level }}</div>
+                    </div>
+                    <div class="detail">
+                        <div class="label"><i class="fa-solid fa-book-bookmark"></i>{% trans 'Major' %}</div>
+                        <div class="value">{{ request.user.worker.education_field }}</div>
+                    </div>
+                </div>
+
+            </div> -->
+
+
         </section>
     </section>
 {% endblock %}
