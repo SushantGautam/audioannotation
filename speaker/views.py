@@ -214,6 +214,7 @@ class ExamPopupView(FormView):
         context['speakerSubObj'] = SpeakerSubmission.objects.filter(question=context['qn'],
                                                                     speaker=speaker,
                                                                     exam_set=exam_set).first()
+        print(context['speakerSubObj'])
         context['examObj'] = exam_set
         context['speaker'] = speaker
         context['qn_set'] = qn_set
