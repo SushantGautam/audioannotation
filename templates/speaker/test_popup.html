@@ -134,19 +134,19 @@
     </div>
 
     <!-- Start and Stop buttons to control audio recording, start and end recording when needed -->
-    <div class="record-controls" {% if speakerSubObj %}style="display :  none"{% endif %} >
-        <button class="btn btn-sm btn-dark" title="{% trans 'Start Recording' %}">
+    <div class="record-controls">
+        <button class="btn btn-sm btn-dark start-recording d-none" title="{% trans 'Start Recording' %}">
             <i class="fa-solid fa-forward"> </i> {% trans 'Start Rec.' %}
         </button>
 
-        <button class="btn btn-sm btn-dark" title="{% trans 'Stop Recording' %}">
+        <button class="btn btn-sm btn-dark stop-recording d-none" title="{% trans 'Stop Recording' %}">
             <i class="fa-solid fa-stop"> </i> {% trans 'Stop Rec.' %}
         </button>
     </div>
     <!-- Start and Stop buttons to control audio recording, start and end recording when needed -->
 
 
-    <div {% if not speakerSubObj %}style="display: none"{% endif %} class="audio_playback_div">
+    <div class="audio_playback_div">
         <audio class="submitted-audio" preload="metadata" onloadedmetadata="mDur()" ontimeupdate="mPlay(this)">
             <source src="{{ speakerSubObj.audio_file.url }}" type="audio/mpeg">
             <source src="{{ speakerSubObj.audio_file.url }}" type="audio/ogg">
@@ -208,10 +208,6 @@
 <!--Recorder-->
 
 <script>
-    // const questionCode = {{qn_set.unique_code}} + {{qn_set.subcategory_code}} ;
-    // console.log(questionCode);
-    // let unique_code = '{{ qn_set.unique_code}}'
-    // let subcategory_code = '{{ qn_set.subcategory_code }}'
     $("#test_modal_label").html(`{{qn_set.subcategory_code}} ` + `[ {{qn_set.unique_code}} ]`);  // set the modal label
     function prev_qn_btn_click() {
         let qn_set_pk = "{{ qn_set.pk }}";
@@ -266,18 +262,363 @@
 
 
 </script>
+
 <!--Recorder testing from here-->
 <script>
     var submission_id;
     {% if speakerSubObj %} submission_id = {{ speakerSubObj.pk }} {% endif %}
+
+    function togglePreparationTimerUI(status) {
+        if (status) {
+            $('.prep-icon, .prep-label, .prep-timer').addClass('status-active');
+            $('.prep-icon, .prep-label, .prep-timer').removeClass('status-inactive');
+        } else {
+            $('.prep-icon, .prep-label, .prep-timer').removeClass('status-active');
+            $('.prep-icon, .prep-label, .prep-timer').addClass('status-inactive');
+        }
+    }
+
+    function toggleRecordingTimerUI(status) {
+        if (status) {
+            $('.rec-icon, .rec-label, .rec-timer').addClass('status-active');
+            $('.rec-icon, .rec-label, .rec-timer').removeClass('status-inactive');
+        } else {
+            $('.rec-icon, .rec-label, .rec-timer').removeClass('status-active');
+            $('.rec-icon, .rec-label, .rec-timer').addClass('status-inactive');
+        }
+    }
+
+    function toggleCompletedUI(status) {
+        if (status) {
+            $('.is-submitted').addClass('status-active');
+            $('.is-submitted').removeClass('status-inactive');
+        } else {
+            $('.is-submitted').removeClass('status-active');
+            $('.is-submitted').addClass('status-inactive');
+        }
+    }
+
+    function enableControlButtons(status) {
+        if (status) {
+            $(".audio_playback_div, .audio-playback-controls").removeAttr('style');
+            $('.play-recorded-audio').removeAttr('disabled');
+            $('.re-record').removeAttr('disabled');
+        } else {
+            $(".audio_playback_div, .audio-playback-controls").css('visibility', 'hidden');
+            $('.play-recorded-audio').attr('disabled', 'disabled');
+            $('.re-record').attr('disabled', 'disabled');
+        }
+    }
+
+    function enableStartRecording(status) {
+        if (status) {
+            $('.record-controls .start-recording').removeClass('d-none');
+            enableStopRecording(false);
+        } else
+            $('.record-controls .start-recording').addClass('d-none');
+
+    }
+
+    function enableStopRecording(status) {
+        if (status) {
+            enableStartRecording(false);
+            $('.record-controls .stop-recording').removeClass('d-none');
+        } else
+            $('.record-controls .stop-recording').addClass('d-none');
+    }
+
+    function completedUI() {
+        togglePreparationTimerUI(false);
+        toggleRecordingTimerUI(false);
+        toggleCompletedUI(true);
+    }
+
+    function removeBlur() {
+        if (document.querySelector('.image-question') != null)
+            document.querySelector('.image-question').classList.remove('blur-filter');
+
+        document.querySelector('.question-description').classList.remove('blur-filter');
+
+        if (document.querySelector('.audio-progress-wrapper') != null)
+            document.querySelector('.audio-progress-wrapper').classList.remove('blur-filter');
+
+
+        document.querySelector('.remove-blur-btn').style.display = "none";
+
+        // If Question type is audio, after clicking "Start" Play audio and after playback ends, start prepTimer
+        // If Question type is not audio, start prep timer.
+        {% if qn.upload_type == "AUD" %}
+            // Start Audio Player Timer
+            startAudioPlayerTimer();
+            // Play audio
+            $("#qn_audio").get(0).play();
+        {% else %}
+            startPreparationTimer();
+        {% endif %}
+    }
+
+    function stopPreparationTimer() {
+        $(".prep-timer").html(`${toHHMMSS(0)}`);
+        clearInterval(prepInterval);
+        togglePreparationTimerUI(false);
+        playBeepSound();
+        startWave();
+    }
+
+    function startPreparationTimer() {
+        if (!(typeof prepInterval === 'undefined')) {
+            clearInterval(prepInterval);
+        }
+
+        // Display Start Recording Button once the preparation time starts.
+        $('.audio_playback_div .start-recording').show();
+        // Prep Timer CSS
+        togglePreparationTimerUI(true);
+        toggleCompletedUI(false);
+        enableControlButtons(false);
+        enableStartRecording(true);
+
+        $(".prev_qn_btn").attr("disabled", "disabled");
+        // When student takes test, prevent closing/interruption of the test
+        document.querySelector('.btn-close').style.display = "none";
+
+        prepInterval = setInterval(() => {
+            prepTimePassed = prepTimePassed + 1;
+            prepTimeLeft = prepTimeLimit - prepTimePassed;
+            if (prepTimeLeft <= 0) {
+                clearInterval(prepInterval);
+                togglePreparationTimerUI(false);
+                playBeepSound();
+                startWave();
+            }
+            $(".prep-timer").html(`${toHHMMSS(prepTimeLeft)}`);
+            // debugger;
+
+        }, 1000);
+    }
+
+    function playBeepSound() {
+        // var audio = new Audio('orgadmin/static/audio/beep-07a.mp3');
+        // audio.play();
+
+        var x = document.getElementById("myAudio");
+        x.play();
+    }
+
+    prepTimeLimit = parseInt("{{ qn.ready_time }}");
+    prepTimePassed = 0;
+    prepTimeLeft = prepTimeLimit;
+    recTimeLimit = parseInt("{{ qn.speaking_time }}");
+    recTimePassed = 0;
+    recTimeLeft = recTimeLimit;
+
+    function startWave() {
+        // $('.question-wrapper').removeClass('blur-filter');
+        toggleRecordingTimerUI(true);
+        // var paths = document.getElementsByTagName('path');
+        // var visualizer = document.getElementById('visualizer');
+        // var mask = visualizer.getElementById('mask');
+        // var h = document.getElementsByTagName('h1')[0];
+        // var path;
+        // var report = 0;
+
+        paths = document.getElementsByTagName('path');
+        visualizer = document.getElementById('visualizer');
+        mask = visualizer.getElementById('mask');
+        h = document.getElementsByTagName('h1')[0];
+        // path;
+        report = 0;
+        record_state = true;
+        soundAllowed = function (stream) {
+            //Audio stops listening in FF without // window.persistAudioStream = stream;
+            //https://bugzilla.mozilla.org/show_bug.cgi?id=965483
+            //https://support.mozilla.org/en-US/questions/984179
+            window.persistAudioStream = stream;
+            // h.innerHTML = "Thanks";
+            h.setAttribute('style', 'opacity: 0;');
+            var audioContent = new AudioContext();
+            var audioStream = audioContent.createMediaStreamSource(stream);
+            var analyser = audioContent.createAnalyser();
+            audioStream.connect(analyser);
+            analyser.fftSize = 1024;
+
+            var frequencyArray = new Uint8Array(analyser.frequencyBinCount);
+            visualizer.setAttribute('viewBox', '0 0 255 255');
+
+            //Through the frequencyArray has a length longer than 255, there seems to be no
+            //significant data after this point. Not worth visualizing.
+            for (var i = 0; i < 255; i++) {
+                path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('stroke-dasharray', '4,1');
+                mask.appendChild(path);
+            }
+            var doDraw = function () {
+                if (record_state) {
+                    requestAnimationFrame(doDraw);
+                }
+                analyser.getByteFrequencyData(frequencyArray);
+                var adjustedLength;
+                for (var i = 0; i < 255; i++) {
+                    adjustedLength = Math.floor(frequencyArray[i]) - (Math.floor(frequencyArray[i]) % 5);
+                    paths[i].setAttribute('d', 'M ' + (i) + ',255 l 0,-' + adjustedLength);
+                }
+
+            }
+            doDraw();
+        }
+
+        soundNotAllowed = function (error) {
+            h.innerHTML = "{% trans 'No mic' %}";
+            console.log(error);
+        }
+
+        /*window.navigator = window.navigator || {};
+        /*navigator.getUserMedia =  navigator.getUserMedia       ||
+                                  navigator.webkitGetUserMedia ||
+                                  navigator.mozGetUserMedia    ||
+                                  null;*/
+
+        start_wave = function () {
+            navigator.getUserMedia({audio: true}, soundAllowed, soundNotAllowed);
+            $("#visualizer").show();
+        }
+        start_wave();
+        startRecording();
+        // rec.record();
+        //setTimeout(stopWave, 7000)
+
+        startRecordTimer();
+    }
+
+    function startRecordTimer() {
+        if (!(typeof recInterval === 'undefined')) {
+            clearInterval(recInterval);
+        }
+        enableStopRecording(true);
+        recInterval = setInterval(() => {
+            recTimePassed = recTimePassed + 1;
+            recTimeLeft = recTimeLimit - recTimePassed;
+            if (recTimeLeft <= 0) {
+                clearInterval(recInterval);
+                stopWave();
+            }
+            $(".rec-timer").html(`${toHHMMSS(recTimeLeft)}`);
+            // debugger;
+
+        }, 1000);
+    }
+
+    function stopWave() {
+        clearInterval(recInterval);
+        record_state = false;
+        stopRecording();
+        $(".rec-timer").html(`${toHHMMSS(0)}`);
+        on_form_submit();
+        $("#visualizer").hide();
+
+        $(".prev_qn_btn").removeAttr("disabled");
+        $(".next_qn_btn").removeAttr("disabled");
+
+        // Test to see if the next button can be made visible and expanded
+        // if(document.querySelector('.next_qn_btn') != null){
+        // $(".next_qn_btn")removeAttribute("hidden")
+        // $(".next_qn_btn").style.width= "4.5rem";
+        // }
+
+        // When recording stops, allow closing/interruption of the test
+        document.querySelector('.btn-close').style.display = "block";// Show play button after the recording is stopped
+
+        // Remove Recording section styles and show Complete message when recording ends and question gets submitted
+        toggleRecordingTimerUI(false);
+
+        toggleCompletedUI(true);
+        // Remove Recording section styles and show Complete message when recording ends and question gets submitted
+        enableStopRecording(false);
+        // Retry Button Enabled
+        enableControlButtons(true);
+    }
+
+    {% if qn.upload_type == "AUD" %}
+        $("#qn_audio").prop("volume", 1.0);
+
+        function startAudioPlayerTimer() {
+            $(".audio-progress").attr("aria-valuenow", String(0));
+            $(".audio-progress").css("width", String(0) + "%");
+            audioTimeLimit = Math.ceil(document.getElementById("qn_audio").duration);
+            audioTimePassed = 0;
+            audioTimeLeft = audioTimeLimit;
+            if (!(typeof audioInterval === 'undefined')) {
+                clearInterval(audioInterval);
+            }
+
+            audioInterval = setInterval(() => {
+                audioTimePassed = audioTimePassed + 1;
+                audioTimeLeft = audioTimeLeft - 1;
+                if (audioTimeLeft <= 0) {
+                    // When Audio Play ends, start preparation timer
+                    startPreparationTimer();
+                    clearInterval(audioInterval);
+                    // startWave();
+                }
+                // $(".prep-timer").html(`${toHHMMSS(prepTimeLeft)}`);
+                audioTimeLimit = Math.ceil(document.getElementById("qn_audio").duration);
+                audioPercent = parseInt(audioTimePassed * 100 / audioTimeLimit);
+                $(".audio-progress").attr("aria-valuenow", String(audioPercent));
+                $(".audio-progress").css("width", String(audioPercent) + "%");
+                // debugger;
+            }, 1000);
+        }
+
+        $("#volume_slider_input").on("input", function () {
+            // use ui.value to get the current value
+            let volume = parseFloat($(this).val()) / 100.0;
+            $("#qn_audio").prop("volume", volume);
+        });
+
+    {% endif %}
+
+    {% if qn.can_submit %}
+        $(".prep-timer").html(`${toHHMMSS(prepTimeLeft)}`);
+        // $(".prev_qn_btn").attr("disabled", "disabled");
+        $(".next_qn_btn").attr("disabled", "disabled");
+        // $(".recorder_wave h1").html("{% trans 'Preparation' %}...");
+        // $('#prep_btn').removeClass('btn-outline-info');
+        // $('#prep_btn').addClass('btn-info');
+        // prepTimeout = setTimeout(startWave, 5000);
+    {% else %}
+
+        // Remove blur-filter effect and Start button from the question if its already submitted
+        if (document.querySelector('.image-question') != null)
+            document.querySelector('.image-question').classList.remove('blur-filter');
+
+        document.querySelector('.question-description').classList.remove('blur-filter');
+
+        if (document.querySelector('.audio-progress-wrapper') != null)
+            document.querySelector('.audio-progress-wrapper').classList.remove('blur-filter');
+
+        document.querySelector('.remove-blur-btn').style.display = "none";
+        // Remove blur-filter effect and Start button from the question if its already submitted
+        completedUI();
+        $(".prep-timer").html(`${toHHMMSS('{{ qn.ready_time }}')}`);
+        $(".rec-timer").html(`${toHHMMSS('{{ qn.speaking_time }}')}`);
+    {% endif %}
+
+
     $(document).ready(function () {
+        $('.record-controls .start-recording').on('click', function () {
+            stopPreparationTimer();
+        });
+
+        $('.record-controls .stop-recording').on('click', function () {
+            stopWave();
+        });
 
         $(".remove-blur-btn").click(function () {
             removeBlur();
         });
 
         $('.re-record').on('click', function () {
-            toggleControlButtons(false);
+            enableControlButtons(false);
             prepTimeLimit = parseInt("{{ qn.ready_time }}");
             prepTimePassed = 0;
             prepTimeLeft = prepTimeLimit;
@@ -296,317 +637,8 @@
         });
 
         // Remove background blur from the main question section on clicking the Start button
-        function removeBlur() {
-            if (document.querySelector('.image-question') != null)
-                document.querySelector('.image-question').classList.remove('blur-filter');
-
-            document.querySelector('.question-description').classList.remove('blur-filter');
-
-            if (document.querySelector('.audio-progress-wrapper') != null)
-                document.querySelector('.audio-progress-wrapper').classList.remove('blur-filter');
 
 
-            document.querySelector('.remove-blur-btn').style.display = "none";
-
-            // If Question type is audio, after clicking "Start" Play audio and after playback ends, start prepTimer
-            // If Question type is not audio, start prep timer.
-            {% if qn.upload_type == "AUD" %}
-                // Start Audio Player Timer
-                startAudioPlayerTimer();
-                // Play audio
-                $("#qn_audio").get(0).play();
-            {% else %}
-                startPreparationTimer();
-            {% endif %}
-        }
-
-        prepTimeLimit = parseInt("{{ qn.ready_time }}");
-        prepTimePassed = 0;
-        prepTimeLeft = prepTimeLimit;
-        recTimeLimit = parseInt("{{ qn.speaking_time }}");
-        recTimePassed = 0;
-        recTimeLeft = recTimeLimit;
-
-        function startPreparationTimer() {
-            if (!(typeof prepInterval === 'undefined')) {
-                clearInterval(prepInterval);
-            }
-            // Prep Timer CSS
-            document.querySelector('.prep-icon').classList.add('status-active');
-            document.querySelector('.prep-icon').classList.remove('status-inactive');
-            document.querySelector('.prep-label').classList.add('status-active');
-            document.querySelector('.prep-label').classList.remove('status-inactive');
-            document.querySelector('.prep-timer').classList.add('status-active');
-            document.querySelector('.prep-timer').classList.remove('status-inactive');
-
-            $(".prev_qn_btn").attr("disabled", "disabled");
-            // When student takes test, prevent closing/interruption of the test
-            document.querySelector('.btn-close').style.display = "none";
-
-            prepInterval = setInterval(() => {
-                prepTimePassed = prepTimePassed + 1;
-                prepTimeLeft = prepTimeLimit - prepTimePassed;
-                if (prepTimeLeft <= 0) {
-                    clearInterval(prepInterval);
-                    startWave();
-                }
-                $(".prep-timer").html(`${toHHMMSS(prepTimeLeft)}`);
-                // debugger;
-
-            }, 1000);
-        }
-
-        function playBeepSound() {
-            // var audio = new Audio('orgadmin/static/audio/beep-07a.mp3');
-            // audio.play();
-
-            var x = document.getElementById("myAudio");
-            x.play();
-        }
-
-        function toggleControlButtons(status) {
-            if (status) {
-                $('.play-recorded-audio').removeAttr('disabled');
-                $('.re-record').removeAttr('disabled');
-            } else {
-                $('.play-recorded-audio').attr('disabled', 'disabled');
-                $('.re-record').attr('disabled', 'disabled');
-            }
-        }
-
-        function startWave() {
-            playBeepSound()
-            // $('.question-wrapper').removeClass('blur-filter');
-            $('.prep-label').removeClass('status-active');
-            $('.prep-label').addClass('status-inactive');
-            $('.prep-icon').removeClass('status-active');
-            $('.prep-icon').addClass('status-inactive');
-            $('.rec-label').removeClass('status-inactive');
-            $('.rec-label').addClass('status-active');
-            $('.rec-icon').removeClass('status-inactive');
-            $('.rec-icon').addClass('status-active');
-            $('.prep-timer').removeClass('status-active');
-            $('.prep-timer').addClass('status-inactive');
-            $('.rec-timer').removeClass('status-inactive');
-            $('.rec-timer').addClass('status-active');
-            // var paths = document.getElementsByTagName('path');
-            // var visualizer = document.getElementById('visualizer');
-            // var mask = visualizer.getElementById('mask');
-            // var h = document.getElementsByTagName('h1')[0];
-            // var path;
-            // var report = 0;
-
-            paths = document.getElementsByTagName('path');
-            visualizer = document.getElementById('visualizer');
-            mask = visualizer.getElementById('mask');
-            h = document.getElementsByTagName('h1')[0];
-            // path;
-            report = 0;
-            record_state = true;
-            soundAllowed = function (stream) {
-                //Audio stops listening in FF without // window.persistAudioStream = stream;
-                //https://bugzilla.mozilla.org/show_bug.cgi?id=965483
-                //https://support.mozilla.org/en-US/questions/984179
-                window.persistAudioStream = stream;
-                // h.innerHTML = "Thanks";
-                h.setAttribute('style', 'opacity: 0;');
-                var audioContent = new AudioContext();
-                var audioStream = audioContent.createMediaStreamSource(stream);
-                var analyser = audioContent.createAnalyser();
-                audioStream.connect(analyser);
-                analyser.fftSize = 1024;
-
-                var frequencyArray = new Uint8Array(analyser.frequencyBinCount);
-                visualizer.setAttribute('viewBox', '0 0 255 255');
-
-                //Through the frequencyArray has a length longer than 255, there seems to be no
-                //significant data after this point. Not worth visualizing.
-                for (var i = 0; i < 255; i++) {
-                    path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                    path.setAttribute('stroke-dasharray', '4,1');
-                    mask.appendChild(path);
-                }
-                var doDraw = function () {
-                    if (record_state) {
-                        requestAnimationFrame(doDraw);
-                    }
-                    analyser.getByteFrequencyData(frequencyArray);
-                    var adjustedLength;
-                    for (var i = 0; i < 255; i++) {
-                        adjustedLength = Math.floor(frequencyArray[i]) - (Math.floor(frequencyArray[i]) % 5);
-                        paths[i].setAttribute('d', 'M ' + (i) + ',255 l 0,-' + adjustedLength);
-                    }
-
-                }
-                doDraw();
-            }
-
-            soundNotAllowed = function (error) {
-                h.innerHTML = "{% trans 'No mic' %}";
-                console.log(error);
-            }
-
-            /*window.navigator = window.navigator || {};
-            /*navigator.getUserMedia =  navigator.getUserMedia       ||
-                                      navigator.webkitGetUserMedia ||
-                                      navigator.mozGetUserMedia    ||
-                                      null;*/
-
-            start_wave = function () {
-                navigator.getUserMedia({audio: true}, soundAllowed, soundNotAllowed);
-            }
-            start_wave();
-            startRecording();
-            // rec.record();
-            //setTimeout(stopWave, 7000)
-
-            startRecordTimer();
-
-            function stopWave() {
-                record_state = false;
-                start_wave();
-                stopRecording();
-                on_form_submit();
-                $("#visualizer").hide();
-                $(".prev_qn_btn").removeAttr("disabled");
-                $(".next_qn_btn").removeAttr("disabled");
-
-                // Test to see if the next button can be made visible and expanded
-                // if(document.querySelector('.next_qn_btn') != null){
-                // $(".next_qn_btn")removeAttribute("hidden")
-                // $(".next_qn_btn").style.width= "4.5rem";
-                // }
-
-                // When recording stops, allow closing/interruption of the test
-                document.querySelector('.btn-close').style.display = "block";// Show play button after the recording is stopped
-
-                // Remove Recording section styles and show Complete message when recording ends and question gets submitted
-                $('.rec-label').removeClass('status-active');
-                $('.rec-label').addClass('status-inactive');
-                $('.rec-icon').removeClass('status-active');
-                $('.rec-icon').addClass('status-inactive');
-                $('.rec-timer').removeClass('status-active');
-                $('.rec-timer').addClass('status-inactive');
-
-                document.querySelector(".is-submitted").classList.remove("status-inactive")
-                document.querySelector(".is-submitted").classList.add("status-active")
-                document.querySelector(".complete-label").classList.add("status-active")
-                // Remove Recording section styles and show Complete message when recording ends and question gets submitted
-                document.querySelector(".record-controls").classList.add('d-none')
-                // Show audio-playback-controls when recording ends and question gets submitted
-                document.querySelector(".audio_playback_div").removeAttribute('style');
-                document.querySelector(".audio-playback-controls").removeAttribute('style');
-
-                // Retry Button Enabled
-                toggleControlButtons(true);
-            }
-
-            function startRecordTimer() {
-                if (!(typeof recInterval === 'undefined')) {
-                    clearInterval(recInterval);
-                }
-
-                recInterval = setInterval(() => {
-                    recTimePassed = recTimePassed + 1;
-                    recTimeLeft = recTimeLimit - recTimePassed;
-                    if (recTimeLeft <= 0) {
-                        clearInterval(recInterval);
-                        stopWave();
-                    }
-                    $(".rec-timer").html(`${toHHMMSS(recTimeLeft)}`);
-                    // debugger;
-
-                }, 1000);
-            }
-
-        }
-
-        {% if qn.upload_type == "AUD" %}
-            $("#qn_audio").prop("volume", 1.0);
-
-
-            function startAudioPlayerTimer() {
-                $(".audio-progress").attr("aria-valuenow", String(0));
-                $(".audio-progress").css("width", String(0) + "%");
-                audioTimeLimit = Math.ceil(document.getElementById("qn_audio").duration);
-                audioTimePassed = 0;
-                audioTimeLeft = audioTimeLimit;
-                if (!(typeof audioInterval === 'undefined')) {
-                    clearInterval(audioInterval);
-                }
-
-                audioInterval = setInterval(() => {
-                    audioTimePassed = audioTimePassed + 1;
-                    audioTimeLeft = audioTimeLeft - 1;
-                    if (audioTimeLeft <= 0) {
-                        // When Audio Play ends, start preparation timer
-                        startPreparationTimer();
-                        clearInterval(audioInterval);
-
-                        // startWave();
-                    }
-                    // $(".prep-timer").html(`${toHHMMSS(prepTimeLeft)}`);
-                    audioTimeLimit = Math.ceil(document.getElementById("qn_audio").duration);
-                    audioPercent = parseInt(audioTimePassed * 100 / audioTimeLimit);
-                    $(".audio-progress").attr("aria-valuenow", String(audioPercent));
-                    $(".audio-progress").css("width", String(audioPercent) + "%");
-
-                    // debugger;
-
-                }, 1000);
-            }
-
-            $("#volume_slider_input").on("input", function () {
-                // use ui.value to get the current value
-                let volume = parseFloat($(this).val()) / 100.0;
-                $("#qn_audio").prop("volume", volume);
-            });
-
-        {% endif %}
-
-        {% if qn.can_submit %}
-            $(".prep-timer").html(`${toHHMMSS(prepTimeLeft)}`);
-            // $(".prev_qn_btn").attr("disabled", "disabled");
-            $(".next_qn_btn").attr("disabled", "disabled");
-            // $(".recorder_wave h1").html("{% trans 'Preparation' %}...");
-            // $('#prep_btn').removeClass('btn-outline-info');
-            // $('#prep_btn').addClass('btn-info');
-            // prepTimeout = setTimeout(startWave, 5000);
-        {% else %}
-
-            // Remove blur-filter effect and Start button from the question if its already submitted
-            if (document.querySelector('.image-question') != null)
-                document.querySelector('.image-question').classList.remove('blur-filter');
-
-            document.querySelector('.question-description').classList.remove('blur-filter');
-
-            if (document.querySelector('.audio-progress-wrapper') != null)
-                document.querySelector('.audio-progress-wrapper').classList.remove('blur-filter');
-
-            document.querySelector('.remove-blur-btn').style.display = "none";
-            // Remove blur-filter effect and Start button from the question if its already submitted
-
-
-            // Remove status-active class from preparation indicator elements if the question is already submitted
-            document.querySelector('.prep-icon').classList.remove('status-active');
-            document.querySelector('.prep-icon').classList.add('status-inactive');
-            document.querySelector('.prep-label').classList.remove('status-active');
-            document.querySelector('.prep-label').classList.add('status-inactive');
-            document.querySelector('.prep-timer').classList.remove('status-active');
-            document.querySelector('.prep-timer').classList.add('status-inactive');
-            // Remove status-active class from preparation indicator elements if the question is already submitted
-
-            // Add active-status class to Complete indicator if the question is already submitted
-            document.querySelector('.is-submitted').classList.remove('status-inactive');
-            document.querySelector('.is-submitted').classList.add('status-active');
-            // Add active-status class to Complete indicator if the question is already submitted
-
-
-
-
-            $(".prep-timer").html(`${toHHMMSS('{{ qn.ready_time }}')}`);
-            $(".rec-timer").html(`${toHHMMSS('{{ qn.speaking_time }}')}`);
-        {% endif %}
     });
 
 </script>
