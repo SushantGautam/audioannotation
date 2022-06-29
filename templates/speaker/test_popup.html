@@ -90,7 +90,7 @@
 
 
 <section class="bottom-section">
-    <div class="recorder_wave" style="width: 8rem; height: 3.5rem;">
+    <div class="recorder_wave">
         <svg preserveAspectRatio="none" id="visualizer" version="1.1" xmlns="http://www.w3.org/2000/svg"
              xmlns:xlink="http://www.w3.org/1999/xlink">
             <defs>
@@ -135,12 +135,12 @@
 
     <!-- Start and Stop buttons to control audio recording, start and end recording when needed -->
     <div class="record-controls">
-        <button class="btn btn-sm btn-dark start-recording d-none" title="{% trans 'Start Recording' %}">
-            <i class="fa-solid fa-forward"> </i> {% trans 'Start Rec.' %}
+        <button class="btn btn-sm start-recording d-none" title="{% trans 'Start recording now' %}">
+            <i class="fa-solid fa-forward"> </i> {% trans 'Start Recording' %}
         </button>
 
-        <button class="btn btn-sm btn-dark stop-recording d-none" title="{% trans 'Stop Recording' %}">
-            <i class="fa-solid fa-stop"> </i> {% trans 'Stop Rec.' %}
+        <button class="btn btn-sm stop-recording d-none" title="{% trans 'Stop recording now' %}">
+            <i class="fa-solid fa-stop"> </i> {% trans 'Stop Recording' %}
         </button>
     </div>
     <!-- Start and Stop buttons to control audio recording, start and end recording when needed -->
@@ -153,7 +153,7 @@
             Your browser does not support the audio element.
         </audio>
 
-        <div class="audio-playback-controls" {% if qn.can_submit %}style="visibility: hidden" {% endif %}>
+        <div class="audio-playback-controls" {% if qn.can_submit %}style="display: none" {% endif %}>
             <label class="audio-playback-label" for="dur">Recorded audio</label>
             <input title="Seek recorded audio" class="submitted-audio-playback" id="dur" type="range" name="rng" min="0"
                    step="0.25" value="0" onchange="mSet()">
