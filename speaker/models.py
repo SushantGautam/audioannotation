@@ -81,12 +81,12 @@ class Speaker(BaseUserModel):
             return "Waiting For Agreement"
         # elif self.user.verificationrequest_set.latest('pk').approved == True and self.user.contractsign_set.latest('pk').approved == None:
         #     return "Waiting For Agreement"
-        elif self.user.id not in ExamSetSubmission.objects.all().values_list("speaker_id", flat=True).distinct() and self.user.verificationrequest_set.latest('pk').approved == True and self.user.contractsign_set.latest('pk').approved == True:
+        elif self.user.id not in ExamSetSubmission.objects.all().values_list("speaker__user_id", flat=True).distinct() and self.user.verificationrequest_set.latest('pk').approved == True and self.user.contractsign_set.latest('pk').approved == True:
             return "Recording"
-        elif self.user.id in ExamSetSubmission.objects.all().values_list("speaker_id", flat=True).distinct() and self.user.verificationrequest_set.latest('pk').approved == True and self.user.contractsign_set.latest('pk').approved == True:
+        elif self.user.id in ExamSetSubmission.objects.all().values_list("speaker__user_id", flat=True).distinct():
             return "Recording Completed"
         # elif self.is_verified:
-        elif self.user.id in ExamSetSubmission.objects.exclude(status__in=['INS', 'STI', 'STF']).values_list("speaker_id", flat=True):
+        elif self.user.id in ExamSetSubmission.objects.exclude(status__in=['INS', 'STI', 'STF']).values_list("speaker__user_id", flat=True):
             return "Finished"
         elif not self.user.is_active:
             return 'Inactive'
