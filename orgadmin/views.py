@@ -13,7 +13,7 @@ from orgadmin.forms import ContractForm,UserRegistrationForm
 from orgadmin.models import User, ContractSign, Contract, Organization
 from professor.forms import QuestionForm, QuestionSetForm
 from professor.models import SubCategory, Category, Question, QuestionSet, Professor
-from speaker.models import Speaker
+from speaker.models import Speaker, ExamSetSubmission
 from worker.models import Worker, WorkerTask, EvaluationTitle
 
 
@@ -180,6 +180,9 @@ class SpeakerListView(ListView):
         listOfIds = [x.id for x in qs if x.get_verification_status().lower() == 'rejected']
         context['rejected'] = qs.filter(pk__in=listOfIds).count()
         context['inactive'] = qs.filter(user__is_active=False).count()
+        context['on_recording'] = qs.exclude(pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct().count()
+        context['recording_completed'] = qs.filter(pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct().count()
+        context['stt_submitted'] = qs.filter(pk__in=ExamSetSubmission.objects.exclude(status__in=['INS', 'STI', 'STF']).values_list("speaker_id", flat=True)).distinct().count()
         return context
 
 
