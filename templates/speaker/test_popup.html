@@ -47,7 +47,9 @@
         </h6>
         {% if qn.upload_type == "AUD" %}
             <audio id="qn_audio">
-                <source src="{{ qn.upload_file.url }}" type="audio/mpeg">
+                {% if qn.upload_file %}
+                    <source src="{{ qn.upload_file.url }}" type="audio/mpeg">
+                {% endif %}
             </audio>
 
             <div class="audio-progress-wrapper blur-filter">
@@ -59,7 +61,7 @@
                 <span><i class="fa-solid fa-circle-play"></i> Audio progress</span>
             </div>
         {% endif %}
-        {% if qn.upload_type == "IMG" %}
+        {% if qn.upload_type == "IMG" and qn.upload_file %}
             <img class="image-question blur-filter" src="{{ qn.upload_file.url }}" alt="question image">
         {% endif %}
         <p class="question-description {% if qn.upload_type == 'NON' %} no-attachment {% endif %} blur-filter ">{{ qn.description }}</p>
