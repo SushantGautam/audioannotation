@@ -148,7 +148,12 @@
                    <td> {{ question.created_at|date:'Y-m-d' }}</td>
                    <td> {{ question.created_at|date:'h:m A' }}</td>
                    <td> {{ question.file_upload.size }}</td>
-                   <td> Play </td>
+                   <td>
+                     <audio controls>
+                        <source src="{{ question.get_question_recording }}" type="audio/mp4">
+                      </audio>
+
+                   </td>
                    </tr>
                 {% endfor %}
 
