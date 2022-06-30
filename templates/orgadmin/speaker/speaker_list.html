@@ -98,7 +98,8 @@
                             <i class="fa-solid fa-users"></i>
                             <span class="count"> {{ total }}</span>
                         </div>
-                        <span class="title"> {% trans 'Total' %}</span>
+{#                        <span class="title"> {% trans 'Total' %}</span>#}
+                        <span class="title"> {% trans 'Total Speakers' %}</span>
                     </div>
                     {#      <span class="new-additions">+98</span>#}
                 </div>
@@ -110,7 +111,8 @@
                             <i class="fa-solid fa-microphone-lines"></i>
                             <span class="count">{{ pending }}</span>
                         </div>
-                        <span class="title"> {% trans 'Pending' %}</span>
+{#                        <span class="title"> {% trans 'Pending' %}</span>#}
+                        <span class="title"> {% trans 'Under Verification' %}</span>
                     </div>
                     {#      <span class="new-additions">+98</span>#}
 
@@ -122,9 +124,11 @@
                     <div class="right-side">
                         <div>
                             <i class="fa-solid fa-person-chalkboard"></i>
-                            <span class="count">{{ verified }}</span>
+                            <span class="count">{{ on_recording }}</span>
+{#                            <span class="count">{{ verified }}</span>#}
                         </div>
-                        <span class="title"> {% trans 'Verified' %}</span>
+{#                        <span class="title"> {% trans 'Verified' %}</span>#}
+                        <span class="title"> {% trans 'On Recording' %}</span>
                     </div>
                     {#                <span class="new-additions">+98</span>#}
 
@@ -136,9 +140,11 @@
                     <div class="right-side">
                         <div>
                             <i class="fa-solid fa-person-digging"></i>
-                            <span class="count">{{ rejected }}</span>
+{#                            <span class="count">{{ rejected }}</span>#}
+                            <span class="count">{{ recording_completed }}</span>
                         </div>
-                        <span class="title"> {% trans 'Rejected' %}</span>
+{#                        <span class="title"> {% trans 'Rejected' %}</span>#}
+                        <span class="title"> {% trans 'Recording Completed' %}</span>
                     </div>
                     {#                <span class="new-additions">+98</span>#}
 
@@ -150,9 +156,11 @@
                     <div class="right-side">
                         <div>
                             <i class="fa-solid fa-person-digging"></i>
-                            <span class="count">{{ inactive }}</span>
+                            <span class="count">{{ stt_submitted }}</span>
+{#                            <span class="count">{{ inactive }}</span>#}
                         </div>
-                        <span class="title"> {% trans 'Inactive' %}</span>
+{#                        <span class="title"> {% trans 'Inactive' %}</span>#}
+                        <span class="title"> {% trans 'Submitted to STT' %}</span>
                     </div>
                     {#                <span class="new-additions">+98</span>#}
 
@@ -168,11 +176,17 @@
                 <thead class="">
                 <tr class="">
                     <th>{% trans "S. No." %}</th>
-                    <th>{% trans "Username" %}</th>
+{#                    <th>{% trans "Username" %}</th>#}
+                    <th>{% trans "Speaker ID" %}</th>
                     <th>{% trans "Name" %}</th>
-                    <th>{% trans "Email" %}</th>
-                    <th>{% trans "Account Status" %}</th>
-                    <th>{% trans "Verification Status" %}</th>
+{#                    <th>{% trans "Email" %}</th>#}
+                    <th>{% trans "Organization" %}</th>
+                    <th>{% trans "Country" %}</th>
+                    <th>{% trans "Level" %}</th>
+                    <th>{% trans "Status" %}</th>
+{#                    <th>{% trans "Account Status" %}</th>#}
+                    <th>{% trans "Action" %}</th>
+{#                    <th>{% trans "Verification Status" %}</th>#}
                     {#                    <th>{% trans "Action" %}</th>#}
 
                 </tr>
@@ -184,14 +198,17 @@
                         <td> {{ forloop.counter }}</td>
                         <td>
                             <a href="{{ speaker.get_absolute_url }}">
-                                {{ speaker.user.username }}
+                                {{ speaker.user.email }}
                             </a>
                         </td>
                         <td> {{ speaker.user.get_full_name }}</td>
-                        <td> {{ speaker.user.email }}</td>
+                        <td> {{ speaker.organization_code }}</td>
+                        <td> {{ speaker.get_nationality_display }}</td>
+                        <td> {{ speaker.get_level_display }}</td>
                         <td>
                             <span class="active-status">
-                                {{ speaker.user.is_active|yesno:'Active, Inactive' }}
+{#                                {{ speaker.user.is_active|yesno:'Active, Inactive' }}#}
+                              {{ speaker.speaker_status }}
                             </span>
                         </td>
                         <td>

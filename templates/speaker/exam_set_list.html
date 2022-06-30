@@ -4,7 +4,7 @@
 
 {% block content %}
     <div class="bg-white pt-5">
-        <h1 class="page-heading">{% trans "Exam Lists" %} </h1>
+        <h1 class="page-heading">{% trans "Exam List" %} </h1>
 
         <div class="table-responsive " id="" style="border: none; overflow-x: unset">
             <table class="table pt-2" cellspacing="0" id="">
@@ -17,6 +17,8 @@
                     <th>{% trans "End Date" %}</th>
                     <th>{% trans "Question Count" %}</th>
                     <th>{% trans "Difficulty Level" %}</th>
+                    <th>{% trans "Progress" %}</th>
+                    <th>{% trans "Status" %}</th>
                     <th>{% trans "Action" %}</th>
                 </tr>
                 </thead>
@@ -30,6 +32,13 @@
                         <td>{{ object.end_date|date:'Y-m-d h:i a' }}</td>
                         <td>{{ object.get_question_count }}</td>
                         <td>{{ object.get_difficulty_level }}</td>
+                        <!-- Static values used as placeholders for the new columns -->
+                        <td>5/10</td>
+                        
+                        <!--Status = Recording: contract is done and recording is on going
+                                    Completed: all questions have been submitted.
+                                    Verified: when admin send all files to STT, no longer edit for questions -->
+                        <td>Completed</td>
                         <td>
                             <a title="{% trans 'Enter exam' %}" href="{% url 'speaker:question_set_list' exam_id=object.pk %}">
                                 <button type="button" class="btn btn-sm btn-dark">

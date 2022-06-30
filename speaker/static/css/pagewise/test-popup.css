@@ -1,3 +1,10 @@
+body{
+    --prep-active: hsl(236, 57%, 50%);
+    --rec-active: hsl(0, 80%, 60%);
+    --submit-active: hsl(120, 58%, 40%);
+
+}
+
 input{
     accent-color: #212529;
 }
@@ -14,13 +21,6 @@ path{
     stroke: white;
     stroke-width: 0.5px;
 }
-
-/* h1{
-    color: white;
-    margin-top: -35px;
-    font-size: 1.2rem;
-
-} */
 
 .top-section{
     display: flex;
@@ -78,8 +78,7 @@ path{
 .question-count-buttons{
     display: flex;
     gap: 0.25rem;
-    background-color: #f3f3f3; 
-    /* padding: 0.5rem; */
+    background-color: #f3f3f3;
 }
 
 .mid-section{
@@ -153,7 +152,6 @@ path{
     position: absolute;
     top: 1rem;
     padding-inline: 1rem;
-    /* align-self: flex-start; */
 }
 
 .question-description{
@@ -221,28 +219,44 @@ path{
     gap: 0.25rem;
 }
 
-.prep-label.status-active , .rec-label.status-active , .is-submitted.status-active  {
-    font-weight: 600;
+
+.status-active{
+    font-size: 0.9rem;
 }
 
-.prep-timer.status-active , .rec-timer.status-active {
-    background-color: #212121;
+.status-inactive{
+    color:hsl(0, 0%, 71%);
+    font-size: 0.9rem;
+}
+
+.prep-label.status-active , .prep-icon.status-active{
+    color: var(--prep-active) ;
+    font-weight: 600;
+}
+.prep-timer.status-active {
+    background-color: var(--prep-active);
     color: #f0f0f0;
     padding: 0rem 0.55rem;
     border-radius: 25rem;
 }
 
-.status-active{
-    color: black;
-    /* font-weight: 500; */
-    font-size: 0.9rem;
+.rec-label.status-active , .rec-icon.status-active{
+    color: var(--rec-active);
+    font-weight: 600;
 }
 
-
-.status-inactive{
-    color:rgb(180, 180, 180);
-    font-size: 0.9rem;
+.rec-timer.status-active {
+    background-color: var(--rec-active);
+    color: #f0f0f0;
+    padding: 0rem 0.55rem;
+    border-radius: 25rem;
 }
+
+.is-submitted.status-active{
+    font-weight: 600;
+    color: var(--submit-active);
+}
+
 
 .blur-filter{
     filter: blur(10px);
@@ -262,7 +276,7 @@ path{
     background-color: #212121;
     border: none;
     padding: 0.2rem 1.25rem;
-    box-shadow: 0 0 10px 8px #f0f0f04f;
+    box-shadow: 0 0 10px 8px #f0f0f0;
     border-radius: 0.25rem;
 }
 
@@ -275,7 +289,6 @@ path{
     align-items: center;
     font-size: 0.9rem;
     gap: 0.25rem;
-    /* color: grey; */
 }
 
 .slider{
@@ -286,12 +299,16 @@ path{
     justify-content: center;
 }
 
+.recorder_wave{
+    width: 10rem;
+    height: 4rem;
+}
+
 
 .audio-playback-controls{
     display: flex;
     flex-direction: column;
     gap: 0.65rem;
-    /* align-items: center; */
 }
 
 .audio-playback-controls .utility-buttons{
@@ -317,21 +334,41 @@ path{
     text-align: center;
 }
 
-.is-submitted{
-    /* color: white; */
-    /* padding: 0.2rem 0.35rem; */
-    /* border-radius: 0.25rem; */
-    /* background-color: grey; */
-    /* font-size: 1rem; */
-}
-
 .is-submitted-indicator{
     background-color: #f0f0f0;
     font-weight: 500;
     filter: contrast(0.8) grayscale(30%);
 }
 
+.record-controls{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 
-.record-controls button{
-    font-size: 0.8rem;
+.start-recording{
+    border: 3.5px solid hsl(0deg 0% 50% / 50%);
+    border-radius: 10rem;
+    font-weight: 600;
+    color: var(--rec-active);
+    font-size: 0.9rem;
+}
+
+.stop-recording{
+    border: 3.5px solid hsl(0deg 0% 50% / 50%);
+    border-radius: 10rem;
+    font-weight: 600;
+    color: var(--submit-active);
+    font-size: 0.9rem;
+}
+.start-recording:hover{
+    border-color: var(--rec-active);
+    background-color: var(--rec-active);
+    color: white;
+}
+.stop-recording:hover{
+    border-color: var(--submit-active);
+    background-color: var(--submit-active);
+    color: white;
 }
