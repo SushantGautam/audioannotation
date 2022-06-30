@@ -98,11 +98,11 @@ input{
 
 
 .basic-info-row label:first-of-type{
-    width: 12rem;
+    width: 14.5rem;
 }
 
 .basic-info-row input[type="text"], .basic-info-row input[type="date"] , .basic-info-row select {
-    width: 15rem;
+    width: 15.5rem;
 }
 
 .info-row{
@@ -115,7 +115,7 @@ input{
 }
 
 .info-detail label{
-    width: 12rem;
+    width: 14rem;
 }
 
 .info-detail input , .info-detail select{

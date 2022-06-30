@@ -46,7 +46,7 @@
                         {{ user.get_full_name }}
                     </div>
                     <div class="basic-info-row">
-                        <label for="id_birth_date"><i class="fa-solid fa-calendar-days"></i>{% trans 'Birth date' %}
+                        <label for="id_birth_date"><i class="fa-solid fa-calendar-days"></i>{% trans 'Birth Date' %}
                             :</label>
                         {{ user.speaker.birth_date|date:'Y-m-d' }}
                     </div>
@@ -62,23 +62,22 @@
             <h4><i class="fa-solid fa-address-book"></i>{% trans 'Contact Information' %}</h4>
             <div class="info-row">
                 <div class="info-detail">
-                    <label for="id_email"><i class="fa-solid fa-at"></i>{% trans 'Email address' %}:</label>
+                    <label for="id_email"><i class="fa-solid fa-at"></i>{% trans 'Email Address' %}:</label>
                     {{ user.email }}
                 </div>
                 <div class="info-detail">
-                    <label for="id_phone_number"><i class="fa-solid fa-phone"></i>{% trans 'Phone number' %}:</label>
+                    <label for="id_phone_number"><i class="fa-solid fa-phone"></i>{% trans 'Phone Number' %}:</label>
                     {{ user.speaker.phone_number }}
                 </div>
             </div>
             <div class="info-row">
                 <div class="info-detail">
                     <label for="id_permanent_address"><i
-                            class="fa-solid fa-location-dot"></i>{% trans 'Permanent address' %}:</label>
+                            class="fa-solid fa-location-dot"></i>{% trans 'City' %}:</label>
                     {{ user.speaker.permanent_address }}
                 </div>
                 <div class="info-detail">
-                    <label for="id_current_address"><i class="fa-solid fa-house"></i>{% trans 'Current address' %}
-                        :</label>
+                    <label for="id_current_address"><i class="fa-solid fa-house"></i>{% trans 'Country' %}:</label>
                     {{ user.speaker.current_address }}
                 </div>
             </div>
@@ -136,13 +135,13 @@
             </div>
             <div class="info-row">
                 <div class="info-detail">
-                    <label for="id_level"><i class="fa-solid fa-arrow-turn-up"></i> {% trans 'Level' %}:</label>
+                    <label for="id_level"><i class="fa-solid fa-arrow-turn-up"></i> {% trans 'Desired Exam Level' %}:</label>
                     {{ user.speaker.get_level_display }}
                 </div>
                 <div class="info-detail">
-                    <label for="id_learning_period"><i
-                            class="fa-solid fa-hourglass-end"></i> {% trans 'Learning period' %}:</label>
-                    {{ user.speaker.learning_period }}
+                    <label title="{% trans 'Learning period in years' %}" for="id_learning_period"><i
+                            class="fa-solid fa-hourglass-end"></i> {% trans 'Learning Period(years)' %}:</label>
+                    {{ user.speaker.learning_period }} years
                 </div>
             </div>
 
@@ -150,7 +149,7 @@
 
                 <div class="info-detail">
                     <label for="id_learning_method"><i
-                            class="fa-solid fa-signs-post"></i>{% trans 'Learning method' %}:</label>
+                            class="fa-solid fa-signs-post"></i>{% trans 'Learning Method' %}:</label>
                     {{ user.speaker.learning_method }}
                 </div>
                 <div class="info-detail">
@@ -170,7 +169,7 @@
                     {{ user.speaker.get_nationality_display }}
                 </div>
                 <div class="info-detail">
-                    <label for="id_language"><i class="fa-solid fa-language"></i> {% trans 'Language' %}:</label>
+                    <label for="id_language"><i class="fa-solid fa-language"></i> {% trans 'Native Language' %}:</label>
                     {{ user.speaker.get_language_display }}
                 </div>
 
@@ -179,13 +178,13 @@
 
                 <div class="info-detail">
                     <label for="id_education_level"><i
-                            class="fa-solid fa-graduation-cap"></i> {% trans 'Education level' %}:</label>
+                            class="fa-solid fa-graduation-cap"></i> {% trans 'Education Level' %}:</label>
                     {{ user.speaker.get_education_level_display }}
                 </div>
                 <div class="info-detail">
                     <label for="id_korea_residency"><i
-                            class="fa-solid fa-house-chimney-user"></i> {% trans 'Korea residency' %}:</label>
-                    {{ user.speaker.korea_residency }}
+                            class="fa-solid fa-house-chimney-user"></i> {% trans 'Korea Residency(years)' %}:</label>
+                    {{ user.speaker.korea_residency }} years
                 </div>
             </div>
         </section>
