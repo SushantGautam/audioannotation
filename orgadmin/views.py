@@ -12,7 +12,7 @@ from django.views.generic import TemplateView, ListView, FormView, CreateView, D
 from orgadmin.forms import ContractForm,UserRegistrationForm
 from orgadmin.models import User, ContractSign, Contract, Organization
 from professor.forms import QuestionForm, QuestionSetForm
-from professor.models import SubCategory, Category, Question, QuestionSet, Professor
+from professor.models import SubCategory, Category, Question, QuestionSet, Professor, ExamSet
 from speaker.models import Speaker, ExamSetSubmission
 from worker.models import Worker, WorkerTask, EvaluationTitle
 
@@ -192,6 +192,32 @@ class SpeakerDetailView(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(SpeakerDetailView, self).get_context_data(*args, **kwargs)
+        return context
+
+
+
+
+class SpeakerResultView(DetailView):
+    model = Speaker
+    template_name = "orgadmin/speaker/speaker_result.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(SpeakerResultView, self).get_context_data(*args, **kwargs)
+
+        exam_sets = ExamSet.objects.filter(
+            pk__in=self.object.speakersubmission_set.values_list('exam_set', flat=True).distinct())
+        solved_exam_sets = ExamSet.objects.filter(
+            pk__in=self.object.examsetsubmission_set.values_list('exam_set', flat=True).distinct())
+
+        question_sets = QuestionSet.objects.filter(examset__in=exam_sets).distinct()
+        solved_question_sets = QuestionSet.objects.filter(examset__in=solved_exam_sets).distinct()
+
+        total_question_count = Question.objects.filter(questionset__in=question_sets).distinct().count()
+        solved_question_count = Question.objects.filter(questionset__in=solved_question_sets).distinct().count()
+
+        context['total_questions'] = total_question_count
+        context['solved_questions'] = solved_question_count
+        context['unsolved_questions'] = total_question_count - solved_question_count
         return context
 
 

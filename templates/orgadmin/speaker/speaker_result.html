@@ -89,81 +89,36 @@
 {% block content %}
 
     <section>
-        <h2 class="my-3 title">{% trans 'Speaker List' %}</h2>
+        <h2 class="my-3 title">{% trans 'Speaker Result' %}</h2>
         <div class="users">
-            <a href="{% url 'speaker_list' %}">
+            <a href="{{ request.url }}">
                 <div class="user-card {% if not request.GET.status %}active{% endif %}">
-                    <div class="right-side">
+                    <div class="right-side text-center">
                         <div>
-                            <i class="fa-solid fa-users"></i>
-                            <span class="count"> {{ total }}</span>
+                            <span class="count"> {{ total_questions }}</span>
                         </div>
-{#                        <span class="title"> {% trans 'Total' %}</span>#}
-                        <span class="title"> {% trans 'Total Speakers' %}</span>
+                        <span class="title"> {% trans 'Total Questions' %}</span>
                     </div>
-                    {#      <span class="new-additions">+98</span>#}
                 </div>
             </a>
-            <a href="{% url 'speaker_list' %}?status=pending">
-                <div class="user-card {% if request.GET.status == 'pending' %}active{% endif %}">
+            <a href="{{ request.url }}?status=solved">
+                <div class="user-card {% if request.GET.status == 'solved' %}active{% endif %}">
                     <div class="right-side">
                         <div>
-                            <i class="fa-solid fa-microphone-lines"></i>
-                            <span class="count">{{ pending }}</span>
+                            <span class="count">{{ solved_questions }}</span>
                         </div>
-{#                        <span class="title"> {% trans 'Pending' %}</span>#}
-                        <span class="title"> {% trans 'Under Verification' %}</span>
+                        <span class="title"> {% trans 'Solved Questions' %}</span>
                     </div>
-                    {#      <span class="new-additions">+98</span>#}
-
                 </div>
             </a>
-
-            <a href="{% url 'speaker_list' %}?status=verified">
-                <div class="user-card {% if request.GET.status == 'verified' %}active{% endif %}">
+            <a href="{{ request.url }}?status=unsolved">
+                <div class="user-card {% if request.GET.status == 'unsolved' %}active{% endif %}">
                     <div class="right-side">
                         <div>
-                            <i class="fa-solid fa-person-chalkboard"></i>
-                            <span class="count">{{ on_recording }}</span>
-{#                            <span class="count">{{ verified }}</span>#}
+                            <span class="count">{{ unsolved_questions }}</span>
                         </div>
-{#                        <span class="title"> {% trans 'Verified' %}</span>#}
-                        <span class="title"> {% trans 'On Recording' %}</span>
+                        <span class="title"> {% trans 'Unsolved Questions' %}</span>
                     </div>
-                    {#                <span class="new-additions">+98</span>#}
-
-                </div>
-            </a>
-
-            <a href="{% url 'speaker_list' %}?status=rejected">
-                <div class="user-card {% if request.GET.status == 'rejected' %}active{% endif %}">
-                    <div class="right-side">
-                        <div>
-                            <i class="fa-solid fa-person-digging"></i>
-{#                            <span class="count">{{ rejected }}</span>#}
-                            <span class="count">{{ recording_completed }}</span>
-                        </div>
-{#                        <span class="title"> {% trans 'Rejected' %}</span>#}
-                        <span class="title"> {% trans 'Recording Completed' %}</span>
-                    </div>
-                    {#                <span class="new-additions">+98</span>#}
-
-                </div>
-            </a>
-
-            <a href="{% url 'speaker_list' %}?status=inactive">
-                <div class="user-card {% if request.GET.status == 'inactive' %}active{% endif %}">
-                    <div class="right-side">
-                        <div>
-                            <i class="fa-solid fa-person-digging"></i>
-                            <span class="count">{{ stt_submitted }}</span>
-{#                            <span class="count">{{ inactive }}</span>#}
-                        </div>
-{#                        <span class="title"> {% trans 'Inactive' %}</span>#}
-                        <span class="title"> {% trans 'Submitted to STT' %}</span>
-                    </div>
-                    {#                <span class="new-additions">+98</span>#}
-
                 </div>
             </a>
         </div>
@@ -176,23 +131,16 @@
                 <thead class="">
                 <tr class="">
                     <th>{% trans "S. No." %}</th>
-{#                    <th>{% trans "Username" %}</th>#}
-                    <th>{% trans "Speaker ID" %}</th>
-                    <th>{% trans "Name" %}</th>
-{#                    <th>{% trans "Email" %}</th>#}
-                    <th>{% trans "Organization" %}</th>
-                    <th>{% trans "Country" %}</th>
-                    <th>{% trans "Level" %}</th>
-                    <th>{% trans "Status" %}</th>
-{#                    <th>{% trans "Account Status" %}</th>#}
-                    <th>{% trans "Action" %}</th>
-{#                    <th>{% trans "Verification Status" %}</th>#}
-                    {#                    <th>{% trans "Action" %}</th>#}
-
+                    <th>{% trans "Question Code" %}</th>
+                    <th>{% trans "Recorded Date" %}</th>
+                    <th>{% trans "Recorded Time" %}</th>
+                    <th>{% trans "File Size" %}</th>
+                    <th>{% trans "Play" %}</th>
                 </tr>
                 </thead>
 
                 <tbody>
+                {% comment %}
                 {% for speaker in object_list %}
                     <tr>
                         <td> {{ forloop.counter }}</td>
@@ -235,44 +183,22 @@
                               {% elif speaker.speaker_status == 'Waiting For Agreement' %}
 
                               {% elif speaker.speaker_status == 'Recording Completed' %}
-                                 <a class="btn btn-sm btn-primary">{% trans 'Send To STT' %}</a>
-                            <a class="btn btn-sm btn-secondary" href="{% url 'speaker_result' speaker.id %}">{% trans 'Result' %}</a>
+                                 <button class="btn btn-sm btn-primary">{% trans 'Send To STT' %}</button>
+                                <button class="btn btn-sm btn-secondary">{% trans 'Result' %}</button>
                               {% elif speaker.speaker_status == 'Recording' %}
-                            <a class="btn btn-sm btn-secondary" href="{% url 'speaker_result' speaker.id %}">{% trans 'Result' %}</a>
+                                  {% trans 'Result' %}
                                 {% elif speaker.speaker_status == 'Finished' %}
-                            <a class="btn btn-sm btn-secondary" href="{% url 'speaker_result' speaker.id %}">{% trans 'Result' %}</a>
+                            <button class="btn btn-sm btn-secondary">{% trans 'Result' %}</button>
                                 {% else %}
-
-
-
-
-{#                                    {{ speaker.get_verification_status }}#}
-
-
-
-
 
 
                                 {% endif %}
                             </span>
                         </td>
-                        {% comment %}
-                        <td>
-                            {% if speaker.user.is_active %}
-                                <form name="block-form" action="{% url 'user_block' user_id=speaker.user.id %}" method="post">
-                                    {% csrf_token %}
-                                    <button class="btn btn-dark btn-sm block-btn">{% trans 'Block' %}</button>
-                                </form>
-                            {% else %}
-                                <form name="unblock-form" action="{% url 'user_unblock' user_id=speaker.user.id %}" method="post">
-                                    {% csrf_token %}
-                                    <button class="btn btn-dark btn-sm unblock-btn">{% trans 'Unblock' %}</button>
-                                </form>
-                            {% endif %}
-                        </td>
-                        {% endcomment %}
+
                     </tr>
                 {% endfor %}
+                {% endcomment %}
                 </tbody>
 
             </table>
@@ -284,6 +210,8 @@
 
 {% block scripts %}
     <script>
+      {% comment %}
+
         $('.table').DataTable();
 
         $('form[name=verify-form]').on('submit', function (e) {
@@ -327,5 +255,7 @@
                 }
             });
         });
+
+        {% endcomment %}
     </script>
 {% endblock scripts %}
