@@ -95,7 +95,7 @@
                 <div class="user-card {% if not request.GET.status %}active{% endif %}">
                     <div class="right-side text-center">
                         <div>
-                            <span class="count"> {{ total_questions }}</span>
+                            <span class="count"> {{ tq_count }}</span>
                         </div>
                         <span class="title"> {% trans 'Total Questions' %}</span>
                     </div>
@@ -105,7 +105,7 @@
                 <div class="user-card {% if request.GET.status == 'solved' %}active{% endif %}">
                     <div class="right-side">
                         <div>
-                            <span class="count">{{ solved_questions }}</span>
+                            <span class="count">{{ sq_count }}</span>
                         </div>
                         <span class="title"> {% trans 'Solved Questions' %}</span>
                     </div>
@@ -115,7 +115,7 @@
                 <div class="user-card {% if request.GET.status == 'unsolved' %}active{% endif %}">
                     <div class="right-side">
                         <div>
-                            <span class="count">{{ unsolved_questions }}</span>
+                            <span class="count">{{ uq_count }}</span>
                         </div>
                         <span class="title"> {% trans 'Unsolved Questions' %}</span>
                     </div>
@@ -140,6 +140,23 @@
                 </thead>
 
                 <tbody>
+
+                {% for question in total_question %}
+                   <tr>
+                   <td> {{ forloop.counter }}</td>
+                   <td> {{ question.unique_code }}</td>
+                   <td> {{ question.created_at|date:'Y-m-d' }}</td>
+                   <td> {{ question.created_at|date:'h:m A' }}</td>
+                   <td> {{ question.file_upload.size }}</td>
+                   <td> Play </td>
+                   </tr>
+                {% endfor %}
+
+
+
+
+
+
                 {% comment %}
                 {% for speaker in object_list %}
                     <tr>

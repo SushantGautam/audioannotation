@@ -212,12 +212,14 @@ class SpeakerResultView(DetailView):
         question_sets = QuestionSet.objects.filter(examset__in=exam_sets).distinct()
         solved_question_sets = QuestionSet.objects.filter(examset__in=solved_exam_sets).distinct()
 
-        total_question_count = Question.objects.filter(questionset__in=question_sets).distinct().count()
-        solved_question_count = Question.objects.filter(questionset__in=solved_question_sets).distinct().count()
+        total_question = Question.objects.filter(questionset__in=question_sets).distinct()
+        solved_question = Question.objects.filter(questionset__in=solved_question_sets).distinct()
 
-        context['total_questions'] = total_question_count
-        context['solved_questions'] = solved_question_count
-        context['unsolved_questions'] = total_question_count - solved_question_count
+        context['tq_count'] = len(total_question)
+        context['sq_count'] = len(solved_question)
+        context['uq_count'] = context['tq_count'] - context['sq_count']
+        context['total_question'] = total_question
+        context['solved_question'] = solved_question
         return context
 
 
