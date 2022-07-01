@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'import_export',
     'fontawesomefree',
     'django_summernote',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -168,12 +169,20 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 #     }
 # }
 
+
 # Celery settings
-CELERY_BROKER_URL = env('REDIS_URL')
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
 result_backend = 'django-db'
 accept_content = ['application/json']
 result_serializer = 'json'
 timezone = 'UTC'
+
+# # Celery settings
+# CELERY_BROKER_URL = env('REDIS_URL')
+# CELERY_RESULT_BACKEND = env('REDIS_URL')
+# accept_content = ['application/json']
+# result_serializer = 'json'
+# timezone = 'UTC'
 
 # Google analytics
 GA_TRACKING_ID = env('GA_TRACKING_ID')

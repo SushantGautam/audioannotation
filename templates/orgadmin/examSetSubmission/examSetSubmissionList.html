@@ -1,0 +1,128 @@
+{% extends "orgadmin/base.html" %}
+{% load static %}
+{% load i18n %}
+{% block styles %}
+    <style>
+        .question_dt_right_btn {
+            float: right;
+        }
+
+        .dataTables_filter svg {
+            z-index: 100;
+            transform: translateX(-5px);
+        }
+
+        .dataTables_filter input {
+            transform: translateX(20px);
+
+        }
+
+        .status-text {
+            cursor: auto;
+            text-decoration: none;
+        }
+
+
+    </style>
+{% endblock styles %}
+
+
+{% block content %}
+    <div class="bg-white p-4">
+
+        <h1 class="page-heading">{% trans "ExamSet Submission List" %}</h1>
+
+        <div class="table-responsive survey_questions_table" id="question_table" style="border: none;">
+            <table class="table pt-2" cellspacing="0" id="question_list_table">
+                <thead class="">
+                <tr class="tableTitleRow">
+                    <th>
+                        <input type="checkbox" class="CheckAll">
+                    </th>
+                    <th>{% trans "S. No." %}</th>
+                    <th>{% trans "Exam Title" %}</th>
+                    <th>{% trans "Speaker" %}</th>
+                    <th>{% trans "Created At" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Actions" %}</th>
+                </tr>
+
+                </thead>
+                <tbody>
+
+                {% for object in object_list %}
+                    <tr>
+                        <td><input type="checkbox" class="questionCheckbox" value="{{ object.id }}">
+                        </td>
+                        <td> {{ forloop.counter }}</td>
+                        <td> {{ object.speaker }}</td>
+                        <td> {{ object.exam_set }}</td>
+                        <td> {{ object.created_at }}</td>
+                        <td> {{ object.get_status_display }}</td>
+                        <td>
+                            <form method="post" action="{% url 'examset_generate_stt' examsetsubmission_id=object.pk %}">
+                                {% csrf_token %}
+                                <button class="btn btn-dark btn-sm" type="submit">{% trans 'Generate STT' %}</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+    <script>
+        $('#question_list_table').DataTable({
+            dom: 'lfBtp',
+            responsive: true,
+            pagingType: "full_numbers",
+            language: {
+                search: '_INPUT_',
+                searchPlaceholder: "{% trans 'Search' %}...",
+                lengthMenu: "&nbsp; _MENU_"
+            },
+
+
+            buttons: [],
+
+            oLanguage: {
+                oPaginate: {
+                    sFirst: '<i class="fas fa-angle-double-left"></i>',
+                    sNext: '<i class="fas fa-angle-right"></i>',
+                    sPrevious: '<i class="fas fa-angle-left"></i>',
+                    sLast: '<i class="fas fa-angle-double-right"></i>',
+                }
+
+            },
+            initComplete: function () {
+                $('.dataTables_filter').addClass('question_dt_right_btn');
+                $('.dataTables_length').addClass('question_dt_right_btn');
+                //  $('.dataTables_filter input').removeClass('form-control-sm');
+                $('.dataTables_filter input').after(`<span class="fa fa-search search-input-icon pr-5"></span>`);
+                $('.dataTables_length select').removeClass('custom-select-sm');
+                $('.dt-buttons button').addClass('btn-gray text-white');
+                $('.dt-buttons').removeClass('btn-group');
+                $('.question_dt_right_btn').css('margin-left', '10px');
+            },
+            stateSave: false,
+            processing: true,
+
+            fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+
+                var index = iDisplayIndexFull + 1;
+                $("td:eq(1)", nRow).html(index);
+                return nRow;
+            },
+            columnDefs: [],
+        });
+
+
+    </script>
+
+{% endblock scripts %}

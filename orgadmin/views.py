@@ -569,3 +569,22 @@ def QuestionSetDeleteView(request, pk):
     if request.method == "POST":
         QuestionSet.objects.filter(pk=pk).delete()
         return redirect("question_set_list")
+
+
+class ExamSetSubmissionList(ListView):
+    model = ExamSetSubmission
+    template_name = 'orgadmin/examSetSubmission/examSetSubmissionList.html'
+
+    def get_queryset(self):
+        qs = super(ExamSetSubmissionList, self).get_queryset()
+        qs = qs.filter(speaker__organization_code=self.request.user.orgadmin.organization_code)
+        return qs
+
+
+class ExamSetGenerateStt(FormView):
+    success_url = reverse_lazy('examset_submission_list')
+
+    def post(self, request, *args, **kwargs):
+        from speaker.tasks import run_STTClova
+        run_STTClova.delay(exam_set_id=int(kwargs.get('examsetsubmission_id')))
+        return redirect(self.success_url)

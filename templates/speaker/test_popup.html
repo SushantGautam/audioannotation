@@ -61,7 +61,7 @@
                 <span><i class="fa-solid fa-circle-play"></i> Audio progress</span>
             </div>
         {% endif %}
-        {% if qn.upload_type == "IMG" and qn.upload_file %}
+        {% if qn.upload_type == "IMG" %}
             <img class="image-question blur-filter" src="{{ qn.upload_file.url }}" alt="question image">
         {% endif %}
         <p class="question-description {% if qn.upload_type == 'NON' %} no-attachment {% endif %} blur-filter ">{{ qn.description }}</p>
