@@ -15,7 +15,7 @@ from orgadmin.forms import ContractForm, UserRegistrationForm
 from orgadmin.models import User, ContractSign, Contract, Organization
 from professor.forms import QuestionForm, QuestionSetForm
 from professor.models import SubCategory, Category, Question, QuestionSet, Professor, ExamSet
-from speaker.models import Speaker, ExamSetSubmission
+from speaker.models import Speaker, ExamSetSubmission, SpeakerSubmission
 from worker.models import Worker, WorkerTask, EvaluationTitle
 
 
@@ -245,9 +245,22 @@ class SpeakerResultView(DetailView):
         for question in context['questions']:
             if question in solved_question:
                 question.solved = True
-                question.audio_url = '/media/' + question.speakersubmission_set.values_list('audio_file', flat=True).first()
-                question.audio_recorded_date = question.speakersubmission_set.first().created_at
-                question.audio_recording_size = round(os.path.getsize(os.path.join(settings.MEDIA_ROOT, question.speakersubmission_set.values_list('audio_file', flat=True).first())) / (1024 * 1024),2)
+                ss = SpeakerSubmission.objects.get(speaker=self.object, question=question)
+
+                # question.audio_url = '/media/' + question.speakersubmission_set.values_list('audio_file', flat=True).first()
+                question.audio_url = ss.audio_file.url
+                # question.audio_recorded_date = question.speakersubmission_set.first().created_at
+                question.audio_recorded_date = ss.created_at
+                # question.audio_recording_size = round(os.path.getsize(os.path.join(settings.MEDIA_ROOT, question.speakersubmission_set.values_list('audio_file', flat=True).first())) / (1024 * 1024),2)
+                question.audio_recording_size = round(os.path.getsize(os.path.join(settings.MEDIA_ROOT, str(ss.audio_file))) / (1024 * 1024),2)
+
+                # print('url', ss.audio_file.url)
+                # print('audio_recorded_date', ss.created_at)
+                # print('audio_recording_size', round(os.path.getsize(os.path.join(settings.MEDIA_ROOT,ss.audio_file )),2))
+
+
+
+
         return context
 
 
