@@ -91,7 +91,7 @@
     <section>
         <h2 class="my-3 title">{% trans 'Speaker Result' %}</h2>
         <div class="users">
-            <a href="{{ request.url }}">
+            <a href="{% url 'speaker_result' object.id %}">
                 <div class="user-card {% if not request.GET.status %}active{% endif %}">
                     <div class="right-side text-center">
                         <div>
@@ -101,7 +101,7 @@
                     </div>
                 </div>
             </a>
-            <a href="{{ request.url }}?status=solved">
+            <a href="{% url 'speaker_result' object.id %}?status=solved">
                 <div class="user-card {% if request.GET.status == 'solved' %}active{% endif %}">
                     <div class="right-side">
                         <div>
@@ -111,7 +111,7 @@
                     </div>
                 </div>
             </a>
-            <a href="{{ request.url }}?status=unsolved">
+            <a href="{% url 'speaker_result' object.id %}?status=unsolved">
                 <div class="user-card {% if request.GET.status == 'unsolved' %}active{% endif %}">
                     <div class="right-side">
                         <div>
@@ -126,7 +126,7 @@
 
     <main class="users-list">
         <section class="table-section">
-            <table class="table py-3" cellspacing="0" id="">
+            <table class="table py-3 text-center" cellspacing="0" id="">
 
                 <thead class="">
                 <tr class="">
@@ -141,17 +141,21 @@
 
                 <tbody>
 
-                {% for question in total_question %}
+                {% for question in questions %}
                    <tr>
                    <td> {{ forloop.counter }}</td>
                    <td> {{ question.unique_code }}</td>
-                   <td> {{ question.created_at|date:'Y-m-d' }}</td>
-                   <td> {{ question.created_at|date:'h:m A' }}</td>
-                   <td> {{ question.file_upload.size }}</td>
+                   <td> {% if question.solved %}{{ question.audio_recorded_date|date:'Y-m-d' }}{% else %}-{% endif %}</td>
+                   <td > {% if question.solved %}{{ question.audio_recorded_date|date:'h:m:s A' }}{% else %}-{% endif %}</td>
+                   <td> {% if question.solved %}{{ question.audio_recording_size }} MB {% else %}-{% endif %}</td>
                    <td>
+                     {% if question.solved %}
                      <audio controls>
-                        <source src="{{ question.get_question_recording }}" type="audio/mp4">
+                        <source src="{{ question.audio_url }}" type="audio/mpeg">
                       </audio>
+                       {% else %}
+                       {% trans 'Not Recorded Yet' %}
+                     {% endif %}
 
                    </td>
                    </tr>

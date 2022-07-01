@@ -1,6 +1,8 @@
+import os
 from datetime import datetime
 
 import requests
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login
 from django.http import JsonResponse
@@ -9,7 +11,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView, ListView, FormView, CreateView, DetailView, UpdateView, DeleteView
 
-from orgadmin.forms import ContractForm,UserRegistrationForm
+from orgadmin.forms import ContractForm, UserRegistrationForm
 from orgadmin.models import User, ContractSign, Contract, Organization
 from professor.forms import QuestionForm, QuestionSetForm
 from professor.models import SubCategory, Category, Question, QuestionSet, Professor, ExamSet
@@ -180,9 +182,13 @@ class SpeakerListView(ListView):
         listOfIds = [x.id for x in qs if x.get_verification_status().lower() == 'rejected']
         context['rejected'] = qs.filter(pk__in=listOfIds).count()
         context['inactive'] = qs.filter(user__is_active=False).count()
-        context['on_recording'] = qs.exclude(pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct().count()
-        context['recording_completed'] = qs.filter(pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct().count()
-        context['stt_submitted'] = qs.filter(pk__in=ExamSetSubmission.objects.exclude(status__in=['INS', 'STI', 'STF']).values_list("speaker_id", flat=True)).distinct().count()
+        context['on_recording'] = qs.exclude(
+            pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct().count()
+        context['recording_completed'] = qs.filter(
+            pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct().count()
+        context['stt_submitted'] = qs.filter(
+            pk__in=ExamSetSubmission.objects.exclude(status__in=['INS', 'STI', 'STF']).values_list("speaker_id",
+                                                                                                   flat=True)).distinct().count()
         return context
 
 
@@ -195,8 +201,6 @@ class SpeakerDetailView(DetailView):
         return context
 
 
-
-
 class SpeakerResultView(DetailView):
     model = Speaker
     template_name = "orgadmin/speaker/speaker_result.html"
@@ -204,22 +208,46 @@ class SpeakerResultView(DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super(SpeakerResultView, self).get_context_data(*args, **kwargs)
 
-        exam_sets = ExamSet.objects.filter(
-            pk__in=self.object.speakersubmission_set.values_list('exam_set', flat=True).distinct())
-        solved_exam_sets = ExamSet.objects.filter(
-            pk__in=self.object.examsetsubmission_set.values_list('exam_set', flat=True).distinct())
+        # exam_sets = ExamSet.objects.filter(
+        #     pk__in=self.object.speakersubmission_set.values_list('exam_set', flat=True).distinct())
+        #
+        # solved_exam_sets = ExamSet.objects.filter(
+        #     pk__in=self.object.examsetsubmission_set.values_list('exam_set', flat=True).distinct())
+        #
+        # question_sets = QuestionSet.objects.filter(examset__in=exam_sets).distinct()
+        # solved_question_sets = QuestionSet.objects.filter(examset__in=solved_exam_sets).distinct()
+        #
+        # total_question = Question.objects.filter(questionset__in=question_sets).distinct()
+        # solved_question = Question.objects.filter(questionset__in=solved_question_sets).distinct()
+        #
+        # context['tq_count'] = len(total_question)
+        # context['sq_count'] = len(solved_question)
+        # context['uq_count'] = context['tq_count'] - context['sq_count']
+        # context['total_question'] = total_question
+        # context['solved_question'] = solved_question
 
-        question_sets = QuestionSet.objects.filter(examset__in=exam_sets).distinct()
-        solved_question_sets = QuestionSet.objects.filter(examset__in=solved_exam_sets).distinct()
+        status = self.request.GET.get('status', None)
+        total_questions = Question.objects.filter(questionset__in=QuestionSet.objects.filter(is_active=True)).distinct()
+        solved_question_ids = self.object.speakersubmission_set.values_list('question', flat=True).distinct()
+        solved_question = Question.objects.filter(pk__in=solved_question_ids).distinct()
+        unsolved_question = total_questions.exclude(pk__in=solved_question).distinct()
+        if status == 'solved':
+            context['questions'] = solved_question
+        elif status == 'unsolved':
+            context['questions'] = unsolved_question
+        else:
+            context['questions'] = total_questions
 
-        total_question = Question.objects.filter(questionset__in=question_sets).distinct()
-        solved_question = Question.objects.filter(questionset__in=solved_question_sets).distinct()
+        context['tq_count'] = total_questions.count()
+        context['sq_count'] = solved_question.count()
+        context['uq_count'] = unsolved_question.count()
 
-        context['tq_count'] = len(total_question)
-        context['sq_count'] = len(solved_question)
-        context['uq_count'] = context['tq_count'] - context['sq_count']
-        context['total_question'] = total_question
-        context['solved_question'] = solved_question
+        for question in context['questions']:
+            if question in solved_question:
+                question.solved = True
+                question.audio_url = '/media/' + question.speakersubmission_set.values_list('audio_file', flat=True).first()
+                question.audio_recorded_date = question.speakersubmission_set.first().created_at
+                question.audio_recording_size = round(os.path.getsize(os.path.join(settings.MEDIA_ROOT, question.speakersubmission_set.values_list('audio_file', flat=True).first())) / (1024 * 1024),2)
         return context
 
 

@@ -69,10 +69,6 @@ class Question(models.Model):
     def filename(self):
         return os.path.basename(self.upload_file.name)
 
-    def get_question_recording(self):
-        a_f = self.speakersubmission_set.values('audio_file')[0]
-        return "media/" + a_f['audio_file']
-
 
 class QuestionSet(models.Model):
     # name = models.CharField(max_length=256)
