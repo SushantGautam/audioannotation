@@ -247,6 +247,7 @@ class SpeakerResultView(DetailView):
                 question.solved = True
                 question.audio_url = '/media/' + question.speakersubmission_set.values_list('audio_file', flat=True).first()
                 question.audio_recorded_date = question.speakersubmission_set.first().created_at
+                question.audio_recording_size = round(os.path.getsize(os.path.join(settings.MEDIA_ROOT, question.speakersubmission_set.values_list('audio_file', flat=True).first())) / (1024 * 1024),2)
         return context
 
 
