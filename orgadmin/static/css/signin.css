@@ -71,6 +71,18 @@ svg{
   user-select: none;
 }
 
+.signup{
+  color: #212121;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.signup:hover{
+  color: #212121;
+  font-weight: 500;
+  letter-spacing: 0.025rem;
+
+}
 @media (min-width: 768px) {
   .bd-placeholder-img-lg {
     font-size: 3.5rem;
