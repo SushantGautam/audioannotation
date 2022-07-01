@@ -245,7 +245,7 @@ class SpeakerResultView(DetailView):
         for question in context['questions']:
             if question in solved_question:
                 question.solved = True
-                ss = SpeakerSubmission.objects.get(speaker=self.object, question=question)
+                ss = SpeakerSubmission.objects.filter(speaker=self.object, question=question).first()
 
                 # question.audio_url = '/media/' + question.speakersubmission_set.values_list('audio_file', flat=True).first()
                 question.audio_url = ss.audio_file.url
