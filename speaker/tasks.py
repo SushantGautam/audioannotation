@@ -16,7 +16,6 @@ def run_STTClova(exam_set_id):
     speakerSub = SpeakerSubmission.objects.filter(speaker_id=ess.speaker.id, exam_set_id=ess.exam_set_id)
     last = speakerSub.last()
     for sub in speakerSub:
-        print('here')
         if sub.status in ['SS', 'SP', 'SC']:    # Skip item if already completed or processing
             continue
 
@@ -36,6 +35,7 @@ def run_STTClova(exam_set_id):
         sub.set_tts_status('SS')    # STT submission for speakerSubmissionAudio
         if res.status_code == 200:
             sub.set_tts_status('SP')    # STT Processing for speakerSubmissionAudio
+            print(sub.status)
             if res.json().get('segments'):
                 print(res.json().get('segments'))
                 for idx, eachDuration in enumerate(res.json()['segments']):
@@ -58,12 +58,11 @@ def run_STTClova(exam_set_id):
             sub.set_tts_status('SF')    # if issue, set STT failed
             failed = True
         # sub.set_tts_status(4)  # STT Output Received & Processing
-        sub.save()
 
         # if there are no saved annotations just set predicted annotations as annotations
 
         # If all speaker submission successfully submitted, change status in exam status
         if sub.pk == last.pk and not failed:
-          ess.set_tts_status('STC')  #
+            ess.set_tts_status('STC')  #
     return "TaskID:" + str('sID') + " is splitted by NAVER SPEECH API to " + \
            str(len('stt_predictions_annotations')) + " parts."

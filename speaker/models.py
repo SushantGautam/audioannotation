@@ -127,7 +127,7 @@ class SpeakerSubmission(models.Model):
         return os.path.basename(self.audio_file.name)
 
     def set_tts_status(self, status):
-        self.tts_status = status  # STT TaskCompleted | AnnotationSaved
+        self.status = status  # STT TaskCompleted | AnnotationSaved
         self.save()
 
 
