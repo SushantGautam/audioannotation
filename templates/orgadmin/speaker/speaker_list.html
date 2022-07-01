@@ -32,11 +32,13 @@
 
         .user-card:hover {
             background-color: #444444;
+            border-color: #444444;
             color: #f0f0f0;
         }
 
         .user-card.active {
             background-color: #444444;
+            border-color: #444444;
             color: #f0f0f0;
             box-shadow: 1px 1px 10px 2px rgba(0, 0, 0, 0.2);
         }
@@ -55,6 +57,13 @@
             display: flex;
             flex-direction: column;
         }
+
+        .user-card .right-side div {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
 
         .new-additions, .time {
             display: flex;
@@ -98,23 +107,23 @@
                             <i class="fa-solid fa-users"></i>
                             <span class="count"> {{ total }}</span>
                         </div>
-{#                        <span class="title"> {% trans 'Total' %}</span>#}
+<!-- {#                        <span class="title"> {% trans 'Total' %}</span>#} -->
                         <span class="title"> {% trans 'Total Speakers' %}</span>
                     </div>
-                    {#      <span class="new-additions">+98</span>#}
+                    <!-- {#      <span class="new-additions">+98</span>#} -->
                 </div>
             </a>
             <a href="{% url 'speaker_list' %}?status=pending">
                 <div class="user-card {% if request.GET.status == 'pending' %}active{% endif %}">
                     <div class="right-side">
                         <div>
-                            <i class="fa-solid fa-microphone-lines"></i>
+                            <i class="fa-solid fa-user-gear"></i>
                             <span class="count">{{ pending }}</span>
                         </div>
-{#                        <span class="title"> {% trans 'Pending' %}</span>#}
+<!-- {#                        <span class="title"> {% trans 'Pending' %}</span>#} -->
                         <span class="title"> {% trans 'Under Verification' %}</span>
                     </div>
-                    {#      <span class="new-additions">+98</span>#}
+                    <!-- {#      <span class="new-additions">+98</span>#} -->
 
                 </div>
             </a>
@@ -123,14 +132,14 @@
                 <div class="user-card {% if request.GET.status == 'verified' %}active{% endif %}">
                     <div class="right-side">
                         <div>
-                            <i class="fa-solid fa-person-chalkboard"></i>
+                            <i class="fa-solid fa-microphone-lines"></i>
                             <span class="count">{{ on_recording }}</span>
-{#                            <span class="count">{{ verified }}</span>#}
+<!-- {#                            <span class="count">{{ verified }}</span>#} -->
                         </div>
-{#                        <span class="title"> {% trans 'Verified' %}</span>#}
+<!-- {#                        <span class="title"> {% trans 'Verified' %}</span>#} -->
                         <span class="title"> {% trans 'On Recording' %}</span>
                     </div>
-                    {#                <span class="new-additions">+98</span>#}
+                    <!-- {#                <span class="new-additions">+98</span>#} -->
 
                 </div>
             </a>
@@ -139,14 +148,14 @@
                 <div class="user-card {% if request.GET.status == 'rejected' %}active{% endif %}">
                     <div class="right-side">
                         <div>
-                            <i class="fa-solid fa-person-digging"></i>
-{#                            <span class="count">{{ rejected }}</span>#}
+                            <i class="fa-solid fa-clipboard-check"></i>
+<!-- {#                            <span class="count">{{ rejected }}</span>#} -->
                             <span class="count">{{ recording_completed }}</span>
                         </div>
-{#                        <span class="title"> {% trans 'Rejected' %}</span>#}
+<!-- {#                        <span class="title"> {% trans 'Rejected' %}</span>#} -->
                         <span class="title"> {% trans 'Recording Completed' %}</span>
                     </div>
-                    {#                <span class="new-additions">+98</span>#}
+                    <!-- {#                <span class="new-additions">+98</span>#} -->
 
                 </div>
             </a>
@@ -155,14 +164,14 @@
                 <div class="user-card {% if request.GET.status == 'inactive' %}active{% endif %}">
                     <div class="right-side">
                         <div>
-                            <i class="fa-solid fa-person-digging"></i>
+                            <i class="fa-solid fa-database"></i>
                             <span class="count">{{ stt_submitted }}</span>
-{#                            <span class="count">{{ inactive }}</span>#}
+<!-- {#                            <span class="count">{{ inactive }}</span>#} -->
                         </div>
-{#                        <span class="title"> {% trans 'Inactive' %}</span>#}
+<!-- {#                        <span class="title"> {% trans 'Inactive' %}</span>#} -->
                         <span class="title"> {% trans 'Submitted to STT' %}</span>
                     </div>
-                    {#                <span class="new-additions">+98</span>#}
+                    <!-- {#                <span class="new-additions">+98</span>#} -->
 
                 </div>
             </a>
