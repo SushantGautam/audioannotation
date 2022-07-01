@@ -215,10 +215,10 @@
                             <span class="verification-status d-flex gap-2">
 {#                             {% if speaker.is_verified %}#}
 {#                                    {% trans 'Verified' %}#}
-                              {% if speaker.get_verification_status == "Pending" %}
-                                    {% trans 'Not Submitted yet' %}
+{#                              {% if speaker.get_verification_status == "Pending" %}#}
+{#                                    {% trans 'Not Submitted yet' %}#}
 
-                                {% elif speaker.speaker_status == "Profile Submitted" %}
+                                {% if speaker.speaker_status == "Profile Submitted" %}
                                     <form name="verify-form" action="{% url 'speaker_verify' user_id=speaker.id %}"
                                           method="post">
                                         {% csrf_token %}

@@ -247,9 +247,6 @@ class SpeakerResultView(DetailView):
                 question.solved = True
                 question.audio_url = '/media/' + question.speakersubmission_set.values_list('audio_file', flat=True).first()
                 question.audio_recorded_date = question.speakersubmission_set.first().created_at
-
-
-
         return context
 
 
