@@ -40,32 +40,19 @@ def run_STTClova(exam_set_id):
                 print(res.json().get('segments'))
                 for idx, eachDuration in enumerate(res.json()['segments']):
                     stt_predictions_annotations.append({
-                        "value": {
-                            "start": eachDuration['start'] / 1000,
-                            "end": eachDuration['end'] / 1000,
+                        "start": eachDuration['start'] / 1000,
+                        "end": eachDuration['end'] / 1000,
+                        "id": "splitter_" + str(idx),
+                        "data": {
+                            "text": [
+                                eachDuration['text']
+                            ],
                             "labels": [
                                 "voice"
                             ]
                         },
-                        "id": "splitter_" + str(idx),
-                        "from_name": "labels",
-                        "to_name": "audio",
-                        "type": "labels"
                     })
-                    stt_predictions_annotations.append({
-                        "value": {
-                            "start": eachDuration['start'] / 1000,
-                            "end": eachDuration['end'] / 1000,
-                            "text": [
-                                eachDuration['text']
-                            ]
-                        },
-                        "id": "splitter_" + str(idx),
-                        "from_name": "transcription",
-                        "to_name": "audio",
-                        "type": "textarea"
-                    })
-            sub.stt_data = stt_predictions_annotations  # set stt data in database
+            sub.stt_data = {"stt_predictions_annotations": stt_predictions_annotations}  # set stt data in database
             sub.set_tts_status('SC')    # STT completed for speakerSubmissionAudio
         else:
             sub.set_tts_status('SF')    # if issue, set STT failed
