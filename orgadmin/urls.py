@@ -66,4 +66,8 @@ urlpatterns += [
     path('question_set/<int:pk>/delete/', views.QuestionSetDeleteView, name='questionset_delete'),
     path('question_set/delete_multiple/', views.MultipleQuestionSetDeleteView,
          name='delete_multiple_questionset'),
+
+    # ExamsetSubmission
+    path('examset/submitted/', views.ExamSetSubmissionList.as_view(), name='examset_submission_list'),
+    path('examset/<int:examsetsubmission_id>/stt/generate/', views.ExamSetGenerateStt.as_view(), name='examset_generate_stt')
 ]

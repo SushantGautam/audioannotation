@@ -172,8 +172,8 @@ class AnnotationPage(TemplateView):
             question = Question.objects.get(pk=self.request.GET.get('question'))
         else:
             question = workerTaskObj.examset_submission.exam_set.question_sets.first().questions.first()
-        speakerSubmissionObj = SpeakerSubmission.objects.get(speaker=workerTaskObj.examset_submission.speaker,
-                                                             question=question)
+        speakerSubmissionObj = SpeakerSubmission.objects.filter(speaker=workerTaskObj.examset_submission.speaker,
+                                                             question=question).first()
 
         context['audio_obj'] = speakerSubmissionObj
         context['stt_data'] = json.dumps(speakerSubmissionObj.stt_data)
