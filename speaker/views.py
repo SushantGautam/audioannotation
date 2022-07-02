@@ -17,7 +17,7 @@ from django.views.generic import ListView, FormView, TemplateView, UpdateView
 from orgadmin.forms import UserChangeForm
 from orgadmin.models import Contract, ContractSign, VerificationRequest
 from speaker.forms import SpeakerSubmissionForm, ProfileEditForm
-from speaker.models import Speaker, SpeakerSubmission
+from speaker.models import Speaker, SpeakerSubmission, ExamSetSubmission
 
 from professor.models import Question, QuestionSet, ExamSet
 
@@ -170,9 +170,10 @@ class ExamSetList(ListView):
         qs = super(ExamSetList, self).get_queryset().filter(
             is_active=True, organization_code=self.request.user.speaker.organization_code,
             difficulty_level__in=[0, self.request.user.speaker.level_mapping()]).filter(
-            Q(start_date__lte=datetime_now) | Q(start_date=None)).filter(
-            Q(end_date__gte=datetime_now) | Q(end_date=None))
-
+            Q(start_date__lte=datetime_now) | Q(start_date=None))
+        for q in qs:
+            q.exam_status = q.get_exam_status(self.request.user.speaker)
+            q.submit_status = q.get_submit_status(self.request.user.speaker)
         return qs
 
 
@@ -228,7 +229,7 @@ class ExamPopupView(FormView):
     def get_form(self, form_class=None):
         if 'id' in self.request.POST:
             form_class = self.form_class(self.request.POST, self.request.FILES,
-                                              instance=SpeakerSubmission.objects.get(pk=self.request.POST.get('id')))
+                                         instance=SpeakerSubmission.objects.get(pk=self.request.POST.get('id')))
         else:
             form_class = self.form_class(self.request.POST, self.request.FILES)
         return form_class
@@ -258,3 +259,19 @@ class ExamPopupView(FormView):
             'error': str(form.errors),
         }
         return JsonResponse(res_dict)
+
+
+def createExamSubmission(speaker_id, exam_set_id):
+    if not ExamSetSubmission.objects.filter(speaker_id=speaker_id, exam_set_id=exam_set_id).exists():
+        ExamSetSubmission.objects.create(speaker_id=speaker_id, exam_set_id=exam_set_id)
+        return True
+    return False
+
+def submitExam(request, exam_id):
+    if request.method == 'POST':
+        speaker_id, exam_id = request.user.speaker.pk, exam_id
+        ins = createExamSubmission(speaker_id, exam_id)
+        if ins:
+            return redirect('speaker:exam_set_list')
+        else:
+            return redirect('speaker:exam_set_list')
