@@ -60,18 +60,14 @@
                         <td> {{ object.created_at }}</td>
                         <td> {{ object.get_status_display }}</td>
                         <td>
-                            <form method="post" action="{% url 'examset_generate_stt' examsetsubmission_id=object.pk %}">
+                            {% if object.status == 'IS' or object.status == 'SF' %}
+                                <form method="post" action="{% url 'examset_generate_stt' examsetsubmission_id=object.pk %}">
                                     {% csrf_token %}
                                     <button class="btn btn-dark btn-sm" type="submit">{% trans 'Generate STT' %}</button>
                                 </form>
-{#                            {% if object.status == 'IS' or object.status == 'SF' %}#}
-{#                                <form method="post" action="{% url 'examset_generate_stt' examsetsubmission_id=object.pk %}">#}
-{#                                    {% csrf_token %}#}
-{#                                    <button class="btn btn-dark btn-sm" type="submit">{% trans 'Generate STT' %}</button>#}
-{#                                </form>#}
-{#                            {% else %}#}
-{#                                -#}
-{#                            {% endif %}#}
+                            {% else %}
+                                -
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

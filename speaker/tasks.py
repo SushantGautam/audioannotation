@@ -35,9 +35,7 @@ def run_STTClova(exam_set_id):
         sub.set_tts_status('SS')    # STT submission for speakerSubmissionAudio
         if res.status_code == 200:
             sub.set_tts_status('SP')    # STT Processing for speakerSubmissionAudio
-            print(sub.status)
             if res.json().get('segments'):
-                print(res.json().get('segments'))
                 for idx, eachDuration in enumerate(res.json()['segments']):
                     stt_predictions_annotations.append({
                         "start": eachDuration['start'] / 1000,
