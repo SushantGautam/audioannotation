@@ -43,15 +43,16 @@
                         <td>{{ object.submit_status|yesno:'Submitted,Not Submitted' }}</td>
                         <td>
                             {% if not object.submit_status %}
-                                <form method="post" action="{% url 'speaker:exam_submit' object.id %}">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="speaker_id" value="{{ user.speaker.id }}">
-                                    <input type="hidden" name="exam_id" value="{{ object.id }}">
-                                    <button type="submit" class="btn btn-sm btn-dark">
-                                        {% trans 'Submit' %}
-                                    </button>
-                                </form>
-
+                                {% if object.exam_status %}
+                                    <form method="post" action="{% url 'speaker:exam_submit' object.id %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="speaker_id" value="{{ user.speaker.id }}">
+                                        <input type="hidden" name="exam_id" value="{{ object.id }}">
+                                        <button type="submit" class="btn btn-sm btn-dark">
+                                            {% trans 'Submit' %}
+                                        </button>
+                                    </form>
+                                {% endif %}
                                 <a title="{% trans 'Enter exam' %}"
                                    href="{% url 'speaker:question_set_list' exam_id=object.pk %}">
                                     <button type="button" class="btn btn-sm btn-dark">

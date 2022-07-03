@@ -68,6 +68,10 @@ urlpatterns += [
          name='delete_multiple_questionset'),
 
     # ExamsetSubmission
+    path('examset/', views.ExamsList.as_view(), name='examset_list'),
+    path('examset/<int:pk>/', views.ExamsDetail.as_view(), name='examset_detail'),
+    path('exam/<int:exam_id>/submit/', views.submitExam, name='exam_submit'),
     path('examset/submitted/', views.ExamSetSubmissionList.as_view(), name='examset_submission_list'),
-    path('examset/<int:examsetsubmission_id>/stt/generate/', views.ExamSetGenerateStt.as_view(), name='examset_generate_stt')
+    path('examset/<int:examsetsubmission_id>/stt/generate/', views.ExamSetGenerateStt.as_view(),
+         name='examset_generate_stt')
 ]

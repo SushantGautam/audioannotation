@@ -1,0 +1,54 @@
+{% extends "orgadmin/base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+    <div class="bg-white pt-5">
+        <h1 class="page-heading">{% trans "Exam List" %} </h1>
+
+        <div class="table-responsive " id="" style="border: none; overflow-x: unset">
+            <table class="table pt-2" cellspacing="0" id="">
+                <thead class="">
+                <tr class="tableTitleRow">
+                    <th>{% trans "S. No." %}</th>
+                    <th>{% trans "Exam Name" %}</th>
+                    <th>{% trans "Description" %}</th>
+                    <th>{% trans "Start Date" %}</th>
+                    <th>{% trans "End Date" %}</th>
+                    <th>{% trans "Question Count" %}</th>
+                    <th>{% trans "Difficulty Level" %}</th>
+                    <th>{% trans "Action" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for object in object_list %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ object.exam_name }}</td>
+                        <td>{{ object.description }}</td>
+                        <td>{{ object.start_date|date:'Y-m-d h:i a' }}</td>
+                        <td>{{ object.end_date|date:'Y-m-d h:i a' }}</td>
+                        <td>{{ object.get_question_count }}</td>
+                        <td>{{ object.get_difficulty_level }}</td>
+                        <td>
+                            <a title="{% trans 'Detail' %}"
+                               href="{% url 'examset_detail' exam_id=object.pk %}">
+                                <button type="button" class="btn btn-sm btn-dark">
+                                    {% trans 'Detail' %}
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block scripts %}
+    <script>
+        $('.table').DataTable();
+    </script>
+
+{% endblock scripts %}

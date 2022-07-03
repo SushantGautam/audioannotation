@@ -1,0 +1,57 @@
+{% extends "orgadmin/base.html" %}
+{% load static %}
+{% load i18n %}
+
+
+{% block content %}
+    <div class="bg-white pt-5">
+        <h1 class="page-heading">{% trans "Exam List" %} </h1>
+
+        <div class="table-responsive " id="" style="border: none; overflow-x: unset">
+            <table class="table pt-2" cellspacing="0" id="">
+                <thead class="">
+                <tr class="tableTitleRow">
+                    <th>{% trans "S. No." %}</th>
+                    <th>{% trans "Speaker" %}</th>
+                    <th>{% trans "Progress" %}</th>
+                    <th>{% trans "Exam Status" %}</th>
+                    <th>{% trans "Submission Status" %}</th>
+                    <th>{% trans "Action" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for speaker in speakers %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ speaker.user.get_full_name }}</td>
+                        <td>{{ speaker.progress }}/{{ object.get_question_count }}</td>
+                        <td>{{ speaker.exam_status|yesno:'Completed,Incomplete' }}</td>
+                        <td>{{ speaker.submit_status|yesno:'Submitted, Not Submitted' }}</td>
+                        <td>
+                            {% if not speaker.submit_status and speaker.exam_status %}
+                                <form method="post" action="{% url 'exam_submit' object.id %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="speaker_id" value="{{ speaker.id }}">
+                                    <input type="hidden" name="exam_id" value="{{ object.id }}">
+                                    <button type="submit" class="btn btn-sm btn-dark">
+                                        {% trans 'Submit' %}
+                                    </button>
+                                </form>
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block scripts %}
+    <script>
+        $('.table').DataTable();
+    </script>
+
+{% endblock scripts %}

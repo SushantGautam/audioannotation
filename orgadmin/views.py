@@ -252,14 +252,12 @@ class SpeakerResultView(DetailView):
                 # question.audio_recorded_date = question.speakersubmission_set.first().created_at
                 question.audio_recorded_date = ss.created_at
                 # question.audio_recording_size = round(os.path.getsize(os.path.join(settings.MEDIA_ROOT, question.speakersubmission_set.values_list('audio_file', flat=True).first())) / (1024 * 1024),2)
-                question.audio_recording_size = round(os.path.getsize(os.path.join(settings.MEDIA_ROOT, str(ss.audio_file))) / (1024 * 1024),2)
+                question.audio_recording_size = round(
+                    os.path.getsize(os.path.join(settings.MEDIA_ROOT, str(ss.audio_file))) / (1024 * 1024), 2)
 
                 # print('url', ss.audio_file.url)
                 # print('audio_recorded_date', ss.created_at)
                 # print('audio_recording_size', round(os.path.getsize(os.path.join(settings.MEDIA_ROOT,ss.audio_file )),2))
-
-
-
 
         return context
 
@@ -657,3 +655,40 @@ class ExamSetGenerateStt(FormView):
         from speaker.tasks import run_STTClova
         run_STTClova.delay(exam_set_id=int(kwargs.get('examsetsubmission_id')))
         return redirect(self.success_url)
+
+
+class ExamsList(ListView):
+    model = ExamSet
+    template_name = "orgadmin/examset/examList.html"
+
+    def get_queryset(self):
+        qs = super(ExamsList, self).get_queryset().filter(
+            organization_code=self.request.user.orgadmin.organization_code)
+        return qs
+
+
+class ExamsDetail(DetailView):
+    model = ExamSet
+    template_name = "orgadmin/examset/examDetail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ExamsDetail, self).get_context_data(**kwargs)
+        speakers = Speaker.objects.filter(
+            pk__in=self.object.speakersubmission_set.values_list('speaker', flat=True)).distinct()
+        for speaker in speakers:
+            speaker.progress = self.object.completed_question_count(speaker.id)
+            speaker.exam_status = self.object.get_exam_status(speaker.id)
+            speaker.submit_status = self.object.get_submit_status(speaker.id)
+        context['speakers'] = speakers
+        return context
+
+
+def submitExam(request, exam_id):
+    if request.method == 'POST':
+        speaker_id, exam_id = request.POST.get('speaker_id'), exam_id
+        from speaker.views import createExamSubmission
+        ins = createExamSubmission(int(speaker_id), exam_id)
+        if ins:
+            return redirect('examset_detail', pk=exam_id)
+        else:
+            return redirect('examset_detail', pk=exam_id)
