@@ -52,14 +52,14 @@
                                     {% for question in question_set.questions.all %}
                                         {% if audio_obj.question.id == question.id %}
                                             <a href="javascript:void(0)" class="question-parent shadow-sm active">
-                                                <span class="question-num">{{ forloop.counter }}</span>
-                                                <span class="question">{{ question.question_title }}</span>
+                                                <span class="question-num">{{ forloop.counter }}.</span>
+                                                <span class="question">{{ question.unique_code }}</span>
                                             </a>
                                         {% else %}
                                             <a class="question-parent shadow-sm"
                                                href="{% url 'worker:annotation_page' workertask_id=worker_task.id %}?question={{ question.id }}">
-                                                <span class="question-num">{{ forloop.counter }}</span>
-                                                <span class="question">{{ question.question_title }}</span>
+                                                <span class="question-num">{{ forloop.counter }}.</span>
+                                                <span class="question">{{ question.unique_code }}</span>
                                             </a>
                                         {% endif %}
                                     {% endfor %}
@@ -77,7 +77,7 @@
             <!-- Region section starts here -->
             <div class="region-section shadow-sm">
 
-                <div class="header-section flex-space">
+                <div class="header-section">
                     <h5 class="m-0">{{ audio_obj.question.question_title }} (<span id="region-count">01</span>)</h5>
                     <button title="Sort regions" class="sort-button btn btn-sm btn-dark"><i
                             class="fa-solid fa-sort"></i></button>
@@ -89,24 +89,28 @@
             </div>
             <!-- Region section ends here -->
 
+            <a title="{% trans 'Go to task list page' %}" class="btn btn-sm btn-block btn-dark go-to-list-button" href="{% url 'worker:my_task_list' %}?type=slicing" role="button">
+                {% trans 'Go to list' %}
+            </a>
+
         </section>
 
         <section class="left-section">
 
             <div class="shadow-sm" id="demo">
-                <div class="row">
-                    <div class="col d-flex justify-content-between">
-                        <h3>{{ audio_obj.question.question_title }}
+                <!-- <div class="row"> -->
+                    <div class="flex-space">
+                        <h5>{{ audio_obj.question.question_title }}
                             {% if workerSubmissionObj.status %}
                                 <span class="text-success"><i class="fa-solid fa-check-double"></i></span>
                             {% endif %}
-                        </h3>
+                        </h5>
                         <p style="text-align:right;">
                             <span id="time-current">0.00</span> / <span id="time-total">0.00</span><br>
                             (<span id="time-current-hms">00:00:00</span> / <span id="time-total-hms">00:00:00</span>)
                         </p>
                     </div>
-                </div>
+                <!-- </div> -->
                 <div id="wave-timeline"></div>
                 <div id="waveform"></div>
                 <div class="utility-buttons-group">
@@ -180,21 +184,15 @@
                         <button class="btn btn-sm btn-danger" id="reset">
                             <span class="bi bi-trash"> {% trans 'Reset' %}</span>
                         </button>
+                        <button title="Shortcut keys" class="btn btn-sm btn-light" id="info" data-bs-toggle="modal" data-bs-target="#infoModal">
+                            <span class="bi bi-info-circle" aria-hidden="true"></span>
+                        </button>
                         <!--
                             <button class="btn btn-light" id="download_button">
                                 <span class="bi bi-download" aria-hidden="true"></span>
                             </button>
                         -->
-                        <button type="button" class="btn btn-sm btn-secondary" id="save-btn">{% trans 'Save' %}</button>
-                        <button title="Shortcut keys" class="btn btn-sm btn-light" id="info" data-bs-toggle="modal"
-                                data-bs-target="#infoModal">
-                            <span class="bi bi-info-circle" aria-hidden="true"></span>
-                        </button>
-                        {% if not workerSubmissionObj or not workerSubmissionObj.status %}
-                            <button title="Submit Task" class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#modal-task-submission-confirm">
-                                {% trans 'Submit' %}
-                            </button>
-                        {% endif %}
+
                     </div>
                 </div>
             </div>
@@ -206,7 +204,7 @@
                     <div class="col">
                         <div class="row">
                             <div class="col-5">
-                                <label for="start">Start</label>
+                                <label for="start">{% trans 'Start' %}</label>
                                 <input class="form-control" id="start" name="start" type="number" step="0.01"/>
                             </div>
                             <div class="col-5">
@@ -225,7 +223,7 @@
                     <div class="col">
                         <div class="row">
                             <div class="col-5">
-                                <label for="end">End</label>
+                                <label for="end">{% trans 'End' %}</label>
                                 <input class="form-control" id="end" name="end" type="number" step="0.01"/>
                             </div>
                             <div class="col-5">
@@ -250,10 +248,10 @@
                     <div class="col">
                     </div>
                     <div class="col">
-                        <button type="submit" class="btn btn-success btn-block">Save</button>
+                        <button type="submit" class="btn btn-success btn-block">{% trans 'Save' %}</button>
                     </div>
                     <div class="col">
-                        <button type="button" class="btn btn-danger btn-block" data-action="delete-region">Delete
+                        <button type="button" class="btn btn-danger btn-block" data-action="delete-region">{% trans 'Delete' %}
                         </button>
                     </div>
                 </div>
@@ -263,7 +261,7 @@
             <div class="result-section shadow-sm">
 
                 <div class="header-section flex-space">
-                    <h5 class="m-0">Results</h5>
+                    <h5 class="m-0">{% trans 'Results' %}</h5>
                     <!--
                     <button class="btn btn-sm btn-dark" data-toggle="tooltip" data-placement="top" title="Delete all">
                         <i class="fas fa-trash"></i>
@@ -274,7 +272,7 @@
 
                 <div class="result">
                     <div class="audio-details">
-                        No Region Selected.
+                        {% trans 'No Region Selected.' %}
                     </div>
                     <div class="audio-data">
 
@@ -296,6 +294,16 @@
                     </form>
                 </div>
 
+                <div class="submit-section">
+                    <button title="{% trans 'Save all changes' %}" type="button" class="btn btn-sm btn-secondary" id="save-btn">{% trans 'Save' %}</button>
+    
+                    {% if not workerSubmissionObj or not workerSubmissionObj.status %}
+                    <button title="{% trans 'Submit task' %}" class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#modal-task-submission-confirm">
+                        {% trans 'Submit' %}
+                    </button>
+                    {% endif %}
+                </div>
+
             </div>
             <!-- Result section ends here -->
         </section>
@@ -308,15 +316,15 @@
         <div class="modal-dialog modal-dialog-fluid">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title">Information</h3>
+                    <h3 class="modal-title">{% trans 'Key bindings' %}</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancel"></button>
                 </div>
                 <div class="modal-body">
-                    <h4>Key biddings</h4>
+                    <!-- <h4>Key bindings</h4> -->
                     <ul>
-                        <li>Shift + ←: Backward 0.2 seconds</li>
-                        <li>Shift + →: Forward 0.2 seconds</li>
-                        <li>Shift + Space: Play or Stop</li>
+                        <li>Shift + ←: {% trans 'Backward' %} 0.2 {% trans 'seconds' %}</li>
+                        <li>Shift + →: {% trans 'Forward' %} 0.2 {% trans 'seconds' %}</li>
+                        <li>Shift + Space: {% trans 'Play or Stop' %}</li>
                     </ul>
                 </div>
             </div>
