@@ -254,7 +254,11 @@ class SpeakerResultView(DetailView):
         # context['solved_question'] = solved_question
 
         status = self.request.GET.get('status', None)
-        total_questions = Question.objects.filter(questionset__in=QuestionSet.objects.filter(is_active=True)).distinct()
+        # total_questions = Question.objects.filter(questionset__in=QuestionSet.objects.filter(is_active=True)).distinct()
+        # total_questions = ExamSet.question_sets.all().values_list('questions', flat=True)
+        es = ExamSet.objects.all()
+        qs = QuestionSet.objects.filter(examset__in=es).distinct()
+        total_questions = Question.objects.filter(questionset__in=qs).distinct()
         solved_question_ids = self.object.speakersubmission_set.values_list('question', flat=True).distinct()
         solved_question = Question.objects.filter(pk__in=solved_question_ids).distinct()
         unsolved_question = total_questions.exclude(pk__in=solved_question).distinct()
