@@ -89,6 +89,10 @@
             </div>
             <!-- Region section ends here -->
 
+            <a title="{% trans 'Go to task list page' %}" class="btn btn-sm btn-block btn-dark go-to-list-button" href="{% url 'worker:my_task_list' %}?type=slicing" role="button">
+                {% trans 'Go to list' %}
+            </a>
+
         </section>
 
         <section class="left-section">
