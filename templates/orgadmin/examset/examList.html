@@ -32,7 +32,7 @@
                         <td>{{ object.get_difficulty_level }}</td>
                         <td>
                             <a title="{% trans 'Detail' %}"
-                               href="{% url 'examset_detail' exam_id=object.pk %}">
+                               href="{% url 'examset_detail' pk=object.pk %}">
                                 <button type="button" class="btn btn-sm btn-dark">
                                     {% trans 'Detail' %}
                                 </button>
