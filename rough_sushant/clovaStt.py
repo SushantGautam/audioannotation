@@ -1,7 +1,6 @@
 import json
 
 import requests
-
 from joblib import Memory
 
 memory = Memory(".cache_cloavaStt_req_upload")
@@ -59,14 +58,11 @@ class ClovaSpeechClient:
                              url=self.invoke_url + '/recognizer/object-storage',
                              data=json.dumps(request_body).encode('UTF-8'))
 
-    
     def req_upload(self, file, completion, callback=None, userdata=None, forbiddens=None, boostings=None,
                    wordAlignment=True, fullText=True, diarization=None):
-        
         @memory.cache
         def _req_upload(file, completion, callback=None, userdata=None, forbiddens=None, boostings=None,
-                   wordAlignment=True, fullText=True, diarization=None):
-                    
+                        wordAlignment=True, fullText=True, diarization=None):
             request_body = {
                 'language': 'ko-KR',
                 'completion': completion,
@@ -89,12 +85,10 @@ class ClovaSpeechClient:
             }
             response = requests.post(headers=headers, url=self.invoke_url + '/recognizer/upload', files=files)
             return response
-        return _req_upload(file, completion, callback, userdata, forbiddens, boostings, wordAlignment, fullText, diarization)
-letion, callback, userdata, forbiddens, boostings, wordAlignment, fullText, diarization)
-letion, callback, userdata, forbiddens, boostings, wordAlignment, fullText, diarization)
-letion, callback, userdata, forbiddens, boostings, wordAlignment, fullText, diarization)
-letion, callback, userdata, forbiddens, boostings, wordAlignment, fullText, diarization)
-etion, callback, userdata, forbiddens, boostings, wordAlignment, fullText, diarization)
+
+        return _req_upload(file, completion, callback, userdata, forbiddens, boostings, wordAlignment, fullText,
+                           diarization)
+
 
 if __name__ == '__main__':
     # res = ClovaSpeechClient().req_url(url='http://example.com/media.mp3', completion='sync')
