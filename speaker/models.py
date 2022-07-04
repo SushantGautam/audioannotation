@@ -70,8 +70,6 @@ class Speaker(BaseUserModel):
         return "Not Submitted"
 
     def speaker_status(self):
-        print('hgf')
-        print('Wsaa sasa', ExamSetSubmission.objects.exclude(status__in=['INS', 'STI', 'STF']).values_list("speaker__user__username", flat=True))
         # if not self.has_request_verification():
         if self.user.verificationrequest_set.count() < 1:
             return "Not Submitted Yet"

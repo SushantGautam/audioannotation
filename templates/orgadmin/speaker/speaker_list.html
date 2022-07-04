@@ -128,8 +128,8 @@
                 </div>
             </a>
 
-            <a href="{% url 'speaker_list' %}?status=verified">
-                <div class="user-card {% if request.GET.status == 'verified' %}active{% endif %}">
+            <a href="{% url 'speaker_list' %}?status=recording">
+                <div class="user-card {% if request.GET.status == 'recording' %}active{% endif %}">
                     <div class="right-side">
                         <div>
                             <i class="fa-solid fa-microphone-lines"></i>
@@ -144,8 +144,8 @@
                 </div>
             </a>
 
-            <a href="{% url 'speaker_list' %}?status=rejected">
-                <div class="user-card {% if request.GET.status == 'rejected' %}active{% endif %}">
+            <a href="{% url 'speaker_list' %}?status=completed">
+                <div class="user-card {% if request.GET.status == 'completed' %}active{% endif %}">
                     <div class="right-side">
                         <div>
                             <i class="fa-solid fa-clipboard-check"></i>
@@ -160,8 +160,8 @@
                 </div>
             </a>
 
-            <a href="{% url 'speaker_list' %}?status=inactive">
-                <div class="user-card {% if request.GET.status == 'inactive' %}active{% endif %}">
+            <a href="{% url 'speaker_list' %}?status=stt_submitted">
+                <div class="user-card {% if request.GET.status == 'stt_submitted' %}active{% endif %}">
                     <div class="right-side">
                         <div>
                             <i class="fa-solid fa-database"></i>
