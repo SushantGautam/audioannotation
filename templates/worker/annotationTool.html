@@ -77,7 +77,7 @@
             <!-- Region section starts here -->
             <div class="region-section shadow-sm">
 
-                <div class="header-section flex-space">
+                <div class="header-section">
                     <h5 class="m-0">{{ audio_obj.question.question_title }} (<span id="region-count">01</span>)</h5>
                     <button title="Sort regions" class="sort-button btn btn-sm btn-dark"><i
                             class="fa-solid fa-sort"></i></button>
@@ -94,19 +94,19 @@
         <section class="left-section">
 
             <div class="shadow-sm" id="demo">
-                <div class="row">
-                    <div class="col d-flex justify-content-between">
-                        <h3>{{ audio_obj.question.question_title }}
+                <!-- <div class="row"> -->
+                    <div class="flex-space">
+                        <h5>{{ audio_obj.question.question_title }}
                             {% if workerSubmissionObj.status %}
                                 <span class="text-success"><i class="fa-solid fa-check-double"></i></span>
                             {% endif %}
-                        </h3>
+                        </h5>
                         <p style="text-align:right;">
                             <span id="time-current">0.00</span> / <span id="time-total">0.00</span><br>
                             (<span id="time-current-hms">00:00:00</span> / <span id="time-total-hms">00:00:00</span>)
                         </p>
                     </div>
-                </div>
+                <!-- </div> -->
                 <div id="wave-timeline"></div>
                 <div id="waveform"></div>
                 <div class="utility-buttons-group">
@@ -312,11 +312,11 @@
         <div class="modal-dialog modal-dialog-fluid">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title">Information</h3>
+                    <h3 class="modal-title">Key bindings</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancel"></button>
                 </div>
                 <div class="modal-body">
-                    <h4>Key biddings</h4>
+                    <!-- <h4>Key bindings</h4> -->
                     <ul>
                         <li>Shift + ←: Backward 0.2 seconds</li>
                         <li>Shift + →: Forward 0.2 seconds</li>
