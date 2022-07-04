@@ -87,7 +87,7 @@
     </div>
     <!-- <img class="mb-3" src="{% static 'img/logo.png' %}" alt="Logo" width="80" height="80">
     <h3 class="h3 mb-3">{% trans "Audio Annotation Tool" %}</h3><br> -->
-    <h5>{% trans "Please Sign In" %}</h5>
+    <h6>{% trans "Sign in with username" %}</h6>
 
     <div class="form-floating">
       <input type="text" name="login" class="form-control" id="id_login" placeholder="username" maxlength="150" required>
@@ -108,12 +108,12 @@
         {% endfor %}
       </div>
     {% endif %}
-    <button class="w-100 btn btn-success mb-2" type="submit">{% trans "Log In" %}</button>
+    <button class="w-100 btn btn-success" type="submit">{% trans "Log In" %}</button>
 
   </form>
-    <p class="h6 login-or mt-2">{% trans 'OR' %}</p>
+    <p class="h6 login-or">{% trans 'OR' %}</p>
 
-     <a class="w-100 btn btn-sm btn-secondary mb-2" href="{% url 'register_user' %}">{% trans 'Sign Up' %}</a>
+     <a class="signup " href="{% url 'register_user' %}">{% trans 'Sign up with email' %}</a>
 
 
 
@@ -157,7 +157,7 @@
   </div>
 
 
-  <p class="mt-5 mb-3 text-muted">&copy; {% now "Y" %} NSDevil Co. Ltd.</p>
+  <p class="text-muted">&copy; {% now "Y" %} NSDevil Co. Ltd.</p>
 </div>
 
 {% endblock %}

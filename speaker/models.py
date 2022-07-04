@@ -124,6 +124,11 @@ class SpeakerSubmission(models.Model):
     def filename(self):
         return os.path.basename(self.audio_file.name)
 
+    def set_tts_status(self, status):
+        self.status = status  # STT TaskCompleted | AnnotationSaved
+        self.save()
+
+
 class ExamSetSubmission(models.Model):
     STATUS_CHOICES = (
         ('INS', _('Initial State')),
@@ -166,6 +171,10 @@ class ExamSetSubmission(models.Model):
         if self.STATUS_CHOICES.index(current) != 0:
             return self.STATUS_CHOICES[self.STATUS_CHOICES.index(current)-1]
         return None
+
+    def set_tts_status(self, status):
+        self.status = status  # STT TaskCompleted | AnnotationSaved
+        self.save()
 
     # # when data is save run the celery task in background
     # def save(self, *args, **kwargs):

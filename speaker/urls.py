@@ -12,6 +12,7 @@ urlpatterns = [
     path('exam/', views.ExamSetList.as_view(), name='exam_set_list'),
     path('exam/<int:exam_id>/', views.QuestionSetList.as_view(), name='question_set_list'),
     path('exam/<int:exam_id>/exam_popup/', views.ExamPopupView.as_view(), name='exam_popup'),
+    path('exam/<int:exam_id>/submit/', views.submitExam, name='exam_submit'),
 ]
 
 # contract urls

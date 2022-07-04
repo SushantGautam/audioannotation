@@ -126,3 +126,13 @@ class ExamSet(models.Model):
 
     def get_question_count(self):
         return self.question_sets.all().values_list('questions', flat=True).count()
+
+    def completed_question_count(self, speaker_id):
+        return self.speakersubmission_set.filter(speaker_id=speaker_id).values_list('question', flat=True).count()
+
+    def get_exam_status(self, speaker_id):
+        return list(self.question_sets.all().values_list('questions', flat=True)) == list(
+            self.speakersubmission_set.filter(speaker_id=speaker_id).values_list('question', flat=True))
+
+    def get_submit_status(self, speaker_id):
+        return self.examsetsubmission_set.filter(speaker_id=speaker_id).exists()

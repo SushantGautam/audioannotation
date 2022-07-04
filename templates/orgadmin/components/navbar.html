@@ -26,6 +26,8 @@
     <a href="{% url 'speaker_list' %}" class="tab-item {% if 'records/speakers' in request.path %}active{% endif %}">Speakers List</a>
     <!-- <a href="" class="tab-item">Recording Allocation</a> -->
     <a href="{% url 'speaker_contract' %}" class="tab-item">Contracts</a>
+    <a href="{% url 'examset_list' %}" class="tab-item">{% trans 'Exams' %}</a>
+    <a href="{% url 'examset_submission_list' %}" class="tab-item">{% trans 'Exams STT' %}</a>
   </div>
 
   <input type="radio" id="questions-tab" name="mytabs">

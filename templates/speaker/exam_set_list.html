@@ -19,6 +19,7 @@
                     <th>{% trans "Difficulty Level" %}</th>
                     <th>{% trans "Progress" %}</th>
                     <th>{% trans "Status" %}</th>
+                    <th>{% trans "Submission Status" %}</th>
                     <th>{% trans "Action" %}</th>
                 </tr>
                 </thead>
@@ -34,17 +35,33 @@
                         <td>{{ object.get_difficulty_level }}</td>
                         <!-- Static values used as placeholders for the new columns -->
                         <td>5/10</td>
-                        
+
                         <!--Status = Recording: contract is done and recording is on going
                                     Completed: all questions have been submitted.
                                     Verified: when admin send all files to STT, no longer edit for questions -->
-                        <td>Completed</td>
+                        <td>{{ object.exam_status|yesno:'Complete,Incomplete' }}</td>
+                        <td>{{ object.submit_status|yesno:'Submitted,Not Submitted' }}</td>
                         <td>
-                            <a title="{% trans 'Enter exam' %}" href="{% url 'speaker:question_set_list' exam_id=object.pk %}">
-                                <button type="button" class="btn btn-sm btn-dark">
-                                    {% trans 'Enter Exam' %}
-                                </button>
-                            </a>
+                            {% if not object.submit_status %}
+                                {% if object.exam_status %}
+                                    <form method="post" action="{% url 'speaker:exam_submit' object.id %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="speaker_id" value="{{ user.speaker.id }}">
+                                        <input type="hidden" name="exam_id" value="{{ object.id }}">
+                                        <button type="submit" class="btn btn-sm btn-dark">
+                                            {% trans 'Submit' %}
+                                        </button>
+                                    </form>
+                                {% endif %}
+                                <a title="{% trans 'Enter exam' %}"
+                                   href="{% url 'speaker:question_set_list' exam_id=object.pk %}">
+                                    <button type="button" class="btn btn-sm btn-dark">
+                                        {% trans 'Enter Exam' %}
+                                    </button>
+                                </a>
+                            {% else %}
+                                -
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

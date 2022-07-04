@@ -663,3 +663,59 @@ def QuestionSetDeleteView(request, pk):
     if request.method == "POST":
         QuestionSet.objects.filter(pk=pk).delete()
         return redirect("question_set_list")
+
+
+class ExamSetSubmissionList(ListView):
+    model = ExamSetSubmission
+    template_name = 'orgadmin/examSetSubmission/examSetSubmissionList.html'
+
+    def get_queryset(self):
+        qs = super(ExamSetSubmissionList, self).get_queryset()
+        qs = qs.filter(speaker__organization_code=self.request.user.orgadmin.organization_code)
+        return qs
+
+
+class ExamSetGenerateStt(FormView):
+    success_url = reverse_lazy('examset_submission_list')
+
+    def post(self, request, *args, **kwargs):
+        from speaker.tasks import run_STTClova
+        run_STTClova.delay(exam_set_id=int(kwargs.get('examsetsubmission_id')))
+        return redirect(self.success_url)
+
+
+class ExamsList(ListView):
+    model = ExamSet
+    template_name = "orgadmin/examset/examList.html"
+
+    def get_queryset(self):
+        qs = super(ExamsList, self).get_queryset().filter(
+            organization_code=self.request.user.orgadmin.organization_code)
+        return qs
+
+
+class ExamsDetail(DetailView):
+    model = ExamSet
+    template_name = "orgadmin/examset/examDetail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ExamsDetail, self).get_context_data(**kwargs)
+        speakers = Speaker.objects.filter(
+            pk__in=self.object.speakersubmission_set.values_list('speaker', flat=True)).distinct()
+        for speaker in speakers:
+            speaker.progress = self.object.completed_question_count(speaker.id)
+            speaker.exam_status = self.object.get_exam_status(speaker.id)
+            speaker.submit_status = self.object.get_submit_status(speaker.id)
+        context['speakers'] = speakers
+        return context
+
+
+def submitExam(request, exam_id):
+    if request.method == 'POST':
+        speaker_id, exam_id = request.POST.get('speaker_id'), exam_id
+        from speaker.views import createExamSubmission
+        ins = createExamSubmission(int(speaker_id), exam_id)
+        if ins:
+            return redirect('examset_detail', pk=exam_id)
+        else:
+            return redirect('examset_detail', pk=exam_id)
