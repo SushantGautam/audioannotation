@@ -1,6 +1,6 @@
 import json
 
-import request
+import requests
 
 from joblib import Memory
 
