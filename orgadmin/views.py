@@ -165,12 +165,15 @@ class SpeakerListView(ListView):
             qs = qs.filter(pk__in=listOfIds)
 
         elif query_param and query_param.lower() == 'recording':
-            qs = qs.filter(
-                pk__in=SpeakerSubmission.objects.all().values_list("speaker_id", flat=True).distinct()).exclude(
-                pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True).distinct())
+            qs = qs.exclude(
+                pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct()
+            # qs = qs.filter(
+            #     pk__in=SpeakerSubmission.objects.all().values_list("speaker_id", flat=True).distinct()).exclude(
+            #     pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True).distinct())
 
         elif query_param and query_param.lower() == 'completed':
-            qs = qs.filter(pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct()
+            # qs = qs.filter(pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct()
+            qs = qs.filter(pk__in=ExamSetSubmission.objects.filter(status__in=['INS', 'STI', 'STF']).values_list("speaker_id", flat=True)).distinct()
 
 
         elif query_param and query_param.lower() == 'stt_submitted':
@@ -201,15 +204,15 @@ class SpeakerListView(ListView):
         context['rejected'] = qs.filter(pk__in=listOfIds).count()
         context['inactive'] = qs.filter(user__is_active=False).count()
 
-        # context['on_recording'] = qs.exclude(
-        #     pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct().count()
-        #
+        context['on_recording'] = qs.exclude(
+            pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct().count()
+
         # context['on_recording'] = SpeakerSubmission.objects.all().values_list("speaker_id", flat=True).distinct(
         # ).exclude( pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct().count()
 
-        context['on_recording'] = qs.filter(
-            pk__in=SpeakerSubmission.objects.all().values_list("speaker_id", flat=True).distinct()).exclude(
-            pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True).distinct()).count()
+        # context['on_recording'] = qs.filter(
+        #     pk__in=SpeakerSubmission.objects.all().values_list("speaker_id", flat=True).distinct()).exclude(
+        #     pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True).distinct()).count()
 
         context['recording_completed'] = qs.filter(
             pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct().count()

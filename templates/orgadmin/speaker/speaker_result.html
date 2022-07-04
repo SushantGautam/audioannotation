@@ -233,7 +233,7 @@
   <script src="{% static 'js/jszip/saveas.js' %}"></script>
 
   <script>
-
+    {% comment %}
   function download_audios() {
     var urls = [];
      $('.audio_file').each(function (){
@@ -271,7 +271,7 @@
         });
     });
 }
-
+{% endcomment %}
 
 
   </script>
@@ -279,7 +279,8 @@
       <script>
 
 
-
+         $('.speaker_result').DataTable()
+         {% comment %}
         $('.speaker_result').DataTable({
           dom: 'lfBtp',
           responsive: true,
@@ -306,53 +307,9 @@
         });
 
 
+{% endcomment %}
 
 
 
-
-         {% comment %}
-        $('form[name=verify-form]').on('submit', function (e) {
-            e.preventDefault();
-            var $form = $(this);
-            $.ajax({
-                type: $(this).attr('method'),
-                url: $(this).attr('action'),
-                data: $(this).serialize(),
-                success: function (response) {
-                    $form.closest('tr').find('.verification-status').text("{% trans 'Verified' %}");
-                    $form.remove();
-                }
-            });
-        });
-
-        $('form[name=block-form]').on('submit', function (e) {
-            e.preventDefault();
-            var $form = $(this);
-            $.ajax({
-                type: $(this).attr('method'),
-                url: $(this).attr('action'),
-                data: $(this).serialize(),
-                success: function (response) {
-                    $form.closest('tr').find('.active-status').text("{% trans 'Inactive' %}");
-                    $form.find('button').text('{% trans 'Unblock' %}')
-                }
-            });
-        });
-
-        $('form[name=unblock-form]').on('submit', function (e) {
-            e.preventDefault();
-            var $form = $(this);
-            $.ajax({
-                type: $(this).attr('method'),
-                url: $(this).attr('action'),
-                data: $(this).serialize(),
-                success: function (response) {
-                    $form.closest('tr').find('.active-status').text("{% trans 'Active' %}");
-                    $form.find('button').text('{% trans 'Block' %}')
-                }
-            });
-        });
-
-        {% endcomment %}
     </script>
 {% endblock scripts %}
