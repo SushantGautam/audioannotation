@@ -172,3 +172,6 @@ staticfiles/
 .rough*
 
 *.zip
+.*
+kim
+rough*
