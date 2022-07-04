@@ -22,8 +22,8 @@ body{
   border-radius: 0.5rem;
   cursor: pointer;
 }
-
 /* Custom scroillbar for webkit based browsers like Chrome, Safari and other Chromium based browsers */
+
 
 /* Custom scrollbar for Firefox */
 html{
@@ -304,4 +304,9 @@ input{
 .merge-button{
     border: 1.5px solid dimgrey;
     padding: 0.1rem 0.5rem;
+}
+
+.submit-section{
+    text-align: right;
+    margin-bottom: 1rem;
 }
