@@ -52,14 +52,14 @@
                                     {% for question in question_set.questions.all %}
                                         {% if audio_obj.question.id == question.id %}
                                             <a href="javascript:void(0)" class="question-parent shadow-sm active">
-                                                <span class="question-num">{{ forloop.counter }}</span>
-                                                <span class="question">{{ question.question_title }}</span>
+                                                <span class="question-num">{{ forloop.counter }}.</span>
+                                                <span class="question">{{ question.unique_code }}</span>
                                             </a>
                                         {% else %}
                                             <a class="question-parent shadow-sm"
                                                href="{% url 'worker:annotation_page' workertask_id=worker_task.id %}?question={{ question.id }}">
-                                                <span class="question-num">{{ forloop.counter }}</span>
-                                                <span class="question">{{ question.question_title }}</span>
+                                                <span class="question-num">{{ forloop.counter }}.</span>
+                                                <span class="question">{{ question.unique_code }}</span>
                                             </a>
                                         {% endif %}
                                     {% endfor %}
