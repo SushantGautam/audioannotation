@@ -83,6 +83,22 @@
             cursor: pointer;
             font-weight: bold;
         }
+
+
+        .speaker_info_col{
+            border: 1px solid #6c7a86;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        .speaker .title {
+          /* display: flex; */
+          background-color: rgba(188,188,188,0.2);
+          justify-content: center;
+          align-items: center;
+          font-weight: 600;
+         /* width: 20%; */
+      }
     </style>
 {% endblock %}
 
@@ -125,8 +141,45 @@
     </section>
 
     <main class="users-list">
+
+         <section class="speaker_info">
+             <div class="speaker row speaker_info_table_row ">
+             <div class="col-md-6 d-flex speaker_info_col">
+                <div class="title col-4 speaker_info_table_th">{% trans 'Speaker ID' %}</div>
+                <div class="value col-8 speaker_info_table_td text-center"> {{ object.user.email }}</div>
+             </div>
+             <div class="col-md-6 d-flex speaker_info_col">
+                <div class="title col-4 speaker_info_table_th">{% trans 'Full Name' %}</div>
+                <div class="value col-8 speaker_info_table_td text-center">{{ object.user.get_full_name }}</div>
+             </div>
+
+          </div>
+           <div class="speaker row speaker_info_table_row ">
+             <div class="col-md-6 d-flex speaker_info_col">
+                <div class="title col-4 speaker_info_table_th">{% trans 'Level' %}</div>
+                <div class="value col-8 speaker_info_table_td text-center"> {{ object.get_level_display }}</div>
+             </div>
+             <div class="col-md-6 d-flex speaker_info_col">
+                <div class="title col-4 speaker_info_table_th">{% trans 'Native Language' %}</div>
+                <div class="value col-8 speaker_info_table_td text-center">{{ object.get_language_display }} </div>
+             </div>
+
+          </div>
+           <div class="speaker row speaker_info_table_row">
+{#             <div class="col-md-6 d-inline-flex speaker_info_col">#}
+{#                <div class="title col-4 speaker_info_table_th">Exam Title</div>#}
+{#                <div class="value col-8 speaker_info_table_td text-right text-center"> What is Your Name?</div>#}
+{#             </div>#}
+             <div class="col-md-6 d-inline-flex speaker_info_col">
+                <div class="title col-4 speaker_info_table_th">{% trans 'Status' %}</div>
+                <div class="value col-8 speaker_info_table_td text-right text-center">{{ object.speaker_status }} </div>
+             </div>
+
+          </div>
+         </section>
+
         <section class="table-section">
-            <table class="table py-3 text-center" cellspacing="0" id="">
+            <table class="table py-3 text-center speaker_result" cellspacing="0" id="speaker_result">
 
                 <thead class="">
                 <tr class="">
@@ -160,71 +213,6 @@
                    </td>
                    </tr>
                 {% endfor %}
-
-
-
-
-
-
-                {% comment %}
-                {% for speaker in object_list %}
-                    <tr>
-                        <td> {{ forloop.counter }}</td>
-                        <td>
-                            <a href="{{ speaker.get_absolute_url }}">
-                                {{ speaker.user.email }}
-                            </a>
-                        </td>
-                        <td> {{ speaker.user.get_full_name }}</td>
-                        <td> {{ speaker.organization_code }}</td>
-                        <td> {{ speaker.get_nationality_display }}</td>
-                        <td> {{ speaker.get_level_display }}</td>
-                        <td>
-                            <span class="active-status">
-{#                                {{ speaker.user.is_active|yesno:'Active, Inactive' }}#}
-                              {{ speaker.speaker_status }}
-                            </span>
-                        </td>
-                        <td>
-                            <span class="verification-status d-flex gap-2">
-{#                             {% if speaker.is_verified %}#}
-{#                                    {% trans 'Verified' %}#}
-                              {% if speaker.get_verification_status == "Pending" %}
-                                    {% trans 'Not Submitted yet' %}
-
-                                {% elif speaker.speaker_status == "Profile Submitted" %}
-                                    <form name="verify-form" action="{% url 'speaker_verify' user_id=speaker.id %}"
-                                          method="post">
-                                        {% csrf_token %}
-                                        <input type="hidden" value="1" name="is_approved">
-                                        <button class="btn btn-dark btn-sm verify-btn">{% trans 'Verify' %}</button>
-                                    </form>
-                                    <form name="verify-form" action="{% url 'speaker_verify' user_id=speaker.id %}"
-                                          method="post">
-                                        {% csrf_token %}
-                                        <input type="hidden" value="0" name="is_approved">
-                                        <button class="btn btn-dark btn-sm verify-btn">{% trans 'Reject' %}</button>
-                                    </form>
-
-                              {% elif speaker.speaker_status == 'Waiting For Agreement' %}
-
-                              {% elif speaker.speaker_status == 'Recording Completed' %}
-                                 <button class="btn btn-sm btn-primary">{% trans 'Send To STT' %}</button>
-                                <button class="btn btn-sm btn-secondary">{% trans 'Result' %}</button>
-                              {% elif speaker.speaker_status == 'Recording' %}
-                                  {% trans 'Result' %}
-                                {% elif speaker.speaker_status == 'Finished' %}
-                            <button class="btn btn-sm btn-secondary">{% trans 'Result' %}</button>
-                                {% else %}
-
-
-                                {% endif %}
-                            </span>
-                        </td>
-
-                    </tr>
-                {% endfor %}
-                {% endcomment %}
                 </tbody>
 
             </table>
@@ -236,10 +224,10 @@
 
 {% block scripts %}
     <script>
-      {% comment %}
 
-        $('.table').DataTable();
 
+        $('.speaker_result').DataTable();
+         {% comment %}
         $('form[name=verify-form]').on('submit', function (e) {
             e.preventDefault();
             var $form = $(this);
