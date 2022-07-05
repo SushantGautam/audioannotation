@@ -26,7 +26,7 @@ class Speaker(BaseUserModel):
     bank_swift_code = models.CharField(max_length=256, blank=True, null=True)
     bank_account_name = models.CharField(max_length=256, blank=True, null=True)
     bank_address = models.CharField(max_length=256, blank=True, null=True)
-    
+
     class Meta:
         verbose_name = _('Speaker')
         verbose_name_plural = _('Speakers')
@@ -39,19 +39,19 @@ class Speaker(BaseUserModel):
 
     def has_request_verification(self):
         return VerificationRequest.objects.filter(user=self.user, approved=None).exists()
-    
+
     def has_profile_rejected(self):
         return VerificationRequest.objects.filter(user=self.user, approved=False).exists()
 
     def has_contract(self):
         return Contract.objects.filter(user_type='SPE', created_by__organization_code=self.organization_code).exists()
-    
+
     def has_contract_submitted(self): #submitted and pending approval
         return ContractSign.objects.filter(user=self.user, approved=None).exists()
-    
+
     def has_contract_rejected(self): #submitted and rejected
         return ContractSign.objects.filter(user=self.user, approved=False).exists()
-    
+
     def has_contract_approved(self): #submitted and approved
         return ContractSign.objects.filter(user=self.user, approved=True).exists()
 
@@ -73,26 +73,27 @@ class Speaker(BaseUserModel):
         # if not self.has_request_verification():
         if self.user.verificationrequest_set.count() < 1:
             return "Not Submitted Yet"
-        elif self.user.verificationrequest_set.latest('pk').approved == None:
+        elif self.user.verificationrequest_set.latest('pk').approved is None:
             return "Profile Submitted"
         elif self.user.verificationrequest_set.latest('pk').approved == True and not self.user.contractsign_set.exists():
-            # return "Agreement Not Sent"
             return "Waiting For Agreement"
-        # elif self.user.verificationrequest_set.latest('pk').approved == True and self.user.contractsign_set.latest('pk').approved == None:
-        #     return "Waiting For Agreement"
-        elif self.user.id not in ExamSetSubmission.objects.all().values_list("speaker__user_id", flat=True).distinct() and self.user.id in SpeakerSubmission.objects.all().values_list("speaker__user_id", flat=True).distinct() and self.user.verificationrequest_set.latest('pk').approved == True and self.user.contractsign_set.latest('pk').approved == True:
+
+        # elif self.user.id not in ExamSetSubmission.objects.all().values_list("speaker__user_id", flat=True).distinct() and self.user.id in SpeakerSubmission.objects.all().values_list("speaker__user_id", flat=True).distinct() and self.user.verificationrequest_set.latest('pk').approved == True and self.user.contractsign_set.latest('pk').approved == True:
+        elif self.user.id not in ExamSetSubmission.objects.all().values_list("speaker__user_id", flat=True).distinct()  and self.user.verificationrequest_set.latest('pk').approved == True and self.user.contractsign_set.latest('pk').approved == True:
             return "Recording"
+
         elif self.user.id in ExamSetSubmission.objects.filter(status__in=['INS', 'STI', 'STF']).values_list("speaker__user_id", flat=True).distinct():
             return "Recording Completed"
-        # elif self.is_verified:
+
         elif self.user.id in ExamSetSubmission.objects.exclude(status__in=['INS', 'STI', 'STF']).values_list("speaker__user_id", flat=True):
             print('Inside Finished')
             return "Finished"
+
         elif not self.user.is_active:
             return 'Inactive'
         else:
-            # return 'Verified Without Submitting Request'
-            return "Waiting For Agreement"
+            return 'Verified Without Submitting Request'
+            # return 'Recording'
 
 
 def audio_filename(instance, filename):

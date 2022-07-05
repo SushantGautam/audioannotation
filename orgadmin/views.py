@@ -5,6 +5,7 @@ import requests
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import HttpResponse, render, redirect, get_object_or_404
 from django.urls import reverse_lazy
@@ -164,12 +165,13 @@ class SpeakerListView(ListView):
             listOfIds = [x.id for x in qs if x.get_verification_status().lower() == query_param]
             qs = qs.filter(pk__in=listOfIds)
 
+
+
         elif query_param and query_param.lower() == 'recording':
-            # qs = qs.exclude(
-            #     pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct()
-            qs = qs.filter(
-                pk__in=SpeakerSubmission.objects.all().values_list("speaker_id", flat=True).distinct()).exclude(
-                pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True).distinct())
+            qs = qs.filter(Q(pk__in=VerificationRequest.objects.all().values_list('user__speaker__id', flat=True)),
+                           Q(pk__in=ContractSign.objects.all().values_list('user__speaker__id', flat=True))).exclude(
+                pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct()
+
 
         elif query_param and query_param.lower() == 'completed':
             # qs = qs.filter(pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct()
@@ -206,16 +208,17 @@ class SpeakerListView(ListView):
         context['rejected'] = qs.filter(pk__in=listOfIds).count()
         context['inactive'] = qs.filter(user__is_active=False).count()
 
-        # context['on_recording'] = qs.exclude(
-        #     pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct().count()
-
-        # context['on_recording'] = SpeakerSubmission.objects.all().values_list("speaker_id", flat=True).distinct(
-        # ).exclude( pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct().count()
+        #
+        # context['on_recording'] = qs.filter(
+        #     pk__in=SpeakerSubmission.objects.all().values_list("speaker_id", flat=True).distinct(),
+        # ).exclude(
+        #     pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True).distinct()
+        # ).count()
 
         context['on_recording'] = qs.filter(
-            pk__in=SpeakerSubmission.objects.all().values_list("speaker_id", flat=True).distinct(),
-        ).exclude(
-            pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True).distinct()).count()
+            Q(pk__in=VerificationRequest.objects.all().values_list('user__speaker__id', flat=True)),
+            Q(pk__in=ContractSign.objects.all().values_list('user__speaker__id', flat=True))).exclude(
+            pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct().count()
 
         context['recording_completed'] = qs.filter(
             pk__in=ExamSetSubmission.objects.filter(status__in=['INS', 'STI', 'STF']).values_list("speaker_id",
@@ -241,28 +244,7 @@ class SpeakerResultView(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(SpeakerResultView, self).get_context_data(*args, **kwargs)
-
-        # exam_sets = ExamSet.objects.filter(
-        #     pk__in=self.object.speakersubmission_set.values_list('exam_set', flat=True).distinct())
-        #
-        # solved_exam_sets = ExamSet.objects.filter(
-        #     pk__in=self.object.examsetsubmission_set.values_list('exam_set', flat=True).distinct())
-        #
-        # question_sets = QuestionSet.objects.filter(examset__in=exam_sets).distinct()
-        # solved_question_sets = QuestionSet.objects.filter(examset__in=solved_exam_sets).distinct()
-        #
-        # total_question = Question.objects.filter(questionset__in=question_sets).distinct()
-        # solved_question = Question.objects.filter(questionset__in=solved_question_sets).distinct()
-        #
-        # context['tq_count'] = len(total_question)
-        # context['sq_count'] = len(solved_question)
-        # context['uq_count'] = context['tq_count'] - context['sq_count']
-        # context['total_question'] = total_question
-        # context['solved_question'] = solved_question
-
         status = self.request.GET.get('status', None)
-        # total_questions = Question.objects.filter(questionset__in=QuestionSet.objects.filter(is_active=True)).distinct()
-        # total_questions = ExamSet.question_sets.all().values_list('questions', flat=True)
         es = ExamSet.objects.all()
         qs = QuestionSet.objects.filter(examset__in=es).distinct()
         total_questions = Question.objects.filter(questionset__in=qs).distinct()

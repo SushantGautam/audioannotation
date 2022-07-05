@@ -40,6 +40,7 @@
                     {% for question_set in question_sets %}
                         <div class="accordion-item">
                             <h4 class="accordion-header" id="flush-headingOne">
+                                <!-- Add "completed" class to accordion-button below if all questions inside it have been submitted -->
                                 <button class="accordion-button collapsed question-set-name" type="button"
                                         data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
                                         aria-expanded="false" aria-controls="flush-collapseOne">
@@ -51,15 +52,24 @@
                                 <div class="accordion-body">
                                     {% for question in question_set.questions.all %}
                                         {% if audio_obj.question.id == question.id %}
-                                            <a href="javascript:void(0)" class="question-parent shadow-sm active">
-                                                <span class="question-num">{{ forloop.counter }}.</span>
-                                                <span class="question">{{ question.unique_code }}</span>
+                                            <a href="javascript:void(0)" class="question-parent shadow-sm active {% if workerSubmissionObj.status %} submitted {% endif %}">
+                                                <div>
+                                                    <span class="question-num">{{ forloop.counter }}.</span>
+                                                    <span class="question">{{ question.unique_code }}</span>
+                                                </div>
+
+                                                <i title="{% trans 'Already submitted' %}" class="fa-solid fa-circle-check"></i>
                                             </a>
                                         {% else %}
                                             <a class="question-parent shadow-sm"
                                                href="{% url 'worker:annotation_page' workertask_id=worker_task.id %}?question={{ question.id }}">
-                                                <span class="question-num">{{ forloop.counter }}.</span>
-                                                <span class="question">{{ question.unique_code }}</span>
+
+                                                <div>
+                                                    <span class="question-num">{{ forloop.counter }}.</span>
+                                                    <span class="question">{{ question.unique_code }}</span>
+                                                </div>
+
+                                                <i title="{% trans 'Already submitted' %}" class="fa-solid fa-circle-check"></i>
                                             </a>
                                         {% endif %}
                                     {% endfor %}
@@ -78,7 +88,7 @@
             <div class="region-section shadow-sm">
 
                 <div class="header-section">
-                    <h5 class="m-0">{{ audio_obj.question.question_title }} (<span id="region-count">01</span>)</h5>
+                    <h5 class="m-0">{{ audio_obj.question.unique_code }} (<span id="region-count">01</span>)</h5>
                     <button title="Sort regions" class="sort-button btn btn-sm btn-dark"><i
                             class="fa-solid fa-sort"></i></button>
                 </div>
@@ -102,7 +112,7 @@
                     <div class="flex-space">
                         <h5>{{ audio_obj.question.question_title }}
                             {% if workerSubmissionObj.status %}
-                                <span class="text-success"><i class="fa-solid fa-check-double"></i></span>
+                                <i title="{% trans 'Already submitted' %}" class="fa-solid fa-circle-check"></i>
                             {% endif %}
                         </h5>
                         <p style="text-align:right;">
