@@ -282,7 +282,7 @@ class SpeakerResultView(DetailView):
         for question in context['questions']:
             if question in solved_question:
                 question.solved = True
-                ss = SpeakerSubmission.objects.filter(speaker=self.object, question=question).first()
+                ss = SpeakerSubmission.objects.filter(speaker=self.object, question=question).last()
                 question.audio_url = ss.audio_file.url
                 question.audio_recorded_date = ss.created_at
                 question.audio_recording_size = round(
