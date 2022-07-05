@@ -213,11 +213,12 @@ class SpeakerListView(ListView):
         # ).exclude( pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct().count()
 
         context['on_recording'] = qs.filter(
-            pk__in=SpeakerSubmission.objects.all().values_list("speaker_id", flat=True).distinct()).exclude(
+            pk__in=SpeakerSubmission.objects.all().values_list("speaker_id", flat=True).distinct(),
+        ).exclude(
             pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True).distinct()).count()
 
         context['recording_completed'] = qs.filter(
-            pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct().count()
+            pk__in=ExamSetSubmission.objects.filter(status__in=['INS', 'STI', 'STF']).values_list("speaker_id", flat=True)).distinct().count()
         context['stt_submitted'] = qs.filter(
             pk__in=ExamSetSubmission.objects.exclude(status__in=['INS', 'STI', 'STF']).values_list("speaker_id",
                                                                                                    flat=True)).distinct().count()
