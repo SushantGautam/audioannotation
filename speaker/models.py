@@ -91,7 +91,8 @@ class Speaker(BaseUserModel):
         elif not self.user.is_active:
             return 'Inactive'
         else:
-            return 'xasxax'
+            # return 'Verified Without Submitting Request'
+            return "Waiting For Agreement"
 
 
 def audio_filename(instance, filename):
