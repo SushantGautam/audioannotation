@@ -57,10 +57,5 @@ def run_STTClova(exam_set_id):
             failed = True
         # sub.set_tts_status(4)  # STT Output Received & Processing
 
-        # if there are no saved annotations just set predicted annotations as annotations
-
-        # If all speaker submission successfully submitted, change status in exam status
-        if sub.pk == last.pk and not failed:
-            ess.set_tts_status('STC')  #
     return "TaskID:" + str('sID') + " is splitted by NAVER SPEECH API to " + \
            str(len('stt_predictions_annotations')) + " parts."

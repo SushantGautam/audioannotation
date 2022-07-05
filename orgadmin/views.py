@@ -704,6 +704,7 @@ class ExamSetGenerateStt(FormView):
     success_url = reverse_lazy('examset_submission_list')
 
     def post(self, request, *args, **kwargs):
+        ExamSetSubmission.objects.get(pk=int(kwargs.get('examsetsubmission_id'))).set_tts_status('STI')
         from speaker.tasks import run_STTClova
         run_STTClova.delay(exam_set_id=int(kwargs.get('examsetsubmission_id')))
         return redirect(self.success_url)

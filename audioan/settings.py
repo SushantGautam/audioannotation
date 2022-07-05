@@ -176,6 +176,8 @@ result_backend = 'django-db'
 accept_content = ['application/json']
 result_serializer = 'json'
 timezone = 'UTC'
+CELERY_ACKS_LATE = True
+# CELERY_TASK_REJECT_ON_WORKER_LOST = True
 
 # # Celery settings
 # CELERY_BROKER_URL = env('REDIS_URL')

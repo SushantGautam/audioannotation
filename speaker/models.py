@@ -177,6 +177,9 @@ class ExamSetSubmission(models.Model):
         self.status = status  # STT TaskCompleted | AnnotationSaved
         self.save()
 
+    def get_question_stt_progress(self):
+        return SpeakerSubmission.objects.filter(speaker=self.speaker, exam_set=self.exam_set, status="SC").count()
+
     # # when data is save run the celery task in background
     # def save(self, *args, **kwargs):
     #     super(ExamSetSubmission, self).save(*args, **kwargs)
