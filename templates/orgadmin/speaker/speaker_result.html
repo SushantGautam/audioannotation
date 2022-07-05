@@ -1,4 +1,5 @@
 {% extends "orgadmin/base.html" %}
+{% load static %}
 {% load i18n %}
 
 {% block styles %}
@@ -83,6 +84,26 @@
             cursor: pointer;
             font-weight: bold;
         }
+
+
+        .speaker_info_col{
+            border: 1px solid #6c7a86;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        .speaker .title {
+          /* display: flex; */
+          background-color: rgba(188,188,188,0.2);
+          justify-content: center;
+          align-items: center;
+          font-weight: 600;
+         /* width: 20%; */
+      }
+
+         .dt_right_btn{
+            float: right;
+        }
     </style>
 {% endblock %}
 
@@ -125,8 +146,45 @@
     </section>
 
     <main class="users-list">
+
+         <section class="speaker_info">
+             <div class="speaker row speaker_info_table_row ">
+             <div class="col-md-6 d-flex speaker_info_col">
+                <div class="title col-4 speaker_info_table_th">{% trans 'Speaker ID' %}</div>
+                <div class="value col-8 speaker_info_table_td text-center"> {{ object.user.email }}</div>
+             </div>
+             <div class="col-md-6 d-flex speaker_info_col">
+                <div class="title col-4 speaker_info_table_th">{% trans 'Full Name' %}</div>
+                <div class="value col-8 speaker_info_table_td text-center">{{ object.user.get_full_name }}</div>
+             </div>
+
+          </div>
+           <div class="speaker row speaker_info_table_row ">
+             <div class="col-md-6 d-flex speaker_info_col">
+                <div class="title col-4 speaker_info_table_th">{% trans 'Level' %}</div>
+                <div class="value col-8 speaker_info_table_td text-center"> {{ object.get_level_display }}</div>
+             </div>
+             <div class="col-md-6 d-flex speaker_info_col">
+                <div class="title col-4 speaker_info_table_th">{% trans 'Native Language' %}</div>
+                <div class="value col-8 speaker_info_table_td text-center">{{ object.get_language_display }} </div>
+             </div>
+
+          </div>
+           <div class="speaker row speaker_info_table_row">
+{#             <div class="col-md-6 d-inline-flex speaker_info_col">#}
+{#                <div class="title col-4 speaker_info_table_th">Exam Title</div>#}
+{#                <div class="value col-8 speaker_info_table_td text-right text-center"> What is Your Name?</div>#}
+{#             </div>#}
+             <div class="col-md-6 d-inline-flex speaker_info_col">
+                <div class="title col-4 speaker_info_table_th">{% trans 'Status' %}</div>
+                <div class="value col-8 speaker_info_table_td text-right text-center">{{ object.speaker_status }} </div>
+             </div>
+
+          </div>
+         </section>
+
         <section class="table-section">
-            <table class="table py-3 text-center" cellspacing="0" id="">
+            <table class="table py-3 text-center speaker_result" cellspacing="0" id="speaker_result">
 
                 <thead class="">
                 <tr class="">
@@ -150,7 +208,7 @@
                    <td> {% if question.solved %}{{ question.audio_recording_size }} MB {% else %}-{% endif %}</td>
                    <td>
                      {% if question.solved %}
-                     <audio controls>
+                     <audio controls class="audio_file" id="audio_{{ question.id }}">
                         <source src="{{ question.audio_url }}" type="audio/mpeg">
                       </audio>
                        {% else %}
@@ -160,71 +218,6 @@
                    </td>
                    </tr>
                 {% endfor %}
-
-
-
-
-
-
-                {% comment %}
-                {% for speaker in object_list %}
-                    <tr>
-                        <td> {{ forloop.counter }}</td>
-                        <td>
-                            <a href="{{ speaker.get_absolute_url }}">
-                                {{ speaker.user.email }}
-                            </a>
-                        </td>
-                        <td> {{ speaker.user.get_full_name }}</td>
-                        <td> {{ speaker.organization_code }}</td>
-                        <td> {{ speaker.get_nationality_display }}</td>
-                        <td> {{ speaker.get_level_display }}</td>
-                        <td>
-                            <span class="active-status">
-{#                                {{ speaker.user.is_active|yesno:'Active, Inactive' }}#}
-                              {{ speaker.speaker_status }}
-                            </span>
-                        </td>
-                        <td>
-                            <span class="verification-status d-flex gap-2">
-{#                             {% if speaker.is_verified %}#}
-{#                                    {% trans 'Verified' %}#}
-                              {% if speaker.get_verification_status == "Pending" %}
-                                    {% trans 'Not Submitted yet' %}
-
-                                {% elif speaker.speaker_status == "Profile Submitted" %}
-                                    <form name="verify-form" action="{% url 'speaker_verify' user_id=speaker.id %}"
-                                          method="post">
-                                        {% csrf_token %}
-                                        <input type="hidden" value="1" name="is_approved">
-                                        <button class="btn btn-dark btn-sm verify-btn">{% trans 'Verify' %}</button>
-                                    </form>
-                                    <form name="verify-form" action="{% url 'speaker_verify' user_id=speaker.id %}"
-                                          method="post">
-                                        {% csrf_token %}
-                                        <input type="hidden" value="0" name="is_approved">
-                                        <button class="btn btn-dark btn-sm verify-btn">{% trans 'Reject' %}</button>
-                                    </form>
-
-                              {% elif speaker.speaker_status == 'Waiting For Agreement' %}
-
-                              {% elif speaker.speaker_status == 'Recording Completed' %}
-                                 <button class="btn btn-sm btn-primary">{% trans 'Send To STT' %}</button>
-                                <button class="btn btn-sm btn-secondary">{% trans 'Result' %}</button>
-                              {% elif speaker.speaker_status == 'Recording' %}
-                                  {% trans 'Result' %}
-                                {% elif speaker.speaker_status == 'Finished' %}
-                            <button class="btn btn-sm btn-secondary">{% trans 'Result' %}</button>
-                                {% else %}
-
-
-                                {% endif %}
-                            </span>
-                        </td>
-
-                    </tr>
-                {% endfor %}
-                {% endcomment %}
                 </tbody>
 
             </table>
@@ -235,53 +228,88 @@
 {% endblock %}
 
 {% block scripts %}
-    <script>
-      {% comment %}
+  <script src="{% static 'js/jszip/jszip.min.js' %}"></script>
+  <script src="{% static 'js/jszip/utils.js' %}"></script>
+  <script src="{% static 'js/jszip/saveas.js' %}"></script>
 
-        $('.table').DataTable();
+  <script>
+    {% comment %}
+  function download_audios() {
+    var urls = [];
+     $('.audio_file').each(function (){
+          urls.push($(this).find('source').attr('src'))
+        })
+        console.log('urls', urls)
+    var zip = new JSZip();
+    var count = 0;
+    var count2 = 0;
+    var zipFilename = "speaker_recordings.zip";
+    var nameFromURL = [];
 
-        $('form[name=verify-form]').on('submit', function (e) {
-            e.preventDefault();
-            var $form = $(this);
-            $.ajax({
-                type: $(this).attr('method'),
-                url: $(this).attr('action'),
-                data: $(this).serialize(),
-                success: function (response) {
-                    $form.closest('tr').find('.verification-status').text("{% trans 'Verified' %}");
-                    $form.remove();
-                }
-            });
+    var the_arr = "";
+    for (var i = 0; i< urls.length; i++){
+        the_arr = urls[i].split('/');
+        nameFromURL[i] = the_arr.pop();
+
+    }
+
+    urls.forEach(function(url){
+        var filename = nameFromURL[count2];
+        count2++;
+        // loading a file and add it in a zip file
+        JSZipUtils.getBinaryContent(url, function (err, data) {
+            if(err) {
+                throw err; // or handle the error
+            }
+            zip.file(filename, data, {binary:true});
+            count++;
+            if (count === urls.length) {
+                zip.generateAsync({type:'blob'}).then(function(content) {
+                    saveAs(content, zipFilename);
+                });
+            }
+        });
+    });
+}
+{% endcomment %}
+
+
+  </script>
+
+      <script>
+
+
+         $('.speaker_result').DataTable()
+         {% comment %}
+        $('.speaker_result').DataTable({
+          dom: 'lfBtp',
+          responsive: true,
+          buttons: [
+
+            {
+                text: "{% trans 'Download All' %}",
+                action: download_audios,
+                className: " btn-primary active btn btn-sm download_btn dt_right_btn",
+            },
+
+        ],
+
+         initComplete: function() {
+           $('.dataTables_filter').addClass('dt_right_btn');
+           $('.dt_right_btn').closest('div').removeClass('btn-group');
+           $('.dt_right_btn').closest('div').addClass('btn-bs-group');
+           $('.dt_right_btn').css('margin-right', '10px');
+         //  $('.dataTables_length').addClass('dt_right_btn');
+         },
+          stateSave: false,
+          processing: true,
+
         });
 
-        $('form[name=block-form]').on('submit', function (e) {
-            e.preventDefault();
-            var $form = $(this);
-            $.ajax({
-                type: $(this).attr('method'),
-                url: $(this).attr('action'),
-                data: $(this).serialize(),
-                success: function (response) {
-                    $form.closest('tr').find('.active-status').text("{% trans 'Inactive' %}");
-                    $form.find('button').text('{% trans 'Unblock' %}')
-                }
-            });
-        });
 
-        $('form[name=unblock-form]').on('submit', function (e) {
-            e.preventDefault();
-            var $form = $(this);
-            $.ajax({
-                type: $(this).attr('method'),
-                url: $(this).attr('action'),
-                data: $(this).serialize(),
-                success: function (response) {
-                    $form.closest('tr').find('.active-status').text("{% trans 'Active' %}");
-                    $form.find('button').text('{% trans 'Block' %}')
-                }
-            });
-        });
+{% endcomment %}
 
-        {% endcomment %}
+
+
     </script>
 {% endblock scripts %}

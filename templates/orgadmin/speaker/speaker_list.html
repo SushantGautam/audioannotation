@@ -92,6 +92,9 @@
             cursor: pointer;
             font-weight: bold;
         }
+         .dt_right_btn{
+            float: right;
+        }
     </style>
 {% endblock %}
 
@@ -128,8 +131,8 @@
                 </div>
             </a>
 
-            <a href="{% url 'speaker_list' %}?status=verified">
-                <div class="user-card {% if request.GET.status == 'verified' %}active{% endif %}">
+            <a href="{% url 'speaker_list' %}?status=recording">
+                <div class="user-card {% if request.GET.status == 'recording' %}active{% endif %}">
                     <div class="right-side">
                         <div>
                             <i class="fa-solid fa-microphone-lines"></i>
@@ -144,8 +147,8 @@
                 </div>
             </a>
 
-            <a href="{% url 'speaker_list' %}?status=rejected">
-                <div class="user-card {% if request.GET.status == 'rejected' %}active{% endif %}">
+            <a href="{% url 'speaker_list' %}?status=completed">
+                <div class="user-card {% if request.GET.status == 'completed' %}active{% endif %}">
                     <div class="right-side">
                         <div>
                             <i class="fa-solid fa-clipboard-check"></i>
@@ -160,8 +163,8 @@
                 </div>
             </a>
 
-            <a href="{% url 'speaker_list' %}?status=inactive">
-                <div class="user-card {% if request.GET.status == 'inactive' %}active{% endif %}">
+            <a href="{% url 'speaker_list' %}?status=stt_submitted">
+                <div class="user-card {% if request.GET.status == 'stt_submitted' %}active{% endif %}">
                     <div class="right-side">
                         <div>
                             <i class="fa-solid fa-database"></i>
@@ -184,6 +187,9 @@
 
                 <thead class="">
                 <tr class="">
+{#                   <th>#}
+{#                        <input type="checkbox" class="CheckAll">#}
+{#                    </th>#}
                     <th>{% trans "S. No." %}</th>
 {#                    <th>{% trans "Username" %}</th>#}
                     <th>{% trans "Speaker ID" %}</th>
@@ -204,6 +210,7 @@
                 <tbody>
                 {% for speaker in object_list %}
                     <tr>
+{#                       <td><input type="checkbox" class="questionCheckbox" value="{{ speaker.id }}">#}
                         <td> {{ forloop.counter }}</td>
                         <td>
                             <a href="{{ speaker.get_absolute_url }}">
@@ -293,7 +300,67 @@
 
 {% block scripts %}
     <script>
-        $('.table').DataTable();
+    $('.table').DataTable()
+    {% comment %}
+        $('.table').DataTable({
+            dom: 'lfBtp',
+            buttons: [
+                {
+                    text: "{% trans 'Verify' %}",
+                    className: "dt_right_btn btn-sm disabled btn-success",
+                },
+            ],
+
+            initComplete: function() {
+                 $('.dataTables_filter').addClass('dt_right_btn');
+                 $('.dt-buttons button').addClass('btn-gray text-white');
+                 $('.dt-buttons').removeClass('btn-group');
+                 $('.dt_right_btn').css('margin-left', '10px');
+                 $('.dataTables_paginate').addClass('my-4');
+                 $(".CheckAll").closest("th").removeClass("sorting_asc");
+            },
+            stateSave: false,
+            responsive: true,
+            processing: true,
+
+        });
+
+
+
+
+    $('.CheckAll').on('click', function () {
+        $('.table input:checkbox').not(this).prop('checked', this.checked);
+        checkboxChangeEvent()
+    });
+    $('#questionset_list_table').on('click', '.questionCheckbox', function () {
+          if ($('.questionCheckbox').length === $('.questionCheckbox:checked').length) {
+              $('.CheckAll').prop('checked', 'checked');
+          } else {
+              $('.CheckAll').prop('checked', false);
+          }
+          checkboxChangeEvent()
+      });
+
+    function checkboxChangeEvent() {
+      console.log("ALL SELECTEDS")
+        let checkBoxlength = $('#questionset_list_table input[type="checkbox"]:checked').not('.CheckAll').length
+        if (checkBoxlength > 0) {
+            $('.checkboxCheckedLength').text(checkBoxlength + ' of ' + $('.questionCheckbox').length + ' selected')
+            $('.deleteCheckedQuestions').removeAttr('disabled')
+        } else {
+            $('.checkboxCheckedLength').text('')
+            $('.deleteCheckedQuestions').prop('disabled', 'disabled')
+        }
+    }
+
+
+
+{% endcomment %}
+
+
+
+
+
 
         $('form[name=verify-form]').on('submit', function (e) {
             e.preventDefault();

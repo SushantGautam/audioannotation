@@ -27,6 +27,8 @@
                         <input type="hidden" value="0" name="is_approved">
                         <button class="btn btn-dark btn-sm verify-btn">{% trans 'Reject' %}</button>
                     </form>
+                   {% elif speaker.get_verification_status == "Rejected" %}
+                  {% trans 'Rejected' %}
                 {% else %}
                     {{ speaker.get_verification_status }}
                 {% endif %}

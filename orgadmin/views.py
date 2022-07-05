@@ -163,13 +163,36 @@ class SpeakerListView(ListView):
         if query_param and query_param.lower() == 'pending':
             listOfIds = [x.id for x in qs if x.get_verification_status().lower() == query_param]
             qs = qs.filter(pk__in=listOfIds)
-        elif query_param and query_param.lower() == 'verified':
-            qs = qs.filter(is_verified=True)
-        elif query_param and query_param.lower() == 'rejected':
-            listOfIds = [x.id for x in qs if x.get_verification_status().lower() == query_param]
-            qs = qs.filter(pk__in=listOfIds)
-        elif query_param and query_param.lower() == 'inactive':
-            qs = qs.filter(user__is_active=False)
+
+        elif query_param and query_param.lower() == 'recording':
+            # qs = qs.exclude(
+            #     pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct()
+            qs = qs.filter(
+                pk__in=SpeakerSubmission.objects.all().values_list("speaker_id", flat=True).distinct()).exclude(
+                pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True).distinct())
+
+        elif query_param and query_param.lower() == 'completed':
+            # qs = qs.filter(pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct()
+            qs = qs.filter(
+                pk__in=ExamSetSubmission.objects.filter(status__in=['INS', 'STI', 'STF']).values_list("speaker_id",
+                                                                                                      flat=True)).distinct()
+
+
+        elif query_param and query_param.lower() == 'stt_submitted':
+            qs = qs.filter(
+                pk__in=ExamSetSubmission.objects.exclude(status__in=['INS', 'STI', 'STF']).values_list("speaker_id",
+                                                                                                       flat=True)).distinct()
+
+        # elif query_param and query_param.lower() == 'verified':
+        #     qs = qs.filter(is_verified=True)
+
+        # elif query_param and query_param.lower() == 'rejected':
+        #     listOfIds = [x.id for x in qs if x.get_verification_status().lower() == query_param]
+        #     qs = qs.filter(pk__in=listOfIds)
+
+        # elif query_param and query_param.lower() == 'inactive':
+        #     qs = qs.filter(user__is_active=False)
+
         return qs
 
     def get_context_data(self, *args, **kwargs):
@@ -182,10 +205,20 @@ class SpeakerListView(ListView):
         listOfIds = [x.id for x in qs if x.get_verification_status().lower() == 'rejected']
         context['rejected'] = qs.filter(pk__in=listOfIds).count()
         context['inactive'] = qs.filter(user__is_active=False).count()
-        context['on_recording'] = qs.exclude(
-            pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct().count()
+
+        # context['on_recording'] = qs.exclude(
+        #     pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct().count()
+
+        # context['on_recording'] = SpeakerSubmission.objects.all().values_list("speaker_id", flat=True).distinct(
+        # ).exclude( pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct().count()
+
+        context['on_recording'] = qs.filter(
+            pk__in=SpeakerSubmission.objects.all().values_list("speaker_id", flat=True).distinct(),
+        ).exclude(
+            pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True).distinct()).count()
+
         context['recording_completed'] = qs.filter(
-            pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True)).distinct().count()
+            pk__in=ExamSetSubmission.objects.filter(status__in=['INS', 'STI', 'STF']).values_list("speaker_id", flat=True)).distinct().count()
         context['stt_submitted'] = qs.filter(
             pk__in=ExamSetSubmission.objects.exclude(status__in=['INS', 'STI', 'STF']).values_list("speaker_id",
                                                                                                    flat=True)).distinct().count()
@@ -227,7 +260,11 @@ class SpeakerResultView(DetailView):
         # context['solved_question'] = solved_question
 
         status = self.request.GET.get('status', None)
-        total_questions = Question.objects.filter(questionset__in=QuestionSet.objects.filter(is_active=True)).distinct()
+        # total_questions = Question.objects.filter(questionset__in=QuestionSet.objects.filter(is_active=True)).distinct()
+        # total_questions = ExamSet.question_sets.all().values_list('questions', flat=True)
+        es = ExamSet.objects.all()
+        qs = QuestionSet.objects.filter(examset__in=es).distinct()
+        total_questions = Question.objects.filter(questionset__in=qs).distinct()
         solved_question_ids = self.object.speakersubmission_set.values_list('question', flat=True).distinct()
         solved_question = Question.objects.filter(pk__in=solved_question_ids).distinct()
         unsolved_question = total_questions.exclude(pk__in=solved_question).distinct()
@@ -245,20 +282,11 @@ class SpeakerResultView(DetailView):
         for question in context['questions']:
             if question in solved_question:
                 question.solved = True
-                ss = SpeakerSubmission.objects.filter(speaker=self.object, question=question).first()
-
-                # question.audio_url = '/media/' + question.speakersubmission_set.values_list('audio_file', flat=True).first()
+                ss = SpeakerSubmission.objects.filter(speaker=self.object, question=question).last()
                 question.audio_url = ss.audio_file.url
-                # question.audio_recorded_date = question.speakersubmission_set.first().created_at
                 question.audio_recorded_date = ss.created_at
-                # question.audio_recording_size = round(os.path.getsize(os.path.join(settings.MEDIA_ROOT, question.speakersubmission_set.values_list('audio_file', flat=True).first())) / (1024 * 1024),2)
                 question.audio_recording_size = round(
                     os.path.getsize(os.path.join(settings.MEDIA_ROOT, str(ss.audio_file))) / (1024 * 1024), 2)
-
-                # print('url', ss.audio_file.url)
-                # print('audio_recorded_date', ss.created_at)
-                # print('audio_recording_size', round(os.path.getsize(os.path.join(settings.MEDIA_ROOT,ss.audio_file )),2))
-
         return context
 
 
