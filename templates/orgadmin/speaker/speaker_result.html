@@ -1,4 +1,5 @@
 {% extends "orgadmin/base.html" %}
+{% load static %}
 {% load i18n %}
 
 {% block styles %}
@@ -99,6 +100,10 @@
           font-weight: 600;
          /* width: 20%; */
       }
+
+         .dt_right_btn{
+            float: right;
+        }
     </style>
 {% endblock %}
 
@@ -203,7 +208,7 @@
                    <td> {% if question.solved %}{{ question.audio_recording_size }} MB {% else %}-{% endif %}</td>
                    <td>
                      {% if question.solved %}
-                     <audio controls>
+                     <audio controls class="audio_file" id="audio_{{ question.id }}">
                         <source src="{{ question.audio_url }}" type="audio/mpeg">
                       </audio>
                        {% else %}
@@ -223,53 +228,88 @@
 {% endblock %}
 
 {% block scripts %}
-    <script>
+  <script src="{% static 'js/jszip/jszip.min.js' %}"></script>
+  <script src="{% static 'js/jszip/utils.js' %}"></script>
+  <script src="{% static 'js/jszip/saveas.js' %}"></script>
+
+  <script>
+    {% comment %}
+  function download_audios() {
+    var urls = [];
+     $('.audio_file').each(function (){
+          urls.push($(this).find('source').attr('src'))
+        })
+        console.log('urls', urls)
+    var zip = new JSZip();
+    var count = 0;
+    var count2 = 0;
+    var zipFilename = "speaker_recordings.zip";
+    var nameFromURL = [];
+
+    var the_arr = "";
+    for (var i = 0; i< urls.length; i++){
+        the_arr = urls[i].split('/');
+        nameFromURL[i] = the_arr.pop();
+
+    }
+
+    urls.forEach(function(url){
+        var filename = nameFromURL[count2];
+        count2++;
+        // loading a file and add it in a zip file
+        JSZipUtils.getBinaryContent(url, function (err, data) {
+            if(err) {
+                throw err; // or handle the error
+            }
+            zip.file(filename, data, {binary:true});
+            count++;
+            if (count === urls.length) {
+                zip.generateAsync({type:'blob'}).then(function(content) {
+                    saveAs(content, zipFilename);
+                });
+            }
+        });
+    });
+}
+{% endcomment %}
 
 
-        $('.speaker_result').DataTable();
+  </script>
+
+      <script>
+
+
+         $('.speaker_result').DataTable()
          {% comment %}
-        $('form[name=verify-form]').on('submit', function (e) {
-            e.preventDefault();
-            var $form = $(this);
-            $.ajax({
-                type: $(this).attr('method'),
-                url: $(this).attr('action'),
-                data: $(this).serialize(),
-                success: function (response) {
-                    $form.closest('tr').find('.verification-status').text("{% trans 'Verified' %}");
-                    $form.remove();
-                }
-            });
+        $('.speaker_result').DataTable({
+          dom: 'lfBtp',
+          responsive: true,
+          buttons: [
+
+            {
+                text: "{% trans 'Download All' %}",
+                action: download_audios,
+                className: " btn-primary active btn btn-sm download_btn dt_right_btn",
+            },
+
+        ],
+
+         initComplete: function() {
+           $('.dataTables_filter').addClass('dt_right_btn');
+           $('.dt_right_btn').closest('div').removeClass('btn-group');
+           $('.dt_right_btn').closest('div').addClass('btn-bs-group');
+           $('.dt_right_btn').css('margin-right', '10px');
+         //  $('.dataTables_length').addClass('dt_right_btn');
+         },
+          stateSave: false,
+          processing: true,
+
         });
 
-        $('form[name=block-form]').on('submit', function (e) {
-            e.preventDefault();
-            var $form = $(this);
-            $.ajax({
-                type: $(this).attr('method'),
-                url: $(this).attr('action'),
-                data: $(this).serialize(),
-                success: function (response) {
-                    $form.closest('tr').find('.active-status').text("{% trans 'Inactive' %}");
-                    $form.find('button').text('{% trans 'Unblock' %}')
-                }
-            });
-        });
 
-        $('form[name=unblock-form]').on('submit', function (e) {
-            e.preventDefault();
-            var $form = $(this);
-            $.ajax({
-                type: $(this).attr('method'),
-                url: $(this).attr('action'),
-                data: $(this).serialize(),
-                success: function (response) {
-                    $form.closest('tr').find('.active-status').text("{% trans 'Active' %}");
-                    $form.find('button').text('{% trans 'Block' %}')
-                }
-            });
-        });
+{% endcomment %}
 
-        {% endcomment %}
+
+
     </script>
 {% endblock scripts %}
