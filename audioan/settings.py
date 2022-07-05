@@ -171,13 +171,13 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 
 # Celery settings
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
 result_backend = 'django-db'
 accept_content = ['application/json']
 result_serializer = 'json'
 timezone = 'UTC'
 CELERY_ACKS_LATE = True
-# CELERY_TASK_REJECT_ON_WORKER_LOST = True
+CELERY_ACKS_ON_FAILURE_OR_TIMEOUT = False
 
 # # Celery settings
 # CELERY_BROKER_URL = env('REDIS_URL')
