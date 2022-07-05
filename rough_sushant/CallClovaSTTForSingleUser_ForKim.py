@@ -78,8 +78,18 @@ ss = SpeakerSubmission.objects.filter(speaker__user__email__in=["ajordan@sa.nsda
                                                                             'Reading Paragraph'])
 
 print(ss)
+ss_list = ss.values_list('pk', 'question', 'speaker')
+dict_ss = {}
+for ss_item in ss_list:
+    if str(ss_item[1]) + str(ss_item[2]) not in dict_ss:
+        dict_ss[str(ss_item[1]) + str(ss_item[2])] = ss_item[0]
+    else:
+        if dict_ss[str(ss_item[1]) + str(ss_item[2])] < ss_item[0]:  # if the one on list is lesser than we have
+            dict_ss[str(ss_item[1]) + str(ss_item[2])] = ss_item[0]
+ss = ss.filter(pk__in=dict_ss.values())
+# end filter latest value of subcategory_code__name for each user
 
-for idx, obj in enumerate(list(ss)[::-1]):
+for idx, obj in enumerate(list(ss)):
     filex = obj.audio_file.path
     print("Processing.. ", idx)
     # if file is a .txt file
