@@ -2,7 +2,7 @@ import json
 
 from celery import shared_task
 
-from speaker.clovastt import ClovaSpeechClient
+from rough_sushant.clovaStt import ClovaSpeechClient
 from speaker.models import ExamSetSubmission, SpeakerSubmission
 
 
