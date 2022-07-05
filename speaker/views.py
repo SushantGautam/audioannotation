@@ -229,7 +229,8 @@ class ExamPopupView(FormView):
         return context
 
     def get_form(self, form_class=None):
-        if 'id' in self.request.POST:
+        if SpeakerSubmission.objects.filter(speaker_id=self.request.user.speaker.id,
+                                            question_id=self.request.POST.get('question')).exists():
             form_class = self.form_class(self.request.POST, self.request.FILES,
                                          instance=SpeakerSubmission.objects.get(pk=self.request.POST.get('id')))
         else:

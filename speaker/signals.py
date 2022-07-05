@@ -15,6 +15,8 @@ def checkIfExamSetComplete(speaker, exam_set):
 def examSetSubmissionCreate(sender, instance, created, **kwargs):
     # when worker task is created, change the related examsetsubmission's status to next.
     if created and checkIfExamSetComplete(instance.speaker, instance.exam_set):
+        if ExamSetSubmission.objects.filter(speaker=instance.speaker, exam_set=instance.exam_set).exists():
+            return
         ExamSetSubmission.objects.create(
             speaker=instance.speaker,
             exam_set=instance.exam_set
