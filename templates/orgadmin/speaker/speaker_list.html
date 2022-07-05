@@ -99,6 +99,14 @@
 {% endblock %}
 
 {% block content %}
+    {% for message in messages %}
+      {% if 'success' in message.tags %}
+      <p class="alert alert-success" role="alert"><span style="font-weight:bold">{{ message }}</span></p>
+      {% else %}
+      <p class="alert alert-warning" role="alert"><span style="font-weight:bold">{{ message }}</span></p>
+      {% endif %}
+    {% endfor %}
+
 
     <section>
         <h2 class="my-3 title">{% trans 'Speaker List' %}</h2>
@@ -187,9 +195,9 @@
 
                 <thead class="">
                 <tr class="">
-{#                   <th>#}
-{#                        <input type="checkbox" class="CheckAll">#}
-{#                    </th>#}
+                   <th>
+                        <input type="checkbox" class="CheckAll">
+                    </th>
                     <th>{% trans "S. No." %}</th>
 {#                    <th>{% trans "Username" %}</th>#}
                     <th>{% trans "Speaker ID" %}</th>
@@ -210,7 +218,7 @@
                 <tbody>
                 {% for speaker in object_list %}
                     <tr>
-{#                       <td><input type="checkbox" class="questionCheckbox" value="{{ speaker.id }}">#}
+                       <td><input type="checkbox" class="speakerCheckbox" value="{{ speaker.id }}">
                         <td> {{ forloop.counter }}</td>
                         <td>
                             <a href="{{ speaker.get_absolute_url }}">
@@ -292,6 +300,8 @@
                 </tbody>
 
             </table>
+                    <span class="checkboxCheckedLength"></span>
+
         </section>
 
     </main>
@@ -299,15 +309,62 @@
 {% endblock %}
 
 {% block scripts %}
+
+  <script>
+  //close alert after 3 seconds
+  window.setTimeout(function() {
+    $(".alert").fadeTo(500, 0).slideUp(500, function(){
+      $(this).remove();
+    });
+  }, 3000);
+</script>
+
+
+
+
     <script>
-    $('.table').DataTable()
-    {% comment %}
+
+
+
+function verify_multi(){
+   console.log("Clicked")
+    if( !confirm("{% trans 'Are you sure you want to verify selected Speakers?' %}") ){
+        return false;
+      }
+
+   let seleced_speakers = []
+   $.each($('.table input[type="checkbox"]:checked').not('.CheckAll'), function (index) {
+     seleced_speakers.push($(this).val())
+   });
+  console.log('seleced_speakers', seleced_speakers)
+   // return false
+   $.ajax({
+     type: "POST",
+     url: "{% url 'verify_multiple_speakers' %}",
+     data: {
+       'csrfmiddlewaretoken': '{{ csrf_token }}',
+       'speakers_ids': seleced_speakers,
+     },
+     success: function (data) {
+       location.reload();
+     },
+
+   });
+ }
+
+
+
+
+
+
         $('.table').DataTable({
             dom: 'lfBtp',
             buttons: [
                 {
                     text: "{% trans 'Verify' %}",
-                    className: "dt_right_btn btn-sm disabled btn-success",
+                    action: verify_multi,
+                    className: "dt_right_btn btn-sm  btn-success verify-all-btn",
+
                 },
             ],
 
@@ -318,6 +375,7 @@
                  $('.dt_right_btn').css('margin-left', '10px');
                  $('.dataTables_paginate').addClass('my-4');
                  $(".CheckAll").closest("th").removeClass("sorting_asc");
+                 $('.verify-all-btn').prop('disabled', 'disabled')
             },
             stateSave: false,
             responsive: true,
@@ -326,14 +384,14 @@
         });
 
 
+  $(document).ready(function(){
 
-
-    $('.CheckAll').on('click', function () {
+     $('.CheckAll').on('click', function () {
         $('.table input:checkbox').not(this).prop('checked', this.checked);
         checkboxChangeEvent()
     });
-    $('#questionset_list_table').on('click', '.questionCheckbox', function () {
-          if ($('.questionCheckbox').length === $('.questionCheckbox:checked').length) {
+    $('.table').on('click', '.speakerCheckbox', function () {
+          if ($('.speakerCheckbox').length === $('.speakerCheckbox:checked').length) {
               $('.CheckAll').prop('checked', 'checked');
           } else {
               $('.CheckAll').prop('checked', false);
@@ -343,19 +401,24 @@
 
     function checkboxChangeEvent() {
       console.log("ALL SELECTEDS")
-        let checkBoxlength = $('#questionset_list_table input[type="checkbox"]:checked').not('.CheckAll').length
+        let checkBoxlength = $('.table input[type="checkbox"]:checked').not('.CheckAll').length
         if (checkBoxlength > 0) {
-            $('.checkboxCheckedLength').text(checkBoxlength + ' of ' + $('.questionCheckbox').length + ' selected')
-            $('.deleteCheckedQuestions').removeAttr('disabled')
+            $('.checkboxCheckedLength').text(checkBoxlength + ' of ' + $('.speakerCheckbox').length + ' selected')
+            $('.verify-all-btn').removeAttr('disabled')
         } else {
             $('.checkboxCheckedLength').text('')
-            $('.deleteCheckedQuestions').prop('disabled', 'disabled')
+            $('.verify-all-btn').prop('disabled', 'disabled')
         }
     }
 
 
+  })
 
-{% endcomment %}
+
+
+
+
+
 
 
 

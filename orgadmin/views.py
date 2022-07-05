@@ -12,7 +12,7 @@ from django.views import View
 from django.views.generic import TemplateView, ListView, FormView, CreateView, DetailView, UpdateView, DeleteView
 
 from orgadmin.forms import ContractForm, UserRegistrationForm
-from orgadmin.models import User, ContractSign, Contract, Organization
+from orgadmin.models import User, ContractSign, Contract, Organization, VerificationRequest
 from professor.forms import QuestionForm, QuestionSetForm
 from professor.models import SubCategory, Category, Question, QuestionSet, Professor, ExamSet
 from speaker.models import Speaker, ExamSetSubmission, SpeakerSubmission
@@ -218,7 +218,8 @@ class SpeakerListView(ListView):
             pk__in=ExamSetSubmission.objects.all().values_list("speaker_id", flat=True).distinct()).count()
 
         context['recording_completed'] = qs.filter(
-            pk__in=ExamSetSubmission.objects.filter(status__in=['INS', 'STI', 'STF']).values_list("speaker_id", flat=True)).distinct().count()
+            pk__in=ExamSetSubmission.objects.filter(status__in=['INS', 'STI', 'STF']).values_list("speaker_id",
+                                                                                                  flat=True)).distinct().count()
         context['stt_submitted'] = qs.filter(
             pk__in=ExamSetSubmission.objects.exclude(status__in=['INS', 'STI', 'STF']).values_list("speaker_id",
                                                                                                    flat=True)).distinct().count()
@@ -288,6 +289,29 @@ class SpeakerResultView(DetailView):
                 question.audio_recording_size = round(
                     os.path.getsize(os.path.join(settings.MEDIA_ROOT, str(ss.audio_file))) / (1024 * 1024), 2)
         return context
+
+
+def verify_multiple_speakers(request):
+    if request.POST and request.is_ajax():
+        speakers_ids = request.POST.getlist('speakers_ids[]')
+        for ids in speakers_ids:
+            verification = VerificationRequest.objects.filter(user__speaker__id=ids).distinct()
+            if verification.exists():
+                verification = verification.last()
+                if verification.approved is None or verification.approved == False:
+                    try:
+                        verification.approved = True
+                        verification.approved_at = datetime.now()
+                        verification.save()
+                        messages.success(request, "Selected Speakers are now Verified")
+                    except:
+                        messages.error(request,
+                                       "Cannot Verify Speakers")
+            else:
+                print('No VerificationRequest Found')
+                messages.error(request,
+                               "No VerificationRequest Found")
+        return redirect('speaker_list')
 
 
 class SpeakerVerification(FormView):

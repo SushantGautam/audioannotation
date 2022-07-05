@@ -28,6 +28,7 @@ urlpatterns += [
     path('records/contracts/', views.SpeakerContractSignList.as_view(), name='speaker_contract'),
     path('records/contracts/<int:contract_id>/verify/', views.SpeakerContractSignVerify.as_view(),
          name='speaker_contract_verify'),
+    path('records/speakers/verify-multiple-speakers/', views.verify_multiple_speakers, name='verify_multiple_speakers')
 ]
 
 # Worker page URLS
