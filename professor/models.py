@@ -136,3 +136,8 @@ class ExamSet(models.Model):
 
     def get_submit_status(self, speaker_id):
         return self.examsetsubmission_set.filter(speaker_id=speaker_id).exists()
+
+    def get_stt_status(self, speaker_id):
+        if self.examsetsubmission_set.filter(speaker_id=speaker_id).exists():
+            return self.examsetsubmission_set.get(speaker_id=speaker_id).status
+        return None

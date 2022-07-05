@@ -174,6 +174,8 @@ class ExamSetList(ListView):
         for q in qs:
             q.exam_status = q.get_exam_status(self.request.user.speaker)
             q.submit_status = q.get_submit_status(self.request.user.speaker)
+            q.stt_status = q.get_stt_status(self.request.user.speaker)
+            q.can_enter = True if q.stt_status in ['INS', 'STF'] else False
         return qs
 
 
