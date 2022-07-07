@@ -33,29 +33,56 @@ class QuestionSerializer(ModelSerializer):
                             "evaluation_purpose"]
 
 
-users = ["ajordan@sa.nsdai.org", "alicegold@sa.nsdai.org", "alinakan@sa.nsdai.org",
-         "Amal.Kabbous@ruhr-uni-bochum.de", "chenyin@sa.nsdai.org", "christinapark@sa.nsdai.org",
-         "crz970826@gmail.com", "ekaterinabaiun@sa.nsdai.org", "ger_bochum_01@sa.nsdai.org",
-         "ger_bochum_06@sa.nsdai.org", "ger_bochum_07@sa.nsdai.org", "ger_bochum_11@sa.nsdai.org",
-         "ger_bochum_16@sa.nsdai.org", "ger_bochum_18@sa.nsdai.org", "ger_bochum_26@sa.nsdai.org",
-         "ger_bochum_31@sa.nsdai.org", "ger_bochum_32@sa.nsdai.org", "ger_bochum_33@sa.nsdai.org",
-         "ger_bochum_35@sa.nsdai.org", "ger_bochum_36@sa.nsdai.org", "ger_bochum_38@sa.nsdai.org",
-         "ger_bochum_39@sa.nsdai.org", "ger_bochum_40@sa.nsdai.org", "ger_bochum_41@sa.nsdai.org",
-         "ger_bochum_42@sa.nsdai.org", "ger_bochum_47@sa.nsdai.org", "ger_bochum_51@sa.nsdai.org",
-         "ger_bochum_52@sa.nsdai.org", "ger_bochum_53@sa.nsdai.org", "ger_bochum_55@sa.nsdai.org",
-         "ger_bochum_58@sa.nsdai.org", "ger_bochum_59@sa.nsdai.org", "ger_bochum_61@sa.nsdai.org",
-         "ger_bochum_62@sa.nsdai.org", "ger_bochum_66@sa.nsdai.org", "ger_bochum_70@sa.nsdai.org",
-         "ger_bochum_74@sa.nsdai.org", "ger_bochum_76@sa.nsdai.org", "ger_bochum_77@sa.nsdai.org",
-         "ger_bochum_80@sa.nsdai.org", "hoff-mar@web.de", "Jasmin.Duesterloh@ruhr-uni-bochum.de",
-         "jessicanorton@sa.nsdai.org", "Jiajie.chen@ruhr-uni-bochum.de", "jinyeonjin@sa.nsdai.org",
-         "Johanna.Spanbroek@rub.de", "kaylamakai@sa.nsdai.org", "kokkeying@sa.nsdai.org",
-         "Lorena.Wolf@rub.de", "marytarakey@sa.nsdai.org", "minority25@sa.nsdai.org",
-         "nsd_iana@sa.nsdai.org", "nsd_luiza@sa.nsdai.org", "nsd_oona@sa.nsdai.org",
-         "ohkusanoriko@sa.nsdai.org", "pia.heyn@rub.de", "sarah.kessener@rub.de",
-         "sinekaterina@sa.nsdai.org", "tanweiwen@sa.nsdai.org", "tarantellishaun@sa.nsdai.org",
-         "teresachien@sa.nsdai.org", "thilinhnguyen@sa.nsdai.org", "thuongpham@sa.nsdai.org",
-         "tianruijia@sa.nsdai.org", "wellingtoncordelia@sa.nsdai.org", "yangcharis@sa.nsdai.org",
-         "yanglin@sa.nsdai.org", "yulyanatyo@sa.nsdai.org", "yuriykim@sa.nsdai.org"]
+users = ["ajordan@sa.nsdai.org",
+         "alicegold@sa.nsdai.org",
+         "alinakan@sa.nsdai.org",
+         "chenyin@sa.nsdai.org",
+         "christinapark@sa.nsdai.org",
+         "ekaterinabaiun@sa.nsdai.org",
+         "hoff-mar@web.de",
+         "ger_bochum_26@sa.nsdai.org",
+         "ger_bochum_31@sa.nsdai.org",
+         "ger_bochum_32@sa.nsdai.org",
+         "ger_bochum_41@sa.nsdai.org",
+         "ger_bochum_51@sa.nsdai.org",
+         "ger_bochum_55@sa.nsdai.org",
+         "Amal.Kabbous@ruhr-uni-bochum.de",
+         "ger_bochum_58@sa.nsdai.org",
+         "crz970826@gmail.com",
+         "ger_bochum_76@sa.nsdai.org",
+         "Jasmin.Duesterloh@ruhr-uni-bochum.de",
+         "jessicanorton@sa.nsdai.org",
+         "Jiajie.chen@ruhr-uni-bochum.de",
+         "jinyeonjin@sa.nsdai.org",
+         "Johanna.Spanbroek@rub.de",
+         "kaylamakai@sa.nsdai.org",
+         "kokkeying@sa.nsdai.org",
+         "Lorena.Wolf@rub.de",
+         "marytarakey@sa.nsdai.org",
+         "minority25@sa.nsdai.org",
+         "nsd_iana@sa.nsdai.org",
+         "nsd_luiza@sa.nsdai.org",
+         "ohkusanoriko@sa.nsdai.org",
+         "sarah.kessener@rub.de",
+         "sinekaterina@sa.nsdai.org",
+         "tanweiwen@sa.nsdai.org",
+         "tarantellishaun@sa.nsdai.org",
+         "teresachien@sa.nsdai.org",
+         "thilinhnguyen@sa.nsdai.org",
+         "thuongpham@sa.nsdai.org",
+         "tianruijia@sa.nsdai.org",
+         "wellingtoncordelia@sa.nsdai.org",
+         "yangcharis@sa.nsdai.org",
+         "yanglin@sa.nsdai.org",
+         "yulyanatyo@sa.nsdai.org",
+         "yuriykim@sa.nsdai.org",
+         "harpershannon@sa.nsdai.org",
+         "michellejoanna@sa.nsdai.org",
+         "rebekahbenavides@gmail.com",
+         "choosihan@sa.nsdai.org",
+         "zhanglin@sa.nsdai.org",
+         "leekim2798@sa.nsdai.org",
+         "granadoprado@sa.nsdai.org"]
 
 for user in users:
     ss = SpeakerSubmission.objects.filter(
@@ -99,6 +126,15 @@ for user in users:
             os.system("mkdir -p " + AudioSavePath)
             os.system("mkdir -p " + AudioSplitSavePath)
 
+            speakerID = obj.speaker.user.email.split("@")[0]
+            gender = obj.speaker.gender
+            dob = str(obj.speaker.birth_date.year % 100)
+            lang = obj.speaker.language.upper()
+            level = obj.speaker.level
+            qcode = obj.question.unique_code.replace("-", "")
+            sn_question_pk = str(obj.question.pk).zfill(7)
+            fileNametoSavePre = speakerID + "-" + gender + "-" + dob + "-" + lang + "-" + level + "-" + qcode
+
             print(file, "-", folder)
             with open("kim/" + folder + "__" + file + '.json', 'r', encoding='utf-8') as f:
                 data = json.load(f)
@@ -110,8 +146,8 @@ for user in users:
                     if data.get('segments'):
                         for idx, seg in enumerate(data.get('segments')):
                             print(seg.get('text'), seg.get('start'), seg.get('end'))
-                            outpath = AudioSplitSavePath + str(obj.question.unique_code) + "__" + file + "__" + str(
-                                idx) + "__" + str(seg.get('text')[:50]) + "_" + ".mp3"
+                            outpath = AudioSplitSavePath + fileNametoSavePre + "-" + str(
+                                idx) + "-" + sn_question_pk + ".mp3"
                             # print(outpath)
                             filepath = filex
                             cmd = "ffmpeg -y -i " + filepath + " -ss " + convertMillis(
@@ -123,12 +159,12 @@ for user in users:
                 # write STToutput With Qsn
                 data['QuestionInfo'] = dict(QuestionSerializer(instance=obj.question, ).data)
                 # save file
-                with open(STTSavePath + str(obj.question.unique_code) + "__" + file + '.json', 'w',
+                with open(STTSavePath + fileNametoSavePre + "-" + sn_question_pk + '.json', 'w',
                           encoding='utf-8') as f:
                     f.write(json.dumps(data, ensure_ascii=False, indent=4))
                     print('success')
-                os.system("cp 'media/" + obj.audio_file.name + "' " + AudioSavePath + str(
-                    obj.question.unique_code) + "__" + file)
+                os.system("cp 'media/" + obj.audio_file.name + "' "
+                          + AudioSavePath + fileNametoSavePre + "-" + sn_question_pk + ".mp3")
     else:
         print("Some files are not processed")
 #
